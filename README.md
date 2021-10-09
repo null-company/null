@@ -22,11 +22,11 @@ And the cyberpunk style is reflected in the style of the weapons, both melee and
 
  1. We won't understand how to properly get SFML to work.
     Possible solution: Switch to SDL or any other library.
- 2. We won't be able to make the graphics as good as we imagined it when making the vision
+ 2. We won't be able to make the graphics as good as we imagined it when making the vision.
     Possible solution: buy art from an artist.
  3. The networking won't work as good as we expected.
     Possible solution: consult local professionals
- 4. Won't be able to escape vim
+ 4. Won't be able to escape vim.
     Possible solution: turn off electricity.
 
 ## MVP Release
