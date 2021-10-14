@@ -1,4 +1,4 @@
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 int main() {
     sf::RenderWindow sfmlWin(sf::VideoMode(1280, 720), "{[Null]}");
