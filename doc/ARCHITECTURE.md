@@ -23,7 +23,7 @@ Both directories then divide for module names, e.g. Main, GameEngine, etc.
 ## Scene
 
 A **Scene** is a (somewhat) serializable piece of data which dictates what a game level is (it's structure,
-what it looks like etc). Essentially, it is defines a tree of GameObjects
+what it looks like etc). Essentially, it defines a tree of GameObjects
 
 Scenes are stored as files and are read by SceneLoader.
 
