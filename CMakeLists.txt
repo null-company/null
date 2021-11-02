@@ -15,12 +15,12 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(SFML)
 
 add_executable(NULL_GAME main.cpp)
-
+add_subdirectory(./network)
 target_link_libraries(NULL_GAME sfml-graphics
   sfml-audio
   sfml-network
   sfml-window
   sfml-system
-  )
+        )
 
 
