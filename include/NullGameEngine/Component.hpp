@@ -8,8 +8,8 @@ namespace null {
         null::GameObject &gameObject;
     public:
         explicit Component(GameObject &gameObject) : gameObject(gameObject) {}
-        virtual void start();
-        virtual void update();
+        virtual void start() {  };
+        virtual void update() {  };
     };
 }
 
