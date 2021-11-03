@@ -1,13 +1,7 @@
-#include <NullGameEngine.hpp>
-#include <vector>
-#include <memory>
-#include <SFML/Graphics.hpp>
-#include <iostream>
+#include <GameObject.hpp>
+#include <Component.hpp>
 
-namespace null
-{
-    // GameObject definitions start
-    // Constructors
+namespace null {
     GameObject::GameObject():
     isVisible(false),
     sprite(nullptr) {
@@ -15,8 +9,6 @@ namespace null
         this->tags = std::set<std::string>();
         this->scripts = std::vector<Script>();
     }
-
-    // Getters, Setters and all the like
 
     std::weak_ptr<sf::Sprite> GameObject::getSprite() {
         return std::weak_ptr<sf::Sprite>(this->sprite);
@@ -80,8 +72,6 @@ namespace null
         sprite->setPosition(pos);
     }
 
-    // Non-getter/setter member functions
-
     void GameObject::start() {
         for (auto &script : scripts) {
             script.start();
@@ -94,43 +84,4 @@ namespace null
         }
     }
 
-    // GameObject definitions end
-
-    // Component definitions start
-    // Component definitions end
-
-    // Script definitions start
-
-    void Script::start(){}
-    void Script::update(){}
-
-    // Script definitions end
-
-    // SceneLoader definitions start
-
-    class SceneLoader {
-
-    };
-
-    // SceneLoader definitions end
-
-    // Scene definitions start
-
-    void Scene::addGameObject(GameObject &gameObject) {
-        gameObjects.push_back(gameObject);
-    }
-
-    void Scene::start() {
-        for (auto &obj : gameObjects) {
-            obj.start();
-        }
-    }
-
-    void Scene::update() {
-        for (auto &obj : gameObjects) {
-            obj.update();
-        }
-    }
-
-    // Scene definitions end
 }

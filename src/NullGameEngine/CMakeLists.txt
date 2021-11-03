@@ -7,11 +7,9 @@ set(INCROOT ${PROJECT_SOURCE_DIR}/include/NullGameEngine/)
 set(SRCROOT ${PROJECT_SOURCE_DIR}/src/NullGameEngine/)
 
 set(SRC
-    ${SRCROOT}/NullGameEngine.cpp
     ${INCROOT}/NullGameEngine.hpp
     ${SRCROOT}/GameObject.cpp
     ${INCROOT}/GameObject.hpp
-    ${SRCROOT}/Script.cpp
     ${INCROOT}/Script.hpp
     ${SRCROOT}/Component.cpp
     ${INCROOT}/Component.hpp

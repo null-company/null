@@ -5,6 +5,7 @@
 #include <set>
 
 #include <NullGameEngine.hpp>
+#include <Script.hpp>
 
 namespace null {
 
