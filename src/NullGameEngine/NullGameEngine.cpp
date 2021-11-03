@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-namespace Null
+namespace null
 {
     // GameObject definitions start
     // Constructors
@@ -39,7 +39,7 @@ namespace Null
     }
 
     std::weak_ptr<GameObject> GameObject::getChild(int index) {
-        return std::weak_ptr<>(this->children[index]);
+        return std::weak_ptr<GameObject>(this->children[index]);
     }
 
     void GameObject::addChild(const std::shared_ptr<GameObject> &child) {

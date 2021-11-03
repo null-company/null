@@ -9,6 +9,18 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/src/NullGameEngine/)
 set(SRC
     ${SRCROOT}/NullGameEngine.cpp
     ${INCROOT}/NullGameEngine.hpp
+    ${SRCROOT}/GameObject.cpp
+    ${INCROOT}/GameObject.hpp
+    ${SRCROOT}/Script.cpp
+    ${INCROOT}/Script.hpp
+    ${SRCROOT}/Component.cpp
+    ${INCROOT}/Component.hpp
+    ${SRCROOT}/Scene.cpp
+    ${INCROOT}/Scene.hpp
+    ${SRCROOT}/SceneLoader.cpp
+    ${INCROOT}/SceneLoader.hpp
+    ${SRCROOT}/MainLoop.cpp
+    ${INCROOT}/MainLoop.hpp
     )
 
 add_library(nullGameEngine STATIC ${SRC})
