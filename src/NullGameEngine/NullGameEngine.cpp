@@ -1,7 +1,8 @@
-#include "NullEngine.h"
+#include <NullGameEngine.hpp>
 #include <vector>
 #include <memory>
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 namespace Null
 {
@@ -38,7 +39,7 @@ namespace Null
     }
 
     std::weak_ptr<GameObject> GameObject::getChild(int index) {
-        return std::weak_ptr(this->children[index]);
+        return std::weak_ptr<>(this->children[index]);
     }
 
     void GameObject::addChild(const std::shared_ptr<GameObject> &child) {
