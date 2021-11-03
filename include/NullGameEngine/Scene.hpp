@@ -1,3 +1,5 @@
+#pragma once
+
 #include <NullGameEngine.hpp>
 #include <GameObject.hpp>
 

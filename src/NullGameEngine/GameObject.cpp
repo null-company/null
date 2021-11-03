@@ -1,5 +1,5 @@
 #include <GameObject.hpp>
-#include <Component.hpp>
+#include <Script.hpp>
 
 namespace null {
     GameObject::GameObject():
