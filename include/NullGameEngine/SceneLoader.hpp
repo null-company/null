@@ -1,6 +1,13 @@
 #include <NullGameEngine.hpp>
 
-class SceneLoader {
+namespace null {
 
-};
+    class SceneLoader {
+
+
+
+    };
+
+}
+
 
