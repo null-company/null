@@ -7,12 +7,15 @@ namespace null {
 
     class MainLoop {
         private:
-            std::unique_ptr<Scene> scene;
-        
+            static std::unique_ptr<Scene> scene;
+            MainLoop();
+            static void provideScene(std::unique_ptr<Scene> newScene) {
+                MainLoop::scene = std::move(newScene);
+            }
         public:
-            explicit MainLoop(std::unique_ptr<Scene> scene):
-                scene(std::move(scene)) {  }
-            void run();
+            static int run();
+
+        friend SceneLoader;
     };
 
     class SceneChangedException : public std::exception {  };
