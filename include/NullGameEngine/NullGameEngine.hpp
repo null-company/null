@@ -5,5 +5,6 @@ namespace null {
     class GameObject;
     class Scene;
     class SceneLoader;
+    class MainLoop;
 }
 
