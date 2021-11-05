@@ -1,7 +1,11 @@
+#include <memory>
+
 #include <MainLoop.hpp>
 #include <Scene.hpp>
 
 namespace null {
+
+    std::unique_ptr<Scene> MainLoop::scene = nullptr;
 
     // todo this is a dummy implementation, copied from the earlier draft
     int MainLoop::run() {
