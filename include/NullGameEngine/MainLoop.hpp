@@ -1,7 +1,10 @@
+#pragma once
+
 #include <memory>
 
 #include <NullGameEngine.hpp>
 #include <Scene.hpp>
+#include <Renderer.hpp>
 
 namespace null {
 

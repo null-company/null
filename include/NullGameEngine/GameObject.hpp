@@ -10,7 +10,7 @@
 namespace null {
 
     class GameObject {
-    private:
+    protected:
         bool isVisible;
         std::shared_ptr<sf::Sprite> sprite;
         std::weak_ptr<GameObject> parent;

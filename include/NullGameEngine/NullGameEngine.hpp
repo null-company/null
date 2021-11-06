@@ -6,5 +6,7 @@ namespace null {
     class Scene;
     class SceneLoader;
     class MainLoop;
+    class Camera;
+    class Renderer;
 }
 
