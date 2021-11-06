@@ -8,7 +8,7 @@ namespace null {
 
     class Renderer {
         public:
-            static void render(const sf::RenderWindow&, const Scene&);
+            static void render(sf::RenderWindow&, const Scene&);
     };
 
 }
