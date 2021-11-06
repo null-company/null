@@ -7,28 +7,43 @@ namespace null {
 
     std::unique_ptr<Scene> MainLoop::scene = nullptr;
 
-    // todo this is a dummy implementation, copied from the earlier draft
-    int MainLoop::run() {
-sceneStart:
-        scene->start();
-        // todo following code should be a part of the scene
-        sf::RenderWindow sfmlWin(sf::VideoMode(1280, 720), "{[Null]}");
+    static void renderingThread(sf::RenderWindow &window) {
 
+        window.setActive(true);
+        // todo the following code should be a part of the scene
         sf::Texture nullTexture;
         if (!nullTexture.loadFromFile("../null.jpg")) {
-          return EXIT_FAILURE;
+            std::terminate();
         }
         sf::Sprite nullPicture(nullTexture);
 
+        while (window.isOpen()) {
+            window.clear(sf::Color::Black);
+            // in future, the drawer will be called here and will be passed the scene object
+            window.draw(nullPicture);
+            window.display();
+        }
+
+    }
+
+    // todo this is a dummy implementation, copied from the earlier draft
+    int MainLoop::run() {
+        sf::RenderWindow sfmlWin(sf::VideoMode(1280, 720), "{[Null]}");
+
+        sfmlWin.setActive(false);
+        sf::Thread rendererThread(renderingThread, std::ref(sfmlWin));
+        rendererThread.launch();
+
+sceneStart:
+        scene->start();
 
         try {
             while (sfmlWin.isOpen()) {
                 scene->update();
-                // todo the following code should be a part of the scene
 
+                // todo dispatching user events such as keyboard inputs will probably take place here
                 sf::Event e;
                 while (sfmlWin.pollEvent(e)) {
-
                     switch (e.type) {
                         case sf::Event::EventType::Closed:
                             sfmlWin.close();
@@ -37,9 +52,6 @@ sceneStart:
                     }
                 }
 
-                sfmlWin.clear();
-                sfmlWin.draw(nullPicture);
-                sfmlWin.display();
             }
         } 
         catch (const SceneChangedException& sceneChanged) {
