@@ -20,7 +20,7 @@ namespace null {
         return this->isVisible;
     }
 
-    void GameObject::setIsVisible(bool &isVisible){
+    void GameObject::setIsVisible(bool isVisible){
         this->isVisible = isVisible;
     }
 

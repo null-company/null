@@ -53,7 +53,7 @@ namespace null {
 
         void update();
 
-        void setIsVisible(bool &isVisible);
+        void setIsVisible(bool isVisible);
 
         void addScript(Script &script);
     };

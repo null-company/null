@@ -10,7 +10,9 @@ namespace null {
         for (const std::unique_ptr<GameObject>& go : scene.gameObjects) {
             // todo this is ugly
             sf::Sprite sprite = *(*go).getSprite().lock();
-            window.draw(sprite);
+            if (go->getIsVisible()) {
+                window.draw(sprite);
+            }
         }
     }
 

@@ -20,6 +20,7 @@ namespace null {
         nullTexture->loadFromFile("../null.jpg");
         auto sprite = std::make_shared<sf::Sprite>(*nullTexture);
         auto nullGameLogo = std::make_unique<GameObject>(sprite);
+        nullGameLogo->setIsVisible(true);
         newScene->addGameObject(move(nullGameLogo));
 
         MainLoop::provideScene(move(newScene));
