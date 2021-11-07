@@ -1,30 +1,13 @@
-#include <SFML/Graphics.hpp>
+#include <string>
+
+#include <SceneLoader.hpp>
+#include <MainLoop.hpp>
 
 int main() {
-    sf::RenderWindow sfmlWin(sf::VideoMode(1280, 720), "{[Null]}");
 
-    sf::Texture nullTexture;
-    if (!nullTexture.loadFromFile("../null.jpg")) {
-      return EXIT_FAILURE;
-    }
-    sf::Sprite nullPicture(nullTexture);
+    std::string mainMenu = "dummy string";
 
-    while (sfmlWin.isOpen()) {
+    null::SceneLoader::loadSceneFromFile(mainMenu);
 
-        sf::Event e;
-        while (sfmlWin.pollEvent(e)) {
-
-            switch (e.type) {
-                case sf::Event::EventType::Closed:
-                    sfmlWin.close();
-                    break;
-                default: break;
-            }
-        }
-
-        sfmlWin.clear();
-        sfmlWin.draw(nullPicture);
-        sfmlWin.display();
-    }
-    return 0;
+    return null::MainLoop::run();
 }
