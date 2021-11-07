@@ -1,4 +1,4 @@
-#include "../include/Client.h"
+#include "../../include/Network/Client.h"
 #include "SFML/Network.hpp"
 #include "iostream"
 

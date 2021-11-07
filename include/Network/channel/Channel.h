@@ -6,11 +6,6 @@
 #define NULL_GAME_CHANNEL_H
 #include "SFML/Network.hpp"
 
-class Channel {
-    sf::TcpSocket socket;
-    void sendMessage(Message message);
-    Channel(sf::TcpSocket&& socket): socket(std::move(socket)){}
-};
 
 
 
