@@ -1,10 +1,12 @@
+#include <memory>
+
 #include <GameObject.hpp>
 #include <Script.hpp>
 
 namespace null {
-    GameObject::GameObject():
+    GameObject::GameObject(std::shared_ptr<sf::Sprite> sprite):
     isVisible(false),
-    sprite(nullptr) {
+    sprite(sprite) {
         this->children = std::vector<std::shared_ptr<GameObject>>();
         this->tags = std::set<std::string>();
         this->scripts = std::vector<Script>();

@@ -20,7 +20,7 @@ namespace null {
 
     public:
 
-        GameObject();
+        GameObject(std::shared_ptr<sf::Sprite>);
 
         std::weak_ptr<sf::Sprite> getSprite();
 
