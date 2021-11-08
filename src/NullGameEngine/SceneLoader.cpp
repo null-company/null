@@ -18,8 +18,8 @@ namespace null {
         // as the sprite lives. todo manage it with resource manager
         sf::Texture* nullTexture = new sf::Texture();
         nullTexture->loadFromFile("../null.jpg");
-        auto sprite = std::make_shared<sf::Sprite>(*nullTexture);
-        auto nullGameLogo = std::make_unique<GameObject>(sprite);
+        auto nullGameLogo = std::make_unique<GameObject>();
+        nullGameLogo->getSprite().setTexture(*nullTexture);
         nullGameLogo->setIsVisible(true);
         newScene->addGameObject(move(nullGameLogo));
 

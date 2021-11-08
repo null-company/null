@@ -11,10 +11,6 @@ namespace null {
             // later it could be implemented more prettier with
             // methods that manipulate how the camera moves
             int distance;
-
-            // todo fix the nullptr. the camera doesn't have a texture
-            // yet it has coordinates (a transform)
-            Camera() : GameObject(nullptr) { }
     };
 
 }
