@@ -10,9 +10,9 @@
 namespace null {
 
     class GameObject {
-    private:
+    protected:
         bool isVisible;
-        std::shared_ptr<sf::Sprite> sprite;
+        sf::Sprite sprite;
         std::weak_ptr<GameObject> parent;
         std::vector<std::shared_ptr<GameObject>> children;
         std::set<std::string> tags;
@@ -22,7 +22,7 @@ namespace null {
 
         GameObject();
 
-        std::weak_ptr<sf::Sprite> getSprite();
+        sf::Sprite& getSprite();
 
         bool getIsVisible();
 
@@ -53,7 +53,7 @@ namespace null {
 
         void update();
 
-        void setIsVisible(bool &isVisible);
+        void setIsVisible(bool isVisible);
 
         void addScript(Script &script);
     };

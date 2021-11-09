@@ -1,24 +1,26 @@
+#include <memory>
+
 #include <GameObject.hpp>
 #include <Script.hpp>
 
 namespace null {
     GameObject::GameObject():
-    isVisible(false),
-    sprite(nullptr) {
+    isVisible(false) {
         this->children = std::vector<std::shared_ptr<GameObject>>();
         this->tags = std::set<std::string>();
         this->scripts = std::vector<Script>();
+        this->sprite = sf::Sprite();
     }
 
-    std::weak_ptr<sf::Sprite> GameObject::getSprite() {
-        return std::weak_ptr<sf::Sprite>(this->sprite);
+    sf::Sprite& GameObject::getSprite() {
+        return this->sprite;
     }
 
     bool GameObject::getIsVisible() {
         return this->isVisible;
     }
 
-    void GameObject::setIsVisible(bool &isVisible){
+    void GameObject::setIsVisible(bool isVisible){
         this->isVisible = isVisible;
     }
 
@@ -57,19 +59,19 @@ namespace null {
     }
 
     sf::Transform GameObject::getTransform() {
-        return sprite->getTransform();
+        return sprite.getTransform();
     }
 
     sf::Vector2f GameObject::getPosition() {
-        return sprite->getPosition();
+        return sprite.getPosition();
     }
 
     void GameObject::setPosition(float x, float y) {
-        sprite->setPosition(x, y);
+        sprite.setPosition(x, y);
     }
 
     void GameObject::setPosition(sf::Vector2f &pos) {
-        sprite->setPosition(pos);
+        sprite.setPosition(pos);
     }
 
     void GameObject::start() {

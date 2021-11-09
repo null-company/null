@@ -2,35 +2,27 @@
 
 #include <MainLoop.hpp>
 #include <Scene.hpp>
+#include <Renderer.hpp>
 
 namespace null {
 
     std::unique_ptr<Scene> MainLoop::scene = nullptr;
-
-    static void renderingThread(sf::RenderWindow &window) {
-
-        window.setActive(true);
-        // todo the following code should be a part of the scene
-        sf::Texture nullTexture;
-        if (!nullTexture.loadFromFile("../null.jpg")) {
-            std::terminate();
-        }
-        sf::Sprite nullPicture(nullTexture);
-
-        while (window.isOpen()) {
-            window.clear(sf::Color::Black);
-            // in future, the drawer will be called here and will be passed the scene object
-            window.draw(nullPicture);
-            window.display();
-        }
-
-    }
 
     // todo this is a dummy implementation, copied from the earlier draft
     int MainLoop::run() {
         sf::RenderWindow sfmlWin(sf::VideoMode(1280, 720), "{[Null]}");
 
         sfmlWin.setActive(false);
+
+        auto renderingThread = [](sf::RenderWindow &window) {
+            window.setActive(true);
+            while (window.isOpen()) {
+                window.clear(sf::Color::Black);
+                Renderer::render(window, *MainLoop::scene);
+                window.display();
+            }
+        };
+
         sf::Thread rendererThread(renderingThread, std::ref(sfmlWin));
         rendererThread.launch();
 

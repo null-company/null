@@ -19,6 +19,10 @@ set(SRC
     ${INCROOT}/SceneLoader.hpp
     ${SRCROOT}/MainLoop.cpp
     ${INCROOT}/MainLoop.hpp
+    ${SRCROOT}/Camera.cpp
+    ${INCROOT}/Camera.hpp
+    ${SRCROOT}/Renderer.cpp
+    ${INCROOT}/Renderer.hpp
     )
 
 add_library(nullGameEngine STATIC ${SRC})
