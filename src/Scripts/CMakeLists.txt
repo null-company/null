@@ -1,0 +1,28 @@
+cmake_minimum_required(VERSION 3.10)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+set(INCROOT ${PROJECT_SOURCE_DIR}/include/Scripts/)
+set(SRCROOT ${PROJECT_SOURCE_DIR}/src/Scripts/)
+
+set(SRC
+    ${INCROOT}/Scripts.hpp # declares all public scripts
+    ${SRCROOT}/ExampleScript.cpp
+    )
+
+add_library(scripts STATIC ${SRC})
+target_include_directories(scripts 
+    PUBLIC ${PROJECT_SOURCE_DIR}/include/Scripts
+    PRIVATE ${PROJECT_SOURCE_DIR}/src)
+
+target_link_libraries(scripts 
+    nullGameEngine
+    sfml-graphics
+    sfml-audio
+    sfml-network
+    sfml-window
+    sfml-system
+    )
+
+

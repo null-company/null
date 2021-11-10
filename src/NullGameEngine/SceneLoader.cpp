@@ -3,6 +3,8 @@
 #include <Scene.hpp>
 #include <SceneLoader.hpp>
 #include <MainLoop.hpp>
+#include <Scripts/ExampleScript.cpp>
+#include <GameObject.hpp>
 
 namespace null {
 
@@ -17,11 +19,23 @@ namespace null {
         // this texture is not released on purpose, because it MUST exist for as long
         // as the sprite lives. todo manage it with resource manager
         sf::Texture* nullTexture = new sf::Texture();
-        nullTexture->loadFromFile("../null.jpg");
+        nullTexture->loadFromFile("../res/null.jpg");
+
         auto nullGameLogo = std::make_unique<GameObject>();
         nullGameLogo->getSprite().setTexture(*nullTexture);
         nullGameLogo->setIsVisible(true);
+
+        auto boxTexture = new sf::Texture();
+        boxTexture->loadFromFile("../res/box.png");
+
+        auto boxObject = std::make_unique<GameObject>();
+        boxObject->getSprite().setTexture(*boxTexture);
+        boxObject->setIsVisible(true);
+
+        boxObject->addScript<ExampleScript>(*boxObject);
+
         newScene->addGameObject(move(nullGameLogo));
+        newScene->addGameObject(move(boxObject));
 
         MainLoop::provideScene(move(newScene));
     };
