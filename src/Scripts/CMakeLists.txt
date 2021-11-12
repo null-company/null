@@ -9,6 +9,11 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/src/Scripts/)
 set(SRC
     ${INCROOT}/Scripts.hpp # declares all public scripts
     ${SRCROOT}/ExampleScript.cpp
+    ${INCROOT}/ExampleScript.hpp
+    ${SRCROOT}/ClockedScript.cpp
+    ${INCROOT}/ClockedScript.hpp
+    ${SRCROOT}/ExampleClockedScript.cpp
+    ${INCROOT}/ExampleClockedScript.hpp
     )
 
 add_library(scripts STATIC ${SRC})

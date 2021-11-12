@@ -3,7 +3,7 @@
 #include <Scene.hpp>
 #include <SceneLoader.hpp>
 #include <MainLoop.hpp>
-#include <Scripts/ExampleScript.cpp>
+#include <Scripts.hpp>
 #include <GameObject.hpp>
 
 namespace null {
@@ -32,7 +32,7 @@ namespace null {
         boxObject->getSprite().setTexture(*boxTexture);
         boxObject->setIsVisible(true);
 
-        boxObject->addScript<ExampleScript>(*boxObject);
+        boxObject->addScript<ExampleClockedScript>(*boxObject);
 
         newScene->addGameObject(move(nullGameLogo));
         newScene->addGameObject(move(boxObject));

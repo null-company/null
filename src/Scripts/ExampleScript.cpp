@@ -1,34 +1,31 @@
-#include <Script.hpp>
-#include <GameObject.hpp>
 #include <SFML/System.hpp>
 
-/* no need to include Scripts.hpp in a script file */
+#include <Script.hpp>
+#include <GameObject.hpp>
+#include <ExampleScript.hpp>
 
 namespace null {
 
-    class ExampleScript : public Script {
-        sf::Clock clock;
-        
-        public:
-        void start() override {
-            clock.restart();
-        }
+    sf::Clock clock;
 
-        void update() override {
-            // todo that kind of clock management is 
-            // basically boilerplate code. could be done in the
-            // Script class itself or in the component or something
-            // else if it's smart enough
-            sf::Time elapsed = clock.restart();
+    void ExampleScript::start() {
+        clock.restart();
+    }
 
-            const sf::Vector2f& position = gameObject.getPosition();
-            sf::Vector2f newPosition = position;
-            newPosition.x += elapsed.asMilliseconds() * 3.0f;
-            gameObject.setPosition(newPosition);
-        }
+    void ExampleScript::update() {
+        // todo that kind of clock management is 
+        // basically boilerplate code. could be done in the
+        // Script class itself or in the component or something
+        // else if it's smart enough
+        sf::Time elapsed = clock.restart();
 
-        explicit ExampleScript(GameObject& gameObject) : Script(gameObject) {  }
-    };
+        const sf::Vector2f& position = gameObject.getPosition();
+        sf::Vector2f newPosition = position;
+        newPosition.x += elapsed.asMilliseconds() * 3.0f;
+        gameObject.setPosition(newPosition);
+    }
+
+    ExampleScript::ExampleScript(GameObject& gameObject) : Script(gameObject) {  }
 
 }
 

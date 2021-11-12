@@ -7,7 +7,7 @@ namespace null {
     protected:
         null::GameObject &gameObject;
     public:
-        explicit Component(GameObject &gameObject) : gameObject(gameObject) { }
+        Component(GameObject &gameObject) : gameObject(gameObject) { }
         virtual void start() { };
         virtual void update() { };
     };

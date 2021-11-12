@@ -30,11 +30,13 @@ target_include_directories(nullGameEngine
     PUBLIC ${PROJECT_SOURCE_DIR}/include/NullGameEngine
     PRIVATE ${PROJECT_SOURCE_DIR}/src)
 
-target_link_libraries(nullGameEngine sfml-graphics
-  sfml-audio
-  sfml-network
-  sfml-window
-  sfml-system
-  )
+target_link_libraries(nullGameEngine 
+    scripts
+    sfml-graphics
+    sfml-audio
+    sfml-network
+    sfml-window
+    sfml-system
+    )
 
 
