@@ -1,6 +1,8 @@
-/* #include <Scripts.hpp> */
+#include <Script.hpp>
 #include <GameObject.hpp>
 #include <SFML/System.hpp>
+
+/* no need to include Scripts.hpp in a script file */
 
 namespace null {
 

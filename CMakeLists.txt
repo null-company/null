@@ -20,6 +20,7 @@ add_executable(NULL_GAME main.cpp)
 
 target_link_libraries(NULL_GAME
     nullGameEngine
+    scripts
     sfml-graphics
     sfml-audio
     sfml-network

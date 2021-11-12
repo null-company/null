@@ -1,6 +1,2 @@
-#include <Script.hpp>
-
-namespace null {
-    class ExampleScript;
-}
+#include <Scripts/ExampleScript.cpp>
 

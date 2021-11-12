@@ -2,7 +2,6 @@
 
 #include <GameObject.hpp>
 #include <Script.hpp>
-#include <Scripts/ExampleScript.cpp>
 
 namespace null {
     GameObject::GameObject():
