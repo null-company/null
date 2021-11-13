@@ -27,7 +27,7 @@ FetchContent_MakeAvailable(googletest)
 
 add_subdirectory(./src/)
 add_subdirectory(./test/)
-add_executable(NULL_GAME main.cpp )
+add_executable(NULL_GAME main.cpp include/Network/Serializable.h)
 
 
 target_link_libraries(NULL_GAME

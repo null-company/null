@@ -7,10 +7,22 @@ Snapshot::Snapshot(std::vector<uint8_t> storage) :
 Snapshot::Snapshot(int size) :
         storage(size, 0) {}
 
-SnapshotDelta snapshot::makeDelta(Snapshot &snapshot1, Snapshot &snapshot2, int chunk_size) {
-    if(snapshot1.size() != snapshot2.size()){
-        throw std::invalid_argument("snapshots have different sizes");
-    }
-    SnapshotDelta snapshotDelta();
-    return;
+uint8_t &Snapshot::operator[](int idx) {
+    return storage[idx];
+}
+
+const uint8_t &Snapshot::operator[](int idx) const {
+    return storage[idx];
+}
+
+Snapshot::const_iter Snapshot::end() const {
+    return storage.end();
+}
+
+Snapshot::const_iter Snapshot::begin() const {
+    return storage.begin();
+}
+
+size_t Snapshot::size() const {
+    return storage.size();
 }
