@@ -18,16 +18,18 @@ private:
      * */
     std::vector<bool> bitMask;
     std::vector<uint8_t> delta;
+
     SnapshotDelta(const Snapshot &snapshot, const Snapshot &snapshot1, std::vector<std::pair<int, int>> areas);
 
 public:
-    std::vector<uint8_t> serialize(std::vector<uint8_t> &in) override;
+    std::vector<uint8_t> serialize() override;
 
     SnapshotDelta(const Snapshot &snapshot, const Snapshot &snapshot1, std::initializer_list<std::pair<int, int>>);
 
     SnapshotDelta(const Snapshot &snapshot, const Snapshot &snapshot1, std::initializer_list<int>);
 
-    SnapshotDelta(const Snapshot &snapshot, const Snapshot &snapshot1, int chunk_size);
+    SnapshotDelta(const Snapshot &snapshot, const Snapshot &snapshot1, int chunk_size = 1);
+
 private:
     void fillDelta(const Snapshot &snapshot1, const Snapshot &snapshot2);
 };

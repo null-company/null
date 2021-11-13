@@ -36,7 +36,7 @@ static std::vector<std::pair<int, int>> createPairArrayFromInt(int elem, size_t 
     return result;
 };
 
-SnapshotDelta::SnapshotDelta(const Snapshot &snapshot, const Snapshot &snapshot1, int chunk_size = 1) :
+SnapshotDelta::SnapshotDelta(const Snapshot &snapshot, const Snapshot &snapshot1, int chunk_size) :
         SnapshotDelta::SnapshotDelta(snapshot, snapshot1, createPairArrayFromInt(chunk_size, snapshot.size())) {
 }
 
@@ -51,7 +51,7 @@ void SnapshotDelta::fillDelta(const Snapshot &snapshot, const Snapshot &snapshot
                     break;
                 }
             }
-            bitMask.push_back(isSame);
+            bitMask.push_back(!isSame);
             if (!isSame) {
                 for (int i = from; i < to; i++) {
                     delta.push_back(snapshot1[i]);
@@ -61,15 +61,14 @@ void SnapshotDelta::fillDelta(const Snapshot &snapshot, const Snapshot &snapshot
     };
 }
 
-
-std::vector<uint8_t> SnapshotDelta::serialize(std::vector<uint8_t> &in) {
-    size_t bitMaskByteSize = (bitMask.size() + sizeof(uint8_t) - 1) / 8;
+std::vector<uint8_t> SnapshotDelta::serialize() {
+    size_t bitMaskByteSize = (bitMask.size() + sizeof(uint8_t) * 8 - 1) / 8;
     std::vector<uint8_t> serialized(bitMaskByteSize + delta.size(), 0);
     //Serialize header
     for (size_t i = 0; i < bitMask.size(); i++) {
-        size_t byteIdx = i / 8;
-        size_t bitIdx = (bitMask.size() + i) % 8;
-        serialized[byteIdx] |= 1 << bitIdx;
+        size_t byteIdx = (bitMaskByteSize * 8 - bitMask.size() + i) / 8;
+        size_t bitIdx = (bitMaskByteSize * 8 - bitMask.size() + i) % 8;
+        serialized[byteIdx] |= bitMask[i] << (7 - bitIdx);
     }
     //Serialize body
     for (size_t i = 0; i < delta.size(); i++) {
@@ -77,4 +76,5 @@ std::vector<uint8_t> SnapshotDelta::serialize(std::vector<uint8_t> &in) {
     }
     return serialized;
 }
+
 

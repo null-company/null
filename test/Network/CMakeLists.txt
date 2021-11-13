@@ -3,7 +3,7 @@ include(GoogleTest)
 add_executable(
         main_test
         main.cpp
-        Snapshot/DeltaObjectsTest.cpp)
+        Snapshot/SnapShotDeltaInstantation.cpp)
 target_link_libraries(
         main_test
         network

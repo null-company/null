@@ -6,7 +6,7 @@
 
 class Serializable {
 public:
-    virtual std::vector<uint8_t> serialize(std::vector<uint8_t> &in) = 0;
+    virtual std::vector<uint8_t> serialize() = 0;
 };
 
 #endif
