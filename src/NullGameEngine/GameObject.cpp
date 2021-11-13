@@ -48,13 +48,6 @@ namespace null {
         scripts.push_back(std::move(script));
     }
 
-    // todo cant put this code here, duplicates the header
-    /* template<class T> */
-    /* void GameObject::addScript(GameObject& go) { */
-    /*     std::unique_ptr<Script> script = std::make_unique<T>(go); */
-    /*     scripts.push_back(std::move(script)); */
-    /* } */
-
     void GameObject::addTag(const std::string &str) {
         tags.insert(str);
     }
