@@ -9,7 +9,9 @@
 
 class SnapshotDelta : public Serializable {
 private:
-    // Areas of the snapshot, that must be watched
+
+
+// Areas of the snapshot, that must be watched
     std::vector<std::pair<int, int>> areas;
 
     /* bitMask of the snapshot areas
@@ -21,6 +23,8 @@ private:
 
     SnapshotDelta(const Snapshot &snapshot, const Snapshot &snapshot1, std::vector<std::pair<int, int>> areas);
 
+    SnapshotDelta(const std::vector<uint8_t> &serialized, std::vector<std::pair<int, int>> areas);
+
 public:
     std::vector<uint8_t> serialize() override;
 
@@ -30,8 +34,20 @@ public:
 
     SnapshotDelta(const Snapshot &snapshot, const Snapshot &snapshot1, int chunk_size = 1);
 
+    SnapshotDelta(const std::vector<uint8_t> &serialized, std::initializer_list<std::pair<int, int>>);
+
+    SnapshotDelta(const std::vector<uint8_t> &serialized, std::initializer_list<int>);
+
+    SnapshotDelta(const std::vector<uint8_t> &serialized, int snapshotSize, int chunk_size = 1);
+
+    bool operator==(const SnapshotDelta &rhs) const;
+
+    bool operator!=(const SnapshotDelta &rhs) const;
+
 private:
     void fillDelta(const Snapshot &snapshot1, const Snapshot &snapshot2);
+
+    void unpack(const std::vector<uint8_t> &vector);
 };
 
 

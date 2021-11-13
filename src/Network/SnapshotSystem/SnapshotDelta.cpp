@@ -14,6 +14,10 @@ SnapshotDelta::SnapshotDelta(const Snapshot &snapshot,
                              std::initializer_list<std::pair<int, int>> areas) :
         SnapshotDelta::SnapshotDelta(snapshot, snapshot1, std::move(std::vector<std::pair<int, int>>(areas))) {}
 
+SnapshotDelta::SnapshotDelta(const std::vector<uint8_t> &serialized,
+                             std::initializer_list<std::pair<int, int>> areas) :
+        SnapshotDelta::SnapshotDelta(serialized, std::move(std::vector<std::pair<int, int>>(areas))) {}
+
 static std::vector<std::pair<int, int>> createPairArrayFromInitList(std::initializer_list<int> list) {
     std::vector<std::pair<int, int>> result;
     for (auto i = list.begin(); i != list.end(); i++) {
@@ -36,8 +40,17 @@ static std::vector<std::pair<int, int>> createPairArrayFromInt(int elem, size_t 
     return result;
 };
 
+SnapshotDelta::SnapshotDelta(const std::vector<uint8_t> &serialized, std::initializer_list<int> list) :
+        SnapshotDelta::SnapshotDelta(serialized, createPairArrayFromInitList(list)) {
+
+}
+
 SnapshotDelta::SnapshotDelta(const Snapshot &snapshot, const Snapshot &snapshot1, int chunk_size) :
         SnapshotDelta::SnapshotDelta(snapshot, snapshot1, createPairArrayFromInt(chunk_size, snapshot.size())) {
+}
+
+SnapshotDelta::SnapshotDelta(const std::vector<uint8_t> &serialized, int snapshotSize, int chunkSize) :
+        SnapshotDelta::SnapshotDelta(serialized, createPairArrayFromInt(chunkSize, snapshotSize)) {
 }
 
 
@@ -77,4 +90,37 @@ std::vector<uint8_t> SnapshotDelta::serialize() {
     return serialized;
 }
 
+SnapshotDelta::SnapshotDelta(const std::vector<uint8_t> &serialized,
+                             std::vector<std::pair<int, int>> areas) : areas(std::move(areas)) {
+    unpack(serialized);
+}
 
+void SnapshotDelta::unpack(const std::vector<uint8_t> &vector) {
+    size_t bitMaskByteSize = (areas.size() + sizeof(uint8_t) * 8 - 1) / 8;
+    //unserialize header
+    for (size_t i = 0; i < areas.size(); i++) {
+        size_t byteIdx = (bitMaskByteSize * 8 - areas.size() + i) / 8;
+        size_t bitIdx = (bitMaskByteSize * 8 - areas.size() + i) % 8;
+        bitMask.emplace_back(vector[byteIdx] & (1 << (7 - bitIdx)));
+    }
+    //unserialize body
+    for (size_t i = 0; i < vector.size() - bitMaskByteSize; i++) {
+        delta.push_back(vector[i + bitMaskByteSize]);
+    }
+}
+
+bool SnapshotDelta::operator==(const SnapshotDelta &rhs) const {
+    return areas == rhs.areas &&
+           bitMask == rhs.bitMask &&
+           delta == rhs.delta;
+}
+
+bool SnapshotDelta::operator!=(const SnapshotDelta &rhs) const {
+    return !(rhs == *this);
+}
+
+
+
+////std::vector<uint8_t> SnapshotDelta::deSerialize() {
+////    return {};
+//}
