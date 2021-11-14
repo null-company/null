@@ -16,7 +16,11 @@ namespace null {
         std::weak_ptr<GameObject> parent;
         std::vector<std::shared_ptr<GameObject>> children;
         std::set<std::string> tags;
-        std::vector<Script> scripts;
+        std::vector<std::unique_ptr<Script>> scripts;
+
+        void start();
+
+        void update();
 
     public:
 
@@ -35,27 +39,32 @@ namespace null {
 
         void addChild(const std::shared_ptr<GameObject> &child);
 
-        std::vector<Script> &getScripts();
+        std::vector<std::unique_ptr<Script>>& getScripts();
 
         void addTag(const std::string &str);
 
         bool removeTag(const std::string& str);
 
-        sf::Transform getTransform();
+        const sf::Transform& getTransform();
 
-        sf::Vector2f getPosition();
+        const sf::Vector2f& getPosition();
 
         void setPosition(float x, float y);
 
         void setPosition(sf::Vector2f &pos);
 
-        void start();
-
-        void update();
-
         void setIsVisible(bool isVisible);
 
-        void addScript(Script &script);
+        void addScript(std::unique_ptr<Script> script);
+
+        template<class T, typename... Args>
+        void addScript(Args&&... args) {
+            std::unique_ptr<Script> script =
+                std::make_unique<T>(std::forward<Args>(args)...);
+            scripts.push_back(std::move(script));
+        }
+
+        friend Scene;
     };
 
 }

@@ -8,7 +8,6 @@ namespace null {
     isVisible(false) {
         this->children = std::vector<std::shared_ptr<GameObject>>();
         this->tags = std::set<std::string>();
-        this->scripts = std::vector<Script>();
         this->sprite = sf::Sprite();
     }
 
@@ -40,12 +39,13 @@ namespace null {
         children.push_back(child);
     }
 
-    std::vector<Script> &GameObject::getScripts() {
+    // todo concern pointer leakage
+    std::vector<std::unique_ptr<Script>> &GameObject::getScripts() {
         return scripts;
     }
 
-    void GameObject::addScript(Script &script) {
-        scripts.push_back(script);
+    void GameObject::addScript(std::unique_ptr<Script> script) {
+        scripts.push_back(std::move(script));
     }
 
     void GameObject::addTag(const std::string &str) {
@@ -58,11 +58,11 @@ namespace null {
         return result;
     }
 
-    sf::Transform GameObject::getTransform() {
+    const sf::Transform& GameObject::getTransform() {
         return sprite.getTransform();
     }
 
-    sf::Vector2f GameObject::getPosition() {
+    const sf::Vector2f& GameObject::getPosition() {
         return sprite.getPosition();
     }
 
@@ -76,13 +76,13 @@ namespace null {
 
     void GameObject::start() {
         for (auto &script : scripts) {
-            script.start();
+            script->start();
         }
     }
 
     void GameObject::update() {
         for (auto &script : scripts) {
-            script.update();
+            script->update();
         }
     }
 
