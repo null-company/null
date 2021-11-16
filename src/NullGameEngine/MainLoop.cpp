@@ -1,4 +1,5 @@
 #include <memory>
+#include <thread>
 
 #include <MainLoop.hpp>
 #include <Scene.hpp>
@@ -12,7 +13,8 @@ namespace null {
     int MainLoop::run() {
         sf::RenderWindow sfmlWin(sf::VideoMode(1280, 720), "{[Null]}");
 
-        sfmlWin.setActive(false);
+        // For now multithreading is disabled (because reasons)
+        //sfmlWin.setActive(false);
 
         auto renderingThread = [](sf::RenderWindow &window) {
             window.setActive(true);
@@ -24,7 +26,7 @@ namespace null {
         };
 
         sf::Thread rendererThread(renderingThread, std::ref(sfmlWin));
-        rendererThread.launch();
+        //rendererThread.launch();
 
 sceneStart:
         scene->start();
@@ -43,7 +45,11 @@ sceneStart:
                         default: break;
                     }
                 }
-
+                sfmlWin.clear(sf::Color::Black);
+                Renderer::render(sfmlWin, *MainLoop::scene);
+                // 1 ms wait makes it smoother?! WHY???
+                std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(1.0));
+                sfmlWin.display();
             }
         } 
         catch (const SceneChangedException& sceneChanged) {

@@ -5,6 +5,7 @@
 #include <MainLoop.hpp>
 #include <Scripts.hpp>
 #include <GameObject.hpp>
+#include <ResourceManager.hpp>
 
 namespace null {
 
@@ -18,15 +19,13 @@ namespace null {
 
         // this texture is not released on purpose, because it MUST exist for as long
         // as the sprite lives. todo manage it with resource manager
-        sf::Texture* nullTexture = new sf::Texture();
-        nullTexture->loadFromFile("../res/null.jpg");
+        sf::Texture* nullTexture = ResourceManager::loadTexture("null.jpg");
 
         auto nullGameLogo = std::make_unique<GameObject>();
         nullGameLogo->getSprite().setTexture(*nullTexture);
         nullGameLogo->setIsVisible(true);
 
-        auto boxTexture = new sf::Texture();
-        boxTexture->loadFromFile("../res/box.png");
+        auto boxTexture = ResourceManager::loadTexture("box.png");
 
         auto boxObject = std::make_unique<GameObject>();
         boxObject->getSprite().setTexture(*boxTexture);

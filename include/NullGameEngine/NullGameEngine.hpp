@@ -8,5 +8,6 @@ namespace null {
     class MainLoop;
     class Camera;
     class Renderer;
+    class ResourceManager;
 }
 
