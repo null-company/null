@@ -31,6 +31,7 @@ target_include_directories(nullGameEngine
     PRIVATE ${PROJECT_SOURCE_DIR}/src)
 
 target_link_libraries(nullGameEngine 
+    box2d
     scripts
     sfml-graphics
     sfml-audio

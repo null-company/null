@@ -14,6 +14,13 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SFML)
 
+FetchContent_Declare(
+ box2d
+ GIT_REPOSITORY https://github.com/erincatto/box2d.git
+ GIT_TAG v2.4.1
+)
+FetchContent_MakeAvailable(box2d)
+
 add_subdirectory(./src/)
 
 add_executable(NULL_GAME main.cpp)
