@@ -30,12 +30,21 @@ namespace null {
 
         auto boxObject = std::make_unique<GameObject>();
         boxObject->getSprite().setTexture(*boxTexture);
+        boxObject->getSprite().setScale(0.25f, 0.25f);
         boxObject->setIsVisible(true);
+
+        auto groundObject = std::make_unique<GameObject>();
+        auto& groundSprite = groundObject->getSprite();
+        groundSprite.setTexture(*boxTexture);
+        groundSprite.setScale(2.0f, 0.35f);
+        groundSprite.setPosition(0.0f, 500.0f);
+        groundObject->setIsVisible(true);
 
         boxObject->addScript<ExampleClockedScript>(*boxObject);
 
         newScene->addGameObject(move(nullGameLogo));
         newScene->addGameObject(move(boxObject));
+        newScene->addGameObject(move(groundObject));
 
         MainLoop::provideScene(move(newScene));
     };
