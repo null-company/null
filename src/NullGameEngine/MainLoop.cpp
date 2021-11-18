@@ -5,9 +5,9 @@
 #include <Scene.hpp>
 #include <Renderer.hpp>
 
-#define MAX_FRAMERATE 60
-
 namespace null {
+
+    constexpr unsigned int MAX_FRAMERATE = 60;
 
     std::unique_ptr<Scene> MainLoop::scene = nullptr;
 
