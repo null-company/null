@@ -1,5 +1,5 @@
-#ifndef NULL_GAME_RESOURCEMANAGER_HPP
-#define NULL_GAME_RESOURCEMANAGER_HPP
+#pragma once
+
 #include <map>
 #include <string>
 
@@ -11,6 +11,3 @@ namespace  null {
         static sf::Texture* loadTexture(const std::string &filename);
     };
 }
-
-
-#endif //NULL_GAME_RESOURCEMANAGER_HPP
