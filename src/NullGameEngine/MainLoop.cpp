@@ -5,6 +5,8 @@
 #include <Scene.hpp>
 #include <Renderer.hpp>
 
+#define MAX_FRAMERATE 60
+
 namespace null {
 
     std::unique_ptr<Scene> MainLoop::scene = nullptr;
@@ -12,7 +14,7 @@ namespace null {
     // todo this is a dummy implementation, copied from the earlier draft
     int MainLoop::run() {
         sf::RenderWindow sfmlWin(sf::VideoMode(1280, 720), "{[Null]}");
-
+        sfmlWin.setFramerateLimit(MAX_FRAMERATE);
         // For now multithreading is disabled (because reasons)
         //sfmlWin.setActive(false);
 
@@ -48,7 +50,6 @@ sceneStart:
                 sfmlWin.clear(sf::Color::Black);
                 Renderer::render(sfmlWin, *MainLoop::scene);
                 // 1 ms wait makes it smoother?! WHY???
-                std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(1.0));
                 sfmlWin.display();
             }
         } 
