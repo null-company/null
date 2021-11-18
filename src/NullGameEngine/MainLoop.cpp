@@ -1,4 +1,5 @@
 #include <memory>
+#include <thread>
 
 #include <MainLoop.hpp>
 #include <Scene.hpp>
@@ -6,13 +7,16 @@
 
 namespace null {
 
+    constexpr unsigned int MAX_FRAMERATE = 60;
+
     std::unique_ptr<Scene> MainLoop::scene = nullptr;
 
     // todo this is a dummy implementation, copied from the earlier draft
     int MainLoop::run() {
         sf::RenderWindow sfmlWin(sf::VideoMode(1280, 720), "{[Null]}");
-
-        sfmlWin.setActive(false);
+        sfmlWin.setFramerateLimit(MAX_FRAMERATE);
+        // For now multithreading is disabled (because reasons)
+        //sfmlWin.setActive(false);
 
         auto renderingThread = [](sf::RenderWindow &window) {
             window.setActive(true);
@@ -24,7 +28,7 @@ namespace null {
         };
 
         sf::Thread rendererThread(renderingThread, std::ref(sfmlWin));
-        rendererThread.launch();
+        //rendererThread.launch();
 
 sceneStart:
         scene->start();
@@ -43,7 +47,9 @@ sceneStart:
                         default: break;
                     }
                 }
-
+                sfmlWin.clear(sf::Color::Black);
+                Renderer::render(sfmlWin, *MainLoop::scene);
+                sfmlWin.display();
             }
         } 
         catch (const SceneChangedException& sceneChanged) {

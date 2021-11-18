@@ -23,7 +23,8 @@ set(SRC
     ${INCROOT}/Camera.hpp
     ${SRCROOT}/Renderer.cpp
     ${INCROOT}/Renderer.hpp
-    )
+    ${SRCROOT}/ResourceManager.cpp
+    ${INCROOT}/ResourceManager.hpp)
 
 add_library(nullGameEngine STATIC ${SRC})
 target_include_directories(nullGameEngine 
