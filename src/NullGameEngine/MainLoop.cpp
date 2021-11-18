@@ -49,7 +49,6 @@ sceneStart:
                 }
                 sfmlWin.clear(sf::Color::Black);
                 Renderer::render(sfmlWin, *MainLoop::scene);
-                // 1 ms wait makes it smoother?! WHY???
                 sfmlWin.display();
             }
         } 
