@@ -1,8 +1,11 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
 #include <memory>
 #include <set>
+
+#include <box2d/box2d.h>
+
+#include <SFML/Graphics.hpp>
 
 #include <NullGameEngine.hpp>
 #include <Script.hpp>
@@ -10,9 +13,14 @@
 namespace null {
 
     class GameObject {
+    private:
+        void assertTextureIsAttached();
+        void setRigidBodyDefPositionBySprite(b2BodyDef&);
+        void setShapeAsBoxBySprite(b2PolygonShape&);
     protected:
         bool isVisible;
         sf::Sprite sprite;
+        b2Body* rigidBody = nullptr;
         std::weak_ptr<GameObject> parent;
         std::vector<std::shared_ptr<GameObject>> children;
         std::set<std::string> tags;
@@ -26,7 +34,17 @@ namespace null {
 
         GameObject();
 
+        ~GameObject();
+
         sf::Sprite& getSprite();
+
+        b2Body* getRigidBody();
+
+        void makeStatic(b2World& box2dWorld);
+
+        void makeDynamic(b2World& box2dWorld);
+
+        void detachFromPhysicsWorld();
 
         bool getIsVisible();
 

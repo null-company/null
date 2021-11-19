@@ -1,4 +1,6 @@
 #include <memory>
+
+#include <box2d/box2d.h>
         
 #include <Scene.hpp>
 #include <SceneLoader.hpp>
@@ -16,6 +18,7 @@ namespace null {
         
         // todo this should be done in a scene file
         auto newScene = std::make_unique<Scene>();
+        auto& box2dWorld = newScene->getBox2dWorld();
 
         // this texture is not released on purpose, because it MUST exist for as long
         // as the sprite lives. todo manage it with resource manager
@@ -35,11 +38,13 @@ namespace null {
         auto groundObject = std::make_unique<GameObject>();
         auto& groundSprite = groundObject->getSprite();
         groundSprite.setTexture(*boxTexture);
-        groundSprite.setScale(2.0f, 0.35f);
+        groundSprite.setScale(1.0f, 0.35f);
         groundSprite.setPosition(0.0f, 500.0f);
         groundObject->setIsVisible(true);
 
-        boxObject->addScript<ExampleClockedScript>(*boxObject);
+        groundObject->makeStatic(box2dWorld);
+
+        boxObject->makeDynamic(box2dWorld);
 
         newScene->addGameObject(move(nullGameLogo));
         newScene->addGameObject(move(boxObject));

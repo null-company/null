@@ -1,5 +1,8 @@
 #include <memory>
 
+#include <box2d/box2d.h>
+#include <box2d/b2_math.h>
+
 #include <GameObject.hpp>
 #include <Script.hpp>
 
@@ -11,8 +14,101 @@ namespace null {
         this->sprite = sf::Sprite();
     }
 
+    GameObject::~GameObject() {
+        if (rigidBody) {
+            rigidBody->GetWorld()->DestroyBody(rigidBody);
+        }
+    }
+
     sf::Sprite& GameObject::getSprite() {
         return this->sprite;
+    }
+
+    b2Body* GameObject::getRigidBody() {
+        return rigidBody;
+    }
+
+    constexpr static int meterToPixel = 100;
+    constexpr static float pixelToMeter = 1.0f / static_cast<float>(meterToPixel);
+
+    static const b2Vec2 pixelToMetersVector(const sf::Vector2f& pixelVec) {
+        const b2Vec2 metersVec(pixelVec.x * pixelToMeter, pixelVec.y * pixelToMeter);
+        return metersVec;
+    }
+
+    template<typename T>
+    static const sf::Vector2<T> meterToPixelVector(const b2Vec2& meterVec) {
+        T x = static_cast<T>(meterVec.x * meterToPixel);
+        T y = static_cast<T>(meterVec.y * meterToPixel);
+
+        return sf::Vector2<T>(x, y);
+    }
+
+    static const sf::Vector2f getSpriteSize(sf::Sprite& sprite) {
+        const sf::Vector2f spriteSize(
+                sprite.getTexture()->getSize().x * sprite.getScale().x,
+                sprite.getTexture()->getSize().y * sprite.getScale().y);
+        return spriteSize;
+    }
+
+    void GameObject::setRigidBodyDefPositionBySprite(b2BodyDef& bodyDef) {
+        auto spritePosMeters = pixelToMetersVector(sprite.getPosition());
+        bodyDef.position.Set(spritePosMeters.x, spritePosMeters.y);
+    }
+
+    void GameObject::setShapeAsBoxBySprite(b2PolygonShape& shape) {
+        auto spriteSizeMeters = pixelToMetersVector(getSpriteSize(sprite));
+        shape.SetAsBox(spriteSizeMeters.x / 2, spriteSizeMeters.y / 2);
+    }
+
+    void GameObject::assertTextureIsAttached() {
+        if (sprite.getTexture() == nullptr) {
+            throw std::invalid_argument("No sprite attached, can't guess rigidbody size");
+        }
+    }
+
+    void GameObject::makeStatic(b2World& box2dWorld) {
+        assertTextureIsAttached();
+        detachFromPhysicsWorld();
+
+        b2BodyDef bodyDef;
+        setRigidBodyDefPositionBySprite(bodyDef);
+        b2Body* rigidBody = box2dWorld.CreateBody(&bodyDef);
+
+        b2PolygonShape shape;
+        setShapeAsBoxBySprite(shape);
+        rigidBody->CreateFixture(&shape, 0.0f);
+
+        this->rigidBody = rigidBody;
+    }
+
+    void GameObject::makeDynamic(b2World& box2dWorld) {
+        assertTextureIsAttached();
+        detachFromPhysicsWorld();
+
+        b2BodyDef bodyDef;
+        bodyDef.type = b2_dynamicBody;
+        setRigidBodyDefPositionBySprite(bodyDef);
+
+        b2Body* rigidBody = box2dWorld.CreateBody(&bodyDef);
+
+        b2PolygonShape shape;
+        setShapeAsBoxBySprite(shape);
+
+        b2FixtureDef fixtureDef;
+        fixtureDef.shape = &shape;
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 0.5f;
+
+        rigidBody->CreateFixture(&fixtureDef);
+        this->rigidBody = rigidBody;
+    }
+
+    void GameObject::detachFromPhysicsWorld() {
+        if (rigidBody) {
+            rigidBody->GetWorld()->DestroyBody(rigidBody);
+            rigidBody = nullptr;
+        }
     }
 
     bool GameObject::getIsVisible() {
@@ -68,10 +164,18 @@ namespace null {
 
     void GameObject::setPosition(float x, float y) {
         sprite.setPosition(x, y);
+        if (!rigidBody) {
+            b2Vec2 newPosition = pixelToMetersVector(sf::Vector2f(x, y));
+            rigidBody->SetTransform(newPosition, rigidBody->GetAngle());
+        }
     }
 
     void GameObject::setPosition(sf::Vector2f &pos) {
         sprite.setPosition(pos);
+        if (rigidBody) {
+            b2Vec2 newPosition = pixelToMetersVector(pos);
+            rigidBody->SetTransform(newPosition, rigidBody->GetAngle());
+        }
     }
 
     void GameObject::start() {
@@ -81,6 +185,15 @@ namespace null {
     }
 
     void GameObject::update() {
+
+        // box2d is expected to have done something,
+        // so we have to adjust the sprite
+        if (rigidBody) {
+            sf::Vector2f newPosition =
+                meterToPixelVector<float>(rigidBody->GetPosition());
+            sprite.setPosition(newPosition);
+        }
+
         for (auto &script : scripts) {
             script->update();
         }
