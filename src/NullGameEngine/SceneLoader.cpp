@@ -38,13 +38,15 @@ namespace null {
         auto groundObject = std::make_unique<GameObject>();
         auto& groundSprite = groundObject->getSprite();
         groundSprite.setTexture(*boxTexture);
-        groundSprite.setScale(1.0f, 0.35f);
-        groundSprite.setPosition(0.0f, 500.0f);
+        groundSprite.setScale(1.0f, 0.1f);
+        groundSprite.setPosition(250.0f / 4, 350.0f);
         groundObject->setIsVisible(true);
 
         groundObject->makeStatic(box2dWorld);
 
         boxObject->makeDynamic(box2dWorld);
+
+        boxObject->getRigidBody()->ApplyLinearImpulseToCenter(b2Vec2(15.0f, 0), true);
 
         newScene->addGameObject(move(nullGameLogo));
         newScene->addGameObject(move(boxObject));
