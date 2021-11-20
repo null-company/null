@@ -7,6 +7,11 @@
 #include <Script.hpp>
 
 namespace null {
+
+    constexpr static int meterToPixel = 100;
+    constexpr static float pixelToMeter = 1.0f / static_cast<float>(meterToPixel);
+    constexpr static double pi = 3.14159265358979323846;
+
     GameObject::GameObject():
     isVisible(false) {
         this->children = std::vector<std::shared_ptr<GameObject>>();
@@ -28,10 +33,8 @@ namespace null {
         return rigidBody;
     }
 
-    constexpr static int meterToPixel = 100;
-    constexpr static float pixelToMeter = 1.0f / static_cast<float>(meterToPixel);
-
-    static const b2Vec2 pixelToMetersVector(const sf::Vector2f& pixelVec) {
+    template<typename T>
+    static const b2Vec2 pixelToMetersVector(const sf::Vector2<T>& pixelVec) {
         const b2Vec2 metersVec(pixelVec.x * pixelToMeter, pixelVec.y * pixelToMeter);
         return metersVec;
     }
@@ -44,8 +47,8 @@ namespace null {
         return sf::Vector2<T>(x, y);
     }
 
-    static const sf::Vector2f getSpriteSize(sf::Sprite& sprite) {
-        const sf::Vector2f spriteSize(
+    static const sf::Vector2u getSpriteSize(sf::Sprite& sprite) {
+        const sf::Vector2u spriteSize(
                 sprite.getTexture()->getSize().x * sprite.getScale().x,
                 sprite.getTexture()->getSize().y * sprite.getScale().y);
         return spriteSize;
@@ -58,7 +61,8 @@ namespace null {
 
     void GameObject::setShapeAsBoxBySprite(b2PolygonShape& shape) {
         auto spriteSizeMeters = pixelToMetersVector(getSpriteSize(sprite));
-        shape.SetAsBox(spriteSizeMeters.x / 2, spriteSizeMeters.y / 2);
+        b2Vec2 boxCenter(spriteSizeMeters.x / 2, spriteSizeMeters.y / 2);
+        shape.SetAsBox(spriteSizeMeters.x / 2, spriteSizeMeters.y / 2, boxCenter, 0.0f);
     }
 
     void GameObject::assertTextureIsAttached() {
@@ -98,7 +102,7 @@ namespace null {
         b2FixtureDef fixtureDef;
         fixtureDef.shape = &shape;
         fixtureDef.density = 1.0f;
-        fixtureDef.friction = 0.5f;
+        fixtureDef.friction = 0.3f;
 
         rigidBody->CreateFixture(&fixtureDef);
         this->rigidBody = rigidBody;
@@ -192,6 +196,7 @@ namespace null {
             sf::Vector2f newPosition =
                 meterToPixelVector<float>(rigidBody->GetPosition());
             sprite.setPosition(newPosition);
+            sprite.setRotation(rigidBody->GetAngle() * (180.0 / pi));
         }
 
         for (auto &script : scripts) {
@@ -200,3 +205,4 @@ namespace null {
     }
 
 }
+
