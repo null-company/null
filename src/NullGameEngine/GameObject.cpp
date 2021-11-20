@@ -164,7 +164,7 @@ namespace null {
 
     void GameObject::setPosition(float x, float y) {
         sprite.setPosition(x, y);
-        if (!rigidBody) {
+        if (rigidBody) {
             b2Vec2 newPosition = pixelToMetersVector(sf::Vector2f(x, y));
             rigidBody->SetTransform(newPosition, rigidBody->GetAngle());
         }
