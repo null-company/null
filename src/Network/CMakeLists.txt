@@ -13,8 +13,7 @@ set(SRC
         ${INCROOT}/message/Message.h
         ${SRCROOT}/message/Message.cpp
         ${INCROOT}/channel/Channel.h
-        ${SRCROOT}/channel/Channel.cpp
-        SnapshotSystem/SnapshotManager.cpp ../../include/Network/SnapshotSystem/SnapshotManager.h SnapshotSystem/Snapshot.cpp ../../include/Network/SnapshotSystem/Snapshot.h SnapshotSystem/SnapshotDelta.cpp ../../include/Network/SnapshotSystem/SnapshotDelta.h SnapshotSystem/SnapshotDelta.cpp)
+        ${SRCROOT}/channel/Channel.cpp)
 add_library(network STATIC ${SRC})
 
 target_include_directories(network
