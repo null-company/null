@@ -49,8 +49,8 @@ namespace null {
 
     static const sf::Vector2u getSpriteSize(sf::Sprite& sprite) {
         const sf::Vector2u spriteSize(
-                sprite.getTexture()->getSize().x * sprite.getScale().x,
-                sprite.getTexture()->getSize().y * sprite.getScale().y);
+                sprite.getTextureRect().getSize().x * sprite.getScale().x,
+                sprite.getTextureRect().getSize().y * sprite.getScale().y);
         return spriteSize;
     }
 
