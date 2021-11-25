@@ -17,16 +17,16 @@ namespace null {
             return x->renderLayer > y->renderLayer;
         };
 
-        auto gamer = std::priority_queue<SpriteRefPair*, std::vector<SpriteRefPair*>, decltype(compSRP)>(compSRP);
+        auto queue = std::priority_queue<SpriteRefPair*, std::vector<SpriteRefPair*>, decltype(compSRP)>(compSRP);
         for (const auto& go : scene.gameObjects) {
             if (go->getIsVisible()) {
                 auto spriteRefPair = new SpriteRefPair {go->getRenderLayer(), go->getSprite()};
-                gamer.push(spriteRefPair);
+                queue.push(spriteRefPair);
             }
         }
-        for (auto srp = gamer.top(); !gamer.empty(); srp = gamer.top()) {
+        for (auto srp = queue.top(); !queue.empty(); srp = queue.top()) {
             window.draw(srp->sprite_ref);
-            gamer.pop();
+            queue.pop();
         }
 
     }
