@@ -1,6 +1,9 @@
+# for all kinds of building
+build/*
+debug/*
+release/*
 
 .clangd
-build/*
 
 # ------------------------------------------------------------------------
 
