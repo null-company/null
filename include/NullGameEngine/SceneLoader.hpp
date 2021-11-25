@@ -1,6 +1,7 @@
 #include <string>
 
 #include <NullGameEngine.hpp>
+#include <RenderLayer.hpp>
 
 namespace null {
 

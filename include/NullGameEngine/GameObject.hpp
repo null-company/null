@@ -9,6 +9,7 @@
 
 #include <NullGameEngine.hpp>
 #include <Script.hpp>
+#include <RenderLayer.hpp>
 
 namespace null {
 
@@ -18,6 +19,7 @@ namespace null {
         void setRigidBodyDefPositionBySprite(b2BodyDef&);
         void setShapeAsBoxBySprite(b2PolygonShape&);
     protected:
+        RenderLayer renderLayer;
         bool isVisible;
         sf::Sprite sprite;
         b2Body* rigidBody = nullptr;
@@ -74,6 +76,8 @@ namespace null {
         void setIsVisible(bool isVisible);
 
         void addScript(std::unique_ptr<Script> script);
+
+        RenderLayer &getRenderLayer();
 
         template<class T, typename... Args>
         void addScript(Args&&... args) {
