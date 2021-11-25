@@ -14,7 +14,7 @@ namespace null {
 
     class GameObject {
     private:
-        void assertTextureIsAttached();
+        void assertSpriteHasSize();
         void setRigidBodyDefPositionBySprite(b2BodyDef&);
         void setShapeAsBoxBySprite(b2PolygonShape&);
     protected:

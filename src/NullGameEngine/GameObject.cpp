@@ -65,14 +65,14 @@ namespace null {
         shape.SetAsBox(spriteSizeMeters.x / 2, spriteSizeMeters.y / 2, boxCenter, 0.0f);
     }
 
-    void GameObject::assertTextureIsAttached() {
-        if (sprite.getTexture() == nullptr) {
+    void GameObject::assertSpriteHasSize() {
+        if (sprite.getTextureRect().height == 0 || sprite.getTextureRect().width == 0) {
             throw std::invalid_argument("No sprite attached, can't guess rigidbody size");
         }
     }
 
     void GameObject::makeStatic(b2World& box2dWorld) {
-        assertTextureIsAttached();
+        assertSpriteHasSize();
         detachFromPhysicsWorld();
 
         b2BodyDef bodyDef;
@@ -87,7 +87,7 @@ namespace null {
     }
 
     void GameObject::makeDynamic(b2World& box2dWorld) {
-        assertTextureIsAttached();
+        assertSpriteHasSize();
         detachFromPhysicsWorld();
 
         b2BodyDef bodyDef;
