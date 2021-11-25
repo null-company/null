@@ -3,6 +3,8 @@
 #include <map>
 #include <string>
 
+#include <SFML/Graphics.hpp>
+
 namespace  null {
     class ResourceManager {
     private:

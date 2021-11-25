@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include "ResourceManager.hpp"
+#include <ResourceManager.hpp>
 
 namespace null {
     std::map<std::string, sf::Texture*> ResourceManager::textureMap =
