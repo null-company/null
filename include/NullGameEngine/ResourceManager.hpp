@@ -11,3 +11,4 @@ namespace  null {
         static sf::Texture* loadTexture(const std::string &filename);
     };
 }
+
