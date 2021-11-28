@@ -6,22 +6,44 @@
 #define NULL_GAME_CLIENT_H
 
 #include "SFML/Network.hpp"
+#include "serverConfig.pb.h"
 
 class Client {
 private:
     char client_idx;
-    sf::TcpSocket server_state_socket;
-    sf::TcpSocket client_command_socket;
-    sf::IpAddress server_address;
-    uint16_t state_port;
-    uint16_t command_port;
+    sf::IpAddress gameServerAddress;
+    sf::TcpSocket serverStateSocket;
+    uint16_t serverStatePort;
+    sf::TcpSocket clientCommandSocket;
+    uint16_t clientCommandPort;
+
+    sf::IpAddress arbiterServerAddress;
+    sf::TcpSocket arbiterSocket;
+    uint16_t arbiterPort;
+
+    std::string roomCode;
+private:
+    void sendGenerateRoomMessage();
+
+    void receiveServerGameRoomInfo();
+
+    net::NetMessage receiveNetMessage(sf::TcpSocket &socket);
+
+    void sendNetMessage(sf::Socket &socket, const net::NetMessage &message);
+
 public:
-    Client(sf::IpAddress server_address, uint16_t state_port, uint16_t command_port);
 
-    void connect();
+    Client(sf::IpAddress serverAddress, uint16_t arbiterPort);
 
-    void send_message();
+    void createRoom();
 
+    void connectRoom();
+
+    void sendChatMessage(const std::string &chatMessage);
+
+    void receiveWorldStateMessage();
+
+    void handleChatMessage(net::ChatMessage *pMessage);
 };
 
 #endif //NULL_GAME_CLIENT_H

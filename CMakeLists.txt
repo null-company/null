@@ -7,13 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 include(FetchContent)
 set(BUILD_SHARED_LIBS OFF)
-FetchContent_Declare(
-        SFML
-        GIT_REPOSITORY https://github.com/SFML/SFML.git
-        GIT_TAG d950c9387a94087f478434fb42b95c5a9c746fb2 # todo this needs revision. 2.5.1 doesnt fit for clang
-)
-FetchContent_MakeAvailable(SFML)
 
+## GOOGLE TEST INSTALL
 include(FetchContent)
 FetchContent_Declare(
         googletest
@@ -24,10 +19,30 @@ if (WIN32)
 endif (WIN32)
 
 FetchContent_MakeAvailable(googletest)
+FetchContent_GetProperties(googletest)
+set(GTest_DIR ${googletest_BINARY_DIR})
+
+#SFML INSTALL
+FetchContent_Declare(
+        SFML
+        GIT_REPOSITORY https://github.com/SFML/SFML.git
+        GIT_TAG d950c9387a94087f478434fb42b95c5a9c746fb2 # todo this needs revision. 2.5.1 doesnt fit for clang
+)
+FetchContent_MakeAvailable(SFML)
+FetchContent_GetProperties(SFML)
+
+# GLOG INSTALL
+FetchContent_Declare(
+        plog
+        GIT_REPOSITORY https://github.com/SergiusTheBest/plog
+        GIT_TAG 914e799d2b08d790f5d04d1c46928586b3a41250
+)
+FetchContent_MakeAvailable(plog)
+FetchContent_GetProperties(plog)
 
 add_subdirectory(./src/)
 add_subdirectory(./test/)
-add_executable(NULL_GAME main.cpp include/Network/Serializable.h)
+add_executable(NULL_GAME main.cpp)
 
 
 target_link_libraries(NULL_GAME
