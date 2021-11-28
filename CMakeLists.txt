@@ -42,7 +42,7 @@ FetchContent_GetProperties(plog)
 
 add_subdirectory(./src/)
 add_subdirectory(./test/)
-add_executable(NULL_GAME main.cpp)
+add_executable(NULL_GAME main.cpp include/Network/server/ClientCollector.h include/Network/NetMessageTransmitting.h)
 
 
 target_link_libraries(NULL_GAME

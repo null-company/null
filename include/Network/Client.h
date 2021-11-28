@@ -27,10 +27,6 @@ private:
 
     void receiveServerGameRoomInfo();
 
-    net::NetMessage receiveNetMessage(sf::TcpSocket &socket);
-
-    void sendNetMessage(sf::Socket &socket, const net::NetMessage &message);
-
 public:
 
     Client(sf::IpAddress serverAddress, uint16_t arbiterPort);

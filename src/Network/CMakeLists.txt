@@ -12,13 +12,13 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/src/Network/)
 set(SRC
         ${INCROOT}/Client.h
         ${SRCROOT}/Client.cpp
-        ${INCROOT}/Server.h
-        ${SRCROOT}/Server.cpp
+        ${INCROOT}/server/Server.h
+        ${SRCROOT}/server/Server.cpp
         ${INCROOT}/channel/Connection.h
         ${SRCROOT}/channel/Connection.cpp
         ${INCROOT}/serialized/serverConfig.pb.h
         ${SRCROOT}/serialized/serverConfig.pb.cc
-        ServerArbiter.cpp)
+        server/ServerArbiter.cpp server/ClientCollector.cpp NetMessageTransmitting.cpp)
 add_library(network STATIC ${SRC})
 target_link_libraries(network ${Protobuf_LIBRARIES})
 target_include_directories(network
