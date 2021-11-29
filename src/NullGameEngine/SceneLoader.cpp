@@ -14,7 +14,7 @@ namespace null {
     // todo this is a dummy implementation
     // later reimplement this by loading stuff from file 
     // and using a resource manager
-    void SceneLoader::loadSceneFromFile(std::string) {
+    void SceneLoader::loadSceneFromFile(std::filesystem::path) {
         
         // todo this should be done in a scene file
         auto newScene = std::make_unique<Scene>();
