@@ -1,4 +1,4 @@
-#include "NetMessageTransmitting.h"
+#include "utils/NetMessageTransmitting.h"
 #include "plog/Log.h"
 
 net::NetMessage receiveNetMessage(sf::TcpSocket &socket) {

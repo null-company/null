@@ -16,8 +16,7 @@ message GameServerConfig{
     fixed32 v4 = 1;
     bytes v6 = 2;
   };
-  uint32 server_state_port = 3;
-  uint32 server_command_port = 4;
+  uint32 server_port = 3;
   string room_code = 5;
 }
 

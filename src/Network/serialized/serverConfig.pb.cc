@@ -32,8 +32,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT NetMessageDefaultTypeInternal _
 constexpr GameServerConfig::GameServerConfig(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : room_code_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
-  , server_state_port_(0u)
-  , server_command_port_(0u)
+  , server_port_(0u)
   , _oneof_case_{}{}
 struct GameServerConfigDefaultTypeInternal {
   constexpr GameServerConfigDefaultTypeInternal()
@@ -130,8 +129,7 @@ const uint32_t TableStruct_serverConfig_2eproto::offsets[] PROTOBUF_SECTION_VARI
   ~0u,  // no _inlined_string_donated_
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
-  PROTOBUF_FIELD_OFFSET(::net::GameServerConfig, server_state_port_),
-  PROTOBUF_FIELD_OFFSET(::net::GameServerConfig, server_command_port_),
+  PROTOBUF_FIELD_OFFSET(::net::GameServerConfig, server_port_),
   PROTOBUF_FIELD_OFFSET(::net::GameServerConfig, room_code_),
   PROTOBUF_FIELD_OFFSET(::net::GameServerConfig, server_address_),
   ~0u,  // no _has_bits_
@@ -172,11 +170,11 @@ const uint32_t TableStruct_serverConfig_2eproto::offsets[] PROTOBUF_SECTION_VARI
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::net::NetMessage)},
   { 13, -1, -1, sizeof(::net::GameServerConfig)},
-  { 25, -1, -1, sizeof(::net::ClientInfo)},
-  { 32, -1, -1, sizeof(::net::GenerateRoom)},
-  { 38, -1, -1, sizeof(::net::ConnectRoom)},
-  { 45, -1, -1, sizeof(::net::GameMessage)},
-  { 52, -1, -1, sizeof(::net::ChatMessage)},
+  { 24, -1, -1, sizeof(::net::ClientInfo)},
+  { 31, -1, -1, sizeof(::net::GenerateRoom)},
+  { 37, -1, -1, sizeof(::net::ConnectRoom)},
+  { 44, -1, -1, sizeof(::net::GameMessage)},
+  { 51, -1, -1, sizeof(::net::ChatMessage)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -197,19 +195,18 @@ const char descriptor_table_protodef_serverConfig_2eproto[] PROTOBUF_SECTION_VAR
   "\021.net.GenerateRoomH\000\022(\n\014connect_room\030\010 \001"
   "(\0132\020.net.ConnectRoomH\000\022(\n\014game_message\030\001"
   " \001(\0132\020.net.GameMessageH\000\022(\n\014chat_message"
-  "\030\002 \001(\0132\020.net.ChatMessageH\000B\006\n\004body\"\213\001\n\020G"
-  "ameServerConfig\022\014\n\002v4\030\001 \001(\007H\000\022\014\n\002v6\030\002 \001("
-  "\014H\000\022\031\n\021server_state_port\030\003 \001(\r\022\033\n\023server"
-  "_command_port\030\004 \001(\r\022\021\n\troom_code\030\005 \001(\tB\020"
-  "\n\016server_address\"!\n\nClientInfo\022\023\n\013client"
-  "_name\030\001 \001(\t\"\016\n\014GenerateRoom\" \n\013ConnectRo"
-  "om\022\021\n\troom_code\030\004 \001(\t\"\036\n\013GameMessage\022\017\n\007"
-  "message\030\001 \001(\t\"\036\n\013ChatMessage\022\017\n\007message\030"
-  "\001 \001(\tb\006proto3"
+  "\030\002 \001(\0132\020.net.ChatMessageH\000B\006\n\004body\"h\n\020Ga"
+  "meServerConfig\022\014\n\002v4\030\001 \001(\007H\000\022\014\n\002v6\030\002 \001(\014"
+  "H\000\022\023\n\013server_port\030\003 \001(\r\022\021\n\troom_code\030\005 \001"
+  "(\tB\020\n\016server_address\"!\n\nClientInfo\022\023\n\013cl"
+  "ient_name\030\001 \001(\t\"\016\n\014GenerateRoom\" \n\013Conne"
+  "ctRoom\022\021\n\troom_code\030\004 \001(\t\"\036\n\013GameMessage"
+  "\022\017\n\007message\030\001 \001(\t\"\036\n\013ChatMessage\022\017\n\007mess"
+  "age\030\001 \001(\tb\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_serverConfig_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_serverConfig_2eproto = {
-  false, false, 613, descriptor_table_protodef_serverConfig_2eproto, "serverConfig.proto", 
+  false, false, 577, descriptor_table_protodef_serverConfig_2eproto, "serverConfig.proto", 
   &descriptor_table_serverConfig_2eproto_once, nullptr, 0, 7,
   schemas, file_default_instances, TableStruct_serverConfig_2eproto::offsets,
   file_level_metadata_serverConfig_2eproto, file_level_enum_descriptors_serverConfig_2eproto, file_level_service_descriptors_serverConfig_2eproto,
@@ -776,9 +773,7 @@ GameServerConfig::GameServerConfig(const GameServerConfig& from)
     room_code_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_room_code(), 
       GetArenaForAllocation());
   }
-  ::memcpy(&server_state_port_, &from.server_state_port_,
-    static_cast<size_t>(reinterpret_cast<char*>(&server_command_port_) -
-    reinterpret_cast<char*>(&server_state_port_)) + sizeof(server_command_port_));
+  server_port_ = from.server_port_;
   clear_has_server_address();
   switch (from.server_address_case()) {
     case kV4: {
@@ -801,10 +796,7 @@ room_code_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAl
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
   room_code_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-    reinterpret_cast<char*>(&server_state_port_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&server_command_port_) -
-    reinterpret_cast<char*>(&server_state_port_)) + sizeof(server_command_port_));
+server_port_ = 0u;
 clear_has_server_address();
 }
 
@@ -859,9 +851,7 @@ void GameServerConfig::Clear() {
   (void) cached_has_bits;
 
   room_code_.ClearToEmpty();
-  ::memset(&server_state_port_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&server_command_port_) -
-      reinterpret_cast<char*>(&server_state_port_)) + sizeof(server_command_port_));
+  server_port_ = 0u;
   clear_server_address();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -889,18 +879,10 @@ const char* GameServerConfig::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPA
         } else
           goto handle_unusual;
         continue;
-      // uint32 server_state_port = 3;
+      // uint32 server_port = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
-          server_state_port_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // uint32 server_command_port = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
-          server_command_port_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          server_port_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -956,16 +938,10 @@ uint8_t* GameServerConfig::_InternalSerialize(
         2, this->_internal_v6(), target);
   }
 
-  // uint32 server_state_port = 3;
-  if (this->_internal_server_state_port() != 0) {
+  // uint32 server_port = 3;
+  if (this->_internal_server_port() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(3, this->_internal_server_state_port(), target);
-  }
-
-  // uint32 server_command_port = 4;
-  if (this->_internal_server_command_port() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(4, this->_internal_server_command_port(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(3, this->_internal_server_port(), target);
   }
 
   // string room_code = 5;
@@ -1001,14 +977,9 @@ size_t GameServerConfig::ByteSizeLong() const {
         this->_internal_room_code());
   }
 
-  // uint32 server_state_port = 3;
-  if (this->_internal_server_state_port() != 0) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32SizePlusOne(this->_internal_server_state_port());
-  }
-
-  // uint32 server_command_port = 4;
-  if (this->_internal_server_command_port() != 0) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32SizePlusOne(this->_internal_server_command_port());
+  // uint32 server_port = 3;
+  if (this->_internal_server_port() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32SizePlusOne(this->_internal_server_port());
   }
 
   switch (server_address_case()) {
@@ -1053,11 +1024,8 @@ void GameServerConfig::MergeFrom(const GameServerConfig& from) {
   if (!from._internal_room_code().empty()) {
     _internal_set_room_code(from._internal_room_code());
   }
-  if (from._internal_server_state_port() != 0) {
-    _internal_set_server_state_port(from._internal_server_state_port());
-  }
-  if (from._internal_server_command_port() != 0) {
-    _internal_set_server_command_port(from._internal_server_command_port());
+  if (from._internal_server_port() != 0) {
+    _internal_set_server_port(from._internal_server_port());
   }
   switch (from.server_address_case()) {
     case kV4: {
@@ -1096,12 +1064,7 @@ void GameServerConfig::InternalSwap(GameServerConfig* other) {
       &room_code_, lhs_arena,
       &other->room_code_, rhs_arena
   );
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(GameServerConfig, server_command_port_)
-      + sizeof(GameServerConfig::server_command_port_)
-      - PROTOBUF_FIELD_OFFSET(GameServerConfig, server_state_port_)>(
-          reinterpret_cast<char*>(&server_state_port_),
-          reinterpret_cast<char*>(&other->server_state_port_));
+  swap(server_port_, other->server_port_);
   swap(server_address_, other->server_address_);
   swap(_oneof_case_[0], other->_oneof_case_[0]);
 }

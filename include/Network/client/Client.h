@@ -11,11 +11,9 @@
 class Client {
 private:
     char client_idx;
+    sf::TcpSocket gameServerSocket;
     sf::IpAddress gameServerAddress;
-    sf::TcpSocket serverStateSocket;
-    uint16_t serverStatePort;
-    sf::TcpSocket clientCommandSocket;
-    uint16_t clientCommandPort;
+    uint16_t gameServerPort;
 
     sf::IpAddress arbiterServerAddress;
     sf::TcpSocket arbiterSocket;
@@ -25,7 +23,7 @@ private:
 private:
     void sendGenerateRoomMessage();
 
-    void receiveServerGameRoomInfo();
+    void askGameServerConfigByRoomCode();
 
 public:
 
@@ -40,6 +38,14 @@ public:
     void receiveWorldStateMessage();
 
     void handleChatMessage(net::ChatMessage *pMessage);
+
+    void handleRoomCodeMessage(const net::ConnectRoom &room);
+
+    void handleServerArbiterMessage(const net::NetMessage &message);
+
+    void handleServerConfigMessage(const net::GameServerConfig &config);
+
+    static void handleChatMessage(const net::ChatMessage &chatMessage);
 };
 
 #endif //NULL_GAME_CLIENT_H

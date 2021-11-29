@@ -501,8 +501,7 @@ class GameServerConfig final :
 
   enum : int {
     kRoomCodeFieldNumber = 5,
-    kServerStatePortFieldNumber = 3,
-    kServerCommandPortFieldNumber = 4,
+    kServerPortFieldNumber = 3,
     kV4FieldNumber = 1,
     kV6FieldNumber = 2,
   };
@@ -520,22 +519,13 @@ class GameServerConfig final :
   std::string* _internal_mutable_room_code();
   public:
 
-  // uint32 server_state_port = 3;
-  void clear_server_state_port();
-  uint32_t server_state_port() const;
-  void set_server_state_port(uint32_t value);
+  // uint32 server_port = 3;
+  void clear_server_port();
+  uint32_t server_port() const;
+  void set_server_port(uint32_t value);
   private:
-  uint32_t _internal_server_state_port() const;
-  void _internal_set_server_state_port(uint32_t value);
-  public:
-
-  // uint32 server_command_port = 4;
-  void clear_server_command_port();
-  uint32_t server_command_port() const;
-  void set_server_command_port(uint32_t value);
-  private:
-  uint32_t _internal_server_command_port() const;
-  void _internal_set_server_command_port(uint32_t value);
+  uint32_t _internal_server_port() const;
+  void _internal_set_server_port(uint32_t value);
   public:
 
   // fixed32 v4 = 1;
@@ -584,8 +574,7 @@ class GameServerConfig final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr room_code_;
-  uint32_t server_state_port_;
-  uint32_t server_command_port_;
+  uint32_t server_port_;
   union ServerAddressUnion {
     constexpr ServerAddressUnion() : _constinit_{} {}
       ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized _constinit_;
@@ -1907,44 +1896,24 @@ inline void GameServerConfig::set_allocated_v6(std::string* v6) {
   // @@protoc_insertion_point(field_set_allocated:net.GameServerConfig.v6)
 }
 
-// uint32 server_state_port = 3;
-inline void GameServerConfig::clear_server_state_port() {
-  server_state_port_ = 0u;
+// uint32 server_port = 3;
+inline void GameServerConfig::clear_server_port() {
+  server_port_ = 0u;
 }
-inline uint32_t GameServerConfig::_internal_server_state_port() const {
-  return server_state_port_;
+inline uint32_t GameServerConfig::_internal_server_port() const {
+  return server_port_;
 }
-inline uint32_t GameServerConfig::server_state_port() const {
-  // @@protoc_insertion_point(field_get:net.GameServerConfig.server_state_port)
-  return _internal_server_state_port();
+inline uint32_t GameServerConfig::server_port() const {
+  // @@protoc_insertion_point(field_get:net.GameServerConfig.server_port)
+  return _internal_server_port();
 }
-inline void GameServerConfig::_internal_set_server_state_port(uint32_t value) {
+inline void GameServerConfig::_internal_set_server_port(uint32_t value) {
   
-  server_state_port_ = value;
+  server_port_ = value;
 }
-inline void GameServerConfig::set_server_state_port(uint32_t value) {
-  _internal_set_server_state_port(value);
-  // @@protoc_insertion_point(field_set:net.GameServerConfig.server_state_port)
-}
-
-// uint32 server_command_port = 4;
-inline void GameServerConfig::clear_server_command_port() {
-  server_command_port_ = 0u;
-}
-inline uint32_t GameServerConfig::_internal_server_command_port() const {
-  return server_command_port_;
-}
-inline uint32_t GameServerConfig::server_command_port() const {
-  // @@protoc_insertion_point(field_get:net.GameServerConfig.server_command_port)
-  return _internal_server_command_port();
-}
-inline void GameServerConfig::_internal_set_server_command_port(uint32_t value) {
-  
-  server_command_port_ = value;
-}
-inline void GameServerConfig::set_server_command_port(uint32_t value) {
-  _internal_set_server_command_port(value);
-  // @@protoc_insertion_point(field_set:net.GameServerConfig.server_command_port)
+inline void GameServerConfig::set_server_port(uint32_t value) {
+  _internal_set_server_port(value);
+  // @@protoc_insertion_point(field_set:net.GameServerConfig.server_port)
 }
 
 // string room_code = 5;

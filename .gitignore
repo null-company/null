@@ -535,7 +535,7 @@ UpgradeLog*.htm
 ServiceFabricBackup/
 *.rptproj.bak
 
-# SQL Server files
+# SQL GameServer files
 *.mdf
 *.ldf
 *.ndf
@@ -572,8 +572,8 @@ node_modules/
 **/*.HTMLClient/GeneratedArtifacts
 **/*.DesktopClient/GeneratedArtifacts
 **/*.DesktopClient/ModelManifest.xml
-**/*.Server/GeneratedArtifacts
-**/*.Server/ModelManifest.xml
+**/*.GameServer/GeneratedArtifacts
+**/*.GameServer/ModelManifest.xml
 _Pvt_Extensions
 
 # Paket dependency manager

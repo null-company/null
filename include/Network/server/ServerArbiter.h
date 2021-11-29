@@ -7,18 +7,27 @@
 
 #include <SFML/Network.hpp>
 #include <list>
-#include "Server.h"
+#include "GameServer.h"
 #include "serverConfig.pb.h"
-#include "ClientCollector.h"
+#include "NetClientCollector.h"
 
-class ServerArbiter : public ClientCollector {
-    std::vector<Server> gameServers;
+class ServerArbiter : public NetClientCollector {
+    std::vector<std::unique_ptr<GameServer>> gameServers;
     std::list<uint16_t> freePorts;
+    std::map<std::string, int> roomCodeToServerNum;
 public:
     ServerArbiter(sf::IpAddress ipAddress, uint16_t port);
-    net::GameServerConfig createNewGameSimulation();
-    void sendServerGameRoomInfo(sf::TcpSocket &client);
 
+    std::string createNewGameSimulation();
+
+    std::string handleRoomCodeMessage(const net::ConnectRoom &room);
+
+    void sendGameServerConfig(sf::TcpSocket &client, const std::string &roomCode);
+
+
+    void handleNetMessage(sf::TcpSocket &client, const net::NetMessage &message) override;
+
+    void sendRoomCode(sf::TcpSocket &socket, const std::string &roomCode);
 };
 
 #endif //NULL_GAME_SERVERARBITER_H
