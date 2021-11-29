@@ -26,21 +26,21 @@ namespace null {
 
         auto nullGameLogo = std::make_unique<GameObject>();
         nullGameLogo->getSprite().setTexture(*nullTexture);
-        nullGameLogo->setIsVisible(true);
+        nullGameLogo->visible = true;
 
         auto boxTexture = ResourceManager::loadTexture("box.png");
 
         auto boxObject = std::make_unique<GameObject>();
         boxObject->getSprite().setTexture(*boxTexture);
         boxObject->getSprite().setScale(0.25f, 0.25f);
-        boxObject->setIsVisible(true);
+        boxObject->visible = true;
 
         auto groundObject = std::make_unique<GameObject>();
         auto& groundSprite = groundObject->getSprite();
         groundSprite.setTexture(*boxTexture);
         groundSprite.setScale(1.0f, 0.1f);
         groundSprite.setPosition(250.0f / 4, 350.0f);
-        groundObject->setIsVisible(true);
+        groundObject->visible = true;
 
         groundObject->makeStatic(box2dWorld);
 

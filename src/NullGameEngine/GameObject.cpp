@@ -12,12 +12,7 @@ namespace null {
     constexpr static float pixelToMeter = 1.0f / static_cast<float>(meterToPixel);
     constexpr static double pi = 3.14159265358979323846;
 
-    GameObject::GameObject():
-    isVisible(false) {
-        this->children = std::vector<std::shared_ptr<GameObject>>();
-        this->tags = std::set<std::string>();
-        this->sprite = sf::Sprite();
-    }
+    GameObject::GameObject(): visible(false) { };
 
     GameObject::~GameObject() {
         if (rigidBody) {
@@ -26,7 +21,7 @@ namespace null {
     }
 
     sf::Sprite& GameObject::getSprite() {
-        return this->sprite;
+        return sprite;
     }
 
     b2Body* GameObject::getRigidBody() {
@@ -115,24 +110,16 @@ namespace null {
         }
     }
 
-    bool GameObject::getIsVisible() {
-        return this->isVisible;
-    }
-
-    void GameObject::setIsVisible(bool isVisible){
-        this->isVisible = isVisible;
-    }
-
     std::vector<std::weak_ptr<GameObject>> GameObject::getChildren() {
         auto result = std::vector<std::weak_ptr<GameObject>>();
-        for (const auto& child_ref : this->children) {
+        for (const auto& child_ref : children) {
             result.push_back(std::weak_ptr<GameObject>(child_ref));
         }
         return result;
     }
 
     std::weak_ptr<GameObject> GameObject::getChild(int index) {
-        return std::weak_ptr<GameObject>(this->children[index]);
+        return std::weak_ptr<GameObject>(children[index]);
     }
 
     void GameObject::addChild(const std::shared_ptr<GameObject> &child) {
