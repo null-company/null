@@ -26,6 +26,7 @@ namespace null {
 
         auto nullGameLogo = std::make_unique<GameObject>();
         nullGameLogo->getSprite().setTexture(*nullTexture);
+        nullGameLogo->renderLayer = BACKGROUND;
         nullGameLogo->visible = true;
 
         auto boxTexture = ResourceManager::loadTexture("box.png");
@@ -33,13 +34,23 @@ namespace null {
         auto boxObject = std::make_unique<GameObject>();
         boxObject->getSprite().setTexture(*boxTexture);
         boxObject->getSprite().setScale(0.25f, 0.25f);
+        boxObject->renderLayer = FOREGROUND;
         boxObject->visible = true;
+
+        auto boxObject2 = std::make_unique<GameObject>();
+        boxObject2->getSprite().setTexture(*boxTexture);
+        boxObject2->getSprite().setScale(0.25f, 0.25f);
+        boxObject2->setPosition(750.0f, 200.0f);
+        boxObject2->getSprite().setColor(sf::Color(255U, 0U, 0U));
+        boxObject2->renderLayer = BACKGROUND1;
+        boxObject2->visible = true;
 
         auto groundObject = std::make_unique<GameObject>();
         auto& groundSprite = groundObject->getSprite();
         groundSprite.setTexture(*boxTexture);
         groundSprite.setScale(1.0f, 0.1f);
         groundSprite.setPosition(250.0f / 4, 350.0f);
+        groundObject->renderLayer = FOREGROUND;
         groundObject->visible = true;
 
         groundObject->makeStatic(box2dWorld);
@@ -52,6 +63,7 @@ namespace null {
 
         newScene->addGameObject(move(nullGameLogo));
         newScene->addGameObject(move(boxObject));
+        newScene->addGameObject(move(boxObject2));
         newScene->addGameObject(move(groundObject));
 
         MainLoop::provideScene(move(newScene));

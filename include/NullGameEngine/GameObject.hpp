@@ -9,6 +9,7 @@
 
 #include <NullGameEngine.hpp>
 #include <Script.hpp>
+#include <RenderLayer.hpp>
 
 namespace null {
 
@@ -30,6 +31,8 @@ namespace null {
         void update();
 
     public:
+
+        RenderLayer renderLayer;
 
         GameObject();
 
