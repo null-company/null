@@ -14,7 +14,6 @@ namespace null {
 
     GameObject::GameObject():
     isVisible(false) {
-        //this->renderLayer = BACKGROUND;
         this->children = std::vector<std::shared_ptr<GameObject>>();
         this->tags = std::set<std::string>();
         this->sprite = sf::Sprite();
@@ -203,10 +202,6 @@ namespace null {
         for (auto &script : scripts) {
             script->update();
         }
-    }
-
-    RenderLayer& GameObject::getRenderLayer() {
-        return renderLayer;
     }
 
 }

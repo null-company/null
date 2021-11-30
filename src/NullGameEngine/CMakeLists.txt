@@ -24,7 +24,8 @@ set(SRC
     ${SRCROOT}/Renderer.cpp
     ${INCROOT}/Renderer.hpp
     ${SRCROOT}/ResourceManager.cpp
-    ${INCROOT}/ResourceManager.hpp)
+    ${INCROOT}/ResourceManager.hpp
+    ${INCROOT}/RenderLayer.hpp)
 
 add_library(nullGameEngine STATIC ${SRC})
 target_include_directories(nullGameEngine 

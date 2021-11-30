@@ -27,7 +27,7 @@ message(STATUS "box2d downloaded")
 
 add_subdirectory(./src/)
 
-add_executable(NULL_GAME main.cpp include/NullGameEngine/RenderLayer.hpp)
+add_executable(NULL_GAME main.cpp)
 
 target_link_libraries(NULL_GAME
     nullGameEngine

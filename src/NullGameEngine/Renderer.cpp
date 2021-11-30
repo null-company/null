@@ -8,28 +8,26 @@
 namespace null {
 
     void Renderer::render(sf::RenderWindow& window, const Scene& scene) {
-        typedef struct {
-            const RenderLayer& renderLayer;
-            const sf::Sprite& sprite_ref;
-        } SpriteRefPair;
-
-        auto compSRP = [](SpriteRefPair* x, SpriteRefPair* y) {
-            return x->renderLayer > y->renderLayer;
+        using SpriteRefPair = struct SpriteRefPair_s {
+            RenderLayer renderLayer;
+            sf::Sprite *sprite_ref;
         };
 
-        auto queue = std::priority_queue<SpriteRefPair*, std::vector<SpriteRefPair*>, decltype(compSRP)>(compSRP);
-        for (const auto& go : scene.gameObjects) {
+        auto compSRP = [](SpriteRefPair x, SpriteRefPair y) {
+            return x.renderLayer > y.renderLayer;
+        };
+
+        auto queue = std::priority_queue<SpriteRefPair, std::vector<SpriteRefPair>, decltype(compSRP)>(compSRP);
+        for (const auto &go: scene.gameObjects) {
             if (go->getIsVisible()) {
-                auto spriteRefPair = new SpriteRefPair {go->getRenderLayer(), go->getSprite()};
+                auto spriteRefPair = SpriteRefPair{go->renderLayer, &(go->getSprite())};
                 queue.push(spriteRefPair);
             }
         }
-        for (auto srp = queue.top(); !queue.empty(); srp = queue.top()) {
-            window.draw(srp->sprite_ref);
+        for (auto &srp = (SpriteRefPair &) queue.top(); !queue.empty(); srp = queue.top()) {
+            window.draw(*(srp.sprite_ref));
             queue.pop();
         }
-
     }
-
 }
 
