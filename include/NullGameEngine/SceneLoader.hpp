@@ -1,4 +1,4 @@
-#include <string>
+#include <filesystem>
 
 #include <NullGameEngine.hpp>
 #include <RenderLayer.hpp>
@@ -10,11 +10,9 @@ namespace null {
             SceneLoader();
 
         public:
-            // todo this is a dummy function, make it use normal filepaths
-            static void loadSceneFromFile(std::string);
+            static void loadSceneFromFile(std::filesystem::path);
 
     };
 
 }
-
 

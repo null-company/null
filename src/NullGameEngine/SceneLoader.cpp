@@ -14,7 +14,7 @@ namespace null {
     // todo this is a dummy implementation
     // later reimplement this by loading stuff from file 
     // and using a resource manager
-    void SceneLoader::loadSceneFromFile(std::string) {
+    void SceneLoader::loadSceneFromFile(std::filesystem::path) {
         
         // todo this should be done in a scene file
         auto newScene = std::make_unique<Scene>();
@@ -27,7 +27,7 @@ namespace null {
         auto nullGameLogo = std::make_unique<GameObject>();
         nullGameLogo->getSprite().setTexture(*nullTexture);
         nullGameLogo->renderLayer = BACKGROUND;
-        nullGameLogo->setIsVisible(true);
+        nullGameLogo->visible = true;
 
         auto boxTexture = ResourceManager::loadTexture("box.png");
 
@@ -35,7 +35,7 @@ namespace null {
         boxObject->getSprite().setTexture(*boxTexture);
         boxObject->getSprite().setScale(0.25f, 0.25f);
         boxObject->renderLayer = FOREGROUND;
-        boxObject->setIsVisible(true);
+        boxObject->visible = true;
 
         auto boxObject2 = std::make_unique<GameObject>();
         boxObject2->getSprite().setTexture(*boxTexture);
@@ -43,7 +43,7 @@ namespace null {
         boxObject2->setPosition(750.0f, 200.0f);
         boxObject2->getSprite().setColor(sf::Color(255U, 0U, 0U));
         boxObject2->renderLayer = BACKGROUND1;
-        boxObject2->setIsVisible(true);
+        boxObject2->visible = true;
 
         auto groundObject = std::make_unique<GameObject>();
         auto& groundSprite = groundObject->getSprite();
@@ -51,7 +51,7 @@ namespace null {
         groundSprite.setScale(1.0f, 0.1f);
         groundSprite.setPosition(250.0f / 4, 350.0f);
         groundObject->renderLayer = FOREGROUND;
-        groundObject->setIsVisible(true);
+        groundObject->visible = true;
 
         groundObject->makeStatic(box2dWorld);
 

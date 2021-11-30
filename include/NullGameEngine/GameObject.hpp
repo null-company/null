@@ -19,7 +19,6 @@ namespace null {
         void setRigidBodyDefPositionBySprite(b2BodyDef&);
         void setShapeAsBoxBySprite(b2PolygonShape&);
     protected:
-        bool isVisible;
         sf::Sprite sprite;
         b2Body* rigidBody = nullptr;
         std::weak_ptr<GameObject> parent;
@@ -39,6 +38,8 @@ namespace null {
 
         ~GameObject();
 
+        bool visible;
+
         sf::Sprite& getSprite();
 
         b2Body* getRigidBody();
@@ -48,8 +49,6 @@ namespace null {
         void makeDynamic(b2World& box2dWorld);
 
         void detachFromPhysicsWorld();
-
-        bool getIsVisible();
 
         // Returns the children of this GameObject
         // Potentially is VERY expensive!
@@ -74,8 +73,6 @@ namespace null {
 
         void setPosition(sf::Vector2f &pos);
 
-        void setIsVisible(bool isVisible);
-
         void addScript(std::unique_ptr<Script> script);
 
         template<class T, typename... Args>
@@ -89,3 +86,4 @@ namespace null {
     };
 
 }
+

@@ -3,6 +3,8 @@
 #include <map>
 #include <string>
 
+#include <SFML/Graphics.hpp>
+
 namespace  null {
     class ResourceManager {
     private:
@@ -11,3 +13,4 @@ namespace  null {
         static sf::Texture* loadTexture(const std::string &filename);
     };
 }
+
