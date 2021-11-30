@@ -9,7 +9,7 @@
 #include <Camera.hpp>
 
 namespace null {
-    class Scene{
+    class Scene {
     private:
         Camera camera;
         std::vector<std::unique_ptr<GameObject>> gameObjects;
