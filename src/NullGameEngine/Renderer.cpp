@@ -9,7 +9,7 @@ namespace null {
     void Renderer::render(sf::RenderWindow& window, const Scene& scene) {
         for (const std::unique_ptr<GameObject>& go : scene.gameObjects) {
             sf::Sprite sprite = go->getSprite();
-            if (go->getIsVisible()) {
+            if (go->visible) {
                 window.draw(sprite);
             }
         }
