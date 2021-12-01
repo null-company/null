@@ -18,6 +18,7 @@ namespace null {
         void assertSpriteHasSize();
         void setRigidBodyDefPositionBySprite(b2BodyDef&);
         void setShapeAsBoxBySprite(b2PolygonShape&);
+        std::weak_ptr<Scene> scene;
     protected:
         sf::Sprite sprite;
         b2Body* rigidBody = nullptr;
@@ -37,6 +38,8 @@ namespace null {
         GameObject();
 
         ~GameObject();
+
+        std::weak_ptr<Scene> getScene();
 
         bool visible;
 

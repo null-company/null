@@ -3,4 +3,5 @@
 #include <ExampleScript.hpp>
 #include <ClockedScript.hpp>
 #include <ExampleClockedScript.hpp>
+#include <ReloadSceneScript.hpp>
 

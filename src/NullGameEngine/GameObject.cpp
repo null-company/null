@@ -15,9 +15,15 @@ namespace null {
     GameObject::GameObject(): visible(false) { };
 
     GameObject::~GameObject() {
-        if (rigidBody) {
-            rigidBody->GetWorld()->DestroyBody(rigidBody);
+        if (scene.lock()) {
+            if (rigidBody) {
+                rigidBody->GetWorld()->DestroyBody(rigidBody);
+            }
         }
+    }
+
+    std::weak_ptr<Scene> GameObject::getScene() {
+        return scene;
     }
 
     sf::Sprite& GameObject::getSprite() {
