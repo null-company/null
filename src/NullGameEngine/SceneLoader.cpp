@@ -51,12 +51,19 @@ namespace null {
 
         boxObject->getRigidBody()->ApplyLinearImpulseToCenter(b2Vec2(15.0f, 0), true);
 
+        groundObject->addScript<ReloadSceneScript>(*groundObject);
+
         newScene->addGameObject(move(nullGameLogo));
         newScene->addGameObject(move(boxObject));
         newScene->addGameObject(move(groundObject));
 
         MainLoop::provideScene(move(newScene));
     };
+
+    void SceneLoader::changeScene(std::filesystem::path path) {
+        loadSceneFromFile(path);
+        throw SceneChangedException();
+    }
 
 }
 
