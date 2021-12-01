@@ -17,7 +17,8 @@ namespace null {
     void SceneLoader::loadSceneFromFile(std::filesystem::path) {
         
         // todo this should be done in a scene file
-        auto newScene = std::make_unique<Scene>();
+        auto newScene = std::make_shared<Scene>();
+        newScene->self = newScene;
         auto& box2dWorld = newScene->getBox2dWorld();
 
         // this texture is not released on purpose, because it MUST exist for as long

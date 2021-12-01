@@ -9,6 +9,7 @@ namespace null {
     Scene::Scene() : box2dWorld(b2Vec2(0.0, 9.8f)) { }
 
     void Scene::addGameObject(std::unique_ptr<GameObject> newGameObject) {
+        newGameObject->scene = self;
         gameObjects.push_back(move(newGameObject));
     }
 

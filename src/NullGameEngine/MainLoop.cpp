@@ -9,7 +9,7 @@ namespace null {
 
     constexpr unsigned int MAX_FRAMERATE = 60;
 
-    std::unique_ptr<Scene> MainLoop::scene = nullptr;
+    std::shared_ptr<Scene> MainLoop::scene = nullptr;
 
     // todo this is a dummy implementation, copied from the earlier draft
     int MainLoop::run() {

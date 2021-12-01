@@ -17,6 +17,8 @@ namespace null {
     public:
         Scene();
 
+        std::weak_ptr<Scene> self;
+
         void start();
 
         void update();
