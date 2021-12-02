@@ -1,30 +1,57 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
 #include <memory>
 #include <set>
 
+#include <box2d/box2d.h>
+
+#include <SFML/Graphics.hpp>
+
 #include <NullGameEngine.hpp>
 #include <Script.hpp>
+#include <RenderLayer.hpp>
 
 namespace null {
 
     class GameObject {
     private:
-        bool isVisible;
-        std::shared_ptr<sf::Sprite> sprite;
+        void assertSpriteHasSize();
+        void setRigidBodyDefPositionBySprite(b2BodyDef&);
+        void setShapeAsBoxBySprite(b2PolygonShape&);
+        std::weak_ptr<Scene> scene;
+    protected:
+        sf::Sprite sprite;
+        b2Body* rigidBody = nullptr;
         std::weak_ptr<GameObject> parent;
         std::vector<std::shared_ptr<GameObject>> children;
         std::set<std::string> tags;
-        std::vector<Script> scripts;
+        std::vector<std::unique_ptr<Script>> scripts;
+
+        void start();
+
+        void update();
 
     public:
 
+        RenderLayer renderLayer;
+
         GameObject();
 
-        std::weak_ptr<sf::Sprite> getSprite();
+        ~GameObject();
 
-        bool getIsVisible();
+        std::weak_ptr<Scene> getScene();
+
+        bool visible;
+
+        sf::Sprite& getSprite();
+
+        b2Body* getRigidBody();
+
+        void makeStatic(b2World& box2dWorld);
+
+        void makeDynamic(b2World& box2dWorld);
+
+        void detachFromPhysicsWorld();
 
         // Returns the children of this GameObject
         // Potentially is VERY expensive!
@@ -35,27 +62,31 @@ namespace null {
 
         void addChild(const std::shared_ptr<GameObject> &child);
 
-        std::vector<Script> &getScripts();
+        std::vector<std::unique_ptr<Script>>& getScripts();
 
         void addTag(const std::string &str);
 
         bool removeTag(const std::string& str);
 
-        sf::Transform getTransform();
+        const sf::Transform& getTransform();
 
-        sf::Vector2f getPosition();
+        const sf::Vector2f& getPosition();
 
         void setPosition(float x, float y);
 
         void setPosition(sf::Vector2f &pos);
 
-        void start();
+        void addScript(std::unique_ptr<Script> script);
 
-        void update();
+        template<class T, typename... Args>
+        void addScript(Args&&... args) {
+            auto script =
+                std::make_unique<T>(std::forward<Args>(args)...);
+            scripts.push_back(std::move(script));
+        }
 
-        void setIsVisible(bool &isVisible);
-
-        void addScript(Script &script);
+        friend Scene;
     };
 
 }
+

@@ -4,12 +4,12 @@
 
 namespace null {
     class Component {
-    private:
+    protected:
         null::GameObject &gameObject;
     public:
-        explicit Component(GameObject &gameObject) : gameObject(gameObject) {}
-        virtual void start() {  };
-        virtual void update() {  };
+        Component(GameObject&);
+        virtual void start() { };
+        virtual void update() { };
     };
 }
 

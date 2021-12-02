@@ -1,24 +1,35 @@
 #pragma once
 
+#include <memory>
+
+#include <box2d/box2d.h>
+
 #include <NullGameEngine.hpp>
 #include <GameObject.hpp>
+#include <Camera.hpp>
 
 namespace null {
-    class Scene{
+    class Scene {
     private:
-        GameObject rootGameObject;
-        std::vector<GameObject> gameObjects;
+        Camera camera;
+        std::vector<std::unique_ptr<GameObject>> gameObjects;
+        b2World box2dWorld;
     public:
-        Scene() {
-            gameObjects = std::vector<GameObject>();
-            rootGameObject = GameObject();
-        }
+        Scene();
+
+        std::weak_ptr<Scene> self;
 
         void start();
 
         void update();
 
-        void addGameObject(GameObject &gameObject);
+        void addGameObject(std::unique_ptr<GameObject>);
+
+        b2World& getBox2dWorld();
+
+        friend Renderer;
+
+        friend SceneLoader;
     };
 }
 

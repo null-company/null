@@ -19,18 +19,27 @@ set(SRC
     ${INCROOT}/SceneLoader.hpp
     ${SRCROOT}/MainLoop.cpp
     ${INCROOT}/MainLoop.hpp
-    )
+    ${SRCROOT}/Camera.cpp
+    ${INCROOT}/Camera.hpp
+    ${SRCROOT}/Renderer.cpp
+    ${INCROOT}/Renderer.hpp
+    ${SRCROOT}/ResourceManager.cpp
+    ${INCROOT}/ResourceManager.hpp
+    ${INCROOT}/RenderLayer.hpp)
 
 add_library(nullGameEngine STATIC ${SRC})
 target_include_directories(nullGameEngine 
     PUBLIC ${PROJECT_SOURCE_DIR}/include/NullGameEngine
     PRIVATE ${PROJECT_SOURCE_DIR}/src)
 
-target_link_libraries(nullGameEngine sfml-graphics
-  sfml-audio
-  sfml-network
-  sfml-window
-  sfml-system
-  )
+target_link_libraries(nullGameEngine 
+    box2d
+    scripts
+    sfml-graphics
+    sfml-audio
+    sfml-network
+    sfml-window
+    sfml-system
+    )
 
 

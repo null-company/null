@@ -1,49 +1,144 @@
+#include <memory>
+
+#include <box2d/box2d.h>
+#include <box2d/b2_math.h>
+
 #include <GameObject.hpp>
 #include <Script.hpp>
 
 namespace null {
-    GameObject::GameObject():
-    isVisible(false),
-    sprite(nullptr) {
-        this->children = std::vector<std::shared_ptr<GameObject>>();
-        this->tags = std::set<std::string>();
-        this->scripts = std::vector<Script>();
+
+    constexpr static int meterToPixel = 100;
+    constexpr static float pixelToMeter = 1.0f / static_cast<float>(meterToPixel);
+    constexpr static double pi = 3.14159265358979323846;
+
+    GameObject::GameObject(): visible(false) { };
+
+    GameObject::~GameObject() {
+        if (scene.lock()) {
+            if (rigidBody) {
+                rigidBody->GetWorld()->DestroyBody(rigidBody);
+            }
+        }
     }
 
-    std::weak_ptr<sf::Sprite> GameObject::getSprite() {
-        return std::weak_ptr<sf::Sprite>(this->sprite);
+    std::weak_ptr<Scene> GameObject::getScene() {
+        return scene;
     }
 
-    bool GameObject::getIsVisible() {
-        return this->isVisible;
+    sf::Sprite& GameObject::getSprite() {
+        return sprite;
     }
 
-    void GameObject::setIsVisible(bool &isVisible){
-        this->isVisible = isVisible;
+    b2Body* GameObject::getRigidBody() {
+        return rigidBody;
+    }
+
+    template<typename T>
+    static const b2Vec2 pixelToMetersVector(const sf::Vector2<T>& pixelVec) {
+        const b2Vec2 metersVec(pixelVec.x * pixelToMeter, pixelVec.y * pixelToMeter);
+        return metersVec;
+    }
+
+    template<typename T>
+    static const sf::Vector2<T> meterToPixelVector(const b2Vec2& meterVec) {
+        T x = static_cast<T>(meterVec.x * meterToPixel);
+        T y = static_cast<T>(meterVec.y * meterToPixel);
+
+        return sf::Vector2<T>(x, y);
+    }
+
+    static const sf::Vector2u getSpriteSize(sf::Sprite& sprite) {
+        const sf::Vector2u spriteSize(
+                sprite.getTextureRect().getSize().x * sprite.getScale().x,
+                sprite.getTextureRect().getSize().y * sprite.getScale().y);
+        return spriteSize;
+    }
+
+    void GameObject::setRigidBodyDefPositionBySprite(b2BodyDef& bodyDef) {
+        auto spritePosMeters = pixelToMetersVector(sprite.getPosition());
+        bodyDef.position.Set(spritePosMeters.x, spritePosMeters.y);
+    }
+
+    void GameObject::setShapeAsBoxBySprite(b2PolygonShape& shape) {
+        auto spriteSizeMeters = pixelToMetersVector(getSpriteSize(sprite));
+        b2Vec2 boxCenter(spriteSizeMeters.x / 2, spriteSizeMeters.y / 2);
+        shape.SetAsBox(spriteSizeMeters.x / 2, spriteSizeMeters.y / 2, boxCenter, 0.0f);
+    }
+
+    void GameObject::assertSpriteHasSize() {
+        if (sprite.getTextureRect().height == 0 || sprite.getTextureRect().width == 0) {
+            throw std::invalid_argument("No sprite attached, can't guess rigidbody size");
+        }
+    }
+
+    void GameObject::makeStatic(b2World& box2dWorld) {
+        assertSpriteHasSize();
+        detachFromPhysicsWorld();
+
+        b2BodyDef bodyDef;
+        setRigidBodyDefPositionBySprite(bodyDef);
+        b2Body* rigidBody = box2dWorld.CreateBody(&bodyDef);
+
+        b2PolygonShape shape;
+        setShapeAsBoxBySprite(shape);
+        rigidBody->CreateFixture(&shape, 0.0f);
+
+        this->rigidBody = rigidBody;
+    }
+
+    void GameObject::makeDynamic(b2World& box2dWorld) {
+        assertSpriteHasSize();
+        detachFromPhysicsWorld();
+
+        b2BodyDef bodyDef;
+        bodyDef.type = b2_dynamicBody;
+        setRigidBodyDefPositionBySprite(bodyDef);
+
+        b2Body* rigidBody = box2dWorld.CreateBody(&bodyDef);
+
+        b2PolygonShape shape;
+        setShapeAsBoxBySprite(shape);
+
+        b2FixtureDef fixtureDef;
+        fixtureDef.shape = &shape;
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 0.3f;
+
+        rigidBody->CreateFixture(&fixtureDef);
+        this->rigidBody = rigidBody;
+    }
+
+    void GameObject::detachFromPhysicsWorld() {
+        if (rigidBody) {
+            rigidBody->GetWorld()->DestroyBody(rigidBody);
+            rigidBody = nullptr;
+        }
     }
 
     std::vector<std::weak_ptr<GameObject>> GameObject::getChildren() {
         auto result = std::vector<std::weak_ptr<GameObject>>();
-        for (const auto& child_ref : this->children) {
+        for (const auto& child_ref : children) {
             result.push_back(std::weak_ptr<GameObject>(child_ref));
         }
         return result;
     }
 
     std::weak_ptr<GameObject> GameObject::getChild(int index) {
-        return std::weak_ptr<GameObject>(this->children[index]);
+        return std::weak_ptr<GameObject>(children[index]);
     }
 
     void GameObject::addChild(const std::shared_ptr<GameObject> &child) {
         children.push_back(child);
     }
 
-    std::vector<Script> &GameObject::getScripts() {
+    // todo concern pointer leakage
+    std::vector<std::unique_ptr<Script>> &GameObject::getScripts() {
         return scripts;
     }
 
-    void GameObject::addScript(Script &script) {
-        scripts.push_back(script);
+    void GameObject::addScript(std::unique_ptr<Script> script) {
+        scripts.push_back(std::move(script));
     }
 
     void GameObject::addTag(const std::string &str) {
@@ -56,32 +151,51 @@ namespace null {
         return result;
     }
 
-    sf::Transform GameObject::getTransform() {
-        return sprite->getTransform();
+    const sf::Transform& GameObject::getTransform() {
+        return sprite.getTransform();
     }
 
-    sf::Vector2f GameObject::getPosition() {
-        return sprite->getPosition();
+    const sf::Vector2f& GameObject::getPosition() {
+        return sprite.getPosition();
     }
 
     void GameObject::setPosition(float x, float y) {
-        sprite->setPosition(x, y);
+        sprite.setPosition(x, y);
+        if (rigidBody) {
+            b2Vec2 newPosition = pixelToMetersVector(sf::Vector2f(x, y));
+            rigidBody->SetTransform(newPosition, rigidBody->GetAngle());
+        }
     }
 
     void GameObject::setPosition(sf::Vector2f &pos) {
-        sprite->setPosition(pos);
+        sprite.setPosition(pos);
+        if (rigidBody) {
+            b2Vec2 newPosition = pixelToMetersVector(pos);
+            rigidBody->SetTransform(newPosition, rigidBody->GetAngle());
+        }
     }
 
     void GameObject::start() {
         for (auto &script : scripts) {
-            script.start();
+            script->start();
         }
     }
 
     void GameObject::update() {
+
+        // box2d is expected to have done something,
+        // so we have to adjust the sprite
+        if (rigidBody) {
+            sf::Vector2f newPosition =
+                meterToPixelVector<float>(rigidBody->GetPosition());
+            sprite.setPosition(newPosition);
+            sprite.setRotation(rigidBody->GetAngle() * (180.0 / pi));
+        }
+
         for (auto &script : scripts) {
-            script.update();
+            script->update();
         }
     }
 
 }
+

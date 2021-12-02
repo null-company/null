@@ -28,6 +28,7 @@ FetchContent_Declare(
         GIT_REPOSITORY https://github.com/SFML/SFML.git
         GIT_TAG d950c9387a94087f478434fb42b95c5a9c746fb2 # todo this needs revision. 2.5.1 doesnt fit for clang
 )
+message(STATUS "Started downloading SFML")
 FetchContent_MakeAvailable(SFML)
 FetchContent_GetProperties(SFML)
 
@@ -40,12 +41,25 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(plog)
 FetchContent_GetProperties(plog)
 
+message(STATUS "SFML downloaded")
+
+FetchContent_Declare(
+ box2d
+ GIT_REPOSITORY https://github.com/erincatto/box2d.git
+ GIT_TAG v2.4.1
+)
+message(STATUS "Started downloading box2d")
+FetchContent_MakeAvailable(box2d)
+message(STATUS "box2d downloaded")
+
+
 add_subdirectory(./src/)
 add_subdirectory(./test/)
 add_executable(NULL_GAME main.cpp include/Network/server/NetClientCollector.h include/Network/utils/NetMessageTransmitting.h)
 
 
 target_link_libraries(NULL_GAME
+        scripts
         nullGameEngine
         network
         sfml-graphics
@@ -54,6 +68,5 @@ target_link_libraries(NULL_GAME
         sfml-window
         sfml-system
         )
-
 
 
