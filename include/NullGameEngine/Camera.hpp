@@ -2,14 +2,16 @@
 
 #include <NullGameEngine.hpp>
 #include <GameObject.hpp>
-#include <SFML/System.hpp>
-#include <CameraScript.hpp>
 
 namespace null {
 
     class Camera final : public GameObject {
-    public:
-        sf::View view;
+        public:
+            // for now it's ok to have distance as a public member
+            // later it could be implemented more prettier with
+            // methods that manipulate how the camera moves
+            int distance;
     };
+
 }
 

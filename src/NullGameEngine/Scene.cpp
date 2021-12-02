@@ -14,14 +14,12 @@ namespace null {
     }
 
     void Scene::start() {
-        camera.start();
         for (auto &obj : gameObjects) {
             obj->start();
         }
     }
 
     void Scene::update() {
-        camera.update();
         constexpr float timeStep = 1.0f / 60.0f;
         constexpr int velocityIterations = 8;
         constexpr int positionIterations = 3;
