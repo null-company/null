@@ -11,7 +11,7 @@ private:
     sf::Thread simulationThread;
 public:
     sf::TcpListener listener;
-    std::vector<sf::TcpSocket> clients;
+    std::vector<std::unique_ptr<sf::TcpSocket>> clients;
     std::list<ssize_t> freeClientSlots;
 
     sf::IpAddress ipAddress;

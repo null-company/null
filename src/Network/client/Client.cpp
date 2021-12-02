@@ -9,7 +9,8 @@
 Client::Client(sf::IpAddress serverAddress, uint16_t arbiterPort) :
         arbiterServerAddress(serverAddress),
         arbiterPort(arbiterPort) {
-    LOGD << "Try to connect to arbitrary server";
+
+    LOGD << "Try to connect to arbitrary server " << arbiterServerAddress << " " << arbiterPort;
     sf::Socket::Status status = arbiterSocket.connect(arbiterServerAddress, arbiterPort);
     if (status != sf::Socket::Done) {
         throw std::invalid_argument("Socket connection failed");
@@ -97,5 +98,9 @@ void Client::handleServerConfigMessage(const net::GameServerConfig &config) {
     LOGD << "Game server address " << gameServerAddress;
     LOGD << "Game server port " << gameServerPort;
     LOGD << "Room code is " << roomCode;
+}
+
+void Client::handleChatMessage(net::ChatMessage *pMessage) {
+    std::cout << pMessage->message() << std::endl;
 }
 

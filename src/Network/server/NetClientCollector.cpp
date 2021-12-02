@@ -11,6 +11,7 @@
 NetClientCollector::NetClientCollector(sf::IpAddress ipAddress, uint16_t port) :
         ipAddress(ipAddress),
         port(port),
+        listener(),
         simulationThread([this]() {
             bool isActive = true;
             while (isActive) {
@@ -24,8 +25,10 @@ NetClientCollector::NetClientCollector(sf::IpAddress ipAddress, uint16_t port) :
         }) {
 
     if (listener.listen(port, ipAddress) != sf::Socket::Done) {
-        LOGD << "Listen was started successfully";
+        LOGE << "Error occurred while listening " << ipAddress.toString() << " " << port;
+        throw std::invalid_argument("Error occurred while listening");
     }
+    LOGD << "Listen was started successfully";
 }
 
 void NetClientCollector::acceptNewClient() {
@@ -33,7 +36,7 @@ void NetClientCollector::acceptNewClient() {
         clients.emplace_back();
         freeClientSlots.push_back(clients.size() - 1);
     }
-    sf::TcpSocket &newClient = *(clients.begin() + freeClientSlots.front());
+    sf::TcpSocket &newClient = **(clients.begin() + freeClientSlots.front());
     freeClientSlots.pop_front();
     if (listener.accept(newClient) != sf::Socket::Done) {
         LOGD << "Cannot accept new client";
@@ -49,7 +52,7 @@ sf::TcpSocket &NetClientCollector::getFirstReadySocket() {
     LOGD << "Wait for the first ready socket";
     sf::SocketSelector socketSelector;
     for (auto &client: clients) {
-        socketSelector.add(client);
+        socketSelector.add(*client);
     }
     socketSelector.add(listener);
     socketSelector.wait();
@@ -59,14 +62,15 @@ sf::TcpSocket &NetClientCollector::getFirstReadySocket() {
         return getFirstReadySocket();
     };
     for (auto &client: clients) {
-        if (socketSelector.isReady(client)) {
-            return client;
+        if (socketSelector.isReady(*client)) {
+            return *client;
         };
     }
+    return *clients[0];
 }
 
 void NetClientCollector::launch() {
     simulationThread.launch();
-    LOGD << "New server was launched";
+    LOGD << "New NetClientCollector was launched for new incoming connections";
 }
 

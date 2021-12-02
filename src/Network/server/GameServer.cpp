@@ -16,7 +16,7 @@ void GameServer::handleNetMessage(sf::TcpSocket &client, const net::NetMessage &
 
 void GameServer::broadcastMessage(const net::NetMessage &message) {
     for (auto &client: clients) {
-        sendNetMessage(client, message);
+        sendNetMessage(*client, message);
     }
 }
 
