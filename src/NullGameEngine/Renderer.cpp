@@ -8,6 +8,7 @@
 namespace null {
 
     void Renderer::render(sf::RenderWindow& window, const Scene& scene) {
+        window.setView(scene.camera.view);
         using SpriteRefPair = struct SpriteRefPair_s {
             RenderLayer renderLayer;
             sf::Sprite *sprite_ref;

@@ -80,7 +80,7 @@ namespace null {
 
         template<class T, typename... Args>
         void addScript(Args&&... args) {
-            std::unique_ptr<Script> script =
+            auto script =
                 std::make_unique<T>(std::forward<Args>(args)...);
             scripts.push_back(std::move(script));
         }
