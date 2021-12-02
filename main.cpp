@@ -27,6 +27,6 @@ int main() {
 
     null::SceneLoader::loadSceneFromFile(mainMenu);
 
-    return null::MainLoop::run();
+    return  null::MainLoop::run();
 }
 
