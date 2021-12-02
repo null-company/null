@@ -10,5 +10,5 @@ namespace null{
         camera.view.setCenter((sf::Vector2f)sf::Mouse::getPosition());
     }
 
-    ExampleCameraScript::ExampleCameraScript(Camera& camera) : CameraScript(camera){ }
+    ExampleCameraScript::ExampleCameraScript(Camera& camera) : CameraScript(camera) { }
 }
