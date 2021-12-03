@@ -20,6 +20,8 @@ namespace null {
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
 
+        newScene->camera.addScript<ExampleCameraScript>(newScene->camera);
+
         // this texture is not released on purpose, because it MUST exist for as long
         // as the sprite lives. todo manage it with resource manager
         sf::Texture* nullTexture = ResourceManager::loadTexture("null.jpg");

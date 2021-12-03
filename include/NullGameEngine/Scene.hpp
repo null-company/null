@@ -31,6 +31,8 @@ namespace null {
         b2World& getBox2dWorld();
 
         friend Renderer;
+
+        friend SceneLoader;
     };
 }
 

@@ -16,6 +16,10 @@ set(SRC
     ${INCROOT}/ExampleClockedScript.hpp
     ${SRCROOT}/ReloadSceneScript.cpp
     ${INCROOT}/ReloadSceneScript.hpp
+    ${SRCROOT}/CameraScript.cpp
+    ${INCROOT}/CameraScript.hpp
+    ${SRCROOT}/ExampleCameraScript.cpp
+    ${INCROOT}/ExampleCameraScript.hpp
     )
 
 add_library(scripts STATIC ${SRC})
