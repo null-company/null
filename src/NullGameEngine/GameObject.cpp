@@ -22,10 +22,10 @@ namespace null {
         }
     }
 
-    void GameObject::addChild(std::unique_ptr<GameObject> child) {
+    void GameObject::addChild(std::shared_ptr<GameObject>&& child) {
         child->scene = scene;
-        auto sharedChild = std::shared_ptr<GameObject>(child.release());
-        children.push_back(std::move(sharedChild));
+        child->parent = shared_from_this();
+        children.push_back(child);
     }
 
     std::weak_ptr<Scene> GameObject::getScene() {
@@ -132,10 +132,6 @@ namespace null {
 
     std::weak_ptr<GameObject> GameObject::getChild(int index) {
         return std::weak_ptr<GameObject>(children[index]);
-    }
-
-    void GameObject::addChild(const std::shared_ptr<GameObject> &child) {
-        children.push_back(child);
     }
 
     // todo concern pointer leakage

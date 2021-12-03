@@ -18,27 +18,26 @@ namespace null {
         
         // todo this should be done in a scene file
         auto newScene = std::make_shared<Scene>();
-        newScene->self = newScene;
         auto& box2dWorld = newScene->getBox2dWorld();
 
         // this texture is not released on purpose, because it MUST exist for as long
         // as the sprite lives. todo manage it with resource manager
         sf::Texture* nullTexture = ResourceManager::loadTexture("null.jpg");
 
-        auto nullGameLogo = std::make_unique<GameObject>();
+        auto nullGameLogo = std::make_shared<GameObject>();
         nullGameLogo->getSprite().setTexture(*nullTexture);
         nullGameLogo->renderLayer = BACKGROUND;
         nullGameLogo->visible = true;
 
         auto boxTexture = ResourceManager::loadTexture("box.png");
 
-        auto boxObject = std::make_unique<GameObject>();
+        auto boxObject = std::make_shared<GameObject>();
         boxObject->getSprite().setTexture(*boxTexture);
         boxObject->getSprite().setScale(0.25f, 0.25f);
         boxObject->renderLayer = FOREGROUND;
         boxObject->visible = true;
 
-        auto boxObject2 = std::make_unique<GameObject>();
+        auto boxObject2 = std::make_shared<GameObject>();
         boxObject2->getSprite().setTexture(*boxTexture);
         boxObject2->getSprite().setScale(0.25f, 0.25f);
         boxObject2->setPosition(750.0f, 200.0f);
@@ -46,7 +45,7 @@ namespace null {
         boxObject2->renderLayer = BACKGROUND1;
         boxObject2->visible = true;
 
-        auto groundObject = std::make_unique<GameObject>();
+        auto groundObject = std::make_shared<GameObject>();
         auto& groundSprite = groundObject->getSprite();
         groundSprite.setTexture(*boxTexture);
         groundSprite.setScale(1.0f, 0.1f);
@@ -64,10 +63,10 @@ namespace null {
 
         groundObject->addScript<ReloadSceneScript>(*groundObject);
 
-        newScene->addRootGameObject(move(nullGameLogo));
-        boxObject2->addChild(move(boxObject));
-        newScene->addRootGameObject(move(boxObject2));
-        newScene->addRootGameObject(move(groundObject));
+        newScene->addRootGameObject(std::move(nullGameLogo));
+        boxObject2->addChild(std::move(boxObject));
+        newScene->addRootGameObject(std::move(boxObject2));
+        newScene->addRootGameObject(std::move(groundObject));
 
         MainLoop::provideScene(move(newScene));
     };

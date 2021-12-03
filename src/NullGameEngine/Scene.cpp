@@ -14,7 +14,7 @@ namespace null {
         std::function<void(const GameObject*)> walk;
         walk = [&result,&walk](const GameObject* go) -> void {
             result.push_back(go);
-            for (const auto child: go->children) {
+            for (const auto& child: go->children) {
                 walk(child.get());
             }
         };
@@ -43,9 +43,9 @@ namespace null {
         return res;
     }
 
-    void Scene::addRootGameObject(std::unique_ptr<GameObject> newGameObject) {
-        newGameObject->scene = self;
-        rootGameObjects.push_back(move(newGameObject));
+    void Scene::addRootGameObject(std::shared_ptr<GameObject>&& newGameObject) {
+        newGameObject->scene = shared_from_this();
+        rootGameObjects.push_back(newGameObject);
     }
 
     void Scene::start() {
