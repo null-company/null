@@ -2,8 +2,10 @@ syntax = "proto3";
 package serial;
 
 message Scene{
-  Position box2d_position = 2;
+     GameObject game_object = 1;
+     Camera camera = 2;
 }
+message Camera{}
 
 message GameObject{
   oneof game_object_instance {
@@ -17,25 +19,21 @@ message Script{
     BasicScript basic_script = 1;
     CameraScript camera_script = 2;
     ClockedScript clocked_script = 3;
-    ReloadCameraScript reload_script = 4;
+    ReloadSceneScript reload_script = 4;
+    ExampleCameraScript example_camera_script = 5;
+    ExampleClockedScript example_clocked_script = 6;
+    ExampleScript example_script = 7;
+
   }
 }
 
-message BasicScript{
-
-}
-
-message CameraScript{
-
-}
-
-message ClockedScript{
-
-}
-
-message ReloadCameraScript{
-
-}
+message BasicScript{}
+message ExampleCameraScript{}
+message ExampleClockedScript{}
+message ExampleScript{}
+message CameraScript{}
+message ClockedScript{}
+message ReloadSceneScript{}
 
 message BasicGameObject{
   repeated GameObject children_objects = 1;

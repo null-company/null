@@ -5,8 +5,8 @@
 
 namespace null {
 
-    ReloadSceneScript::ReloadSceneScript(GameObject& gameObject)
-        : Script(gameObject) { }
+    ReloadSceneScript::ReloadSceneScript(GameObject &gameObject)
+            : Script(gameObject) {}
 
     void ReloadSceneScript::start() {
 
@@ -18,5 +18,14 @@ namespace null {
         }
     }
 
+    serial::Script ReloadSceneScript::prefabSerialize() {
+        serial::Script script;
+        script.mutable_reload_script();
+        return script;
+    }
+
+    std::unique_ptr<ReloadSceneScript> ReloadSceneScript::prefabDeserialize(const serial::ReloadSceneScript &script) {
+        return {};
+    }
 }
 

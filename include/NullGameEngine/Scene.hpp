@@ -25,11 +25,14 @@ namespace null {
 
         void addGameObject(std::unique_ptr<GameObject>);
 
-        b2World& getBox2dWorld();
+        b2World &getBox2dWorld();
 
         friend Renderer;
 
         friend SceneLoader;
+
+        virtual serial::Scene prefabSerialize();
+
     };
 }
 

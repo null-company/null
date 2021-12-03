@@ -8,6 +8,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 include(FetchContent)
 set(BUILD_SHARED_LIBS OFF)
 
+find_package(Protobuf REQUIRED)
+include_directories(${Protobuf_INCLUDE_DIRS})
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
 ## GOOGLE TEST INSTALL
 include(FetchContent)
 FetchContent_Declare(

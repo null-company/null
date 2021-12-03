@@ -8,6 +8,7 @@
 #include <ResourceManager.hpp>
 #include <google/protobuf/message.h>
 #include <Scene.hpp>
+#include <utility>
 
 namespace null {
 
@@ -222,14 +223,22 @@ namespace null {
         for (auto &childGameObject: children) {
             *basicGameObject.add_children_objects() = childGameObject->prefabSerialize();
         }
+
+        for (auto &script: scripts) {
+            *basicGameObject.add_children_scripts() = script->prefabSerialize();
+        }
+
+        for (auto &tag: tags) {
+            *basicGameObject.add_tags() = tag;
+        }
         return serializeGameObject;
     }
 
     //TODO I suppose it should be a little more compact
     std::shared_ptr<GameObject>
-    GameObject::prefabDeserialize(const serial::BasicGameObject &serialized) {
-        std::shared_ptr<GameObject> gameObject = std::make_unique<GameObject>();
-        //Sprite deserialize
+    GameObject::prefabDeserialize(const serial::BasicGameObject &serialized, std::weak_ptr<Scene> scene) {
+        std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>();
+        gameObject->setScene(std::move(scene));
         if (serialized.has_sprite()) {
             if (!serialized.sprite().texture_path().empty()) {
                 auto texture = ResourceManager::loadTexture(serialized.sprite().texture_path());
@@ -260,12 +269,12 @@ namespace null {
         }
         //Script deserialize
         for (auto &children_object: serialized.children_scripts()) {
-            gameObject->addScript(prefabDeserialize(children_object));
+//            gameObject->addScript(prefabDeserialize(children_object, std::weak_ptr<Scene>()));
         }
 
         //Recursive deserialize
         for (auto &children_serialized_object: serialized.children_objects()) {
-            auto child = prefabDeserialize(children_serialized_object);
+            auto child = prefabDeserialize(children_serialized_object, std::weak_ptr<Scene>());
             child->parent = std::weak_ptr<GameObject>(gameObject);
             gameObject->addChild(child);
         }
@@ -274,14 +283,21 @@ namespace null {
     }
 
     std::shared_ptr<GameObject>
-    GameObject::prefabDeserialize(const serial::GameObject &serialized) {
+    GameObject::prefabDeserialize(const serial::GameObject &serialized, std::weak_ptr<Scene> scene) {
         switch (serialized.game_object_instance_case()) {
             case serial::GameObject::kBasicGameObject:
-                return prefabDeserialize(serialized.basic_game_object());
+                return GameObject::prefabDeserialize(serialized.basic_game_object(), std::move(scene));
                 break;
             case serial::GameObject::GAME_OBJECT_INSTANCE_NOT_SET:
+
                 break;
         }
+        throw std::invalid_argument("Unexpected usage of prefub deserialize");
+        return {nullptr};
+    }
+
+    void GameObject::setScene(std::weak_ptr<Scene> newScene) {
+        this->scene = std::move(newScene);
     }
 }
 

@@ -23,11 +23,11 @@ set(SRC
     )
 
 add_library(scripts STATIC ${SRC})
-target_include_directories(scripts 
+target_include_directories(scripts
     PUBLIC ${PROJECT_SOURCE_DIR}/include/Scripts
     PRIVATE ${PROJECT_SOURCE_DIR}/src)
 
-target_link_libraries(scripts 
+target_link_libraries(scripts
     nullGameEngine
     sfml-graphics
     sfml-audio

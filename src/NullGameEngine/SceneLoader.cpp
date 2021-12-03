@@ -70,6 +70,7 @@ namespace null {
         newScene->addGameObject(move(boxObject));
         newScene->addGameObject(move(boxObject2));
         newScene->addGameObject(move(groundObject));
+//        serial::Scene serialize = newScene->prefabSerialize();
 
         MainLoop::provideScene(move(newScene));
     };

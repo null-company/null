@@ -14,7 +14,10 @@ namespace null {
 
         virtual void update() {};
 
-        virtual serial::serialize();
+        //TODO Should it be pure virtual?
+        virtual serial::Script prefabSerialize() = 0;
+
+        static std::unique_ptr<Component> prefabDeserialize(const serial::Script &script);
     };
 }
 

@@ -15,6 +15,10 @@ namespace null {
         void update() override;
 
         explicit ExampleScript(GameObject& gameObject);
+
+        serial::Script prefabSerialize() override;
+
+        static std::unique_ptr<ExampleScript> prefabDeserialize(const serial::ExampleScript &script);
     };
 
 }

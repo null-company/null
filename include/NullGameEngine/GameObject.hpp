@@ -44,6 +44,8 @@ namespace null {
 
         ~GameObject();
 
+        void setScene(std::weak_ptr<Scene> newScene);
+
         std::weak_ptr<Scene> getScene();
 
         bool visible;
@@ -94,9 +96,11 @@ namespace null {
 
         virtual serial::GameObject prefabSerialize();
 
-        static std::shared_ptr<GameObject> prefabDeserialize(const serial::BasicGameObject &serialized);
+        static std::shared_ptr<GameObject>
+        prefabDeserialize(const serial::BasicGameObject &serialized, std::weak_ptr<Scene> scene);
 
-        static std::shared_ptr<GameObject> prefabDeserialize(const serial::GameObject &serialized);
+        static std::shared_ptr<GameObject>
+        prefabDeserialize(const serial::GameObject &serialized, std::weak_ptr<Scene> scene);
     };
 }
 
