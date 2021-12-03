@@ -8,39 +8,24 @@ namespace null {
     // gravity is default
     Scene::Scene() : box2dWorld(b2Vec2(0.0, 9.8f)) { }
 
-    std::vector<const GameObject*> Scene::walkObjectTree(const GameObject* gameObject) const {
+    void Scene::objectTreeForEachDo(GameObject& gameObject,
+            std::function<void(GameObject&)> function) const {
 
-        std::vector<const GameObject*> result;
-        std::function<void(const GameObject*)> walk;
-        walk = [&result,&walk](const GameObject* go) -> void {
-            result.push_back(go);
-            for (const auto& child: go->children) {
-                walk(child.get());
+        std::function<void(GameObject&)> walk;
+        walk = [&function, &walk](GameObject& go) -> void {
+            function(go);
+            for (const auto& child: go.children) {
+                walk(*child);
             }
         };
 
         walk(gameObject);
-
-        return result;
     }
 
-    std::vector<GameObject*> Scene::getAllGameObjects() const {
-        std::vector<GameObject*> res;
-
+    void Scene::sceneTreeForEachDo(std::function<void(GameObject&)> function) const {
         for (const auto& obj : rootGameObjects) {
-            std::vector<const GameObject*> currConst = walkObjectTree(obj.get());
-            auto f = [](const GameObject* go) {
-                return const_cast<GameObject*>(go);
-            };
-            std::transform(
-                    currConst.begin(),
-                    currConst.end(),
-                    std::back_inserter(res),
-                    f
-                    );
+            objectTreeForEachDo(*obj, function);
         }
-
-        return res;
     }
 
     void Scene::addRootGameObject(std::shared_ptr<GameObject>&& newGameObject) {
@@ -49,9 +34,9 @@ namespace null {
     }
 
     void Scene::start() {
-        for (auto &obj : getAllGameObjects()) {
-            obj->start();
-        }
+        sceneTreeForEachDo([](GameObject& obj) -> void {
+                obj.start();
+                });
     }
 
     void Scene::update() {
@@ -61,9 +46,9 @@ namespace null {
 
         box2dWorld.Step(timeStep, velocityIterations, positionIterations);
         
-        for (auto &obj : getAllGameObjects()) {
-            obj->update();
-        }
+        sceneTreeForEachDo([](GameObject& obj) -> void {
+                obj.update();
+                });
     }
 
     b2World& Scene::getBox2dWorld() {

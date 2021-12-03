@@ -14,11 +14,13 @@ namespace null {
         Camera camera;
         std::vector<std::shared_ptr<GameObject>> rootGameObjects;
         b2World box2dWorld;
-        std::vector<const GameObject*> walkObjectTree(const GameObject*) const;
     public:
         Scene();
 
-        std::vector<GameObject*> getAllGameObjects() const;
+        void objectTreeForEachDo(GameObject&,
+                std::function<void(GameObject&)>) const; 
+
+        void sceneTreeForEachDo(std::function<void(GameObject&)>) const;
 
         void start();
 
