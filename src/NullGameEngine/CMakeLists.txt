@@ -35,6 +35,7 @@ target_include_directories(nullGameEngine
 target_link_libraries(nullGameEngine 
     box2d
     scripts
+    serialization
     sfml-graphics
     sfml-audio
     sfml-network

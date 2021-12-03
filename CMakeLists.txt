@@ -44,9 +44,9 @@ FetchContent_GetProperties(plog)
 message(STATUS "SFML downloaded")
 
 FetchContent_Declare(
- box2d
- GIT_REPOSITORY https://github.com/erincatto/box2d.git
- GIT_TAG v2.4.1
+        box2d
+        GIT_REPOSITORY https://github.com/erincatto/box2d.git
+        GIT_TAG v2.4.1
 )
 message(STATUS "Started downloading box2d")
 FetchContent_MakeAvailable(box2d)
@@ -55,13 +55,14 @@ message(STATUS "box2d downloaded")
 
 add_subdirectory(./src/)
 add_subdirectory(./test/)
-add_executable(NULL_GAME main.cpp include/Network/server/NetClientCollector.h include/Network/utils/NetMessageTransmitting.h)
+add_executable(NULL_GAME main.cpp)
 
 
 target_link_libraries(NULL_GAME
         scripts
         nullGameEngine
         network
+        serialization
         sfml-graphics
         sfml-audio
         sfml-network

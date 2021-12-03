@@ -1,0 +1,79 @@
+syntax = "proto3";
+package serial;
+
+message Scene{
+  Position box2d_position = 2;
+}
+
+message GameObject{
+  oneof game_object_instance {
+    BasicGameObject basic_game_object = 1;
+    // subclasses of game object
+  }
+}
+
+message Script{
+  oneof script_instance {
+    BasicScript basic_script = 1;
+    CameraScript camera_script = 2;
+    ClockedScript clocked_script = 3;
+    ReloadCameraScript reload_script = 4;
+  }
+}
+
+message BasicScript{
+
+}
+
+message CameraScript{
+
+}
+
+message ClockedScript{
+
+}
+
+message ReloadCameraScript{
+
+}
+
+message BasicGameObject{
+  repeated GameObject children_objects = 1;
+  repeated Script children_scripts = 2;
+  repeated string tags = 3;
+  RenderLayer render_layer = 7;
+  Sprite sprite = 4;
+  bool visible = 5;
+  //TODO Need to be refactored since now it connect objects only to main window
+  Box2DType box2d_type = 6;
+}
+
+message Position{
+  float x = 1;
+  float y = 2;
+}
+message Sprite{
+  message Scale{
+    float scale_x = 1;
+    float scale_y = 2;
+  }
+  string texture_path = 1;
+  Position position = 2;
+  Scale scale = 5;
+}
+enum RenderLayer {
+  BACKGROUND = 0;
+  BACKGROUND1 = 1;
+  BACKGROUND2 = 2;
+  BACKGROUND3 = 3;
+  FOREGROUND = 4;
+  FOREGROUND1 = 5;
+  FOREGROUND2 = 6;
+  FOREGROUND3 = 7;
+  ONTOP = 8;
+};
+
+enum Box2DType{
+  STATIC = 0;
+  DYNAMIC = 1;
+}
