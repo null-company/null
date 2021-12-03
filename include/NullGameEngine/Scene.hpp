@@ -26,7 +26,7 @@ namespace null {
 
         void update();
 
-        void addRootGameObject(std::shared_ptr<GameObject>&&);
+        std::weak_ptr<GameObject> addRootGameObject(std::shared_ptr<GameObject>&&);
 
         b2World& getBox2dWorld();
 

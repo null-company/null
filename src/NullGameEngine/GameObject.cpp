@@ -22,10 +22,12 @@ namespace null {
         }
     }
 
-    void GameObject::addChild(std::shared_ptr<GameObject>&& child) {
+    std::weak_ptr<GameObject> GameObject::addChild(std::shared_ptr<GameObject>&& child) {
         child->scene = scene;
         child->parent = shared_from_this();
         children.push_back(child);
+
+        return child;
     }
 
     std::weak_ptr<Scene> GameObject::getScene() {

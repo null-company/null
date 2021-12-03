@@ -39,7 +39,7 @@ namespace null {
 
         ~GameObject();
 
-        void addChild(std::shared_ptr<GameObject>&&);
+        std::weak_ptr<GameObject> addChild(std::shared_ptr<GameObject>&&);
 
         std::weak_ptr<Scene> getScene();
 
