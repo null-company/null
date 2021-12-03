@@ -18,7 +18,7 @@ namespace null {
         };
 
         auto queue = std::priority_queue<SpriteRefPair, std::vector<SpriteRefPair>, decltype(compSRP)>(compSRP);
-        for (const auto &go: scene.gameObjects) {
+        for (const auto &go: scene.getAllGameObjects()) {
             if (go->visible) {
                 auto spriteRefPair = SpriteRefPair{go->renderLayer, &(go->getSprite())};
                 queue.push(spriteRefPair);

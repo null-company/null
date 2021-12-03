@@ -65,7 +65,7 @@ namespace null {
         groundObject->addScript<ReloadSceneScript>(*groundObject);
 
         newScene->addGameObject(move(nullGameLogo));
-        newScene->addGameObject(move(boxObject));
+        boxObject2->addChild(move(boxObject));
         newScene->addGameObject(move(boxObject2));
         newScene->addGameObject(move(groundObject));
 

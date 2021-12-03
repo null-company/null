@@ -8,13 +8,48 @@ namespace null {
     // gravity is default
     Scene::Scene() : box2dWorld(b2Vec2(0.0, 9.8f)) { }
 
+    std::vector<const GameObject*> Scene::walkObjectTree(const GameObject* gameObject) const {
+
+        std::vector<const GameObject*> result;
+        std::function<void(const GameObject*)> walk;
+        walk = [&result,&walk](const GameObject* go) -> void {
+            result.push_back(go);
+            for (const auto child: go->children) {
+                walk(child.get());
+            }
+        };
+
+        walk(gameObject);
+
+        return result;
+    }
+
+    std::vector<GameObject*> Scene::getAllGameObjects() const {
+        std::vector<GameObject*> res;
+
+        for (const auto& obj : rootGameObjects) {
+            std::vector<const GameObject*> currConst = walkObjectTree(obj.get());
+            auto f = [](const GameObject* go) {
+                return const_cast<GameObject*>(go);
+            };
+            std::transform(
+                    currConst.begin(),
+                    currConst.end(),
+                    std::back_inserter(res),
+                    f
+                    );
+        }
+
+        return res;
+    }
+
     void Scene::addGameObject(std::unique_ptr<GameObject> newGameObject) {
         newGameObject->scene = self;
-        gameObjects.push_back(move(newGameObject));
+        rootGameObjects.push_back(move(newGameObject));
     }
 
     void Scene::start() {
-        for (auto &obj : gameObjects) {
+        for (auto &obj : getAllGameObjects()) {
             obj->start();
         }
     }
@@ -26,7 +61,7 @@ namespace null {
 
         box2dWorld.Step(timeStep, velocityIterations, positionIterations);
         
-        for (auto &obj : gameObjects) {
+        for (auto &obj : getAllGameObjects()) {
             obj->update();
         }
     }

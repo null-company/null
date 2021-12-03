@@ -39,6 +39,8 @@ namespace null {
 
         ~GameObject();
 
+        void addChild(std::unique_ptr<GameObject>);
+
         std::weak_ptr<Scene> getScene();
 
         bool visible;

@@ -22,6 +22,12 @@ namespace null {
         }
     }
 
+    void GameObject::addChild(std::unique_ptr<GameObject> child) {
+        child->scene = scene;
+        auto sharedChild = std::shared_ptr<GameObject>(child.release());
+        children.push_back(std::move(sharedChild));
+    }
+
     std::weak_ptr<Scene> GameObject::getScene() {
         return scene;
     }
@@ -118,8 +124,8 @@ namespace null {
 
     std::vector<std::weak_ptr<GameObject>> GameObject::getChildren() {
         auto result = std::vector<std::weak_ptr<GameObject>>();
-        for (const auto& child_ref : children) {
-            result.push_back(std::weak_ptr<GameObject>(child_ref));
+        for (const auto& childRef : children) {
+            result.push_back(std::weak_ptr<GameObject>(childRef));
         }
         return result;
     }

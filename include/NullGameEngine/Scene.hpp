@@ -12,12 +12,15 @@ namespace null {
     class Scene {
     private:
         Camera camera;
-        std::vector<std::unique_ptr<GameObject>> gameObjects;
+        std::vector<std::unique_ptr<GameObject>> rootGameObjects;
         b2World box2dWorld;
+        std::vector<const GameObject*> walkObjectTree(const GameObject*) const;
     public:
         Scene();
 
         std::weak_ptr<Scene> self;
+
+        std::vector<GameObject*> getAllGameObjects() const;
 
         void start();
 
