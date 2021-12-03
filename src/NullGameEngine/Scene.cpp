@@ -43,7 +43,7 @@ namespace null {
         return res;
     }
 
-    void Scene::addGameObject(std::unique_ptr<GameObject> newGameObject) {
+    void Scene::addRootGameObject(std::unique_ptr<GameObject> newGameObject) {
         newGameObject->scene = self;
         rootGameObjects.push_back(move(newGameObject));
     }

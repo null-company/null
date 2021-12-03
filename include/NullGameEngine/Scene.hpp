@@ -26,7 +26,7 @@ namespace null {
 
         void update();
 
-        void addGameObject(std::unique_ptr<GameObject>);
+        void addRootGameObject(std::unique_ptr<GameObject>);
 
         b2World& getBox2dWorld();
 

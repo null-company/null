@@ -64,10 +64,10 @@ namespace null {
 
         groundObject->addScript<ReloadSceneScript>(*groundObject);
 
-        newScene->addGameObject(move(nullGameLogo));
+        newScene->addRootGameObject(move(nullGameLogo));
         boxObject2->addChild(move(boxObject));
-        newScene->addGameObject(move(boxObject2));
-        newScene->addGameObject(move(groundObject));
+        newScene->addRootGameObject(move(boxObject2));
+        newScene->addRootGameObject(move(groundObject));
 
         MainLoop::provideScene(move(newScene));
     };
