@@ -14,8 +14,9 @@ namespace null {
         std::function<void(GameObject&)> walk;
         walk = [&function, &walk](GameObject& go) -> void {
             function(go);
-            for (const auto& child: go.children) {
-                walk(*child);
+            for (const auto& childWeakRef: go.getChildren()) {
+                auto childP = childWeakRef.lock();
+                walk(*childP);
             }
         };
 

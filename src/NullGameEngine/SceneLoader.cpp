@@ -63,9 +63,11 @@ namespace null {
 
         groundObject->addScript<ReloadSceneScript>(*groundObject);
 
-        newScene->addRootGameObject(std::move(nullGameLogo));
-        boxObject2->addChild(std::move(boxObject));
-        newScene->addRootGameObject(std::move(boxObject2));
+        // nonsensical actions to demonstrate
+        // child adding process
+        nullGameLogo->addChild(std::move(boxObject));
+        nullGameLogo->addChild(std::move(boxObject2));
+        groundObject->addChild(std::move(nullGameLogo));
         newScene->addRootGameObject(std::move(groundObject));
 
         MainLoop::provideScene(move(newScene));
