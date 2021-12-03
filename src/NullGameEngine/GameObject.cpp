@@ -125,13 +125,13 @@ namespace null {
     std::vector<std::weak_ptr<GameObject>> GameObject::getChildren() {
         auto result = std::vector<std::weak_ptr<GameObject>>();
         for (const auto& childRef : children) {
-            result.push_back(std::weak_ptr<GameObject>(childRef));
+            result.push_back(childRef);
         }
         return result;
     }
 
     std::weak_ptr<GameObject> GameObject::getChild(int index) {
-        return std::weak_ptr<GameObject>(children[index]);
+        return children[index];
     }
 
     // todo concern pointer leakage
