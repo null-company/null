@@ -19,12 +19,11 @@ namespace null {
         };
 
         auto queue = std::priority_queue<SpriteRefPair, std::vector<SpriteRefPair>, decltype(compSRP)>(compSRP);
-        for (const auto &go: scene.gameObjects) {
-            if (go->visible) {
-                auto spriteRefPair = SpriteRefPair{go->renderLayer, &(go->getSprite())};
+        scene.sceneTreeForEachDo([&queue](GameObject& go) -> void {
+                if (go.visible) {
+                auto spriteRefPair = SpriteRefPair{go.renderLayer, &(go.getSprite())};
                 queue.push(spriteRefPair);
-            }
-        }
+                }});
         for (auto &srp = (SpriteRefPair &) queue.top(); !queue.empty(); srp = queue.top()) {
             window.draw(*(srp.sprite_ref));
             queue.pop();

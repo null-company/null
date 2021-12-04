@@ -13,7 +13,7 @@
 
 namespace null {
 
-    class GameObject {
+    class GameObject : public std::enable_shared_from_this<GameObject> {
     private:
         void assertSpriteHasSize();
         void setRigidBodyDefPositionBySprite(b2BodyDef&);
@@ -39,6 +39,8 @@ namespace null {
 
         ~GameObject();
 
+        std::weak_ptr<GameObject> addChild(std::shared_ptr<GameObject>&&);
+
         std::weak_ptr<Scene> getScene();
 
         bool visible;
@@ -59,8 +61,6 @@ namespace null {
 
         // Returns the child of this GameObject by its index
         std::weak_ptr<GameObject> getChild(int index);
-
-        void addChild(const std::shared_ptr<GameObject> &child);
 
         std::vector<std::unique_ptr<Script>>& getScripts();
 

@@ -22,6 +22,14 @@ namespace null {
         }
     }
 
+    std::weak_ptr<GameObject> GameObject::addChild(std::shared_ptr<GameObject>&& child) {
+        child->scene = scene;
+        child->parent = weak_from_this();
+        children.push_back(child);
+
+        return child;
+    }
+
     std::weak_ptr<Scene> GameObject::getScene() {
         return scene;
     }
@@ -118,18 +126,14 @@ namespace null {
 
     std::vector<std::weak_ptr<GameObject>> GameObject::getChildren() {
         auto result = std::vector<std::weak_ptr<GameObject>>();
-        for (const auto& child_ref : children) {
-            result.push_back(std::weak_ptr<GameObject>(child_ref));
+        for (const auto& childRef : children) {
+            result.push_back(childRef);
         }
         return result;
     }
 
     std::weak_ptr<GameObject> GameObject::getChild(int index) {
-        return std::weak_ptr<GameObject>(children[index]);
-    }
-
-    void GameObject::addChild(const std::shared_ptr<GameObject> &child) {
-        children.push_back(child);
+        return children[index];
     }
 
     // todo concern pointer leakage
