@@ -37,6 +37,7 @@ target_link_libraries(nullGameEngine
     scripts
     serialization
     sfml-graphics
+    yaml-cpp
     sfml-audio
     sfml-network
     sfml-window

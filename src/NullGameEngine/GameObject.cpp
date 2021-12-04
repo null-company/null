@@ -205,7 +205,7 @@ namespace null {
     serial::GameObject GameObject::prefabSerialize() {
         serial::GameObject serializeGameObject;
         serial::BasicGameObject &basicGameObject = *serializeGameObject.mutable_basic_game_object();
-        if (rigidBody->GetMass() > 0) { // This I try to check whether it is dynamic or not
+        if (rigidBody && rigidBody->GetMass() > 0) { // This I try to check whether it is dynamic or not
             basicGameObject.set_box2d_type(serial::Box2DType::DYNAMIC);
         } else {
             basicGameObject.set_box2d_type(serial::Box2DType::STATIC);
