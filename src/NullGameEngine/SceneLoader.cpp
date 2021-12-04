@@ -65,11 +65,20 @@ namespace null {
 
         groundObject->addScript<ReloadSceneScript>(*groundObject);
 
+        auto cursorObject = std::make_shared<GameObject>();
+
+        auto spriteSheet = SpriteSheet("cursorAnim.png", sf::Vector2i(16, 16), {{"cursorAnim", 0, 0, 5}});
+        cursorObject->addScript<CursorAnimation>(*cursorObject, spriteSheet);
+        cursorObject->getSprite().setScale(4.0f, 4.0f);
+        cursorObject->renderLayer = FOREGROUND;
+        cursorObject->visible = true;
+
         // nonsensical actions to demonstrate
         // child adding process
         nullGameLogo->addChild(std::move(boxObject));
         nullGameLogo->addChild(std::move(boxObject2));
         groundObject->addChild(std::move(nullGameLogo));
+        newScene->addRootGameObject(std::move(cursorObject));
         newScene->addRootGameObject(std::move(groundObject));
 
         MainLoop::provideScene(move(newScene));
