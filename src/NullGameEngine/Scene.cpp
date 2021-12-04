@@ -30,7 +30,7 @@ namespace null {
     }
 
     std::weak_ptr<GameObject> Scene::addRootGameObject(std::shared_ptr<GameObject>&& newGameObject) {
-        newGameObject->scene = shared_from_this();
+        newGameObject->scene = weak_from_this();
         rootGameObjects.push_back(newGameObject);
 
         return newGameObject;

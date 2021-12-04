@@ -24,7 +24,7 @@ namespace null {
 
     std::weak_ptr<GameObject> GameObject::addChild(std::shared_ptr<GameObject>&& child) {
         child->scene = scene;
-        child->parent = shared_from_this();
+        child->parent = weak_from_this();
         children.push_back(child);
 
         return child;
