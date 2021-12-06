@@ -24,7 +24,6 @@ public:
 
     void sendGameServerConfig(sf::TcpSocket &client, const std::string &roomCode);
 
-
     void handleNetMessage(sf::TcpSocket &client, const net::NetMessage &message) override;
 
     void sendRoomCode(sf::TcpSocket &socket, const std::string &roomCode);

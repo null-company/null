@@ -9,13 +9,12 @@
 class NetClientCollector {
 private:
     sf::Thread simulationThread;
+    sf::IpAddress ipAddress;
 public:
     sf::TcpListener listener;
     std::vector<std::unique_ptr<sf::TcpSocket>> clients;
+    // std::map<int, ClientInfo>
     std::list<ssize_t> freeClientSlots;
-
-    sf::IpAddress ipAddress;
-    uint16_t port;
 
     NetClientCollector(sf::IpAddress ipAddress, uint16_t port);
 
@@ -26,6 +25,10 @@ public:
     virtual void handleNetMessage(sf::TcpSocket &client, const net::NetMessage &message) = 0;
 
     void launch();
+
+    uint32_t getIP();
+
+    uint32_t getPort() const;
 };
 
 #endif //NULL_GAME_NETCLIENTCOLLECTOR_H

@@ -139,7 +139,6 @@ class NetMessage final :
     kGenerateRoomRequest = 7,
     kConnectRoom = 8,
     kGameMessage = 1,
-    kChatMessage = 2,
     BODY_NOT_SET = 0,
   };
 
@@ -227,7 +226,6 @@ class NetMessage final :
     kGenerateRoomRequestFieldNumber = 7,
     kConnectRoomFieldNumber = 8,
     kGameMessageFieldNumber = 1,
-    kChatMessageFieldNumber = 2,
   };
   // .net.GameServerConfig server_config = 5;
   bool has_server_config() const;
@@ -319,24 +317,6 @@ class NetMessage final :
       ::net::GameMessage* game_message);
   ::net::GameMessage* unsafe_arena_release_game_message();
 
-  // .net.ChatMessage chat_message = 2;
-  bool has_chat_message() const;
-  private:
-  bool _internal_has_chat_message() const;
-  public:
-  void clear_chat_message();
-  const ::net::ChatMessage& chat_message() const;
-  PROTOBUF_NODISCARD ::net::ChatMessage* release_chat_message();
-  ::net::ChatMessage* mutable_chat_message();
-  void set_allocated_chat_message(::net::ChatMessage* chat_message);
-  private:
-  const ::net::ChatMessage& _internal_chat_message() const;
-  ::net::ChatMessage* _internal_mutable_chat_message();
-  public:
-  void unsafe_arena_set_allocated_chat_message(
-      ::net::ChatMessage* chat_message);
-  ::net::ChatMessage* unsafe_arena_release_chat_message();
-
   void clear_body();
   BodyCase body_case() const;
   // @@protoc_insertion_point(class_scope:net.NetMessage)
@@ -347,7 +327,6 @@ class NetMessage final :
   void set_has_generate_room_request();
   void set_has_connect_room();
   void set_has_game_message();
-  void set_has_chat_message();
 
   inline bool has_body() const;
   inline void clear_has_body();
@@ -363,7 +342,6 @@ class NetMessage final :
     ::net::GenerateRoom* generate_room_request_;
     ::net::ConnectRoom* connect_room_;
     ::net::GameMessage* game_message_;
-    ::net::ChatMessage* chat_message_;
   } body_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   uint32_t _oneof_case_[1];
@@ -1051,6 +1029,11 @@ class GameMessage final :
   static const GameMessage& default_instance() {
     return *internal_default_instance();
   }
+  enum MessageCase {
+    kChatMessage = 2,
+    MESSAGE_NOT_SET = 0,
+  };
+
   static inline const GameMessage* internal_default_instance() {
     return reinterpret_cast<const GameMessage*>(
                &_GameMessage_default_instance_);
@@ -1130,31 +1113,47 @@ class GameMessage final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kMessageFieldNumber = 1,
+    kChatMessageFieldNumber = 2,
   };
-  // string message = 1;
-  void clear_message();
-  const std::string& message() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_message(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_message();
-  PROTOBUF_NODISCARD std::string* release_message();
-  void set_allocated_message(std::string* message);
+  // .net.ChatMessage chat_message = 2;
+  bool has_chat_message() const;
   private:
-  const std::string& _internal_message() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_message(const std::string& value);
-  std::string* _internal_mutable_message();
+  bool _internal_has_chat_message() const;
   public:
+  void clear_chat_message();
+  const ::net::ChatMessage& chat_message() const;
+  PROTOBUF_NODISCARD ::net::ChatMessage* release_chat_message();
+  ::net::ChatMessage* mutable_chat_message();
+  void set_allocated_chat_message(::net::ChatMessage* chat_message);
+  private:
+  const ::net::ChatMessage& _internal_chat_message() const;
+  ::net::ChatMessage* _internal_mutable_chat_message();
+  public:
+  void unsafe_arena_set_allocated_chat_message(
+      ::net::ChatMessage* chat_message);
+  ::net::ChatMessage* unsafe_arena_release_chat_message();
 
+  void clear_message();
+  MessageCase message_case() const;
   // @@protoc_insertion_point(class_scope:net.GameMessage)
  private:
   class _Internal;
+  void set_has_chat_message();
+
+  inline bool has_message() const;
+  inline void clear_has_message();
 
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+  union MessageUnion {
+    constexpr MessageUnion() : _constinit_{} {}
+      ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized _constinit_;
+    ::net::ChatMessage* chat_message_;
+  } message_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  uint32_t _oneof_case_[1];
+
   friend struct ::TableStruct_serverConfig_2eproto;
 };
 // -------------------------------------------------------------------
@@ -1689,80 +1688,6 @@ inline ::net::GameMessage* NetMessage::mutable_game_message() {
   return _msg;
 }
 
-// .net.ChatMessage chat_message = 2;
-inline bool NetMessage::_internal_has_chat_message() const {
-  return body_case() == kChatMessage;
-}
-inline bool NetMessage::has_chat_message() const {
-  return _internal_has_chat_message();
-}
-inline void NetMessage::set_has_chat_message() {
-  _oneof_case_[0] = kChatMessage;
-}
-inline void NetMessage::clear_chat_message() {
-  if (_internal_has_chat_message()) {
-    if (GetArenaForAllocation() == nullptr) {
-      delete body_.chat_message_;
-    }
-    clear_has_body();
-  }
-}
-inline ::net::ChatMessage* NetMessage::release_chat_message() {
-  // @@protoc_insertion_point(field_release:net.NetMessage.chat_message)
-  if (_internal_has_chat_message()) {
-    clear_has_body();
-      ::net::ChatMessage* temp = body_.chat_message_;
-    if (GetArenaForAllocation() != nullptr) {
-      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-    }
-    body_.chat_message_ = nullptr;
-    return temp;
-  } else {
-    return nullptr;
-  }
-}
-inline const ::net::ChatMessage& NetMessage::_internal_chat_message() const {
-  return _internal_has_chat_message()
-      ? *body_.chat_message_
-      : reinterpret_cast< ::net::ChatMessage&>(::net::_ChatMessage_default_instance_);
-}
-inline const ::net::ChatMessage& NetMessage::chat_message() const {
-  // @@protoc_insertion_point(field_get:net.NetMessage.chat_message)
-  return _internal_chat_message();
-}
-inline ::net::ChatMessage* NetMessage::unsafe_arena_release_chat_message() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:net.NetMessage.chat_message)
-  if (_internal_has_chat_message()) {
-    clear_has_body();
-    ::net::ChatMessage* temp = body_.chat_message_;
-    body_.chat_message_ = nullptr;
-    return temp;
-  } else {
-    return nullptr;
-  }
-}
-inline void NetMessage::unsafe_arena_set_allocated_chat_message(::net::ChatMessage* chat_message) {
-  clear_body();
-  if (chat_message) {
-    set_has_chat_message();
-    body_.chat_message_ = chat_message;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:net.NetMessage.chat_message)
-}
-inline ::net::ChatMessage* NetMessage::_internal_mutable_chat_message() {
-  if (!_internal_has_chat_message()) {
-    clear_body();
-    set_has_chat_message();
-    body_.chat_message_ = CreateMaybeMessage< ::net::ChatMessage >(GetArenaForAllocation());
-  }
-  return body_.chat_message_;
-}
-inline ::net::ChatMessage* NetMessage::mutable_chat_message() {
-  ::net::ChatMessage* _msg = _internal_mutable_chat_message();
-  // @@protoc_insertion_point(field_mutable:net.NetMessage.chat_message)
-  return _msg;
-}
-
 inline bool NetMessage::has_body() const {
   return body_case() != BODY_NOT_SET;
 }
@@ -2094,57 +2019,89 @@ inline void ConnectRoom::set_allocated_room_code(std::string* room_code) {
 
 // GameMessage
 
-// string message = 1;
-inline void GameMessage::clear_message() {
-  message_.ClearToEmpty();
+// .net.ChatMessage chat_message = 2;
+inline bool GameMessage::_internal_has_chat_message() const {
+  return message_case() == kChatMessage;
 }
-inline const std::string& GameMessage::message() const {
-  // @@protoc_insertion_point(field_get:net.GameMessage.message)
-  return _internal_message();
+inline bool GameMessage::has_chat_message() const {
+  return _internal_has_chat_message();
 }
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void GameMessage::set_message(ArgT0&& arg0, ArgT... args) {
- 
- message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:net.GameMessage.message)
+inline void GameMessage::set_has_chat_message() {
+  _oneof_case_[0] = kChatMessage;
 }
-inline std::string* GameMessage::mutable_message() {
-  std::string* _s = _internal_mutable_message();
-  // @@protoc_insertion_point(field_mutable:net.GameMessage.message)
-  return _s;
+inline void GameMessage::clear_chat_message() {
+  if (_internal_has_chat_message()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete message_.chat_message_;
+    }
+    clear_has_message();
+  }
 }
-inline const std::string& GameMessage::_internal_message() const {
-  return message_.Get();
-}
-inline void GameMessage::_internal_set_message(const std::string& value) {
-  
-  message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* GameMessage::_internal_mutable_message() {
-  
-  return message_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* GameMessage::release_message() {
-  // @@protoc_insertion_point(field_release:net.GameMessage.message)
-  return message_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void GameMessage::set_allocated_message(std::string* message) {
-  if (message != nullptr) {
-    
+inline ::net::ChatMessage* GameMessage::release_chat_message() {
+  // @@protoc_insertion_point(field_release:net.GameMessage.chat_message)
+  if (_internal_has_chat_message()) {
+    clear_has_message();
+      ::net::ChatMessage* temp = message_.chat_message_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    message_.chat_message_ = nullptr;
+    return temp;
   } else {
-    
+    return nullptr;
   }
-  message_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), message,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (message_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    message_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+}
+inline const ::net::ChatMessage& GameMessage::_internal_chat_message() const {
+  return _internal_has_chat_message()
+      ? *message_.chat_message_
+      : reinterpret_cast< ::net::ChatMessage&>(::net::_ChatMessage_default_instance_);
+}
+inline const ::net::ChatMessage& GameMessage::chat_message() const {
+  // @@protoc_insertion_point(field_get:net.GameMessage.chat_message)
+  return _internal_chat_message();
+}
+inline ::net::ChatMessage* GameMessage::unsafe_arena_release_chat_message() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:net.GameMessage.chat_message)
+  if (_internal_has_chat_message()) {
+    clear_has_message();
+    ::net::ChatMessage* temp = message_.chat_message_;
+    message_.chat_message_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
   }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:net.GameMessage.message)
+}
+inline void GameMessage::unsafe_arena_set_allocated_chat_message(::net::ChatMessage* chat_message) {
+  clear_message();
+  if (chat_message) {
+    set_has_chat_message();
+    message_.chat_message_ = chat_message;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:net.GameMessage.chat_message)
+}
+inline ::net::ChatMessage* GameMessage::_internal_mutable_chat_message() {
+  if (!_internal_has_chat_message()) {
+    clear_message();
+    set_has_chat_message();
+    message_.chat_message_ = CreateMaybeMessage< ::net::ChatMessage >(GetArenaForAllocation());
+  }
+  return message_.chat_message_;
+}
+inline ::net::ChatMessage* GameMessage::mutable_chat_message() {
+  ::net::ChatMessage* _msg = _internal_mutable_chat_message();
+  // @@protoc_insertion_point(field_mutable:net.GameMessage.chat_message)
+  return _msg;
 }
 
+inline bool GameMessage::has_message() const {
+  return message_case() != MESSAGE_NOT_SET;
+}
+inline void GameMessage::clear_has_message() {
+  _oneof_case_[0] = MESSAGE_NOT_SET;
+}
+inline GameMessage::MessageCase GameMessage::message_case() const {
+  return GameMessage::MessageCase(_oneof_case_[0]);
+}
 // -------------------------------------------------------------------
 
 // ChatMessage

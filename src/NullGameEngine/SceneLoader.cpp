@@ -8,6 +8,7 @@
 #include <Scripts.hpp>
 #include <GameObject.hpp>
 #include <ResourceManager.hpp>
+#include <fstream>
 #include "google/protobuf/util/json_util.h"
 #include "yaml-cpp/yaml.h"
 
@@ -74,11 +75,14 @@ namespace null {
         newScene->addGameObject(move(boxObject2));
         newScene->addGameObject(move(groundObject));
         serial::Scene serialize = newScene->prefabSerialize();
+
         std::string message;
         google::protobuf::util::JsonOptions options;
         options.add_whitespace = true;
         google::protobuf::util::MessageToJsonString(serialize, &message, options);
-        std::cout << message;
+        std::ofstream file;
+        file.open("../scene.json", std::ios::out);
+        file << message;
         MainLoop::provideScene(move(newScene));
     };
 

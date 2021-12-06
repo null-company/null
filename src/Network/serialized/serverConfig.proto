@@ -7,7 +7,6 @@ message NetMessage{
     GenerateRoom generate_room_request = 7;
     ConnectRoom connect_room = 8;
     GameMessage game_message = 1;
-    ChatMessage chat_message = 2;
   }
 }
 
@@ -32,7 +31,9 @@ message ConnectRoom{
 }
 
 message GameMessage{
-  string message = 1; // plug (however)
+  oneof message {
+    ChatMessage chat_message = 2;
+  }
 }
 
 message ChatMessage{

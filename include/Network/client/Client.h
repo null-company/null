@@ -12,30 +12,29 @@ class Client {
 private:
     char client_idx;
     sf::TcpSocket gameServerSocket;
-    sf::IpAddress gameServerAddress;
-    uint16_t gameServerPort;
-
-    sf::IpAddress arbiterServerAddress;
     sf::TcpSocket arbiterSocket;
-    uint16_t arbiterPort;
-
     std::string roomCode;
 private:
     void sendGenerateRoomMessage();
 
     void askGameServerConfigByRoomCode();
 
+    void setRoomCode(const std::string &roomCode);
+
 public:
 
     Client(sf::IpAddress serverAddress, uint16_t arbiterPort);
 
+    std::string getRoom();
+
+    sf::TcpSocket& getGameServerSocket();
     void createRoom();
 
-    void connectRoom();
+    void connectRoom(sf::IpAddress serverAddress, uint16_t port);
 
     void sendChatMessage(const std::string &chatMessage);
 
-    void receiveWorldStateMessage();
+    void handleGameServerMessage(const net::GameMessage &message);
 
     void handleChatMessage(net::ChatMessage *pMessage);
 
@@ -43,9 +42,11 @@ public:
 
     void handleServerArbiterMessage(const net::NetMessage &message);
 
-    void handleServerConfigMessage(const net::GameServerConfig &config);
+    void handleServerConfigMessageAndConnect(const net::GameServerConfig &config);
 
     static void handleChatMessage(const net::ChatMessage &chatMessage);
+
+    void connectRoom(const std::string &roomCode);
 };
 
 #endif //NULL_GAME_CLIENT_H

@@ -2,8 +2,8 @@ syntax = "proto3";
 package serial;
 
 message Scene{
-     GameObject game_object = 1;
-     Camera camera = 2;
+  GameObject game_object = 1;
+  Camera camera = 2;
 }
 message Camera{}
 

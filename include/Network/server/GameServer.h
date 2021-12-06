@@ -16,7 +16,10 @@ public:
 
     void broadcastChatMessage(const std::string &basicString);
 
-    void broadcastMessage(const net::NetMessage &message);
+    void broadcastMessage(const net::GameMessage &message);
+
+    void handleGameMessage(sf::TcpSocket &client, const net::GameMessage &message);
+
 };
 
 

@@ -9,9 +9,12 @@ net::NetMessage receiveNetMessage(sf::TcpSocket &socket) {
         LOGE << "Error occurred while trying to receive some message from";
         throw std::invalid_argument("Error occurred while trying to receive some message from");
     }
-    message.ParseFromArray(packet.getData(), packet.getDataSize());
+    std::string resultString;
+    packet >> resultString;
+    message.ParseFromString(resultString);
     return message;
 }
+
 
 void sendNetMessage(sf::TcpSocket &socket, const net::NetMessage &message) {
     LOGD << "Sending Some Message";
@@ -22,3 +25,10 @@ void sendNetMessage(sf::TcpSocket &socket, const net::NetMessage &message) {
         throw std::invalid_argument("Error occurred while sending message");
     }
 }
+
+void sendNetMessage(sf::TcpSocket &socket, const net::GameMessage &message) {
+    net::NetMessage message1;
+    *message1.mutable_game_message() = message;
+    sendNetMessage(socket, message1);
+}
+

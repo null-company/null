@@ -8,7 +8,7 @@
 std::string ServerArbiter::createNewGameSimulation() {
     PLOGD << "New game simulation is creating";
     net::GameServerConfig gameServerConfig;
-    gameServers.emplace_back(std::make_unique<GameServer>(ipAddress, freePorts.front()));
+    gameServers.emplace_back(std::make_unique<GameServer>(sf::IpAddress(getIP()), freePorts.front()));
     gameServers.back()->launch();
     freePorts.pop_front();
 
@@ -31,11 +31,11 @@ ServerArbiter::ServerArbiter(sf::IpAddress ipAddress, uint16_t port) : NetClient
     LOGD << "Game server arbiter was initialized";
 }
 
-std::string ServerArbiter::handleRoomCodeMessage(const net::ConnectRoom &room) {
-    LOGD << "Room code was received";
-    const std::string &roomCode = room.room_code();
-    return roomCode;
-}
+//std::string ServerArbiter::handleRoomCodeMessage(const net::ConnectRoom &room) {
+//    LOGD << "Room code was received";
+//    const std::string &roomCode = room.room_code();
+//    return roomCode;
+//}
 
 void ServerArbiter::sendGameServerConfig(sf::TcpSocket &client, const std::string &roomCode) {
     net::NetMessage message;
@@ -43,21 +43,32 @@ void ServerArbiter::sendGameServerConfig(sf::TcpSocket &client, const std::strin
     if (!roomCodeToServerNum.contains(roomCode)) {
         sendNetMessage(client, message);
     }
-    const GameServer &server = *(gameServers[roomCodeToServerNum[roomCode]]);
+    GameServer &server = *(gameServers[roomCodeToServerNum[roomCode]]);
     serverConfig->set_room_code(roomCode);
-    serverConfig->set_v4(server.ipAddress.toInteger());
-    serverConfig->set_server_port(port);
+    serverConfig->set_v4(server.getIP());
+    serverConfig->set_server_port(server.getPort());
     sendNetMessage(client, message);
 }
 
 void ServerArbiter::handleNetMessage(sf::TcpSocket &client, const net::NetMessage &message) {
-    if (message.has_generate_room_request()) {
-        LOGD << "Request about asking generating new game received";
-        std::string roomCode = createNewGameSimulation();
-        sendRoomCode(client, roomCode);
-    } else if (message.has_connect_room()) {
-        LOGD << "Request about asking getting game server config by server";
-        sendGameServerConfig(client, message.connect_room().room_code());
+    switch (message.body_case()) {
+        case net::NetMessage::kGenerateRoomRequest: {
+            LOGD << "Request about asking generating new game received";
+            std::string roomCode = createNewGameSimulation();
+            sendRoomCode(client, roomCode);
+            break;
+        }
+        case net::NetMessage::kConnectRoom: {
+            LOGD << "Request about asking getting game server config by server";
+            sendGameServerConfig(client, message.connect_room().room_code());
+            break;
+        }
+        case net::NetMessage::kGameMessage:
+        case net::NetMessage::kClientInfo:
+
+        case net::NetMessage::kServerConfig:
+        case net::NetMessage::BODY_NOT_SET:
+            break;
     }
 }
 

@@ -8,19 +8,15 @@
 #include <plog/Log.h>
 #include <utils/NetMessageTransmitting.h>
 
+
 NetClientCollector::NetClientCollector(sf::IpAddress ipAddress, uint16_t port) :
-        ipAddress(ipAddress),
-        port(port),
         listener(),
+        ipAddress(ipAddress),
         simulationThread([this]() {
-            bool isActive = true;
-            while (isActive) {
+            while (true) {
                 sf::TcpSocket &client = this->getFirstReadySocket();
                 net::NetMessage message = receiveNetMessage(client);
                 this->handleNetMessage(client, message);
-                if (0 != 0) {
-                    break;
-                }
             }
         }) {
 
@@ -33,7 +29,7 @@ NetClientCollector::NetClientCollector(sf::IpAddress ipAddress, uint16_t port) :
 
 void NetClientCollector::acceptNewClient() {
     if (freeClientSlots.empty()) {
-        clients.emplace_back();
+        clients.emplace_back(std::make_unique<sf::TcpSocket>());
         freeClientSlots.push_back(clients.size() - 1);
     }
     sf::TcpSocket &newClient = **(clients.begin() + freeClientSlots.front());
@@ -74,3 +70,11 @@ void NetClientCollector::launch() {
     LOGD << "New NetClientCollector was launched for new incoming connections";
 }
 
+
+uint32_t NetClientCollector::getIP() {
+    return ipAddress.toInteger();
+}
+
+uint32_t NetClientCollector::getPort() const {
+    return listener.getLocalPort();
+}
