@@ -6,18 +6,41 @@ namespace null {
 
     // box2dWorld is initiated under assumption that
     // gravity is default
-    Scene::Scene() : box2dWorld(b2Vec2(0.0, 9.8f)) {}
+    Scene::Scene() : box2dWorld(b2Vec2(0.0, 9.8f)) { }
 
-    void Scene::addGameObject(std::unique_ptr<GameObject> newGameObject) {
-        newGameObject->scene = self;
-        gameObjects.push_back(move(newGameObject));
+    void Scene::objectTreeForEachDo(GameObject& gameObject,
+            std::function<void(GameObject&)> function) const {
+
+        std::function<void(GameObject&)> walk;
+        walk = [&function, &walk](GameObject& go) -> void {
+            function(go);
+            for (const auto& childWeakRef: go.getChildren()) {
+                auto childP = childWeakRef.lock();
+                walk(*childP);
+            }
+        };
+
+        walk(gameObject);
+    }
+
+    void Scene::sceneTreeForEachDo(std::function<void(GameObject&)> function) const {
+        for (const auto& obj : rootGameObjects) {
+            objectTreeForEachDo(*obj, function);
+        }
+    }
+
+    std::weak_ptr<GameObject> Scene::addRootGameObject(std::shared_ptr<GameObject>&& newGameObject) {
+        newGameObject->scene = weak_from_this();
+        rootGameObjects.push_back(newGameObject);
+
+        return newGameObject;
     }
 
     void Scene::start() {
         camera.start();
-        for (auto &obj: gameObjects) {
-            obj->start();
-        }
+        sceneTreeForEachDo([](GameObject& obj) -> void {
+                obj.start();
+                });
     }
 
     void Scene::update() {
@@ -27,23 +50,14 @@ namespace null {
         constexpr int positionIterations = 3;
 
         box2dWorld.Step(timeStep, velocityIterations, positionIterations);
-
-        for (auto &obj: gameObjects) {
-            obj->update();
-        }
+        
+        sceneTreeForEachDo([](GameObject& obj) -> void {
+                obj.update();
+                });
     }
 
-    b2World &Scene::getBox2dWorld() {
+    b2World& Scene::getBox2dWorld() {
         return box2dWorld;
-    }
-
-    serial::Scene Scene::prefabSerialize() {
-        serial::Scene serializeScene;
-        serial::BasicGameObject &gameObject = *(serializeScene.mutable_game_object()->mutable_basic_game_object());
-        for (auto &childObject: this->gameObjects) {
-            *gameObject.add_children_objects() = childObject->prefabSerialize();
-        }
-        return serializeScene;
     }
 
 }
