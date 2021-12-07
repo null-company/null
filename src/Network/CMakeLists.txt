@@ -18,10 +18,13 @@ set(SRC
         ${SRCROOT}/channel/Connection.cpp
         ${INCROOT}/serialized/serverConfig.pb.h
         ${SRCROOT}/serialized/serverConfig.pb.cc
-        server/ServerArbiter.cpp
-        server/NetClientCollector.cpp
-        utils/NetMessageTransmitting.cpp
-        ../../include/Network/utils/util.h server/util.cpp ../../include/Network/network.h
+        ${SRCROOT}/server/ServerArbiter.cpp
+        ${SRCROOT}/server/NetClientCollector.cpp
+        ${SRCROOT}/utils/NetMessageTransmitting.cpp
+        ${INCROOT}/utils/NetMessageTransmitting.h
+        ${INCROOT}/utils/util.h
+        ${SRCROOT}/utils/util.cpp
+        ${INCROOT}/network.h
         )
 SET_SOURCE_FILES_PROPERTIES(${PROTO_SRCS} ${PROTO_HDRS} PROPERTIES GENERATED TRUE)
 
