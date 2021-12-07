@@ -3,6 +3,7 @@
 #include <NullGameEngine.hpp>
 #include <SFML/Graphics.hpp>
 #include <utility>
+#include <unordered_map>
 
 namespace null {
     class SpriteSheet;
