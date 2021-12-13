@@ -21,7 +21,7 @@ void Client::sendGenerateRoomMessage() {
     message.mutable_generate_room_request();
     net::NetMessage message2;
     sendNetMessage(arbiterSocket, message);
-    LOGD << "Message was send: " << message.SerializeAsString();
+    LOGD << "Message was send: " << message.DebugString();
 }
 
 void Client::handleRoomCodeMessage(const net::ConnectRoom &room) {
@@ -32,7 +32,7 @@ void Client::handleRoomCodeMessage(const net::ConnectRoom &room) {
 
 void Client::connectRoom(sf::IpAddress serverAddress, uint16_t port) {
     if (gameServerSocket.connect(serverAddress, port) != sf::Socket::Done) {
-        LOGE << "Connect server state socket error occurred";
+        LOGE << "Connect server state socket error";
         throw std::invalid_argument("Connect server state socket error occurred");
     }
 }
@@ -51,7 +51,7 @@ void Client::connectRoom(const std::string &roomCode) {
     askGameServerConfigByRoomCode();
     net::NetMessage message = receiveNetMessage(arbiterSocket);
     if (!message.has_server_config()) {
-        throw std::invalid_argument("Expected room code");
+        throw std::invalid_argument("Expected server config");
     }
     handleServerConfigMessageAndConnect(message.server_config());
 }
@@ -61,7 +61,7 @@ void Client::sendChatMessage(const std::string &chatMessage) {
     std::string *message_field = message.mutable_chat_message()->mutable_message();
     *(message_field) = chatMessage;
     sendGameMessage(gameServerSocket, message);
-    LOGD << "Chat message was send\n" << chatMessage << std::endl;
+    LOGD << "Chat message was send\n" << chatMessage;
 }
 
 void Client::handleChatMessage(const net::ChatMessage &chatMessage) {

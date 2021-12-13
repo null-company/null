@@ -10,12 +10,12 @@ net::NetMessage receiveNetMessage(sf::TcpSocket &socket) {
     auto status = socket.receive(packet);
     if (status != sf::Socket::Done) {
         LOGD << "Cannot receive message";
-        throw ClientReceiveException("Error occurred while trying to receive some message from client", status);
+        throw ClientReceiveException("Cannot receive message", status);
     }
     std::string resultString;
     packet >> resultString;
     message.ParseFromString(resultString);
-    LOGD << "Message was received successfully: " << resultString;
+    LOGD << "Message was received successfully: " << message.DebugString();
     return message;
 }
 

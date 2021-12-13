@@ -6,7 +6,7 @@
 #include "utils/util.h"
 #include "utils/NetMessageTransmitting.h"
 
-//TODO: reuse previous game slots
+//TODO: what about destruction the game?
 std::string ServerArbiter::createNewGameSimulation() {
     PLOGD << "New game simulation is creating";
     net::GameServerConfig gameServerConfig;
