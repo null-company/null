@@ -2,21 +2,14 @@
 #include "server/GameServer.h"
 #include "utils/NetMessageTransmitting.h"
 
-GameServer::GameServer(sf::IpAddress ipAddress, uint16_t port) :
-        NetClientCollector(ipAddress, port) {
-    LOGD << "Game server was initiated successfully: " << ipAddress << " " << port;
+GameServer::GameServer() :
+        NetClientCollector() {
 }
 
 void GameServer::broadcastMessage(const net::GameMessage &message) {
     for (auto &client: clients) {
-        sendNetMessage(*client, message);
+        sendGameMessage(*client, message);
     }
-}
-
-void GameServer::broadcastChatMessage(const std::string &basicString) {
-    net::GameMessage message;
-    *(message.mutable_chat_message()->mutable_message()) = basicString;
-    broadcastMessage(message);
 }
 
 void GameServer::handleNetMessage(sf::TcpSocket &client, const net::NetMessage &message) {

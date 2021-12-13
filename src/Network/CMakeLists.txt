@@ -25,7 +25,7 @@ set(SRC
         ${INCROOT}/utils/util.h
         ${SRCROOT}/utils/util.cpp
         ${INCROOT}/network.h
-        )
+        exceptions/NetworkException.cpp ../../include/Network/exceptions/NetworkException.h)
 SET_SOURCE_FILES_PROPERTIES(${PROTO_SRCS} ${PROTO_HDRS} PROPERTIES GENERATED TRUE)
 
 add_library(network STATIC ${SRC})

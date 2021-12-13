@@ -7,9 +7,9 @@
 int main() {
     static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;
     plog::init(plog::debug, &consoleAppender);
-    Client client1("127.0.0.1", 4005);
-    Client client2("127.0.0.1", 4005);
-    Client client3("127.0.0.1", 4005);
+    Client client1("127.0.0.1", 5000);
+    Client client2("127.0.0.1", 5000);
+    Client client3("127.0.0.1", 5000);
     client1.createRoom();
     client2.connectRoom(client1.getRoom());
     client3.connectRoom(client1.getRoom());

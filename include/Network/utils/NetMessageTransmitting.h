@@ -1,5 +1,4 @@
-#ifndef NULL_GAME_NETMESSAGETRANSMITTING_H
-#define NULL_GAME_NETMESSAGETRANSMITTING_H
+#pragma once
 
 #include <serverConfig.pb.h>
 #include <SFML/Network.hpp>
@@ -8,6 +7,5 @@ net::NetMessage receiveNetMessage(sf::TcpSocket &socket);
 
 void sendNetMessage(sf::TcpSocket &socket, const net::NetMessage &message);
 
-void sendNetMessage(sf::TcpSocket &socket, const net::GameMessage &message);
+void sendGameMessage(sf::TcpSocket &socket, const net::GameMessage &message);
 
-#endif

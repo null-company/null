@@ -1,5 +1,7 @@
 #include "server/ServerArbiter.h"
 #include <plog/Log.h>
+
+#include <utility>
 #include "plog/Initializers/RollingFileInitializer.h"
 #include "utils/util.h"
 #include "utils/NetMessageTransmitting.h"
@@ -8,9 +10,10 @@
 std::string ServerArbiter::createNewGameSimulation() {
     PLOGD << "New game simulation is creating";
     net::GameServerConfig gameServerConfig;
-    gameServers.emplace_back(std::make_unique<GameServer>(sf::IpAddress(getIP()), freePorts.front()));
+    gameServers.emplace_back(std::make_unique<GameServer>());
+    gameServers.back()->listen(sf::IpAddress(this->getIP()), freePorts.back());
+    freePorts.pop_back();
     gameServers.back()->launch();
-    freePorts.pop_front();
 
     std::string roomCode = generateSixLetterCode();
     while (roomCodeToServerNum.contains(roomCode)) {
@@ -22,20 +25,14 @@ std::string ServerArbiter::createNewGameSimulation() {
     return roomCode;
 }
 
-ServerArbiter::ServerArbiter(sf::IpAddress ipAddress, uint16_t port) : NetClientCollector(ipAddress, port),
-                                                                       freePorts(),
-                                                                       gameServers() {
-    for (uint16_t i = 5000u; i < 5030u; i++) {
-        freePorts.push_back(i);
-    }
-    LOGD << "Game server arbiter was initialized";
+ServerArbiter::ServerArbiter(std::function<void()> simulationThread) : NetClientCollector(
+        std::move(simulationThread)) {}
+
+ServerArbiter::ServerArbiter() : NetClientCollector(),
+                                 freePorts({6000, 6001, 6002, 6003, 6004, 6005, 6006}),
+                                 gameServers() {
 }
 
-//std::string ServerArbiter::handleRoomCodeMessage(const net::ConnectRoom &room) {
-//    LOGD << "Room code was received";
-//    const std::string &roomCode = room.room_code();
-//    return roomCode;
-//}
 
 void ServerArbiter::sendGameServerConfig(sf::TcpSocket &client, const std::string &roomCode) {
     net::NetMessage message;

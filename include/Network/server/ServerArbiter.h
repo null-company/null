@@ -12,15 +12,15 @@
 #include "NetClientCollector.h"
 
 class ServerArbiter : public NetClientCollector {
+    ServerArbiter(std::function<void()> simulationThread);
+
     std::vector<std::unique_ptr<GameServer>> gameServers;
     std::list<uint16_t> freePorts;
     std::map<std::string, int> roomCodeToServerNum;
 public:
-    ServerArbiter(sf::IpAddress ipAddress, uint16_t port);
+    ServerArbiter();
 
     std::string createNewGameSimulation();
-
-    std::string handleRoomCodeMessage(const net::ConnectRoom &room);
 
     void sendGameServerConfig(sf::TcpSocket &client, const std::string &roomCode);
 

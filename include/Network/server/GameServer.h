@@ -10,11 +10,9 @@
 
 class GameServer : public NetClientCollector {
 public:
-    GameServer(sf::IpAddress ipAddress, uint16_t port);
+    GameServer();
 
     void handleNetMessage(sf::TcpSocket &client, const net::NetMessage &message) override;
-
-    void broadcastChatMessage(const std::string &basicString);
 
     void broadcastMessage(const net::GameMessage &message);
 

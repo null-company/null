@@ -5,45 +5,76 @@
 #include <server/NetClientCollector.h>
 #include <SFML/Network.hpp>
 #include <cstdint>
+#include <utility>
 #include <plog/Log.h>
 #include <utils/NetMessageTransmitting.h>
+#include "exceptions/NetworkException.h"
 
 
-NetClientCollector::NetClientCollector(sf::IpAddress ipAddress, uint16_t port) :
-        listener(),
-        ipAddress(ipAddress),
-        simulationThread([this]() {
-            while (true) {
-                sf::TcpSocket &client = this->getFirstReadySocket();
-                net::NetMessage message = receiveNetMessage(client);
-                this->handleNetMessage(client, message);
+void NetClientCollector::defaultSimulationThreadFunc(NetClientCollector *self) {
+    while (true) {
+        int readyClientIdx = self->getFirstReadySocketIdx();
+        if (isListener(readyClientIdx)) {
+            self->acceptNewClient();
+            continue;
+        }
+        try {
+            sf::TcpSocket &client = self->getClient(readyClientIdx);
+            net::NetMessage message = receiveNetMessage(client);
+            self->handleNetMessage(client, message);
+        } catch (const ClientReceiveException &exception) {
+            if (exception.getStatus() == sf::Socket::Disconnected) {
+                self->disconnectClient(readyClientIdx);
+                LOGD << "Client was disconnected successfully";
+                continue;
             }
-        }) {
-
-    if (listener.listen(port, ipAddress) != sf::Socket::Done) {
-        LOGE << "Error occurred while listening " << ipAddress.toString() << " " << port;
-        throw std::invalid_argument("Error occurred while listening");
+            throw ClientReceiveException("Unexpected client receive exception status", exception.getStatus());
+        }
     }
-    LOGD << "Listen was started successfully";
+}
+
+NetClientCollector::NetClientCollector(std::function<void()> simulationThread) :
+        listener(),
+        ipAddress(),
+        simulationThread(std::move(simulationThread)) {}
+
+NetClientCollector::NetClientCollector() :
+        NetClientCollector([this]() { defaultSimulationThreadFunc(this); }) {}
+
+NetClientCollector::~NetClientCollector() {
+    for (auto &client: clients) {
+        client->disconnect();
+    }
+    listener.close();
 }
 
 void NetClientCollector::acceptNewClient() {
-    if (freeClientSlots.empty()) {
-        clients.emplace_back(std::make_unique<sf::TcpSocket>());
-        freeClientSlots.push_back(clients.size() - 1);
-    }
-    sf::TcpSocket &newClient = **(clients.begin() + freeClientSlots.front());
-    freeClientSlots.pop_front();
+    clients.emplace_back(std::make_unique<sf::TcpSocket>());
+    sf::TcpSocket &newClient = *clients.back();
     if (listener.accept(newClient) != sf::Socket::Done) {
         LOGD << "Cannot accept new client";
-        throw std::invalid_argument("Cannot accept new client");
+        throw NetworkException("Cannot accept new client");
     }
     LOGD << "New client was accepted";
 }
 
+void NetClientCollector::disconnectClient(int idx) {
+    if (idx < 0 || idx >= clients.size()) {
+        throw std::invalid_argument("Client index is out of range");
+    }
+    sf::TcpSocket &client = *clients[idx];
+    client.disconnect();
+    LOGD << "Client " << idx << " was successfully disconnected";
+    if (idx != clients.size() - 1) {
+        clients[idx] = std::move(clients.back());
+    }
+    clients.resize(clients.size() - 1);
+}
 
-sf::TcpSocket &NetClientCollector::getFirstReadySocket() {
-    // TODO not generate it every time i want to receive message
+/**
+ * @return index of first ready socket (-1 means that it is socket listener)
+ */
+int NetClientCollector::getFirstReadySocketIdx() {
     // TODO not allow one socket to take the whole CPU time
     LOGD << "Wait for the first ready socket";
     sf::SocketSelector socketSelector;
@@ -53,16 +84,30 @@ sf::TcpSocket &NetClientCollector::getFirstReadySocket() {
     socketSelector.add(listener);
     socketSelector.wait();
     if (socketSelector.isReady(listener)) {
-        acceptNewClient();
-        //TODO: Remove this recursion stuff
-        return getFirstReadySocket();
+        return -1;
     };
-    for (auto &client: clients) {
-        if (socketSelector.isReady(*client)) {
-            return *client;
+    for (int idx = 0; idx < clients.size(); idx++) {
+        if (socketSelector.isReady(*clients[idx])) {
+            return idx;
         };
     }
-    return *clients[0];
+    throw NetworkException("Unexpected socket selector case");
+}
+
+void NetClientCollector::listen(sf::IpAddress address, const std::vector<uint16_t> &ports) {
+    ipAddress = address;
+    for (const auto port: ports) {
+        if (listener.listen(port, ipAddress) == sf::Socket::Done) {
+            LOGD << "Successfully bind: " << ipAddress.toString() << " " << port;
+            return;
+        }
+        LOGD << "Port " << port << " was unsuccessfully to bound, try next";
+    }
+    throw NetworkException("Cannot bind to socket");
+}
+
+void NetClientCollector::listen(sf::IpAddress address, uint16_t port) {
+    listen(address, std::vector({port}));
 }
 
 void NetClientCollector::launch() {
@@ -70,11 +115,18 @@ void NetClientCollector::launch() {
     LOGD << "New NetClientCollector was launched for new incoming connections";
 }
 
-
 uint32_t NetClientCollector::getIP() {
     return ipAddress.toInteger();
 }
 
-uint32_t NetClientCollector::getPort() const {
+uint16_t NetClientCollector::getPort() const {
     return listener.getLocalPort();
+}
+
+bool NetClientCollector::isListener(int idx) {
+    return idx == -1;
+}
+
+sf::TcpSocket &NetClientCollector::getClient(int idx) {
+    return *(clients[idx]);
 }

@@ -2,18 +2,17 @@
 #include "client/Client.h"
 #include "SFML/Network.hpp"
 #include "iostream"
-#include "exception"
 #include "plog/Log.h"
 #include "serialized/serverConfig.pb.h"
+#include "exceptions/NetworkException.h"
 
 Client::Client(sf::IpAddress arbiterServerAddress, uint16_t arbiterPort) {
 
     LOGD << "Try to connect to arbitrary server " << arbiterServerAddress << " " << arbiterPort;
     sf::Socket::Status status = arbiterSocket.connect(arbiterServerAddress, arbiterPort);
     if (status != sf::Socket::Done) {
-        throw std::invalid_argument("Socket connection failed");
+        throw NetworkException("Socket connection failed");
     }
-
     LOGD << "Connection to arbiter server was initiated successfully";
 }
 
@@ -22,7 +21,7 @@ void Client::sendGenerateRoomMessage() {
     message.mutable_generate_room_request();
     net::NetMessage message2;
     sendNetMessage(arbiterSocket, message);
-    LOGD << "Message was send" << message.SerializePartialAsString();
+    LOGD << "Message was send: " << message.SerializeAsString();
 }
 
 void Client::handleRoomCodeMessage(const net::ConnectRoom &room) {
@@ -61,7 +60,7 @@ void Client::sendChatMessage(const std::string &chatMessage) {
     net::GameMessage message;
     std::string *message_field = message.mutable_chat_message()->mutable_message();
     *(message_field) = chatMessage;
-    sendNetMessage(gameServerSocket, message);
+    sendGameMessage(gameServerSocket, message);
     LOGD << "Chat message was send\n" << chatMessage << std::endl;
 }
 
@@ -83,7 +82,7 @@ void Client::handleGameServerMessage(const net::GameMessage &message) {
             break;
         default:
             LOGE << "Unexpected message type from world state socket";
-            throw std::invalid_argument("Unexpected message type from world state socket");
+            throw NetworkException("Unexpected message type from world state socket");
             break;
     }
 }
@@ -93,10 +92,10 @@ void Client::handleServerConfigMessageAndConnect(const net::GameServerConfig &co
     uint16_t gameServerPort = config.server_port();
     setRoomCode(config.room_code());
 
-    LOGD << "Game server address " << gameServerAddress;
-    LOGD << "Game server port " << gameServerPort;
-    LOGD << "Room code is" << roomCode;
-    LOGD << "Try to connect";
+    LOGD << "Game server address: " << gameServerAddress;
+    LOGD << "Game server port: " << gameServerPort;
+    LOGD << "Room code is: " << roomCode;
+    LOGD << "Try to connect...";
     connectRoom(gameServerAddress, gameServerPort);
 }
 
@@ -104,8 +103,8 @@ void Client::handleChatMessage(net::ChatMessage *pMessage) {
     std::cout << pMessage->message() << std::endl;
 }
 
-void Client::setRoomCode(const std::string &roomCode) {
-    this->roomCode = roomCode;
+void Client::setRoomCode(const std::string &newRoomCode) {
+    this->roomCode = newRoomCode;
 }
 
 std::string Client::getRoom() {
@@ -118,5 +117,10 @@ void Client::handleServerArbiterMessage(const net::NetMessage &message) {
 
 sf::TcpSocket &Client::getGameServerSocket() {
     return gameServerSocket;
+}
+
+Client::~Client() {
+    gameServerSocket.disconnect();
+    arbiterSocket.disconnect();
 }
 

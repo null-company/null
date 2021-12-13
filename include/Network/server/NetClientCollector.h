@@ -8,27 +8,45 @@
 
 class NetClientCollector {
 private:
-    sf::Thread simulationThread;
-    sf::IpAddress ipAddress;
-public:
     sf::TcpListener listener;
+
+protected:
+    sf::Thread simulationThread;
+
+    sf::IpAddress ipAddress;
+
+    static void defaultSimulationThreadFunc(NetClientCollector *clientCollector);
+
     std::vector<std::unique_ptr<sf::TcpSocket>> clients;
-    // std::map<int, ClientInfo>
-    std::list<ssize_t> freeClientSlots;
+public:
 
-    NetClientCollector(sf::IpAddress ipAddress, uint16_t port);
+    NetClientCollector();
 
-    sf::TcpSocket &getFirstReadySocket();
+    int getFirstReadySocketIdx();
+
+    sf::TcpSocket &getClient(int idx);
 
     void acceptNewClient();
 
     virtual void handleNetMessage(sf::TcpSocket &client, const net::NetMessage &message) = 0;
 
+    NetClientCollector(std::function<void()> simulationThread);
+
+    virtual ~NetClientCollector();
+
     void launch();
 
     uint32_t getIP();
 
-    uint32_t getPort() const;
+    uint16_t getPort() const;
+
+    void disconnectClient(int idx);
+
+    void listen(sf::IpAddress address, const std::vector<uint16_t> &ports);
+
+    void listen(sf::IpAddress address, uint16_t port);
+
+    static bool isListener(int idx);
 };
 
 #endif //NULL_GAME_NETCLIENTCOLLECTOR_H

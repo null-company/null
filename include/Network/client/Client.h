@@ -19,12 +19,12 @@ private:
 
     void askGameServerConfigByRoomCode();
 
-    void setRoomCode(const std::string &roomCode);
+    void setRoomCode(const std::string &newRoomCode);
 
 public:
 
     Client(sf::IpAddress serverAddress, uint16_t arbiterPort);
-
+    ~Client();
     std::string getRoom();
 
     sf::TcpSocket& getGameServerSocket();
