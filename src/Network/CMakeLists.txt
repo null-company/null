@@ -14,8 +14,6 @@ set(SRC
         ${SRCROOT}/client/Client.cpp
         ${INCROOT}/server/GameServer.h
         ${SRCROOT}/server/GameServer.cpp
-        ${INCROOT}/channel/Connection.h
-        ${SRCROOT}/channel/Connection.cpp
         ${INCROOT}/serialized/serverConfig.pb.h
         ${SRCROOT}/serialized/serverConfig.pb.cc
         ${SRCROOT}/server/ServerArbiter.cpp
@@ -25,7 +23,8 @@ set(SRC
         ${INCROOT}/utils/util.h
         ${SRCROOT}/utils/util.cpp
         ${INCROOT}/network.h
-        exceptions/NetworkException.cpp ../../include/Network/exceptions/NetworkException.h)
+        ${SRCROOT}exceptions/NetworkException.cpp
+        ${INCROOT}/exceptions/NetworkException.h)
 SET_SOURCE_FILES_PROPERTIES(${PROTO_SRCS} ${PROTO_HDRS} PROPERTIES GENERATED TRUE)
 
 add_library(network STATIC ${SRC})

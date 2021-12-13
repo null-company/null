@@ -1,6 +1,4 @@
-#ifndef NULL_GAME_NETCLIENTCOLLECTOR_H
-#define NULL_GAME_NETCLIENTCOLLECTOR_H
-
+#pragma once
 #include <SFML/Network.hpp>
 #include <cstdint>
 #include <list>
@@ -48,5 +46,3 @@ public:
 
     static bool isListener(int idx);
 };
-
-#endif //NULL_GAME_NETCLIENTCOLLECTOR_H

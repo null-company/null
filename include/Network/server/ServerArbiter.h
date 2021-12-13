@@ -1,9 +1,4 @@
-//
-// Created by artemonchelus on 22.11.2021.
-//
-
-#ifndef NULL_GAME_SERVERARBITER_H
-#define NULL_GAME_SERVERARBITER_H
+#pragma once
 
 #include <SFML/Network.hpp>
 #include <list>
@@ -28,5 +23,3 @@ public:
 
     void sendRoomCode(sf::TcpSocket &socket, const std::string &roomCode);
 };
-
-#endif //NULL_GAME_SERVERARBITER_H

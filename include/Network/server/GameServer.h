@@ -1,10 +1,4 @@
-//
-// Created by artemonchelus on 02.11.2021.
-//
-
-#ifndef NULL_GAME_GAMESERVER_H
-#define NULL_GAME_GAMESERVER_H
-
+#pragma once
 #include "SFML/Network.hpp"
 #include "NetClientCollector.h"
 
@@ -29,6 +23,3 @@ public:
 
     void disconnectClient(int idx) override;
 };
-
-
-#endif //NULL_GAME_GAMESERVER_H
