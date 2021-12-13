@@ -13,7 +13,7 @@ int main() {
     client1.createRoom();
     client2.connectRoom(client1.getRoom());
     client3.connectRoom(client1.getRoom());
-    client1.sendChatMessage("Hello guys");
+    client3.sendChatMessage("Hello guys");
     client1.handleGameServerMessage(receiveNetMessage(client1.getGameServerSocket()).game_message());
     client2.handleGameServerMessage(receiveNetMessage(client2.getGameServerSocket()).game_message());
     client3.handleGameServerMessage(receiveNetMessage(client3.getGameServerSocket()).game_message());

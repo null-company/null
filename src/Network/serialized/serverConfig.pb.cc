@@ -92,7 +92,8 @@ struct GameMessageDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT GameMessageDefaultTypeInternal _GameMessage_default_instance_;
 constexpr ChatMessage::ChatMessage(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : message_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+  : message_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , game_id_(0u){}
 struct ChatMessageDefaultTypeInternal {
   constexpr ChatMessageDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -165,6 +166,7 @@ const uint32_t TableStruct_serverConfig_2eproto::offsets[] PROTOBUF_SECTION_VARI
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::net::ChatMessage, game_id_),
   PROTOBUF_FIELD_OFFSET(::net::ChatMessage, message_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -201,12 +203,12 @@ const char descriptor_table_protodef_serverConfig_2eproto[] PROTOBUF_SECTION_VAR
   "nt_name\030\001 \001(\t\"\016\n\014GenerateRoom\" \n\013Connect"
   "Room\022\021\n\troom_code\030\004 \001(\t\"B\n\013GameMessage\022("
   "\n\014chat_message\030\002 \001(\0132\020.net.ChatMessageH\000"
-  "B\t\n\007message\"\036\n\013ChatMessage\022\017\n\007message\030\001 "
-  "\001(\tb\006proto3"
+  "B\t\n\007message\"/\n\013ChatMessage\022\017\n\007game_id\030\005 "
+  "\001(\r\022\017\n\007message\030\001 \001(\tb\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_serverConfig_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_serverConfig_2eproto = {
-  false, false, 571, descriptor_table_protodef_serverConfig_2eproto, "serverConfig.proto", 
+  false, false, 588, descriptor_table_protodef_serverConfig_2eproto, "serverConfig.proto", 
   &descriptor_table_serverConfig_2eproto_once, nullptr, 0, 7,
   schemas, file_default_instances, TableStruct_serverConfig_2eproto::offsets,
   file_level_metadata_serverConfig_2eproto, file_level_enum_descriptors_serverConfig_2eproto, file_level_service_descriptors_serverConfig_2eproto,
@@ -1732,6 +1734,7 @@ ChatMessage::ChatMessage(const ChatMessage& from)
     message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_message(), 
       GetArenaForAllocation());
   }
+  game_id_ = from.game_id_;
   // @@protoc_insertion_point(copy_constructor:net.ChatMessage)
 }
 
@@ -1740,6 +1743,7 @@ message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlre
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
   message_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+game_id_ = 0u;
 }
 
 ChatMessage::~ChatMessage() {
@@ -1771,6 +1775,7 @@ void ChatMessage::Clear() {
   (void) cached_has_bits;
 
   message_.ClearToEmpty();
+  game_id_ = 0u;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1786,6 +1791,14 @@ const char* ChatMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID
           auto str = _internal_mutable_message();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "net.ChatMessage.message"));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 game_id = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          game_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -1829,6 +1842,12 @@ uint8_t* ChatMessage::_InternalSerialize(
         1, this->_internal_message(), target);
   }
 
+  // uint32 game_id = 5;
+  if (this->_internal_game_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(5, this->_internal_game_id(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1850,6 +1869,11 @@ size_t ChatMessage::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_message());
+  }
+
+  // uint32 game_id = 5;
+  if (this->_internal_game_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32SizePlusOne(this->_internal_game_id());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
@@ -1877,6 +1901,9 @@ void ChatMessage::MergeFrom(const ChatMessage& from) {
   if (!from._internal_message().empty()) {
     _internal_set_message(from._internal_message());
   }
+  if (from._internal_game_id() != 0) {
+    _internal_set_game_id(from._internal_game_id());
+  }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -1901,6 +1928,7 @@ void ChatMessage::InternalSwap(ChatMessage* other) {
       &message_, lhs_arena,
       &other->message_, rhs_arena
   );
+  swap(game_id_, other->game_id_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata ChatMessage::GetMetadata() const {

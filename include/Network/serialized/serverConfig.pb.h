@@ -1281,6 +1281,7 @@ class ChatMessage final :
 
   enum : int {
     kMessageFieldNumber = 1,
+    kGameIdFieldNumber = 5,
   };
   // string message = 1;
   void clear_message();
@@ -1296,6 +1297,15 @@ class ChatMessage final :
   std::string* _internal_mutable_message();
   public:
 
+  // uint32 game_id = 5;
+  void clear_game_id();
+  uint32_t game_id() const;
+  void set_game_id(uint32_t value);
+  private:
+  uint32_t _internal_game_id() const;
+  void _internal_set_game_id(uint32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:net.ChatMessage)
  private:
   class _Internal;
@@ -1304,6 +1314,7 @@ class ChatMessage final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+  uint32_t game_id_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_serverConfig_2eproto;
 };
@@ -2105,6 +2116,26 @@ inline GameMessage::MessageCase GameMessage::message_case() const {
 // -------------------------------------------------------------------
 
 // ChatMessage
+
+// uint32 game_id = 5;
+inline void ChatMessage::clear_game_id() {
+  game_id_ = 0u;
+}
+inline uint32_t ChatMessage::_internal_game_id() const {
+  return game_id_;
+}
+inline uint32_t ChatMessage::game_id() const {
+  // @@protoc_insertion_point(field_get:net.ChatMessage.game_id)
+  return _internal_game_id();
+}
+inline void ChatMessage::_internal_set_game_id(uint32_t value) {
+  
+  game_id_ = value;
+}
+inline void ChatMessage::set_game_id(uint32_t value) {
+  _internal_set_game_id(value);
+  // @@protoc_insertion_point(field_set:net.ChatMessage.game_id)
+}
 
 // string message = 1;
 inline void ChatMessage::clear_message() {

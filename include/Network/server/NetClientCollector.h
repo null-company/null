@@ -26,9 +26,9 @@ public:
 
     sf::TcpSocket &getClient(int idx);
 
-    void acceptNewClient();
+    virtual void acceptNewClient();
 
-    virtual void handleNetMessage(sf::TcpSocket &client, const net::NetMessage &message) = 0;
+    virtual void handleNetMessage(int clientIdx, const net::NetMessage &message) = 0;
 
     NetClientCollector(std::function<void()> simulationThread);
 
@@ -40,7 +40,7 @@ public:
 
     uint16_t getPort() const;
 
-    void disconnectClient(int idx);
+    virtual void disconnectClient(int idx);
 
     void listen(sf::IpAddress address, const std::vector<uint16_t> &ports);
 

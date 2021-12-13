@@ -47,17 +47,17 @@ void ServerArbiter::sendGameServerConfig(sf::TcpSocket &client, const std::strin
     sendNetMessage(client, message);
 }
 
-void ServerArbiter::handleNetMessage(sf::TcpSocket &client, const net::NetMessage &message) {
+void ServerArbiter::handleNetMessage(int clientIdx, const net::NetMessage &message) {
     switch (message.body_case()) {
         case net::NetMessage::kGenerateRoomRequest: {
             LOGD << "Request about asking generating new game received";
             std::string roomCode = createNewGameSimulation();
-            sendRoomCode(client, roomCode);
+            sendRoomCode(*clients[clientIdx], roomCode);
             break;
         }
         case net::NetMessage::kConnectRoom: {
             LOGD << "Request about asking getting game server config by server";
-            sendGameServerConfig(client, message.connect_room().room_code());
+            sendGameServerConfig(*clients[clientIdx], message.connect_room().room_code());
             break;
         }
         case net::NetMessage::kGameMessage:

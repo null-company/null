@@ -12,7 +12,10 @@ int main() {
     serverArbiter.launch();
 
     while (true) {
-        int oper;
+        std::string oper;
         std::cin >> oper;
+        if (oper == "exit") {
+            break;
+        }
     }
 }

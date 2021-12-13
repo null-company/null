@@ -9,15 +9,25 @@
 #include "NetClientCollector.h"
 
 class GameServer : public NetClientCollector {
+private:
+    std::vector<uint8_t> clientIDs;
+    static uint8_t globalGameID;
 public:
     GameServer();
 
-    void handleNetMessage(sf::TcpSocket &client, const net::NetMessage &message) override;
+    int clientCount();
+
+    void handleNetMessage(int clientIdx, const net::NetMessage &message) override;
 
     void broadcastMessage(const net::GameMessage &message);
 
-    void handleGameMessage(sf::TcpSocket &client, const net::GameMessage &message);
+    void handleGameMessage(int clientIdx, const net::GameMessage &message);
 
+    uint8_t getGameID(int clientIdx);
+
+    void acceptNewClient() override;
+
+    void disconnectClient(int idx) override;
 };
 
 

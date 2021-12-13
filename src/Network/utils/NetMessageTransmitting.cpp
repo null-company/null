@@ -15,7 +15,7 @@ net::NetMessage receiveNetMessage(sf::TcpSocket &socket) {
     std::string resultString;
     packet >> resultString;
     message.ParseFromString(resultString);
-    LOGD << "Message was received successfully: " << message.DebugString();
+    LOGD << "Message was received successfully: " << message.ShortDebugString();
     return message;
 }
 

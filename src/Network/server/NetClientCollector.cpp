@@ -21,7 +21,7 @@ void NetClientCollector::defaultSimulationThreadFunc(NetClientCollector *self) {
         try {
             sf::TcpSocket &client = self->getClient(readyClientIdx);
             net::NetMessage message = receiveNetMessage(client);
-            self->handleNetMessage(client, message);
+            self->handleNetMessage(readyClientIdx, message);
         } catch (const ClientReceiveException &exception) {
             if (exception.getStatus() == sf::Socket::Disconnected) {
                 self->disconnectClient(readyClientIdx);

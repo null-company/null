@@ -31,11 +31,13 @@ message ConnectRoom{
 }
 
 message GameMessage{
+
   oneof message {
     ChatMessage chat_message = 2;
   }
 }
 
 message ChatMessage{
+  uint32 game_id = 5;
   string message = 1;
 }

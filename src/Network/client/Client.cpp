@@ -21,7 +21,7 @@ void Client::sendGenerateRoomMessage() {
     message.mutable_generate_room_request();
     net::NetMessage message2;
     sendNetMessage(arbiterSocket, message);
-    LOGD << "Message was send: " << message.DebugString();
+    LOGD << "Message was send: " << message.ShortDebugString();
 }
 
 void Client::handleRoomCodeMessage(const net::ConnectRoom &room) {
@@ -78,6 +78,9 @@ void Client::askGameServerConfigByRoomCode() {
 void Client::handleGameServerMessage(const net::GameMessage &message) {
     switch (message.message_case()) {
         case net::GameMessage::kChatMessage:
+            if (message.chat_message().game_id() != 0) {
+                LOGE << "This chat message has player game id: " << message.chat_message().game_id();
+            }
             handleChatMessage(message.chat_message());
             break;
         default:
