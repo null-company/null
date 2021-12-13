@@ -18,7 +18,7 @@ public:
 
 };
 
-class ClientReceiveException : NetworkException {
+class ClientReceiveException : public NetworkException {
 private:
     sf::Socket::Status status;
 public:

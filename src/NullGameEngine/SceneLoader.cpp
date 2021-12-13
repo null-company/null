@@ -8,6 +8,7 @@
 #include <Scripts.hpp>
 #include <GameObject.hpp>
 #include <ResourceManager.hpp>
+#include "client/Client.h"
 
 namespace null {
 
@@ -19,7 +20,7 @@ namespace null {
         // todo this should be done in a scene file
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
-
+        Client client("127.0.0.1", 5000);
         newScene->camera.addScript<ExampleCameraScript>(newScene->camera);
 
         // this texture is not released on purpose, because it MUST exist for as long

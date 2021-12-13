@@ -1,10 +1,4 @@
-//
-// Created by artemonchelus on 02.11.2021.
-//
-
-#ifndef NULL_GAME_CLIENT_H
-#define NULL_GAME_CLIENT_H
-
+#pragma once
 #include "SFML/Network.hpp"
 #include "serverConfig.pb.h"
 
@@ -48,5 +42,3 @@ public:
 
     void connectRoom(const std::string &roomCode);
 };
-
-#endif //NULL_GAME_CLIENT_H

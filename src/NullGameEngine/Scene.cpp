@@ -60,5 +60,9 @@ namespace null {
         return box2dWorld;
     }
 
+    serial::Scene Scene::prefabSerialize() {
+        return {};
+    }
+
 }
 

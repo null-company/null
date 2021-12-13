@@ -74,12 +74,12 @@ add_executable(NULL_GAME main.cpp)
 target_link_libraries(NULL_GAME
         scripts
         nullGameEngine
+        sfml-network
         network
         yaml-cpp
         serialization
         sfml-graphics
         sfml-audio
-        sfml-network
         sfml-window
         sfml-system
         )
