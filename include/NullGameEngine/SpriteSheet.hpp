@@ -5,8 +5,7 @@
 #include <utility>
 
 namespace null {
-    class SpriteSheet;
-
+    // Represents a set of animations stored in a single texture
     class SpriteSheet {
     private:
         class Animation_c {

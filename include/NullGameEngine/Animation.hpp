@@ -3,8 +3,10 @@
 #include "SpriteSheet.hpp"
 
 namespace null{
-    class Animation : public Component, public SpriteSheet {
+    // Represents a Component which changes GameObject's sprite via a SpriteSheet
+    class Animation : public Component {
     public:
+        SpriteSheet spriteSheet;
         void update() override;
         explicit Animation(GameObject&, SpriteSheet&);
     };
