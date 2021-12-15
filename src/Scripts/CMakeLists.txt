@@ -20,7 +20,8 @@ set(SRC
     ${INCROOT}/CameraScript.hpp
     ${SRCROOT}/ExampleCameraScript.cpp
     ${INCROOT}/ExampleCameraScript.hpp
-    )
+    ${SRCROOT}/CursorAnimation.cpp
+    ${INCROOT}/CursorAnimation.hpp)
 
 add_library(scripts STATIC ${SRC})
 target_include_directories(scripts 

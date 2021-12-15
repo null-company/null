@@ -6,3 +6,4 @@
 #include <ReloadSceneScript.hpp>
 #include <CameraScript.hpp>
 #include <ExampleCameraScript.hpp>
+#include <CursorAnimation.hpp>
