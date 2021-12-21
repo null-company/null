@@ -8,6 +8,8 @@
 #include <Scripts.hpp>
 #include <GameObject.hpp>
 #include <ResourceManager.hpp>
+#include <PlayerAnimation.hpp>
+#include <Utility.hpp>
 
 namespace null {
 
@@ -36,6 +38,7 @@ namespace null {
         auto boxObject = std::make_shared<GameObject>();
         boxObject->getSprite().setTexture(*boxTexture);
         boxObject->getSprite().setScale(0.25f, 0.25f);
+        boxObject->setPosition(200, 0);
         boxObject->renderLayer = FOREGROUND;
         boxObject->visible = true;
 
@@ -61,7 +64,7 @@ namespace null {
         // call this to prevent from rotation
         /* boxObject->getRigidBody()->SetFixedRotation(true); */
 
-        boxObject->getRigidBody()->ApplyLinearImpulseToCenter(b2Vec2(15.0f, 0), true);
+        //boxObject->getRigidBody()->ApplyLinearImpulseToCenter(b2Vec2(15.0f, 0), true);
 
         groundObject->addScript<ReloadSceneScript>(*groundObject);
 
@@ -73,6 +76,37 @@ namespace null {
         cursorObject->renderLayer = FOREGROUND;
         cursorObject->visible = true;
 
+        auto player = std::make_unique<GameObject>();
+        player->getSprite().setTextureRect({0, 0, 30, 54});
+        player->getSprite().setScale(3.0f, 3.0f);
+        //player->setPosition(100, 0);
+        player->visible = true;
+        player->renderLayer = FOREGROUND1;
+        player->makeDynamic(box2dWorld);
+        player->getRigidBody()->SetFixedRotation(true);
+        auto playerSpriteSheet = SpriteSheet("playerAnim.png", {30, 54}, {{"walkRight", 0, 0, 3}, {"walkLeft", 1, 0, 3}});
+
+        auto shape1 = new b2PolygonShape();
+        auto sizeVector = Utility::pixelToMetersVector(sf::Vector2i{60, 162});
+        shape1->SetAsBox(sizeVector.x/2, sizeVector.y/2, player->getRigidBody()->GetWorldCenter(), 0.0f);
+        b2FixtureDef fixtureDef1;
+        fixtureDef1.shape = shape1;
+        fixtureDef1.density = 1;
+
+        auto shape2 = new b2PolygonShape();
+        sizeVector = Utility::pixelToMetersVector(sf::Vector2i{90, 162});
+        shape2->SetAsBox(sizeVector.x/2, sizeVector.y/2, player->getRigidBody()->GetWorldCenter(), 0.0f);
+        b2FixtureDef fixtureDef2;
+        fixtureDef2.shape = shape2;
+        fixtureDef2.density = 1;
+
+        player->addScript<PlayerAnimation>(*player, playerSpriteSheet,
+                                           std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>>{
+            {"walkRight", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}},
+            {"walkLeft", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}}
+        });
+
+
         // nonsensical actions to demonstrate
         // child adding process
         nullGameLogo->addChild(std::move(boxObject));
@@ -80,6 +114,7 @@ namespace null {
         groundObject->addChild(std::move(nullGameLogo));
         newScene->addRootGameObject(std::move(cursorObject));
         newScene->addRootGameObject(std::move(groundObject));
+        newScene->addRootGameObject(std::move(player));
 
         MainLoop::provideScene(move(newScene));
     };

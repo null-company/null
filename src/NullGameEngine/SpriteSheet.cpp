@@ -7,7 +7,7 @@ namespace null {
     SpriteSheet::SpriteSheet(
             std::string  textureName,
             sf::Vector2i spriteSize,
-            std::vector<Animation_c> animations
+            std::vector<Animation_s> animations
             ):  textureName(std::move(textureName)),
                 spriteSize(spriteSize) {
         splitTextureIntoAnimations(animations);
@@ -16,7 +16,7 @@ namespace null {
         }
     }
 
-    void SpriteSheet::splitTextureIntoAnimations(std::vector<Animation_c> &animationVec) const {
+    void SpriteSheet::splitTextureIntoAnimations(std::vector<Animation_s> &animationVec) const {
         for (auto& anim : animationVec) {
             for(int i = anim.start; i <= anim.end; i++) {
                 anim.framePositions.emplace_back(i * spriteSize.x, anim.row * spriteSize.y);
@@ -24,7 +24,7 @@ namespace null {
         }
     }
 
-    void SpriteSheet::addAnimation(const Animation_c& anim) {
+    void SpriteSheet::addAnimation(const Animation_s& anim) {
         animations.emplace(anim.name, anim);
     }
 

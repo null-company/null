@@ -9,5 +9,6 @@ namespace null {
     class Camera;
     class Renderer;
     class ResourceManager;
+    class Animation;
 }
 
