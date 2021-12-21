@@ -29,7 +29,12 @@ set(SRC
     ${INCROOT}/SpriteSheet.hpp
     ${SRCROOT}/SpriteSheet.cpp
     ${SRCROOT}/Animation.cpp
-    ${INCROOT}/Animation.hpp RigidBodyAnimation.cpp ../../include/NullGameEngine/RigidBodyAnimation.hpp Utility.cpp ../../include/NullGameEngine/Utility.hpp)
+    ${INCROOT}/Animation.hpp
+    ${SRCROOT}/RigidBodyAnimation.cpp
+    ${INCROOT}/RigidBodyAnimation.hpp
+    ${SRCROOT}/Utility.cpp 
+    ${INCROOT}/Utility.hpp
+    )
 
 add_library(nullGameEngine STATIC ${SRC})
 target_include_directories(nullGameEngine 
