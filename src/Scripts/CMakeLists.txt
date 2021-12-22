@@ -24,6 +24,8 @@ set(SRC
     ${INCROOT}/CursorAnimation.hpp
     ${SRCROOT}/PlayerAnimation.cpp
     ${INCROOT}/PlayerAnimation.hpp
+    ${SRCROOT}/ButtonScript.cpp
+    ${INCROOT}/ButtonScript.hpp
     )
 
 add_library(scripts STATIC ${SRC})

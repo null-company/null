@@ -7,3 +7,4 @@
 #include <CameraScript.hpp>
 #include <ExampleCameraScript.hpp>
 #include <CursorAnimation.hpp>
+#include <ButtonScript.hpp>

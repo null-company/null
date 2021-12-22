@@ -13,7 +13,7 @@ int main() {
     XInitThreads();
     #endif //__linux
 
-    std::string mainMenu = "dummy string";
+    std::string mainMenu = "/menu";
 
     null::SceneLoader::loadSceneFromFile(mainMenu);
 

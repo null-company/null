@@ -76,7 +76,7 @@ namespace null {
 
         void setPosition(float x, float y);
 
-        void setPosition(sf::Vector2f &pos);
+        void setPosition(const sf::Vector2f &pos);
 
         void addScript(std::unique_ptr<Script> script);
 

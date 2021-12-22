@@ -2,6 +2,7 @@
 
 #include <box2d/box2d.h>
 #include <box2d/b2_math.h>
+#include <box2d/b2_body.h>
 
 #include <GameObject.hpp>
 #include <Script.hpp>
@@ -85,6 +86,9 @@ namespace null {
         detachFromPhysicsWorld();
 
         b2BodyDef bodyDef;
+        b2BodyUserData userData;
+        userData.pointer = reinterpret_cast<uintptr_t>(this);
+        bodyDef.userData = userData;
         setRigidBodyDefPositionBySprite(bodyDef);
         b2Body* rigidBody = box2dWorld.CreateBody(&bodyDef);
 
@@ -101,6 +105,9 @@ namespace null {
 
         b2BodyDef bodyDef;
         bodyDef.type = b2_dynamicBody;
+        b2BodyUserData userData;
+        userData.pointer = reinterpret_cast<uintptr_t>(this);
+        bodyDef.userData = userData;
         setRigidBodyDefPositionBySprite(bodyDef);
 
         b2Body* rigidBody = box2dWorld.CreateBody(&bodyDef);
@@ -175,7 +182,7 @@ namespace null {
         }
     }
 
-    void GameObject::setPosition(sf::Vector2f &pos) {
+    void GameObject::setPosition(const sf::Vector2f &pos) {
         sprite.setPosition(pos);
         if (rigidBody) {
             b2Vec2 newPosition = pixelToMetersVector(pos);
