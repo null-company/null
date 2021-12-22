@@ -27,7 +27,6 @@ namespace null {
     }
 
     void ButtonScript::press() {
-        std::cout << "calling callback" << std::endl;
         callback();
     }
 

@@ -39,14 +39,12 @@ namespace null {
             if (collision == nullptr) {
                 return;
             }
-            std::cout << "otherObj" << std::endl;
             GameObject* otherObject = reinterpret_cast<GameObject*>(collision->other->GetUserData().pointer);
             if (otherObject != nullptr) {
                 auto& scripts = otherObject->getScripts();
                 if (scripts.size() > 0) {
                     auto buttonScript = dynamic_cast<ButtonScript*>(scripts[0].get());
                     if (buttonScript != nullptr) {
-                        std::cout << "pressing" << std::endl;
                         buttonScript->press();
                     }
                 }

@@ -190,7 +190,6 @@ namespace null {
         auto playButtonTexture = ResourceManager::loadTexture("menu/buttons/play.png");
         playButton->setPosition(450, 380);
         playButton->addScript<ButtonScript>(*playButton, *playButtonTexture, *pressedTexture, []() -> void {
-            std::cout<< "callback called" << std::endl;
             SceneLoader::changeScene("/demo");
         });
         playButton->renderLayer = FOREGROUND;

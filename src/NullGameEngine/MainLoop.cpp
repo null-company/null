@@ -61,7 +61,6 @@ sceneStart:
             }
         } 
         catch (const SceneChangedException& sceneChanged) {
-            std::cout << "caught" << std::endl;
             goto sceneStart;
         }
 
