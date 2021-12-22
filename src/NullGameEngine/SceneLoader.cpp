@@ -129,7 +129,7 @@ namespace null {
         nullGameLogo->addChild(std::move(boxObject));
         //nullGameLogo->addChild(std::move(boxObject2));
         newScene->addRootGameObject(std::move(nullGameLogo));
-        newScene->addRootGameObject(std::move(cursorObject));
+        //newScene->addRootGameObject(std::move(cursorObject));
         newScene->addRootGameObject(std::move(player));
 
         MainLoop::provideScene(move(newScene));

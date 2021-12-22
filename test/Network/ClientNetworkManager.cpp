@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <server/ServerArbiter.h>
-#include "client/ClientNetworkManagerTest.h"
+#include "client/ClientNetworkManager.h"
 #include "exceptions/NetworkException.h"
 
 //
@@ -11,7 +11,7 @@
 //    port++;
 //    serverArbiter.listen("127.0.0.1", port);
 //    serverArbiter.launch();
-//    ClientNetworkManagerTest client1("127.0.0.1", port);
+//    ClientNetworkManager client1("127.0.0.1", port);
 //
 //    client1.getClient().createRoom();
 //    std::string roomCode = client1.getClient().getRoom();
@@ -23,10 +23,10 @@
 //    int port = rand() % 23 + 5000;
 //    serverArbiter.listen("127.0.0.1", port);
 //    serverArbiter.launch();
-//    ClientNetworkManagerTest client1("127.0.0.1", port);
-//    ClientNetworkManagerTest client2("127.0.0.1", port);
-//    ClientNetworkManagerTest client3("127.0.0.1", port);
-//    ClientNetworkManagerTest client4("127.0.0.1", port);
+//    ClientNetworkManager client1("127.0.0.1", port);
+//    ClientNetworkManager client2("127.0.0.1", port);
+//    ClientNetworkManager client3("127.0.0.1", port);
+//    ClientNetworkManager client4("127.0.0.1", port);
 //
 //    client1.getClient().createRoom();
 //
@@ -42,10 +42,10 @@ TEST(NetworkClientManager, subtest) {
     int port = rand() % 23 + 5000;
     serverArbiter.listen("127.0.0.1", port);
     serverArbiter.launch();
-    ClientNetworkManagerTest client1("127.0.0.1", port);
-    ClientNetworkManagerTest client2("127.0.0.1", port);
-    ClientNetworkManagerTest client3("127.0.0.1", port);
-    ClientNetworkManagerTest client4("127.0.0.1", port);
+    ClientNetworkManager client1("127.0.0.1", port);
+    ClientNetworkManager client2("127.0.0.1", port);
+    ClientNetworkManager client3("127.0.0.1", port);
+    ClientNetworkManager client4("127.0.0.1", port);
 
     client1.getClient().createRoom();
 

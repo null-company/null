@@ -39,9 +39,11 @@ message GameMessage{
   }
 }
 
-message PlayerInfo{
-  int32 x = 1;
-  int32 y = 2;
+message PlayerInfo {
+  float x = 1;
+  float y = 2;
+  string currAnim = 3;
+  int32 currFrame = 4;
 }
 
 message BoxInfo{

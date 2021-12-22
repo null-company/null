@@ -11,6 +11,8 @@ namespace null {
         void start() override;
         void update() override;
         explicit CursorAnimation(GameObject&, SpriteSheet);
+
+        serial::Script prefabSerialize() override;
     };
 
 }

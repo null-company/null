@@ -1,27 +1,40 @@
+#include <serverConfig.pb.h>
 #include "NetworkPlayerScript.hpp"
 
 namespace null {
 
 
-    NetworkPlayerScript::NetworkPlayerScript(GameObject&gameObject, SpriteSheet& spriteSheet,
+    NetworkPlayerScript::NetworkPlayerScript(GameObject& gameObject, SpriteSheet& spriteSheet,
                                              std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>> map,
-                                             std::queue<int>& q) :
-                                             RigidBodyAnimation(gameObject, spriteSheet, map), queue(q) { }
+                                             std::queue<net::GameMessage>& q, int id) :
+                                             RigidBodyAnimation(gameObject, spriteSheet, map), queue(q), id(id) { }
 
     void NetworkPlayerScript::update() {
-        for (auto m = queue.front(); !queue.empty(); queue.pop(), m = queue.front()) {
-            handleMessage(m);
+        net::GameMessage message;
+        bool bruhmomento = false;
+        for (auto m = queue.front(); !queue.empty(); m = queue.front(),queue.pop()) {
+            //if (m.game_id() == id) {
+            message = m;
+            bruhmomento = true;
+            //}
+        }
+        if (bruhmomento) {
+            handleMessage(message);
         }
         RigidBodyAnimation::update();
     }
 
-    void NetworkPlayerScript::handleMessage(int msg) {
-        float x = 0;
-        float y = 0;
-        std::string currAnim;
-        int currFrame = 0;
+    void NetworkPlayerScript::handleMessage(net::GameMessage& msg) {
+        float x = msg.player_info().x();
+        float y = msg.player_info().y();
+        std::string currAnim = msg.player_info().curranim();
+        int currFrame = msg.player_info().currframe();
         gameObject.getRigidBody()->SetTransform({x, y}, gameObject.getRigidBody()->GetAngle());
         spriteSheet.setAnimation(currAnim);
         spriteSheet.setFrame(currFrame);
+    }
+
+    serial::Script NetworkPlayerScript::prefabSerialize() {
+        return {};
     }
 }

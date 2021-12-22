@@ -2,7 +2,7 @@ enable_testing()
 include(GoogleTest)
 add_executable(
         main_test
-        main.cpp ClientNetworkManagerTest.cpp)
+        main.cpp ClientNetworkManager.cpp)
 target_link_libraries(
         main_test
         network

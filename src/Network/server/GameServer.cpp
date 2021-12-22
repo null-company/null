@@ -27,6 +27,7 @@ void GameServer::handleNetMessage(int clientIdx, const net::NetMessage &message)
 // This is the main function must be used
 void GameServer::handleGameMessage(int clientIdx, const net::GameMessage &message) {
     auto idMsg = message;
+    idMsg.set_game_id(getGameID(clientIdx));
     broadcastMessage(idMsg, clientIdx);
 }
 

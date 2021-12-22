@@ -5,7 +5,7 @@
 #include "plog/Appenders/ConsoleAppender.h"
 #include "plog/Formatters/TxtFormatter.h"
 #include "server/ServerArbiter.h"
-#include "client/ClientNetworkManagerTest.h"
+#include "client/ClientNetworkManager.h"
 
 int main(int argc, char ** argv){
     static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;

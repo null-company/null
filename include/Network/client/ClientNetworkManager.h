@@ -9,7 +9,7 @@
 #include <set>
 
 
-class ClientNetworkManagerTest {
+class ClientNetworkManager {
 private:
     Client client;
     std::map<int, std::queue<net::GameMessage>> channels;
@@ -22,7 +22,7 @@ private:
 public:
 
     Client & getClient();
-    ClientNetworkManagerTest(sf::IpAddress address, uint16_t port);
+    ClientNetworkManager(sf::IpAddress address, uint16_t port);
 
     std::queue<net::GameMessage> &subscribe(int playerId, int messageId);
 

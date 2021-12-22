@@ -3,6 +3,7 @@
 #include <Utility.hpp>
 #include <utility>
 #include <iostream>
+#include <MainLoop.hpp>
 
 namespace  null {
     void PlayerAnimation::start() {
@@ -85,10 +86,21 @@ namespace  null {
 //            }
 //        }
 //        std::cout << gameObject.getPosition().x << ", " << gameObject.getPosition().y << std::endl;
+
+        net::GameMessage message;
+        message.mutable_player_info()->set_x(gameObject.getRigidBody()->GetPosition().x);
+        message.mutable_player_info()->set_y(gameObject.getRigidBody()->GetPosition().y);
+        message.mutable_player_info()->set_curranim(spriteSheet.currAnimation->name);
+        message.mutable_player_info()->set_currframe(spriteSheet.currFrame);
+        sendGameMessage(MainLoop::clientNetworkManager.getClient().getGameServerSocket(),message);
         RigidBodyAnimation::update();
     }
 
     PlayerAnimation::PlayerAnimation(GameObject& gameObject, SpriteSheet& spriteSheet,
                                      const std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>>& map) :
-            RigidBodyAnimation(gameObject, spriteSheet, map){ }
+            RigidBodyAnimation(gameObject, spriteSheet, map) { }
+
+    serial::Script PlayerAnimation::prefabSerialize() {
+        return {};
+    }
 }
