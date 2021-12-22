@@ -538,7 +538,7 @@ UpgradeLog*.htm
 ServiceFabricBackup/
 *.rptproj.bak
 
-# SQL Server files
+# SQL GameServer files
 *.mdf
 *.ldf
 *.ndf
@@ -575,8 +575,8 @@ node_modules/
 **/*.HTMLClient/GeneratedArtifacts
 **/*.DesktopClient/GeneratedArtifacts
 **/*.DesktopClient/ModelManifest.xml
-**/*.Server/GeneratedArtifacts
-**/*.Server/ModelManifest.xml
+**/*.GameServer/GeneratedArtifacts
+**/*.GameServer/ModelManifest.xml
 _Pvt_Extensions
 
 # Paket dependency manager
@@ -658,3 +658,6 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/cmake,vim,clion,intellij,c++,visualstudio,visualstudiocode
+
+./src/**/*.pb.cc
+./include/**/*.pb.h

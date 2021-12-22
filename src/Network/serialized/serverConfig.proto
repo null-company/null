@@ -1,0 +1,53 @@
+syntax = "proto3";
+package net;
+message NetMessage{
+  oneof body{
+    GameServerConfig server_config = 5;
+    ClientInfo client_info = 6;
+    GenerateRoom generate_room_request = 7;
+    ConnectRoom connect_room = 8;
+    GameMessage game_message = 1;
+  }
+}
+
+message GameServerConfig{
+  oneof server_address{
+    fixed32 v4 = 1;
+    bytes v6 = 2;
+  };
+  uint32 server_port = 3;
+  string room_code = 5;
+}
+
+message ClientInfo{
+  string client_name = 1;
+}
+
+message GenerateRoom{
+}
+
+message ConnectRoom{
+  string room_code = 4;
+}
+
+message GameMessage{
+  uint32 game_id = 5;
+  oneof message {
+    ChatMessage chat_message = 2;
+    PlayerInfo player_info = 3;
+    BoxInfo boxInfo = 4;
+  }
+}
+
+message PlayerInfo{
+  int32 x = 1;
+  int32 y = 2;
+}
+
+message BoxInfo{
+  int32 meow = 1;
+}
+message ChatMessage{
+  uint32 game_id = 5;
+  string message = 1;
+}

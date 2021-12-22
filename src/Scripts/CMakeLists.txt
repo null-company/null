@@ -24,12 +24,13 @@ set(SRC
     ${INCROOT}/CursorAnimation.hpp PlayerAnimation.cpp ../../include/Scripts/PlayerAnimation.hpp)
 
 add_library(scripts STATIC ${SRC})
-target_include_directories(scripts 
+target_include_directories(scripts
     PUBLIC ${PROJECT_SOURCE_DIR}/include/Scripts
     PRIVATE ${PROJECT_SOURCE_DIR}/src)
 
-target_link_libraries(scripts 
+target_link_libraries(scripts
     nullGameEngine
+    network
     sfml-graphics
     sfml-audio
     sfml-network

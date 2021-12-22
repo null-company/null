@@ -41,6 +41,7 @@ namespace null {
         sceneTreeForEachDo([](GameObject& obj) -> void {
                 obj.start();
                 });
+
     }
 
     void Scene::update() {
@@ -58,6 +59,10 @@ namespace null {
 
     b2World& Scene::getBox2dWorld() {
         return box2dWorld;
+    }
+
+    serial::Scene Scene::prefabSerialize() {
+        return {};
     }
 
 }

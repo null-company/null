@@ -7,13 +7,16 @@
 namespace null {
 
     class ReloadSceneScript : public Script {
-        
-        public:
+
+    public:
         void start() override;
 
         void update() override;
 
-        explicit ReloadSceneScript(GameObject& gameObject);
+        explicit ReloadSceneScript(GameObject &gameObject);
+
+        serial::Script prefabSerialize() override;
+        static std::unique_ptr<ReloadSceneScript> prefabDeserialize(const serial::ReloadSceneScript &script);
     };
 
 }

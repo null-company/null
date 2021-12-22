@@ -1,5 +1,6 @@
 #pragma once
 namespace null {
+    // Must be completely migrated to the scene.proto
     enum RenderLayer {
         BACKGROUND,
         BACKGROUND1,
