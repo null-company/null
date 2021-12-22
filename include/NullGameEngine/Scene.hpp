@@ -22,6 +22,10 @@ namespace null {
 
         void sceneTreeForEachDo(std::function<void(GameObject&)>) const;
 
+        std::weak_ptr<GameObject> findFirstByTag(const std::string& tag);
+
+        std::vector<std::weak_ptr<GameObject>> findAllByTag(const std::string& tag);
+
         void start();
 
         void update();
@@ -29,6 +33,8 @@ namespace null {
         std::weak_ptr<GameObject> addRootGameObject(std::shared_ptr<GameObject>&&);
 
         b2World& getBox2dWorld();
+
+        class GameObjectNotFoundException : public std::exception { };
 
         friend Renderer;
 

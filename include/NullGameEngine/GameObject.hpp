@@ -64,9 +64,11 @@ namespace null {
 
         std::vector<std::unique_ptr<Script>>& getScripts();
 
-        void addTag(const std::string &str);
+        void addTag(const std::string& tag);
 
-        bool removeTag(const std::string& str);
+        bool removeTag(const std::string& tag);
+
+        bool hasTag(const std::string& tag);
 
         const sf::Transform& getTransform();
 
