@@ -29,6 +29,34 @@ namespace null {
         }
     }
 
+    std::weak_ptr<GameObject> Scene::findFirstByTag(const std::string& tag) {
+        std::weak_ptr<GameObject> res;
+        bool found = false;
+        sceneTreeForEachDo([&tag, &res, &found](GameObject& obj) -> void {
+            if (found) {
+                return;
+            }
+            if (obj.hasTag(tag)) {
+                res = obj.weak_from_this();
+                found = true;
+            }
+        });
+        if (res.lock() == nullptr) {
+            throw GameObjectNotFoundException();
+        }
+        return res;
+    }
+
+    std::vector<std::weak_ptr<GameObject>> Scene::findAllByTag(const std::string& tag) {
+        std::vector<std::weak_ptr<GameObject>> res;
+        sceneTreeForEachDo([&tag, &res](GameObject& obj) -> void {
+            if (obj.hasTag(tag)) {
+                res.emplace_back(obj.weak_from_this());
+            }
+        });
+        return res;
+    }
+
     std::weak_ptr<GameObject> Scene::addRootGameObject(std::shared_ptr<GameObject>&& newGameObject) {
         newGameObject->scene = weak_from_this();
         rootGameObjects.push_back(newGameObject);

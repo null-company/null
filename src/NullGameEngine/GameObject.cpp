@@ -2,6 +2,7 @@
 
 #include <box2d/box2d.h>
 #include <box2d/b2_math.h>
+#include <box2d/b2_body.h>
 
 #include <GameObject.hpp>
 #include <Script.hpp>
@@ -85,6 +86,9 @@ namespace null {
         detachFromPhysicsWorld();
 
         b2BodyDef bodyDef;
+        b2BodyUserData userData;
+        userData.pointer = reinterpret_cast<uintptr_t>(this);
+        bodyDef.userData = userData;
         setRigidBodyDefPositionBySprite(bodyDef);
         bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
         b2Body* rigidBody = box2dWorld.CreateBody(&bodyDef);
@@ -103,7 +107,9 @@ namespace null {
 
         b2BodyDef bodyDef;
         bodyDef.type = b2_dynamicBody;
-        bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
+        b2BodyUserData userData;
+        userData.pointer = reinterpret_cast<uintptr_t>(this);
+        bodyDef.userData = userData;
         setRigidBodyDefPositionBySprite(bodyDef);
 
         b2Body* rigidBody = box2dWorld.CreateBody(&bodyDef);
@@ -148,14 +154,18 @@ namespace null {
         scripts.push_back(std::move(script));
     }
 
-    void GameObject::addTag(const std::string &str) {
+    void GameObject::addTag(const std::string& str) {
         tags.insert(str);
     }
 
-    bool GameObject::removeTag(const std::string &str) {
+    bool GameObject::removeTag(const std::string& str) {
         auto result = !tags.find(str)->empty();
         tags.erase(str);
         return result;
+    }
+
+    bool GameObject::hasTag(const std::string& tag) {
+        return tags.count(tag);
     }
 
     const sf::Transform& GameObject::getTransform() {
@@ -174,7 +184,7 @@ namespace null {
         }
     }
 
-    void GameObject::setPosition(sf::Vector2f &pos) {
+    void GameObject::setPosition(const sf::Vector2f &pos) {
         sprite.setPosition(pos);
         if (rigidBody) {
             b2Vec2 newPosition = pixelToMetersVector(pos);

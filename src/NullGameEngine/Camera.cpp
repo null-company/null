@@ -2,7 +2,8 @@
 
 namespace null {
 
-    // this is for the later implementations of camera motions
+    // todo fix magic constants
+    Camera::Camera() : view({640, 360}, {1280, 720}) { }
 
 }
 

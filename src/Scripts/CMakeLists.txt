@@ -22,6 +22,12 @@ set(SRC
     ${INCROOT}/ExampleCameraScript.hpp
     ${SRCROOT}/CursorAnimation.cpp
     ${INCROOT}/CursorAnimation.hpp PlayerAnimation.cpp ../../include/Scripts/PlayerAnimation.hpp NetworkPlayerScript.cpp ../../include/Scripts/NetworkPlayerScript.hpp)
+    ${INCROOT}/CursorAnimation.hpp
+    ${SRCROOT}/PlayerAnimation.cpp
+    ${INCROOT}/PlayerAnimation.hpp
+    ${SRCROOT}/ButtonScript.cpp
+    ${INCROOT}/ButtonScript.hpp
+    )
 
 add_library(scripts STATIC ${SRC})
 target_include_directories(scripts

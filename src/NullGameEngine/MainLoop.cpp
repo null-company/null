@@ -16,10 +16,18 @@ namespace null {
     std::shared_ptr<Scene> MainLoop::scene = nullptr;
     ClientNetworkManager MainLoop::clientNetworkManager = ClientNetworkManager("127.0.0.1", 5000);
 
+    sf::Window* MainLoop::window = nullptr;
+
+    sf::Window& MainLoop::getWindow() {
+        return *window;
+    }
+
     // todo this is a dummy implementation, copied from the earlier draft
     int MainLoop::run() {
         sf::RenderWindow sfmlWin(sf::VideoMode(1280, 720), "{[Null]}");
+        window = &sfmlWin;
         sfmlWin.setFramerateLimit(MAX_FRAMERATE);
+        sfmlWin.setMouseCursorVisible(false);
         // For now multithreading is disabled (because reasons)
         //sfmlWin.setActive(false);
 
