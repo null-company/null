@@ -4,6 +4,9 @@
 #include <MainLoop.hpp>
 #include <Scene.hpp>
 #include <Renderer.hpp>
+#include <SpriteSheet.hpp>
+#include <Utility.hpp>
+#include <Scripts/NetworkPlayerScript.hpp>
 
 namespace null {
 
@@ -57,6 +60,49 @@ sceneStart:
         }
 
         return 0;
+    }
+
+    void createNewNetworkPlayerObject() {
+
+        auto player = std::make_unique<GameObject>();
+        player->getSprite().setTextureRect({0, 0, 30, 54});
+        player->getSprite().setScale(3.0f, 3.0f);
+        //player->setPosition(100, 0);
+        player->visible = true;
+        player->renderLayer = FOREGROUND1;
+        //player->makeDynamic(box2dWorld);
+        player->getRigidBody()->SetFixedRotation(true);
+        auto playerSpriteSheet = SpriteSheet("playerAnim_v3.png", {30, 54}, {{"idle", 0, 0, 7}, {"walkRight", 1, 0, 3}, {"walkLeft", 2, 0, 3}});
+
+        auto shape1 = new b2PolygonShape();
+        auto sizeVector = Utility::pixelToMetersVector(sf::Vector2i{39, 162});
+        shape1->SetAsBox(sizeVector.x/2, sizeVector.y/2, player->getRigidBody()->GetWorldCenter(), 0.0f);
+        b2FixtureDef fixtureDef1;
+        fixtureDef1.shape = shape1;
+        fixtureDef1.density = 1;
+
+        auto shape2 = new b2PolygonShape();
+        sizeVector = Utility::pixelToMetersVector(sf::Vector2i{87, 162});
+        shape2->SetAsBox(sizeVector.x/2, sizeVector.y/2, player->getRigidBody()->GetWorldCenter(), 0.0f);
+        b2FixtureDef fixtureDef2;
+        fixtureDef2.shape = shape2;
+        fixtureDef2.density = 1;
+
+        auto shape3 = new b2PolygonShape();
+        sizeVector = Utility::pixelToMetersVector(sf::Vector2i{78, 162});
+        shape3->SetAsBox(sizeVector.x/2, sizeVector.y/2, player->getRigidBody()->GetWorldCenter(), 0.0f);
+        b2FixtureDef fixtureDef3;
+        fixtureDef3.shape = shape3;
+        fixtureDef3.density = 1;
+
+        std::queue<int> q;
+        player->addScript<NetworkPlayerScript>(*player, playerSpriteSheet,
+                                           std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>>{
+                                                   {"idle", {{fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}}},
+                                                   {"walkRight", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}},
+                                                   {"walkLeft", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}}
+                                           }, q);
+        //TODO add player to scene
     }
 
 }

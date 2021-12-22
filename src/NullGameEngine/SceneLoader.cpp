@@ -26,10 +26,11 @@ namespace null {
 
         // this texture is not released on purpose, because it MUST exist for as long
         // as the sprite lives. todo manage it with resource manager
-        sf::Texture* nullTexture = ResourceManager::loadTexture("null.jpg");
+        sf::Texture* nullTexture = ResourceManager::loadTexture("background.png");
 
         auto nullGameLogo = std::make_shared<GameObject>();
         nullGameLogo->getSprite().setTexture(*nullTexture);
+        nullGameLogo->getSprite().setScale({4.0f, 4.0f});
         nullGameLogo->renderLayer = BACKGROUND;
         nullGameLogo->visible = true;
 
@@ -37,28 +38,36 @@ namespace null {
 
         auto boxObject = std::make_shared<GameObject>();
         boxObject->getSprite().setTexture(*boxTexture);
-        boxObject->getSprite().setScale(0.25f, 0.25f);
+        boxObject->getSprite().setScale(0.125f, 0.125f);
         boxObject->setPosition(200, 0);
         boxObject->renderLayer = FOREGROUND;
         boxObject->visible = true;
 
         auto boxObject2 = std::make_shared<GameObject>();
         boxObject2->getSprite().setTexture(*boxTexture);
-        boxObject2->getSprite().setScale(0.25f, 0.25f);
+        boxObject2->getSprite().setScale(0.125f, 0.125f);
         boxObject2->setPosition(750.0f, 200.0f);
         boxObject2->getSprite().setColor(sf::Color(255U, 0U, 0U));
         boxObject2->renderLayer = BACKGROUND1;
         boxObject2->visible = true;
-
-        auto groundObject = std::make_shared<GameObject>();
-        auto& groundSprite = groundObject->getSprite();
-        groundSprite.setTexture(*boxTexture);
-        groundSprite.setScale(1.0f, 0.1f);
-        groundSprite.setPosition(250.0f / 4, 350.0f);
-        groundObject->renderLayer = FOREGROUND;
-        groundObject->visible = true;
-
-        groundObject->makeStatic(box2dWorld);
+        auto createGround = [&box2dWorld, &newScene](float x, float y){
+            auto groundObject = std::make_shared<GameObject>();
+            auto& groundSprite = groundObject->getSprite();
+            groundSprite.setTexture(*ResourceManager::loadTexture("platform.png"));
+            groundSprite.setScale(3.0f, 3.0f);
+            groundSprite.setPosition(x, y);
+            groundObject->renderLayer = FOREGROUND;
+            groundObject->visible = true;
+            groundObject->makeStatic(box2dWorld);
+            groundObject->addScript<ReloadSceneScript>(*groundObject);
+            newScene->addRootGameObject(std::move(groundObject));
+        };
+        createGround(0, 400);
+        createGround(192, 466);
+        createGround(384, 532);
+        createGround(576, 532);
+        createGround(768, 532);
+        createGround(1152, 400);
 
         boxObject->makeDynamic(box2dWorld);
         // call this to prevent from rotation
@@ -66,7 +75,7 @@ namespace null {
 
         //boxObject->getRigidBody()->ApplyLinearImpulseToCenter(b2Vec2(15.0f, 0), true);
 
-        groundObject->addScript<ReloadSceneScript>(*groundObject);
+
 
         auto cursorObject = std::make_shared<GameObject>();
 
@@ -84,24 +93,32 @@ namespace null {
         player->renderLayer = FOREGROUND1;
         player->makeDynamic(box2dWorld);
         player->getRigidBody()->SetFixedRotation(true);
-        auto playerSpriteSheet = SpriteSheet("playerAnim.png", {30, 54}, {{"walkRight", 0, 0, 3}, {"walkLeft", 1, 0, 3}});
+        auto playerSpriteSheet = SpriteSheet("playerAnim_v2.png", {30, 54}, {{"idle", 0, 0, 7}, {"walkRight", 1, 0, 3}, {"walkLeft", 2, 0, 3}});
 
         auto shape1 = new b2PolygonShape();
-        auto sizeVector = Utility::pixelToMetersVector(sf::Vector2i{60, 162});
+        auto sizeVector = Utility::pixelToMetersVector(sf::Vector2i{39, 162});
         shape1->SetAsBox(sizeVector.x/2, sizeVector.y/2, player->getRigidBody()->GetWorldCenter(), 0.0f);
         b2FixtureDef fixtureDef1;
         fixtureDef1.shape = shape1;
         fixtureDef1.density = 1;
 
         auto shape2 = new b2PolygonShape();
-        sizeVector = Utility::pixelToMetersVector(sf::Vector2i{90, 162});
+        sizeVector = Utility::pixelToMetersVector(sf::Vector2i{87, 162});
         shape2->SetAsBox(sizeVector.x/2, sizeVector.y/2, player->getRigidBody()->GetWorldCenter(), 0.0f);
         b2FixtureDef fixtureDef2;
         fixtureDef2.shape = shape2;
         fixtureDef2.density = 1;
 
+        auto shape3 = new b2PolygonShape();
+        sizeVector = Utility::pixelToMetersVector(sf::Vector2i{78, 162});
+        shape3->SetAsBox(sizeVector.x/2, sizeVector.y/2, player->getRigidBody()->GetWorldCenter(), 0.0f);
+        b2FixtureDef fixtureDef3;
+        fixtureDef3.shape = shape3;
+        fixtureDef3.density = 1;
+
         player->addScript<PlayerAnimation>(*player, playerSpriteSheet,
                                            std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>>{
+            {"idle", {{fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}}},
             {"walkRight", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}},
             {"walkLeft", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}}
         });
@@ -110,10 +127,9 @@ namespace null {
         // nonsensical actions to demonstrate
         // child adding process
         nullGameLogo->addChild(std::move(boxObject));
-        nullGameLogo->addChild(std::move(boxObject2));
-        groundObject->addChild(std::move(nullGameLogo));
+        //nullGameLogo->addChild(std::move(boxObject2));
+        newScene->addRootGameObject(std::move(nullGameLogo));
         newScene->addRootGameObject(std::move(cursorObject));
-        newScene->addRootGameObject(std::move(groundObject));
         newScene->addRootGameObject(std::move(player));
 
         MainLoop::provideScene(move(newScene));
