@@ -145,14 +145,18 @@ namespace null {
         scripts.push_back(std::move(script));
     }
 
-    void GameObject::addTag(const std::string &str) {
+    void GameObject::addTag(const std::string& str) {
         tags.insert(str);
     }
 
-    bool GameObject::removeTag(const std::string &str) {
+    bool GameObject::removeTag(const std::string& str) {
         auto result = !tags.find(str)->empty();
         tags.erase(str);
         return result;
+    }
+
+    bool GameObject::hasTag(const std::string& tag) {
+        return tags.count(tag);
     }
 
     const sf::Transform& GameObject::getTransform() {
