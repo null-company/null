@@ -8,9 +8,11 @@ GameServer::GameServer() :
 
 uint8_t GameServer::globalGameID = 1;
 
-void GameServer::broadcastMessage(const net::GameMessage &message) {
-    for (auto &client: clients) {
-        sendGameMessage(*client, message);
+void GameServer::broadcastMessage(const net::GameMessage &message, int cliendId) {
+    for (int i = 0; i < clientCount(); i++) {
+        if (i == cliendId)
+            continue;
+        sendGameMessage(getClient(i), message);
     }
 }
 
@@ -24,11 +26,8 @@ void GameServer::handleNetMessage(int clientIdx, const net::NetMessage &message)
 
 // This is the main function must be used
 void GameServer::handleGameMessage(int clientIdx, const net::GameMessage &message) {
-    if (message.has_chat_message()) {
-        auto idMsg = message;
-        idMsg.mutable_chat_message()->set_game_id(getGameID(clientIdx));
-        broadcastMessage(idMsg);
-    }
+    auto idMsg = message;
+    broadcastMessage(idMsg, clientIdx);
 }
 
 void GameServer::acceptNewClient() {

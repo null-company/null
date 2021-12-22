@@ -31,12 +31,22 @@ message ConnectRoom{
 }
 
 message GameMessage{
-
+  uint32 game_id = 5;
   oneof message {
     ChatMessage chat_message = 2;
+    PlayerInfo player_info = 3;
+    BoxInfo boxInfo = 4;
   }
 }
 
+message PlayerInfo{
+  int32 x = 1;
+  int32 y = 2;
+}
+
+message BoxInfo{
+  int32 meow = 1;
+}
 message ChatMessage{
   uint32 game_id = 5;
   string message = 1;

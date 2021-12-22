@@ -24,7 +24,7 @@ set(SRC
         ${SRCROOT}/utils/util.cpp
         ${INCROOT}/network.h
         ${SRCROOT}exceptions/NetworkException.cpp
-        ${INCROOT}/exceptions/NetworkException.h)
+        ${INCROOT}/exceptions/NetworkException.h client/ClientNetworkManager.cpp ../../include/Network/client/ClientNetworkManagerTest.h)
 SET_SOURCE_FILES_PROPERTIES(${PROTO_SRCS} ${PROTO_HDRS} PROPERTIES GENERATED TRUE)
 
 add_library(network STATIC ${SRC})

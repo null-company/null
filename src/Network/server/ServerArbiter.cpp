@@ -1,6 +1,6 @@
 #include "server/ServerArbiter.h"
 #include <plog/Log.h>
-
+#include <random>
 #include <utility>
 #include "plog/Initializers/RollingFileInitializer.h"
 #include "utils/util.h"
@@ -9,10 +9,12 @@
 //TODO: what about destruction the game?
 std::string ServerArbiter::createNewGameSimulation() {
     PLOGD << "New game simulation is creating";
+    srand(time(nullptr));
+    uint16_t port = freePorts.back();
+    freePorts.pop_back();
     net::GameServerConfig gameServerConfig;
     gameServers.emplace_back(std::make_unique<GameServer>());
-    gameServers.back()->listen(sf::IpAddress(this->getIP()), freePorts.back());
-    freePorts.pop_back();
+    gameServers.back()->listen(sf::IpAddress(this->getIP()), port);
     gameServers.back()->launch();
 
     std::string roomCode = generateSixLetterCode();
@@ -25,13 +27,13 @@ std::string ServerArbiter::createNewGameSimulation() {
     return roomCode;
 }
 
-ServerArbiter::ServerArbiter(std::function<void()> simulationThread) : NetClientCollector(
-        std::move(simulationThread)) {}
-
 ServerArbiter::ServerArbiter() : NetClientCollector(),
-                                 freePorts({6000, 6001, 6002, 6003, 6004, 6005, 6006}),
+                                 freePorts({6000, 6001, 6002, 6003, 6004, 6005, 6006, 6007, 6008, 6009, 6010}),
                                  gameServers() {
 }
+
+ServerArbiter::ServerArbiter(std::function<void()> simulationThread) : NetClientCollector(
+        std::move(simulationThread)) {}
 
 
 void ServerArbiter::sendGameServerConfig(sf::TcpSocket &client, const std::string &roomCode) {
@@ -74,5 +76,9 @@ void ServerArbiter::sendRoomCode(sf::TcpSocket &socket, const std::string &roomC
     net::NetMessage netMessage;
     netMessage.mutable_connect_room()->set_room_code(roomCode);
     sendNetMessage(socket, netMessage);
+}
+
+ServerArbiter::~ServerArbiter() {
+
 }
 

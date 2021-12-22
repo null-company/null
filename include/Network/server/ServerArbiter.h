@@ -22,4 +22,5 @@ public:
     void handleNetMessage(int clientIdx, const net::NetMessage &message) override;
 
     void sendRoomCode(sf::TcpSocket &socket, const std::string &roomCode);
+    ~ServerArbiter() override;
 };

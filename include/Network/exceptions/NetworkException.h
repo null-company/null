@@ -18,13 +18,13 @@ public:
 
 };
 
-class ClientReceiveException : public NetworkException {
+class ReceiveException : public NetworkException {
 private:
     sf::Socket::Status status;
 public:
-    ClientReceiveException(std::string message, sf::Socket::Status status);
+    ReceiveException(std::string message, sf::Socket::Status status);
 
-    ~ClientReceiveException() noexcept override;
+    ~ReceiveException() noexcept override;
 
     sf::Socket::Status getStatus() const;
 };

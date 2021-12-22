@@ -12,7 +12,7 @@ protected:
     sf::Thread simulationThread;
 
     sf::IpAddress ipAddress;
-
+    volatile bool threadIsActive;
     static void defaultSimulationThreadFunc(NetClientCollector *clientCollector);
 
     std::vector<std::unique_ptr<sf::TcpSocket>> clients;
@@ -45,4 +45,5 @@ public:
     void listen(sf::IpAddress address, uint16_t port);
 
     static bool isListener(int idx);
+
 };

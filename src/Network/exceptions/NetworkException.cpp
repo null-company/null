@@ -16,11 +16,11 @@ NetworkException::NetworkException(const char *c_str) : NetworkException(std::st
 
 NetworkException::~NetworkException() noexcept = default;
 
-ClientReceiveException::ClientReceiveException(std::string message, sf::Socket::Status status) : NetworkException(
-        std::move(message)), status(status) {}
+ReceiveException::ReceiveException(std::string message, sf::Socket::Status status) : NetworkException(
+        message), status(status) {}
 
-sf::Socket::Status ClientReceiveException::getStatus() const {
+sf::Socket::Status ReceiveException::getStatus() const {
     return status;
 }
 
-ClientReceiveException::~ClientReceiveException() noexcept = default;
+ReceiveException::~ReceiveException() noexcept = default;

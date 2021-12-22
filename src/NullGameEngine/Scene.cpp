@@ -41,6 +41,7 @@ namespace null {
         sceneTreeForEachDo([](GameObject& obj) -> void {
                 obj.start();
                 });
+
     }
 
     void Scene::update() {

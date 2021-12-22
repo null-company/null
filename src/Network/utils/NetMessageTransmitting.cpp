@@ -4,18 +4,15 @@
 
 
 net::NetMessage receiveNetMessage(sf::TcpSocket &socket) {
-    LOGD << "Try to receive message";
     net::NetMessage message;
     sf::Packet packet;
     auto status = socket.receive(packet);
     if (status != sf::Socket::Done) {
-        LOGD << "Cannot receive message";
-        throw ClientReceiveException("Cannot receive message", status);
+        throw ReceiveException("Cannot receive message", status);
     }
     std::string resultString;
     packet >> resultString;
     message.ParseFromString(resultString);
-    LOGD << "Message was received successfully: " << message.ShortDebugString();
     return message;
 }
 
@@ -26,7 +23,7 @@ void sendNetMessage(sf::TcpSocket &socket, const net::NetMessage &message) {
     auto status = socket.send(packet);
     if (status != sf::Socket::Done) {
         LOGD << "Cannot send message";
-        throw ClientReceiveException("Error occurred while trying to send message to client", status);
+        throw ReceiveException("Error occurred while trying to send message to client", status);
     }
     LOGD << "Message send successful";
 }
