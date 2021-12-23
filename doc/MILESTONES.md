@@ -2,21 +2,21 @@
 
 ## MVP (Due date: end of 1st semester)
 
- [ ] Simple wrapper for graphics rendering
+ [X] Simple wrapper for graphics rendering
 
- [ ] Make a simple game-engine like library
+ [X] Make a simple game-engine like library
 
- [ ] Implement a physics library for game objects
+ [X] Implement a physics library for game objects
 
  [ ] Implement a map editor
 
- [ ] Develop a networking protocol
+ [X] Develop a networking protocol
 
- [ ] Make a simple UI
+ [X] Make a simple UI
 
- [ ] Make art for the player characters and the few weapons
+ [X] Make art for the player characters and the few weapons
 
- [ ] Implement animations
+ [X] Implement animations
 
  [ ] Implement weapons and picking up weapons
 
