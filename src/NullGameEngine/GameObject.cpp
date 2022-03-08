@@ -12,7 +12,7 @@ namespace null {
     constexpr static float pixelToMeter = 1.0f / static_cast<float>(meterToPixel);
     constexpr static double pi = 3.14159265358979323846;
 
-    GameObject::GameObject(): visible(false) { };
+    GameObject::GameObject() : visible(false) {};
 
     GameObject::~GameObject() {
         if (scene.lock()) {
@@ -126,7 +126,7 @@ namespace null {
 
     std::vector<std::weak_ptr<GameObject>> GameObject::getChildren() {
         auto result = std::vector<std::weak_ptr<GameObject>>();
-        for (const auto& childRef : children) {
+        for (const auto& childRef: children) {
             result.push_back(childRef);
         }
         return result;
@@ -137,13 +137,15 @@ namespace null {
     }
 
     // todo concern pointer leakage
-    std::vector<std::unique_ptr<Script>> &GameObject::getScripts() {
+    std::vector<std::unique_ptr<Script>>& GameObject::getScripts() {
         return scripts;
     }
 
     void GameObject::addScript(std::unique_ptr<Script> script) {
         scripts.push_back(std::move(script));
     }
+
+
 
     void GameObject::addTag(const std::string& str) {
         tags.insert(str);
@@ -175,7 +177,7 @@ namespace null {
         }
     }
 
-    void GameObject::setPosition(sf::Vector2f &pos) {
+    void GameObject::setPosition(sf::Vector2f& pos) {
         sprite.setPosition(pos);
         if (rigidBody) {
             b2Vec2 newPosition = pixelToMetersVector(pos);
@@ -184,7 +186,7 @@ namespace null {
     }
 
     void GameObject::start() {
-        for (auto &script : scripts) {
+        for (auto& script: scripts) {
             script->start();
         }
     }
@@ -195,12 +197,12 @@ namespace null {
         // so we have to adjust the sprite
         if (rigidBody) {
             sf::Vector2f newPosition =
-                meterToPixelVector<float>(rigidBody->GetPosition());
+                    meterToPixelVector<float>(rigidBody->GetPosition());
             sprite.setPosition(newPosition);
             sprite.setRotation(rigidBody->GetAngle() * (180.0 / pi));
         }
 
-        for (auto &script : scripts) {
+        for (auto& script: scripts) {
             script->update();
         }
     }

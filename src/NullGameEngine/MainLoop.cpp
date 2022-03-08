@@ -16,7 +16,7 @@ namespace null {
         sf::RenderWindow sfmlWin(sf::VideoMode(1280, 720), "{[Null]}");
         sfmlWin.setFramerateLimit(MAX_FRAMERATE);
         // For now multithreading is disabled (because reasons)
-        //sfmlWin.setActive(false);
+//        sfmlWin.setActive(false);
 
         auto renderingThread = [](sf::RenderWindow &window) {
             window.setActive(true);
