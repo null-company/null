@@ -11,7 +11,7 @@
 namespace null {
     class Scene : public std::enable_shared_from_this<Scene> {
     private:
-        Camera camera;
+        mutable Camera camera;
         std::vector<std::shared_ptr<GameObject>> rootGameObjects;
         b2World box2dWorld;
     public:

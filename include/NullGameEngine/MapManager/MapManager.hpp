@@ -12,7 +12,6 @@ namespace null {
     public:
         MapManager(b2World& box2dWorld) : box2dWorld(box2dWorld) {}
 
-        std::shared_ptr<GameObject> makeBorder(float x, float y, float width, float height);
 
         std::shared_ptr<GameObject> makeBorder(float x, float y, float width, float height, float bsize=30);
 

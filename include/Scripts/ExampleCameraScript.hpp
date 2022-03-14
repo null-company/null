@@ -7,7 +7,7 @@
 namespace null {
     class ExampleCameraScript : public CameraScript {
     private:
-        GameObject*map = nullptr;
+        GameObject* map = nullptr;
         GameObject* trackedObject = &gameObject;
         sf::FloatRect computeNewViewRect();
     public:

@@ -4,6 +4,7 @@
 #include <MainLoop.hpp>
 #include <Scene.hpp>
 #include <Renderer.hpp>
+#include <iostream>
 
 namespace null {
 
@@ -35,7 +36,7 @@ sceneStart:
 
         try {
             while (sfmlWin.isOpen()) {
-                scene->update();
+
 
                 // todo dispatching user events such as keyboard inputs will probably take place here
                 sf::Event e;
@@ -44,9 +45,14 @@ sceneStart:
                         case sf::Event::EventType::Closed:
                             sfmlWin.close();
                             break;
-                        default: break;
+                        case sf::Event::Resized:{
+                            break;
+                        }
+                        default:
+                            break;
                     }
                 }
+                scene->update();
                 sfmlWin.clear(sf::Color::Black);
                 Renderer::render(sfmlWin, *MainLoop::scene);
                 sfmlWin.display();

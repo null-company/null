@@ -9,6 +9,7 @@ namespace null {
 
     void Renderer::render(sf::RenderWindow& window, const Scene& scene) {
         window.setView(scene.camera.view);
+        scene.camera.view.setSize(window.getSize().x, window.getSize().y);
         using SpriteRefPair = struct SpriteRefPair_s {
             RenderLayer renderLayer;
             sf::Sprite *sprite_ref;

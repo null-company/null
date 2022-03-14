@@ -61,14 +61,14 @@ namespace null {
 
         auto shape1 = new b2PolygonShape();
         auto sizeVector = Utility::pixelToMetersVector(sf::Vector2i{60, 162});
-        shape1->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, player->getRigidBody()->GetWorldCenter(), 0.0f);
+        shape1->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, player->getRigidBody()->GetLocalCenter(), 0.0f);
         b2FixtureDef fixtureDef1;
         fixtureDef1.shape = shape1;
         fixtureDef1.density = 1;
 
         auto shape2 = new b2PolygonShape();
         sizeVector = Utility::pixelToMetersVector(sf::Vector2i{90, 162});
-        shape2->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, player->getRigidBody()->GetWorldCenter(), 0.0f);
+        shape2->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, player->getRigidBody()->GetLocalCenter(), 0.0f);
         b2FixtureDef fixtureDef2;
         fixtureDef2.shape = shape2;
         fixtureDef2.density = 1;
