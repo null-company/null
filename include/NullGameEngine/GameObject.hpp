@@ -10,6 +10,7 @@
 #include <NullGameEngine.hpp>
 #include <Script.hpp>
 #include <RenderLayer.hpp>
+#include <algorithm>
 
 namespace null {
 
@@ -39,6 +40,8 @@ namespace null {
         RenderLayer renderLayer;
 
         GameObject();
+
+        explicit GameObject(std::set<std::string> tags);
 
         ~GameObject();
 

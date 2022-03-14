@@ -1,10 +1,11 @@
 #include "ExampleCameraScript.hpp"
+#include "Scene.hpp"
 #include <algorithm>
 
 namespace null {
 
     void ExampleCameraScript::start() {
-        camera.view = sf::View(sf::FloatRect(0, 0, 1280, 720));
+        CameraScript::start();
     }
 
     template<typename T>
@@ -16,9 +17,9 @@ namespace null {
     sf::FloatRect ExampleCameraScript::computeNewViewRect() {
         // Write once read never (c) Artem
         auto trackedGOPosition = trackedObject->getSprite().getPosition();
-        auto viewSize = camera.view.getSize();
+        auto viewSize = sf::Vector2f(windowMetaInfo->windowsSize);
         sf::FloatRect newViewRect(trackedGOPosition.x - viewSize.x / 2,
-                           trackedGOPosition.y - viewSize.y / 2,
+                                  trackedGOPosition.y - viewSize.y / 2,
                                   viewSize.x,
                                   viewSize.y);
 
@@ -39,11 +40,13 @@ namespace null {
 
     void ExampleCameraScript::update() {
         auto rect = computeNewViewRect();
-        camera.view.setCenter(rect.left + rect.width / 2, rect.top + rect.height / 2);
-
+        view.setCenter(rect.left + rect.width / 2, rect.top + rect.height / 2);
+        view.setSize(rect.width, rect.height);
     }
 
-    ExampleCameraScript::ExampleCameraScript(Camera& camera) : CameraScript(camera) {}
+    ExampleCameraScript::ExampleCameraScript(GameObject& camera) : CameraScript(camera) {
+
+    }
 
     void ExampleCameraScript::setTrackedGameObject(GameObject& gameObject) {
         trackedObject = &gameObject;

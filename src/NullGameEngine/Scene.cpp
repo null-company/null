@@ -6,10 +6,12 @@ namespace null {
 
     // box2dWorld is initiated under assumption that
     // gravity is default
-    Scene::Scene() : box2dWorld(b2Vec2(0.0, 9.8f)) { }
+    Scene::Scene() : box2dWorld(b2Vec2(0.0, 9.8f)) {
+        auto cameraCopy = camera;
+    }
 
     void Scene::objectTreeForEachDo(GameObject& gameObject,
-            std::function<void(GameObject&)> function) const {
+                                    std::function<void(GameObject&)> function) const {
 
         std::function<void(GameObject&)> walk;
         walk = [&function, &walk](GameObject& go) -> void {
@@ -24,7 +26,7 @@ namespace null {
     }
 
     void Scene::sceneTreeForEachDo(std::function<void(GameObject&)> function) const {
-        for (const auto& obj : rootGameObjects) {
+        for (const auto& obj: rootGameObjects) {
             objectTreeForEachDo(*obj, function);
         }
     }
@@ -60,32 +62,35 @@ namespace null {
     std::weak_ptr<GameObject> Scene::addRootGameObject(std::shared_ptr<GameObject>&& newGameObject) {
         newGameObject->scene = weak_from_this();
         rootGameObjects.push_back(newGameObject);
-
         return newGameObject;
     }
 
     void Scene::start() {
-        camera.start();
+        auto cameraCopy = camera;
+        addRootGameObject(std::move(cameraCopy));
         sceneTreeForEachDo([](GameObject& obj) -> void {
-                obj.start();
-                });
+            obj.start();
+        });
     }
 
     void Scene::update() {
-        camera.update();
         constexpr float timeStep = 1.0f / 60.0f;
         constexpr int velocityIterations = 8;
         constexpr int positionIterations = 3;
 
         box2dWorld.Step(timeStep, velocityIterations, positionIterations);
-        
+
         sceneTreeForEachDo([](GameObject& obj) -> void {
-                obj.update();
-                });
+            obj.update();
+        });
     }
 
     b2World& Scene::getBox2dWorld() {
         return box2dWorld;
+    }
+
+    WindowMetaInfo& Scene::getWindowMetaInfo() const {
+        return windowMetaInfo;
     }
 
 }

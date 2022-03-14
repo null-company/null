@@ -7,18 +7,20 @@
 #include <NullGameEngine.hpp>
 #include <GameObject.hpp>
 #include <Camera.hpp>
+#include "WindowMetaInfo.hpp"
 
 namespace null {
     class Scene : public std::enable_shared_from_this<Scene> {
     private:
-        mutable Camera camera;
+        mutable WindowMetaInfo windowMetaInfo;
+        mutable std::shared_ptr<GameObject> camera = std::make_shared<GameObject>(std::set<std::string>({"camera"}));
         std::vector<std::shared_ptr<GameObject>> rootGameObjects;
         b2World box2dWorld;
     public:
         Scene();
 
         void objectTreeForEachDo(GameObject&,
-                std::function<void(GameObject&)>) const; 
+                                 std::function<void(GameObject&)>) const;
 
         void sceneTreeForEachDo(std::function<void(GameObject&)>) const;
 
@@ -34,11 +36,14 @@ namespace null {
 
         b2World& getBox2dWorld();
 
-        class GameObjectNotFoundException : public std::exception { };
+        class GameObjectNotFoundException : public std::exception {
+        };
 
         friend Renderer;
 
         friend SceneLoader;
+
+        WindowMetaInfo& getWindowMetaInfo() const;
     };
 }
 

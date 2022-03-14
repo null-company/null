@@ -7,9 +7,6 @@
 
 namespace null {
 
-    class Camera final : public GameObject {
-    public:
-        sf::View view;
-    };
+
 }
 

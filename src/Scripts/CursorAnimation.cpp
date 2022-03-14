@@ -1,14 +1,17 @@
 #include "CursorAnimation.hpp"
 #include <GameObject.hpp>
 #include <iostream>
+#include <Scene.hpp>
 
 namespace null {
     void CursorAnimation::start() {
         spriteSheet.setAnimation(cursorAnim);
+        this->windowMetaInfo = &(gameObject.getScene().lock()->getWindowMetaInfo());
     }
 
     void CursorAnimation::update() {
-        gameObject.getSprite().setPosition(sf::Vector2f(sf::Mouse::getPosition() * 2 - sf::Vector2i(640, 380)));
+        auto coords = windowMetaInfo->relativeWindowMouseCoord;
+        gameObject.getSprite().setPosition(coords);
         if (frameCount++ == 3) {
             spriteSheet.setFrame((spriteSheet.currFrame + 1) % spriteSheet.currAnimation->end);
             frameCount = 0;
@@ -16,5 +19,6 @@ namespace null {
         Animation::update();
     }
 
-    CursorAnimation::CursorAnimation(GameObject& gameObject, SpriteSheet spriteSheet) : Animation(gameObject, spriteSheet) { }
+    CursorAnimation::CursorAnimation(GameObject& gameObject, SpriteSheet spriteSheet) : Animation(gameObject,
+                                                                                                  spriteSheet) {}
 }

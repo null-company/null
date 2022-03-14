@@ -15,7 +15,7 @@ namespace null {
 
         void update() override;
 
-        explicit ExampleCameraScript(Camera& camera);
+        explicit ExampleCameraScript(GameObject& camera);
 
         void setTrackedGameObject(GameObject& gameObject);
 

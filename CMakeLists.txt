@@ -27,7 +27,7 @@ message(STATUS "box2d downloaded")
 
 add_subdirectory(./src/)
 
-add_executable(NULL_GAME main.cpp)
+add_executable(NULL_GAME main.cpp src/NullGameEngine/WindowMetaInfo.cpp include/NullGameEngine/WindowMetaInfo.hpp)
 
 target_link_libraries(NULL_GAME
     nullGameEngine

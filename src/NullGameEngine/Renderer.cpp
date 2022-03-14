@@ -8,11 +8,13 @@
 namespace null {
 
     void Renderer::render(sf::RenderWindow& window, const Scene& scene) {
-        window.setView(scene.camera.view);
-        scene.camera.view.setSize(window.getSize().x, window.getSize().y);
+        window.setView(scene.camera->getScript<CameraScript>()->view);
+        scene.windowMetaInfo.windowsSize = window.getSize();
+        scene.windowMetaInfo.relativeWindowMouseCoord = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
         using SpriteRefPair = struct SpriteRefPair_s {
             RenderLayer renderLayer;
-            sf::Sprite *sprite_ref;
+            sf::Sprite* sprite_ref;
         };
 
         auto compSRP = [](SpriteRefPair x, SpriteRefPair y) {
@@ -21,11 +23,12 @@ namespace null {
 
         auto queue = std::priority_queue<SpriteRefPair, std::vector<SpriteRefPair>, decltype(compSRP)>(compSRP);
         scene.sceneTreeForEachDo([&queue](GameObject& go) -> void {
-                if (go.visible) {
+            if (go.visible) {
                 auto spriteRefPair = SpriteRefPair{go.renderLayer, &(go.getSprite())};
                 queue.push(spriteRefPair);
-                }});
-        for (auto &srp = (SpriteRefPair &) queue.top(); !queue.empty(); srp = queue.top()) {
+            }
+        });
+        for (auto& srp = (SpriteRefPair&) queue.top(); !queue.empty(); srp = queue.top()) {
             window.draw(*(srp.sprite_ref));
             queue.pop();
         }

@@ -146,7 +146,6 @@ namespace null {
     }
 
 
-
     void GameObject::addTag(const std::string& str) {
         tags.insert(str);
     }
@@ -205,6 +204,10 @@ namespace null {
         for (auto& script: scripts) {
             script->update();
         }
+    }
+
+    GameObject::GameObject(std::set<std::string> tags) : GameObject() {
+        this->tags = std::move(tags);
     }
 
 }

@@ -2,7 +2,7 @@
 
 #include <SceneLoader.hpp>
 #include <MainLoop.hpp>
-
+#include <iostream>
 // Have to do this on linux
 #ifdef __linux
 #include <X11/Xlib.h>
@@ -17,6 +17,6 @@ int main() {
 
     null::SceneLoader::loadSceneFromFile(mainMenu);
 
-    return null::MainLoop::run();
+    return  null::MainLoop::run();;;;;;;
 }
 

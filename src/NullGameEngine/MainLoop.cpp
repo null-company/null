@@ -18,7 +18,7 @@ namespace null {
         sfmlWin.setFramerateLimit(MAX_FRAMERATE);
         // For now multithreading is disabled (because reasons)
 //        sfmlWin.setActive(false);
-
+        sfmlWin.setMouseCursorVisible(false);
         auto renderingThread = [](sf::RenderWindow &window) {
             window.setActive(true);
             while (window.isOpen()) {
@@ -52,6 +52,7 @@ sceneStart:
                             break;
                     }
                 }
+
                 scene->update();
                 sfmlWin.clear(sf::Color::Black);
                 Renderer::render(sfmlWin, *MainLoop::scene);

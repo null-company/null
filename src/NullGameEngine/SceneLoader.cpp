@@ -23,8 +23,7 @@ namespace null {
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
 
-        newScene->camera.addScript<ExampleCameraScript>(newScene->camera);
-
+        newScene->camera->addScript<ExampleCameraScript>(*newScene->camera);
         // this texture is not released on purpose, because it MUST exist for as long
         // as the sprite lives. todo manage it with resource manager
         sf::Texture* stadiumTexture = ResourceManager::loadTexture("background.png");
@@ -53,8 +52,9 @@ namespace null {
         player->renderLayer = FOREGROUND1;
         player->makeDynamic(box2dWorld);
         player->getRigidBody()->SetFixedRotation(true);
-        newScene->camera.getScript<ExampleCameraScript>()->setTrackedGameObject(*player);
-        newScene->camera.getScript<ExampleCameraScript>()->setMap(*backgroundGO);
+
+        newScene->camera->getScript<ExampleCameraScript>()->setTrackedGameObject(*player);
+        newScene->camera->getScript<ExampleCameraScript>()->setMap(*backgroundGO);
 
         auto playerSpriteSheet = SpriteSheet("playerAnim.png", {30, 54}, {{"walkRight", 0, 0, 3},
                                                                           {"walkLeft",  1, 0, 3}});
@@ -82,6 +82,7 @@ namespace null {
         MapManager mapManager(box2dWorld);
         // nonsensical actions to demonstrate
         // child adding process
+//        newScene->addRootGameObject(std::move(camera));
         newScene->addRootGameObject(std::move(mapManager.makeBorder(backgroundGO->getSprite())));
         newScene->addRootGameObject(std::move(cursorObject));
         newScene->addRootGameObject(std::move(player));
