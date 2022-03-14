@@ -24,7 +24,7 @@ set(SRC
     ${INCROOT}/CursorAnimation.hpp
     ${SRCROOT}/PlayerAnimation.cpp
     ${INCROOT}/PlayerAnimation.hpp
-    )
+        Weapons/WeaponScript.cpp Weapons/StraightWeaponScript.cpp ../../include/Scripts/Weapon/StraightWeaponScript.hpp)
 
 add_library(scripts STATIC ${SRC})
 target_include_directories(scripts 

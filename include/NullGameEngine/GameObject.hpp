@@ -12,6 +12,9 @@
 #include <RenderLayer.hpp>
 #include <algorithm>
 
+enum class GameObjectStatus {
+    NONE, RUNNING, DEATCHED
+};
 namespace null {
 
     class GameObject : public std::enable_shared_from_this<GameObject> {
@@ -30,6 +33,7 @@ namespace null {
         std::vector<std::shared_ptr<GameObject>> children;
         std::set<std::string> tags;
         std::vector<std::unique_ptr<Script>> scripts;
+        GameObjectStatus gameObjectStatus = GameObjectStatus::NONE;
 
         void start();
 
@@ -46,6 +50,8 @@ namespace null {
         ~GameObject();
 
         std::weak_ptr<GameObject> addChild(std::shared_ptr<GameObject>&&);
+
+        std::weak_ptr<GameObject> getParent() const;
 
         std::weak_ptr<Scene> getScene();
 

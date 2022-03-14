@@ -10,8 +10,7 @@ namespace null {
     void Renderer::render(sf::RenderWindow& window, const Scene& scene) {
         window.setView(scene.camera->getScript<CameraScript>()->view);
         scene.windowMetaInfo.windowsSize = window.getSize();
-        scene.windowMetaInfo.relativeWindowMouseCoord = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-
+        scene.windowMetaInfo.absoluteMouseWorldCoords = window.mapPixelToCoords(sf::Mouse::getPosition(window));
         using SpriteRefPair = struct SpriteRefPair_s {
             RenderLayer renderLayer;
             sf::Sprite* sprite_ref;

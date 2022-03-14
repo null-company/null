@@ -10,7 +10,7 @@ namespace null {
     }
 
     void CursorAnimation::update() {
-        auto coords = windowMetaInfo->relativeWindowMouseCoord;
+        auto coords = windowMetaInfo->absoluteMouseWorldCoords;
         gameObject.getSprite().setPosition(coords);
         if (frameCount++ == 3) {
             spriteSheet.setFrame((spriteSheet.currFrame + 1) % spriteSheet.currAnimation->end);

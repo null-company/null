@@ -24,7 +24,8 @@ namespace null {
 
     std::weak_ptr<GameObject> GameObject::addChild(std::shared_ptr<GameObject>&& child) {
         child->scene = scene;
-        child->parent = weak_from_this();
+        auto parentwptr = weak_from_this();
+        child->parent = parentwptr;
         children.push_back(child);
 
         return child;
@@ -185,15 +186,20 @@ namespace null {
     }
 
     void GameObject::start() {
+        gameObjectStatus = GameObjectStatus::RUNNING;
         for (auto& script: scripts) {
             script->start();
         }
+
     }
 
     void GameObject::update() {
 
         // box2d is expected to have done something,
         // so we have to adjust the sprite
+        if (gameObjectStatus == GameObjectStatus::NONE) {
+            start();
+        }
         if (rigidBody) {
             sf::Vector2f newPosition =
                     meterToPixelVector<float>(rigidBody->GetPosition());
@@ -208,6 +214,10 @@ namespace null {
 
     GameObject::GameObject(std::set<std::string> tags) : GameObject() {
         this->tags = std::move(tags);
+    }
+
+    std::weak_ptr<GameObject> GameObject::getParent() const {
+        return parent;
     }
 
 }

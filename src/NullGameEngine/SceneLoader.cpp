@@ -11,6 +11,8 @@
 #include <PlayerAnimation.hpp>
 #include <Utility.hpp>
 #include "MapManager/MapManager.hpp"
+#include "Weapon/WeaponScript.hpp"
+#include "Weapon/StraightWeaponScript.hpp"
 
 namespace null {
 
@@ -44,7 +46,7 @@ namespace null {
         cursorObject->renderLayer = FOREGROUND;
         cursorObject->visible = true;
 
-        auto player = std::make_unique<GameObject>();
+        auto player = std::make_shared<GameObject>();
         player->getSprite().setTextureRect({0, 0, 30, 54});
         player->getSprite().setScale(3.0f, 3.0f);
 //        player->setPosition(300, 300);
@@ -53,6 +55,9 @@ namespace null {
         player->makeDynamic(box2dWorld);
         player->getRigidBody()->SetFixedRotation(true);
 
+        auto weapon = std::make_shared<GameObject>();
+        weapon->addScript<StraightWeaponScript>(*weapon);
+        player->addChild(std::move(weapon));
         newScene->camera->getScript<ExampleCameraScript>()->setTrackedGameObject(*player);
         newScene->camera->getScript<ExampleCameraScript>()->setMap(*backgroundGO);
 

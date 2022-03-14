@@ -18,6 +18,9 @@ namespace null {
             function(go);
             for (const auto& childWeakRef: go.getChildren()) {
                 auto childP = childWeakRef.lock();
+                if (childP == nullptr) {
+                    continue;
+                }
                 walk(*childP);
             }
         };
@@ -61,6 +64,9 @@ namespace null {
 
     std::weak_ptr<GameObject> Scene::addRootGameObject(std::shared_ptr<GameObject>&& newGameObject) {
         newGameObject->scene = weak_from_this();
+        objectTreeForEachDo(*newGameObject, [&](GameObject& gameObject) {
+            gameObject.scene = newGameObject->scene;
+        });
         rootGameObjects.push_back(newGameObject);
         return newGameObject;
     }
