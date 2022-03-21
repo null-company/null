@@ -37,14 +37,17 @@ set(SRC
     )
 
 add_library(nullGameEngine STATIC ${SRC})
-target_include_directories(nullGameEngine 
+target_include_directories(nullGameEngine
     PUBLIC ${PROJECT_SOURCE_DIR}/include/NullGameEngine
     PRIVATE ${PROJECT_SOURCE_DIR}/src)
 
-target_link_libraries(nullGameEngine 
+target_link_libraries(nullGameEngine
     box2d
     scripts
+    serialization
+    network
     sfml-graphics
+    yaml-cpp
     sfml-audio
     sfml-network
     sfml-window

@@ -32,13 +32,16 @@ namespace null {
 
         std::weak_ptr<GameObject> addRootGameObject(std::shared_ptr<GameObject>&&);
 
-        b2World& getBox2dWorld();
+        b2World &getBox2dWorld();
 
         class GameObjectNotFoundException : public std::exception { };
 
         friend Renderer;
 
         friend SceneLoader;
+
+        virtual serial::Scene prefabSerialize();
+
     };
 }
 

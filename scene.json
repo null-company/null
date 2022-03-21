@@ -1,0 +1,71 @@
+{
+ "gameObject": {
+  "basicGameObject": {
+   "childrenObjects": [
+    {
+     "basicGameObject": {
+      "sprite": {
+       "position": {},
+       "scale": {
+        "scaleX": 1,
+        "scaleY": 1
+       }
+      },
+      "visible": true
+     }
+    },
+    {
+     "basicGameObject": {
+      "sprite": {
+       "position": {},
+       "scale": {
+        "scaleX": 0.25,
+        "scaleY": 0.25
+       }
+      },
+      "visible": true,
+      "box2dType": "DYNAMIC",
+      "renderLayer": "FOREGROUND"
+     }
+    },
+    {
+     "basicGameObject": {
+      "sprite": {
+       "position": {
+        "x": 750,
+        "y": 200
+       },
+       "scale": {
+        "scaleX": 0.25,
+        "scaleY": 0.25
+       }
+      },
+      "visible": true,
+      "renderLayer": "BACKGROUND1"
+     }
+    },
+    {
+     "basicGameObject": {
+      "childrenScripts": [
+       {
+        "reloadScript": {}
+       }
+      ],
+      "sprite": {
+       "position": {
+        "x": 62.5,
+        "y": 350
+       },
+       "scale": {
+        "scaleX": 1,
+        "scaleY": 0.1
+       }
+      },
+      "visible": true,
+      "renderLayer": "FOREGROUND"
+     }
+    }
+   ]
+  }
+ }
+}

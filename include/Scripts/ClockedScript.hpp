@@ -16,18 +16,23 @@ namespace null {
     class ClockedScript : public Script {
         sf::Clock clock;
 
-        protected:
+    protected:
         sf::Time elapsed;
 
         virtual void clockedStart() = 0;
+
         virtual void clockedUpdate() = 0;
 
-        public:
+    public:
         void start() override final;
 
         void update() override final;
 
-        explicit ClockedScript(GameObject& gameObject);
+        explicit ClockedScript(GameObject &gameObject);
+
+        serial::Script prefabSerialize() override;
+
+        static std::unique_ptr<ClockedScript> prefabDeserialize(const serial::ClockedScript &script);
     };
 
 }

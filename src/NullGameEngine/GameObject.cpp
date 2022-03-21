@@ -86,7 +86,9 @@ namespace null {
 
         b2BodyDef bodyDef;
         setRigidBodyDefPositionBySprite(bodyDef);
+        bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
         b2Body* rigidBody = box2dWorld.CreateBody(&bodyDef);
+
 
         b2PolygonShape shape;
         setShapeAsBoxBySprite(shape);
@@ -101,6 +103,7 @@ namespace null {
 
         b2BodyDef bodyDef;
         bodyDef.type = b2_dynamicBody;
+        bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
         setRigidBodyDefPositionBySprite(bodyDef);
 
         b2Body* rigidBody = box2dWorld.CreateBody(&bodyDef);

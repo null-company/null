@@ -5,6 +5,7 @@
 #include <NullGameEngine.hpp>
 #include <Scene.hpp>
 #include <Renderer.hpp>
+#include <client/ClientNetworkManager.h>
 
 namespace null {
 
@@ -16,6 +17,7 @@ namespace null {
                 MainLoop::scene = std::move(newScene);
             }
         public:
+            static ClientNetworkManager clientNetworkManager;
             static int run();
 
         friend SceneLoader;
