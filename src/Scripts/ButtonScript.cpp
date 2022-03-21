@@ -2,15 +2,17 @@
 #include <Script.hpp>
 #include <GameObject.hpp>
 #include <Scene.hpp>
+#include <iostream>
 
 namespace null {
 
-    void ButtonScript::start() { 
+    void ButtonScript::start() {
         sprite = &gameObject.getSprite();
 
         sprite->setTexture(unpressedButtonTexture);
         gameObject.makeStatic(gameObject.getScene().lock()->getBox2dWorld());
         rigidBody = gameObject.getRigidBody();
+        std::cout << rigidBody->GetPosition().x << " " << rigidBody->GetPosition().y << std::endl;
         rigidBody->GetFixtureList()->SetSensor(true);
     }
 
@@ -31,9 +33,9 @@ namespace null {
     }
 
     ButtonScript::ButtonScript(GameObject& gameObject, sf::Texture unpressedButtonTexture,
-            sf::Texture pressedButtonTexture, const std::function<void()> callback) :
-        Script(gameObject), unpressedButtonTexture(unpressedButtonTexture),
-        pressedButtonTexture(pressedButtonTexture), callback(callback) { };
+                               sf::Texture pressedButtonTexture, const std::function<void()> callback) :
+            Script(gameObject), unpressedButtonTexture(unpressedButtonTexture),
+            pressedButtonTexture(pressedButtonTexture), callback(callback) {};
 
 }
 

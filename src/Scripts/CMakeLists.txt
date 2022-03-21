@@ -30,6 +30,9 @@ set(SRC
         ${SRCROOT}Weapons/WeaponScript.cpp
         ${SRCROOT}/Weapons/StraightWeaponScript.cpp
         ${INCROOT}/Weapon/StraightWeaponScript.hpp
+        ${INCROOT}/Weapon/WeaponScript.hpp
+        ${SRCROOT}/Weapons/BulletScript.cpp
+        ${INCROOT}/Weapon/BulletScript.hpp
         )
 
 add_library(scripts STATIC ${SRC})

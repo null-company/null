@@ -56,8 +56,6 @@ sceneStart:
                         }
                         default:
                             break;
-                        default:
-                            break;
                     }
                 }
 

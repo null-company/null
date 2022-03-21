@@ -14,7 +14,7 @@ namespace null {
 
     void ReloadSceneScript::update() {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
-            SceneLoader::changeScene("todo example");
+            SceneLoader::changeScene("/demo");
         }
     }
 }

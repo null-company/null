@@ -70,8 +70,6 @@ add_subdirectory(./src/)
 add_subdirectory(./test/)
 add_executable(NULL_GAME main.cpp)
 
-add_executable(NULL_GAME main.cpp src/NullGameEngine/WindowMetaInfo.cpp include/NullGameEngine/WindowMetaInfo.hpp include/Scripts/Weapon/WeaponScript.hpp)
-
 
 target_link_libraries(NULL_GAME
         scripts

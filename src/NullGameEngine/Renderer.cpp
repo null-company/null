@@ -8,7 +8,9 @@
 namespace null {
 
     void Renderer::render(sf::RenderWindow& window, const Scene& scene) {
-        window.setView(scene.camera->getScript<CameraScript>()->view);
+        if (scene.camera->getScript<CameraScript>()) {
+            window.setView(scene.camera->getScript<CameraScript>()->view);
+        }
         scene.windowMetaInfo.windowsSize = window.getSize();
         scene.windowMetaInfo.absoluteMouseWorldCoords = window.mapPixelToCoords(sf::Mouse::getPosition(window));
         using SpriteRefPair = struct SpriteRefPair_s {

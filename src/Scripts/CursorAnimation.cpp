@@ -15,7 +15,7 @@ namespace null {
 
     void CursorAnimation::update() {
         auto coords = windowMetaInfo->absoluteMouseWorldCoords;
-        gameObject.getSprite().setPosition(coords);
+        gameObject.setPosition(coords);
         if (frameCount++ == 3) {
             spriteSheet.setFrame((spriteSheet.currFrame + 1) % spriteSheet.currAnimation->end);
             frameCount = 0;
@@ -24,6 +24,7 @@ namespace null {
 
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             auto rigidBody = gameObject.getRigidBody();
+            std::cout << rigidBody->GetPosition().x << " " << rigidBody->GetPosition().y << std::endl;
             if (rigidBody == nullptr) {
                 return;
             }
@@ -46,7 +47,7 @@ namespace null {
             if (otherObject != nullptr) {
                 auto& scripts = otherObject->getScripts();
                 if (scripts.size() > 0) {
-                    auto buttonScript = dynamic_cast<ButtonScript*>(scripts[0].get());
+                    auto buttonScript = otherObject->getScript<ButtonScript>();
                     if (buttonScript != nullptr) {
                         buttonScript->press();
                     }
