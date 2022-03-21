@@ -8,6 +8,7 @@
 #include <Utility.hpp>
 #include <NetworkPlayerScript.hpp>
 #include <exceptions/NetworkException.h>
+#include <iostream>
 
 namespace null {
 
@@ -36,24 +37,31 @@ namespace null {
 
         std::unordered_set<uint> gg;
 
-        sceneStart:
+sceneStart:
         scene->start();
 
         try {
             while (sfmlWin.isOpen()) {
-                scene->update();
 
-                // TODO: dispatching user events such as keyboard inputs will probably take place here
+
+                // todo dispatching user events such as keyboard inputs will probably take place here
                 sf::Event e;
                 while (sfmlWin.pollEvent(e)) {
                     switch (e.type) {
                         case sf::Event::EventType::Closed:
                             sfmlWin.close();
                             break;
+                        case sf::Event::Resized:{
+                            break;
+                        }
+                        default:
+                            break;
                         default:
                             break;
                     }
                 }
+
+                scene->update();
                 sfmlWin.clear(sf::Color::Black);
                 Renderer::render(sfmlWin, *MainLoop::scene);
                 sfmlWin.display();

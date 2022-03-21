@@ -2,17 +2,20 @@
 
 #include <CursorAnimation.hpp>
 #include <GameObject.hpp>
+#include <iostream>
+#include <Scene.hpp>
 #include <ButtonScript.hpp>
 #include <MainLoop.hpp>
 
 namespace null {
     void CursorAnimation::start() {
         spriteSheet.setAnimation(cursorAnim);
+        this->windowMetaInfo = &(gameObject.getScene().lock()->getWindowMetaInfo());
     }
 
     void CursorAnimation::update() {
-        auto mousePosition = sf::Vector2f(sf::Mouse::getPosition(MainLoop::getWindow()));
-        gameObject.setPosition(mousePosition);
+        auto coords = windowMetaInfo->absoluteMouseWorldCoords;
+        gameObject.getSprite().setPosition(coords);
         if (frameCount++ == 3) {
             spriteSheet.setFrame((spriteSheet.currFrame + 1) % spriteSheet.currAnimation->end);
             frameCount = 0;
@@ -29,8 +32,8 @@ namespace null {
                 return;
             }
             for (auto contactEdge = rigidBody->GetContactList();
-                    contactEdge != nullptr;
-                    contactEdge = contactEdge->next) {
+                 contactEdge != nullptr;
+                 contactEdge = contactEdge->next) {
                 if (contactEdge->contact->IsTouching() == true) {
                     collision = contactEdge;
                     break;
@@ -52,5 +55,6 @@ namespace null {
         }
     }
 
-    CursorAnimation::CursorAnimation(GameObject& gameObject, SpriteSheet spriteSheet) : Animation(gameObject, spriteSheet) { }
+    CursorAnimation::CursorAnimation(GameObject& gameObject, SpriteSheet spriteSheet) : Animation(gameObject,
+                                                                                                  spriteSheet) {}
 }

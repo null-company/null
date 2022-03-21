@@ -1,7 +1,7 @@
 #include <memory>
 
 #include <box2d/box2d.h>
-        
+
 #include <Scene.hpp>
 #include <SceneLoader.hpp>
 #include <MainLoop.hpp>
@@ -12,6 +12,9 @@
 #include <Utility.hpp>
 #include <functional>
 #include <unordered_map>
+#include "MapManager/MapManager.hpp"
+#include "Weapon/WeaponScript.hpp"
+#include "Weapon/StraightWeaponScript.hpp"
 
 namespace null {
 
@@ -47,8 +50,7 @@ namespace null {
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
 
-        newScene->camera.addScript<ExampleCameraScript>(newScene->camera);
-
+        newScene->camera->addScript<ExampleCameraScript>(*newScene->camera);
         // this texture is not released on purpose, because it MUST exist for as long
         // as the sprite lives. todo manage it with resource manager
         sf::Texture* nullTexture = ResourceManager::loadTexture("background.png");
@@ -104,26 +106,35 @@ namespace null {
         cursorObject->renderLayer = FOREGROUND;
         cursorObject->visible = true;
 
-        auto player = std::make_unique<GameObject>();
+        auto player = std::make_shared<GameObject>();
         player->getSprite().setTextureRect({0, 0, 30, 54});
         player->getSprite().setScale(3.0f, 3.0f);
-        //player->setPosition(100, 0);
+//        player->setPosition(300, 300);
         player->visible = true;
         player->renderLayer = FOREGROUND1;
         player->makeDynamic(box2dWorld);
         player->getRigidBody()->SetFixedRotation(true);
         auto playerSpriteSheet = SpriteSheet("playerAnim_v2.png", {30, 54}, {{"idle", 0, 0, 7}, {"walkRight", 1, 0, 3}, {"walkLeft", 2, 0, 3}});
 
+        auto weapon = std::make_shared<GameObject>();
+        weapon->addScript<StraightWeaponScript>(*weapon);
+        player->addChild(std::move(weapon));
+        newScene->camera->getScript<ExampleCameraScript>()->setTrackedGameObject(*player);
+        newScene->camera->getScript<ExampleCameraScript>()->setMap(*backgroundGO);
+
+        auto playerSpriteSheet = SpriteSheet("playerAnim.png", {30, 54}, {{"walkRight", 0, 0, 3},
+                                                                          {"walkLeft",  1, 0, 3}});
+
         auto shape1 = new b2PolygonShape();
-        auto sizeVector = Utility::pixelToMetersVector(sf::Vector2i{39, 162});
-        shape1->SetAsBox(sizeVector.x/2, sizeVector.y/2, player->getRigidBody()->GetWorldCenter(), 0.0f);
+        auto sizeVector = Utility::pixelToMetersVector(sf::Vector2i{60, 162});
+        shape1->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, player->getRigidBody()->GetLocalCenter(), 0.0f);
         b2FixtureDef fixtureDef1;
         fixtureDef1.shape = shape1;
         fixtureDef1.density = 1;
 
         auto shape2 = new b2PolygonShape();
-        sizeVector = Utility::pixelToMetersVector(sf::Vector2i{87, 162});
-        shape2->SetAsBox(sizeVector.x/2, sizeVector.y/2, player->getRigidBody()->GetWorldCenter(), 0.0f);
+        sizeVector = Utility::pixelToMetersVector(sf::Vector2i{90, 162});
+        shape2->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, player->getRigidBody()->GetLocalCenter(), 0.0f);
         b2FixtureDef fixtureDef2;
         fixtureDef2.shape = shape2;
         fixtureDef2.density = 1;
@@ -142,7 +153,7 @@ namespace null {
             {"walkLeft", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}}
         });
 
-
+        MapManager mapManager(box2dWorld);
         // nonsensical actions to demonstrate
         // child adding process
         nullGameLogo->addChild(std::move(boxObject));
@@ -225,13 +236,17 @@ namespace null {
 
 
         newScene->addRootGameObject(std::move(background));
+//        newScene->addRootGameObject(std::move(camera));
+        newScene->addRootGameObject(std::move(mapManager.makeBorder(backgroundGO->getSprite())));
         newScene->addRootGameObject(std::move(cursorObject));
         newScene->addRootGameObject(std::move(playButton));
         newScene->addRootGameObject(std::move(optionsButton));
         newScene->addRootGameObject(std::move(exitButton));
+        newScene->addRootGameObject(std::move(player));
+        newScene->addRootGameObject(std::move(backgroundGO));
 
-        return newScene;
-    }
+        MainLoop::provideScene(move(newScene));
+    };
 
     void SceneLoader::changeScene(std::filesystem::path path) {
         loadSceneFromFile(path);

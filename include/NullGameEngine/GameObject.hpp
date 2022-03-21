@@ -10,7 +10,11 @@
 #include <NullGameEngine.hpp>
 #include <Script.hpp>
 #include <RenderLayer.hpp>
+#include <algorithm>
 
+enum class GameObjectStatus {
+    NONE, RUNNING, DEATCHED
+};
 namespace null {
 
     class GameObject : public std::enable_shared_from_this<GameObject> {
@@ -26,6 +30,7 @@ namespace null {
         std::vector<std::shared_ptr<GameObject>> children;
         std::set<std::string> tags;
         std::vector<std::unique_ptr<Script>> scripts;
+        GameObjectStatus gameObjectStatus = GameObjectStatus::NONE;
 
         void start();
 
@@ -37,9 +42,13 @@ namespace null {
 
         GameObject();
 
+        explicit GameObject(std::set<std::string> tags);
+
         ~GameObject();
 
         std::weak_ptr<GameObject> addChild(std::shared_ptr<GameObject>&&);
+
+        std::weak_ptr<GameObject> getParent() const;
 
         std::weak_ptr<Scene> getScene();
 
@@ -85,6 +94,18 @@ namespace null {
             auto script =
                 std::make_unique<T>(std::forward<Args>(args)...);
             scripts.push_back(std::move(script));
+        }
+
+        // Returns a script by a given name (each script must have name)
+        template<class T>
+        T* getScript() {
+            for (auto& script: getScripts()) {
+
+                if (dynamic_cast<T*>(script.get()) != nullptr) {
+                    return dynamic_cast<T*>(script.get());
+                }
+            }
+            return nullptr;
         }
 
         friend Scene;

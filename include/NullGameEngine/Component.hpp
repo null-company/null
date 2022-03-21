@@ -1,8 +1,7 @@
 #pragma once
 
 #include <NullGameEngine.hpp>
-#include "scene.pb.h"
-
+#include <string>
 namespace null {
     class Component {
     protected:

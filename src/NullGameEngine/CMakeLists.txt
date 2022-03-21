@@ -34,7 +34,7 @@ set(SRC
     ${INCROOT}/RigidBodyAnimation.hpp
     ${SRCROOT}/Utility.cpp 
     ${INCROOT}/Utility.hpp
-    )
+        GameObjectManagers/MapManager.cpp ../../include/NullGameEngine/MapManager/MapManager.hpp ../Scripts/Weapons/BulletScript.cpp ../../include/Scripts/Weapon/BulletScript.hpp)
 
 add_library(nullGameEngine STATIC ${SRC})
 target_include_directories(nullGameEngine

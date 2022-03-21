@@ -1,5 +1,6 @@
 #include <Component.hpp>
 #include "Scripts.hpp"
+#include <string>
 
 namespace null {
 

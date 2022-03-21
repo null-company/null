@@ -2,12 +2,19 @@
 
 #include <GameObject.hpp>
 #include <Camera.hpp>
+#include "WindowMetaInfo.hpp"
 
 namespace null {
     class CameraScript : public Script {
     public:
-        Camera& camera;
+        WindowMetaInfo * windowMetaInfo;
+        GameObject& camera;
+        sf::View view;
+        explicit CameraScript(GameObject& camera);
 
-        explicit CameraScript(Camera& camera);
+        void start() override;
+
+        void update() override;
+
     };
 }
