@@ -10,14 +10,39 @@
 #include <ResourceManager.hpp>
 #include <PlayerAnimation.hpp>
 #include <Utility.hpp>
+#include <functional>
+#include <unordered_map>
 
 namespace null {
 
     // todo this is a dummy implementation
     // later reimplement this by loading stuff from file 
     // and using a resource manager
-    void SceneLoader::loadSceneFromFile(std::filesystem::path) {
-        
+    void SceneLoader::loadSceneFromFile(std::filesystem::path path) {
+
+        enum Level { Demo, Menu };
+
+        // a temporary solution to get a scene by keyword
+        // while we don't store them in files
+        auto keyword = path.string();
+
+        const std::unordered_map<std::string, std::function<std::shared_ptr<Scene>(void)>> keywordToLevelGetter = {
+            {"/demo", getDemoScene}, {"/menu", getMenuScene},
+            {"/menu/play", getPlayScene}, {"/menu/play/createRoom", getCreateRoomScene},
+            {"/menu/play/joinRoom", getJoinRoomScene}, {"/game", getGameScene}
+        };
+
+        std::shared_ptr<Scene> scene;
+
+        scene = keywordToLevelGetter.at(keyword)();
+        MainLoop::provideScene(scene);
+    }
+
+    static std::shared_ptr<Scene> getGameScene() {
+        return nullptr;
+    }
+
+    std::shared_ptr<Scene> SceneLoader::getDemoScene() {
         // todo this should be done in a scene file
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
@@ -132,8 +157,87 @@ namespace null {
         //newScene->addRootGameObject(std::move(cursorObject));
         newScene->addRootGameObject(std::move(player));
 
-        MainLoop::provideScene(move(newScene));
-    };
+        return newScene;
+    }
+
+    std::shared_ptr<Scene> SceneLoader::getPlayScene() {
+        return nullptr;
+    }
+
+    std::shared_ptr<Scene> SceneLoader::getCreateRoomScene() {
+        return nullptr;
+    }
+
+    std::shared_ptr<Scene> SceneLoader::getJoinRoomScene() {
+        return nullptr;
+    }
+
+    std::shared_ptr<Scene> SceneLoader::getGameScene() {
+        return nullptr;
+    }
+
+    std::shared_ptr<Scene> SceneLoader::getMenuScene() {
+
+        auto newScene = std::make_shared<Scene>();
+        auto& box2dWorld = newScene->getBox2dWorld();
+
+        sf::Texture* nullTexture = ResourceManager::loadTexture("menu/menu_background.png");
+
+        auto background = std::make_shared<GameObject>();
+        background->getSprite().setTexture(*nullTexture);
+        background->getSprite().setPosition({0, 0});
+        background->renderLayer = BACKGROUND;
+        background->visible = true;
+
+        auto cursorObject = std::make_shared<GameObject>();
+
+        auto spriteSheet = SpriteSheet("cursorAnim.png", sf::Vector2i(16, 16), {{"cursorAnim", 0, 0, 5}});
+        cursorObject->addScript<CursorAnimation>(*cursorObject, spriteSheet);
+        cursorObject->getSprite().setScale(4.0f, 4.0f);
+        cursorObject->renderLayer = FOREGROUND3;
+        cursorObject->addTag("cursor");
+        cursorObject->visible = true;
+        cursorObject->makeDynamic(box2dWorld);
+        cursorObject->getRigidBody()->GetFixtureList()->SetSensor(true);
+
+        sf::Texture* pressedTexture = ResourceManager::loadTexture("menu/buttons/null_text.png");
+
+        auto playButton = std::make_shared<GameObject>();
+        auto playButtonTexture = ResourceManager::loadTexture("menu/buttons/play.png");
+        playButton->setPosition(450, 380);
+        playButton->addScript<ButtonScript>(*playButton, *playButtonTexture, *pressedTexture, []() -> void {
+            SceneLoader::changeScene("/demo");
+        });
+        playButton->renderLayer = FOREGROUND;
+        playButton->visible = true;
+
+        auto exitButton = std::make_shared<GameObject>();
+        auto exitButtonTexture = ResourceManager::loadTexture("menu/buttons/exit.png");
+        exitButton->setPosition(450, 600);
+        exitButton->addScript<ButtonScript>(*exitButton, *exitButtonTexture, *pressedTexture, []() -> void {
+            std::exit(0);
+        });
+        exitButton->renderLayer = FOREGROUND;
+        exitButton->visible = true;
+
+
+        auto optionsButton = std::make_shared<GameObject>();
+        auto optionsButtonTexture = ResourceManager::loadTexture("menu/buttons/options.png");
+        optionsButton->setPosition(320, 490);
+        optionsButton->addScript<ButtonScript>(*optionsButton, *optionsButtonTexture, *pressedTexture,
+                []() -> void { });
+        optionsButton->renderLayer = FOREGROUND;
+        optionsButton->visible = true;
+
+
+        newScene->addRootGameObject(std::move(background));
+        newScene->addRootGameObject(std::move(cursorObject));
+        newScene->addRootGameObject(std::move(playButton));
+        newScene->addRootGameObject(std::move(optionsButton));
+        newScene->addRootGameObject(std::move(exitButton));
+
+        return newScene;
+    }
 
     void SceneLoader::changeScene(std::filesystem::path path) {
         loadSceneFromFile(path);

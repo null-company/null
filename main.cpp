@@ -24,9 +24,8 @@ int main() {
     XInitThreads();
 #endif //__linux
 
+    std::string mainMenu = "/menu";
 
-    std::string mainMenu = "dummy string";
-    Client client("127.0.0.1", 5000);
     null::SceneLoader::loadSceneFromFile(mainMenu);
 
     return null::MainLoop::run();
