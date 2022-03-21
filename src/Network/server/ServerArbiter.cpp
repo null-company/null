@@ -19,7 +19,8 @@ std::string ServerArbiter::createNewGameSimulation() {
 
     std::string roomCode = generateSixLetterCode();
     while (roomCodeToServerNum.contains(roomCode)) {
-        roomCode = generateSixLetterCode();
+        //roomCode = generateSixLetterCode();
+        roomCode = "AAAAAA";
     }
 
     PLOGD << "Room code was chosen: " << roomCode;
@@ -36,20 +37,20 @@ ServerArbiter::ServerArbiter(std::function<void()> simulationThread) : NetClient
         std::move(simulationThread)) {}
 
 
-void ServerArbiter::sendGameServerConfig(sf::TcpSocket &client, const std::string &roomCode) {
+void ServerArbiter::sendGameServerConfig(sf::TcpSocket& client, const std::string& roomCode) {
     net::NetMessage message;
-    net::GameServerConfig *serverConfig = message.mutable_server_config();
+    net::GameServerConfig* serverConfig = message.mutable_server_config();
     if (!roomCodeToServerNum.contains(roomCode)) {
         sendNetMessage(client, message);
     }
-    GameServer &server = *(gameServers[roomCodeToServerNum[roomCode]]);
+    GameServer& server = *(gameServers[roomCodeToServerNum[roomCode]]);
     serverConfig->set_room_code(roomCode);
     serverConfig->set_v4(server.getIP());
     serverConfig->set_server_port(server.getPort());
     sendNetMessage(client, message);
 }
 
-void ServerArbiter::handleNetMessage(int clientIdx, const net::NetMessage &message) {
+void ServerArbiter::handleNetMessage(int clientIdx, const net::NetMessage& message) {
     switch (message.body_case()) {
         case net::NetMessage::kGenerateRoomRequest: {
             LOGD << "Request about asking generating new game received";
@@ -71,7 +72,7 @@ void ServerArbiter::handleNetMessage(int clientIdx, const net::NetMessage &messa
     }
 }
 
-void ServerArbiter::sendRoomCode(sf::TcpSocket &socket, const std::string &roomCode) {
+void ServerArbiter::sendRoomCode(sf::TcpSocket& socket, const std::string& roomCode) {
     LOGD << "sending room code to the " << socket.getRemoteAddress() << " " << socket.getRemotePort();
     net::NetMessage netMessage;
     netMessage.mutable_connect_room()->set_room_code(roomCode);

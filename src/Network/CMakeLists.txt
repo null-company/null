@@ -34,11 +34,8 @@ target_include_directories(network
         PUBLIC ${PROJECT_SOURCE_DIR}/include/Network/serialized # Done for Protocol Buffer support
         PRIVATE ${PROJECT_SOURCE_DIR}/src/Network)
 add_executable(SERVER server.cpp)
-add_executable(CLIENT client.cpp)
+
 target_link_libraries(SERVER
-        network
-        )
-target_link_libraries(CLIENT
         network
         )
 target_link_libraries(network

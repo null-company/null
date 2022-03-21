@@ -20,10 +20,8 @@ namespace null {
     int MainLoop::run() {
         sf::RenderWindow sfmlWin(sf::VideoMode(1280, 720), "{[Null]}");
         sfmlWin.setFramerateLimit(MAX_FRAMERATE);
-        // For now multithreading is disabled (because reasons)
-        //sfmlWin.setActive(false);
 
-        auto renderingThread = [](sf::RenderWindow &window) {
+        auto renderingThread = [](sf::RenderWindow& window) {
             window.setActive(true);
             while (window.isOpen()) {
                 window.clear(sf::Color::Black);
@@ -33,7 +31,6 @@ namespace null {
         };
 
         sf::Thread rendererThread(renderingThread, std::ref(sfmlWin));
-        //rendererThread.launch();
 
         std::unordered_set<uint> gg;
         auto& q = clientNetworkManager.subscribe(-1337, net::GameMessage::kPlayerInfo);
@@ -41,20 +38,19 @@ namespace null {
         if (std::getenv("ROOM_CREATOR")) {
             clientNetworkManager.getClient().createRoom();
             LOGD << clientNetworkManager.getClient().getRoom();
-            //gg.emplace(1);
         } else {
-            clientNetworkManager.getClient().connectRoom("MdirCM");
-            //gg.emplace(2);
+            clientNetworkManager.getClient().connectRoom("AAAAAA");
         }
 
-sceneStart:
+        sceneStart:
         scene->start();
 
         try {
             while (sfmlWin.isOpen()) {
                 try {
-                    while(true) {
-                        auto message = receiveNetMessage(clientNetworkManager.getClient().getGameServerSocket()).game_message();
+                    while (true) {
+                        auto message = receiveNetMessage(
+                                clientNetworkManager.getClient().getGameServerSocket()).game_message();
                         clientNetworkManager.multiplexMessage(message);
                     }
                 } catch (ReceiveException& e) {
@@ -73,25 +69,30 @@ sceneStart:
                         player->renderLayer = FOREGROUND1;
                         player->makeDynamic(scene->getBox2dWorld());
                         player->getRigidBody()->SetFixedRotation(true);
-                        auto playerSpriteSheet = SpriteSheet("playerAnim_v3.png", {30, 54}, {{"idle", 0, 0, 7}, {"walkRight", 1, 0, 3}, {"walkLeft", 2, 0, 3}});
+                        auto playerSpriteSheet = SpriteSheet("playerAnim_v3.png", {30, 54}, {{"idle",      0, 0, 7},
+                                                                                             {"walkRight", 1, 0, 3},
+                                                                                             {"walkLeft",  2, 0, 3}});
 
                         auto shape1 = new b2PolygonShape();
                         auto sizeVector = Utility::pixelToMetersVector(sf::Vector2i{39, 162});
-                        shape1->SetAsBox(sizeVector.x/2, sizeVector.y/2, player->getRigidBody()->GetWorldCenter(), 0.0f);
+                        shape1->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, player->getRigidBody()->GetWorldCenter(),
+                                         0.0f);
                         b2FixtureDef fixtureDef1;
                         fixtureDef1.shape = shape1;
                         fixtureDef1.density = 1;
 
                         auto shape2 = new b2PolygonShape();
                         sizeVector = Utility::pixelToMetersVector(sf::Vector2i{87, 162});
-                        shape2->SetAsBox(sizeVector.x/2, sizeVector.y/2, player->getRigidBody()->GetWorldCenter(), 0.0f);
+                        shape2->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, player->getRigidBody()->GetWorldCenter(),
+                                         0.0f);
                         b2FixtureDef fixtureDef2;
                         fixtureDef2.shape = shape2;
                         fixtureDef2.density = 1;
 
                         auto shape3 = new b2PolygonShape();
                         sizeVector = Utility::pixelToMetersVector(sf::Vector2i{78, 162});
-                        shape3->SetAsBox(sizeVector.x/2, sizeVector.y/2, player->getRigidBody()->GetWorldCenter(), 0.0f);
+                        shape3->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, player->getRigidBody()->GetWorldCenter(),
+                                         0.0f);
                         b2FixtureDef fixtureDef3;
                         fixtureDef3.shape = shape3;
                         fixtureDef3.density = 1;
@@ -99,9 +100,9 @@ sceneStart:
                         auto& tq = clientNetworkManager.subscribe(t.game_id(), net::GameMessage::kPlayerInfo);
                         player->addScript<NetworkPlayerScript>(*player, playerSpriteSheet,
                                                                std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>>{
-                                                                       {"idle", {{fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}}},
+                                                                       {"idle",      {{fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}}},
                                                                        {"walkRight", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}},
-                                                                       {"walkLeft", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}}
+                                                                       {"walkLeft",  {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}}
                                                                }, tq, t.game_id());
                         tq.push(t);
                         scene->addRootGameObject(std::move(player));
@@ -119,14 +120,15 @@ sceneStart:
                         case sf::Event::EventType::Closed:
                             sfmlWin.close();
                             break;
-                        default: break;
+                        default:
+                            break;
                     }
                 }
                 sfmlWin.clear(sf::Color::Black);
                 Renderer::render(sfmlWin, *MainLoop::scene);
                 sfmlWin.display();
             }
-        } 
+        }
         catch (const SceneChangedException& sceneChanged) {
             goto sceneStart;
         }
@@ -144,25 +146,27 @@ sceneStart:
         player->renderLayer = FOREGROUND1;
         //player->makeDynamic(box2dWorld);
         player->getRigidBody()->SetFixedRotation(true);
-        auto playerSpriteSheet = SpriteSheet("playerAnim_v3.png", {30, 54}, {{"idle", 0, 0, 7}, {"walkRight", 1, 0, 3}, {"walkLeft", 2, 0, 3}});
+        auto playerSpriteSheet = SpriteSheet("playerAnim_v3.png", {30, 54}, {{"idle",      0, 0, 7},
+                                                                             {"walkRight", 1, 0, 3},
+                                                                             {"walkLeft",  2, 0, 3}});
 
         auto shape1 = new b2PolygonShape();
         auto sizeVector = Utility::pixelToMetersVector(sf::Vector2i{39, 162});
-        shape1->SetAsBox(sizeVector.x/2, sizeVector.y/2, player->getRigidBody()->GetWorldCenter(), 0.0f);
+        shape1->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, player->getRigidBody()->GetWorldCenter(), 0.0f);
         b2FixtureDef fixtureDef1;
         fixtureDef1.shape = shape1;
         fixtureDef1.density = 1;
 
         auto shape2 = new b2PolygonShape();
         sizeVector = Utility::pixelToMetersVector(sf::Vector2i{87, 162});
-        shape2->SetAsBox(sizeVector.x/2, sizeVector.y/2, player->getRigidBody()->GetWorldCenter(), 0.0f);
+        shape2->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, player->getRigidBody()->GetWorldCenter(), 0.0f);
         b2FixtureDef fixtureDef2;
         fixtureDef2.shape = shape2;
         fixtureDef2.density = 1;
 
         auto shape3 = new b2PolygonShape();
         sizeVector = Utility::pixelToMetersVector(sf::Vector2i{78, 162});
-        shape3->SetAsBox(sizeVector.x/2, sizeVector.y/2, player->getRigidBody()->GetWorldCenter(), 0.0f);
+        shape3->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, player->getRigidBody()->GetWorldCenter(), 0.0f);
         b2FixtureDef fixtureDef3;
         fixtureDef3.shape = shape3;
         fixtureDef3.density = 1;

@@ -7,38 +7,39 @@ set(INCROOT ${PROJECT_SOURCE_DIR}/include/Scripts/)
 set(SRCROOT ${PROJECT_SOURCE_DIR}/src/Scripts/)
 
 set(SRC
-    ${INCROOT}/Scripts.hpp # declares all public scripts
-    ${SRCROOT}/ExampleScript.cpp
-    ${INCROOT}/ExampleScript.hpp
-    ${SRCROOT}/ClockedScript.cpp
-    ${INCROOT}/ClockedScript.hpp
-    ${SRCROOT}/ExampleClockedScript.cpp
-    ${INCROOT}/ExampleClockedScript.hpp
-    ${SRCROOT}/ReloadSceneScript.cpp
-    ${INCROOT}/ReloadSceneScript.hpp
-    ${SRCROOT}/CameraScript.cpp
-    ${INCROOT}/CameraScript.hpp
-    ${SRCROOT}/ExampleCameraScript.cpp
-    ${INCROOT}/ExampleCameraScript.hpp
-    ${SRCROOT}/CursorAnimation.cpp
-    ${INCROOT}/CursorAnimation.hpp
-    ${SRCROOT}/PlayerAnimation.cpp
-    ${INCROOT}/PlayerAnimation.hpp
-    )
+        ${INCROOT}/Scripts.hpp # declares all public scripts
+        ${SRCROOT}/ExampleScript.cpp
+        ${INCROOT}/ExampleScript.hpp
+        ${SRCROOT}/ClockedScript.cpp
+        ${INCROOT}/ClockedScript.hpp
+        ${SRCROOT}/ExampleClockedScript.cpp
+        ${INCROOT}/ExampleClockedScript.hpp
+        ${SRCROOT}/ReloadSceneScript.cpp
+        ${INCROOT}/ReloadSceneScript.hpp
+        ${SRCROOT}/CameraScript.cpp
+        ${INCROOT}/CameraScript.hpp
+        ${SRCROOT}/ExampleCameraScript.cpp
+        ${INCROOT}/ExampleCameraScript.hpp
+        ${SRCROOT}/CursorAnimation.cpp
+        ${INCROOT}/CursorAnimation.hpp
+        ${SRCROOT}/PlayerAnimation.cpp
+        ${INCROOT}/PlayerAnimation.hpp
+        ${SRCROOT}/NetworkPlayerScript.cpp
+        )
 
 add_library(scripts STATIC ${SRC})
 target_include_directories(scripts
-    PUBLIC ${PROJECT_SOURCE_DIR}/include/Scripts
-    PRIVATE ${PROJECT_SOURCE_DIR}/src)
+        PUBLIC ${PROJECT_SOURCE_DIR}/include/Scripts
+        PRIVATE ${PROJECT_SOURCE_DIR}/src)
 
 target_link_libraries(scripts
-    nullGameEngine
-    network
-    sfml-graphics
-    sfml-audio
-    sfml-network
-    sfml-window
-    sfml-system
-    )
+        nullGameEngine
+        network
+        sfml-graphics
+        sfml-audio
+        sfml-network
+        sfml-window
+        sfml-system
+        )
 
 
