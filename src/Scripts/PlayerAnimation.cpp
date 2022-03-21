@@ -71,6 +71,7 @@ namespace  null {
             gameObject.getRigidBody()->SetLinearVelocity({gameObject.getRigidBody()->GetLinearVelocity().x, -6});
             canJump = false;
         }
+        RigidBodyAnimation::update();
     }
 
     PlayerAnimation::PlayerAnimation(GameObject& gameObject, SpriteSheet& spriteSheet,
