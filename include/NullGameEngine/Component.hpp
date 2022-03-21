@@ -6,18 +6,13 @@
 namespace null {
     class Component {
     protected:
-        null::GameObject &gameObject;
+        null::GameObject& gameObject;
     public:
-        Component(GameObject &);
+        Component(GameObject&);
 
         virtual void start() {};
 
         virtual void update() {};
-
-        //TODO Should it be pure virtual?
-        virtual serial::Script prefabSerialize() = 0;
-
-        static std::unique_ptr<Component> prefabDeserialize(const serial::Script &script);
     };
 }
 

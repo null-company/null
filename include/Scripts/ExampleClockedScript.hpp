@@ -14,8 +14,7 @@ namespace null {
         void clockedUpdate() override;
 
         explicit ExampleClockedScript(GameObject& gameObject);
-        serial::Script prefabSerialize() override;
-        static std::unique_ptr<ExampleClockedScript> prefabDeserialize(const serial::ExampleClockedScript &script);
+
     };
 }
 

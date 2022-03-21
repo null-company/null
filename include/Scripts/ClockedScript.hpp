@@ -30,9 +30,6 @@ namespace null {
 
         explicit ClockedScript(GameObject &gameObject);
 
-        serial::Script prefabSerialize() override;
-
-        static std::unique_ptr<ClockedScript> prefabDeserialize(const serial::ClockedScript &script);
     };
 
 }

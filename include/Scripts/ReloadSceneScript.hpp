@@ -15,8 +15,6 @@ namespace null {
 
         explicit ReloadSceneScript(GameObject &gameObject);
 
-        serial::Script prefabSerialize() override;
-        static std::unique_ptr<ReloadSceneScript> prefabDeserialize(const serial::ReloadSceneScript &script);
     };
 
 }

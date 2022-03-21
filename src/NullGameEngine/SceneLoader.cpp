@@ -95,12 +95,6 @@ namespace null {
         createGround(1152, 400);
 
         boxObject->makeDynamic(box2dWorld);
-        // call this to prevent from rotation
-        /* boxObject->getRigidBody()->SetFixedRotation(true); */
-
-        //boxObject->getRigidBody()->ApplyLinearImpulseToCenter(b2Vec2(15.0f, 0), true);
-
-
 
         auto cursorObject = std::make_shared<GameObject>();
 

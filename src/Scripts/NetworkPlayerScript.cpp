@@ -7,12 +7,12 @@ namespace null {
     NetworkPlayerScript::NetworkPlayerScript(GameObject& gameObject, SpriteSheet& spriteSheet,
                                              std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>> map,
                                              std::queue<net::GameMessage>& q, int id) :
-                                             RigidBodyAnimation(gameObject, spriteSheet, map), queue(q), id(id) { }
+            RigidBodyAnimation(gameObject, spriteSheet, map), queue(q), id(id) {}
 
     void NetworkPlayerScript::update() {
         net::GameMessage message;
         bool bruhmomento = false;
-        for (auto m = queue.front(); !queue.empty(); m = queue.front(),queue.pop()) {
+        for (auto m = queue.front(); !queue.empty(); m = queue.front(), queue.pop()) {
             //if (m.game_id() == id) {
             message = m;
             bruhmomento = true;
@@ -32,9 +32,5 @@ namespace null {
         gameObject.getRigidBody()->SetTransform({x, y}, gameObject.getRigidBody()->GetAngle());
         spriteSheet.setAnimation(currAnim);
         spriteSheet.setFrame(currFrame);
-    }
-
-    serial::Script NetworkPlayerScript::prefabSerialize() {
-        return {};
     }
 }

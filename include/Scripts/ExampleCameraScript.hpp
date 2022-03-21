@@ -8,9 +8,6 @@ namespace null {
         void start() override;
         void update() override;
         explicit ExampleCameraScript(Camera& camera);
-
-        serial::Script prefabSerialize() override;
-        static std::unique_ptr<ExampleCameraScript> prefabDeserialize(const serial::ExampleCameraScript &script);
     };
 
 }

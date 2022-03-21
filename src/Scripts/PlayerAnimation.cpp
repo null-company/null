@@ -26,8 +26,6 @@ namespace  null {
                 auto* otherGo = (GameObject*) otherRb->GetUserData().pointer;
                 if (otherRb->GetWorldCenter().y - Utility::pixelToMetersVector<float>({0, otherGo->getSprite().getTextureRect().height * otherGo->getSprite().getScale().y}).y / 2 + 1 >
                     rb->GetWorldCenter().y + Utility::pixelToMetersVector<float>({0, gameObject.getSprite().getTextureRect().height * gameObject.getSprite().getScale().y}).y / 2) {
-//                    std::cout << otherRb->GetWorldCenter().y  - Utility::pixelToMetersVector<float>({0, otherGo->getSprite().getTextureRect().height * otherGo->getSprite().getScale().y}).y / 2 << std::endl;
-//                    std::cout << rb->GetWorldCenter().y + Utility::pixelToMetersVector<float>({0, gameObject.getSprite().getTextureRect().height * gameObject.getSprite().getScale().y}).y / 2 << std::endl;
                     canJump = true;
                     rb->SetLinearVelocity({rb->GetLinearVelocity().x, 0});
                     break;
@@ -70,37 +68,13 @@ namespace  null {
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && canJump) {
-            //gameObject.getRigidBody()->ApplyLinearImpulseToCenter({0, -30.0f}, false);
             gameObject.getRigidBody()->SetLinearVelocity({gameObject.getRigidBody()->GetLinearVelocity().x, -6});
             canJump = false;
         }
-        //TODO
-        //used for debug log, will remove later
-//        for (auto& xxx : fixtureMap) {
-//            std::cout << xxx.first << std::endl;
-//            for (auto& ddd : xxx.second) {
-//                for (auto fff : ddd) {
-//                    std::cout << (fff->GetFilterData().maskBits != 0) << ' ';
-//                }
-//                std::cout << std::endl;
-//            }
-//        }
-//        std::cout << gameObject.getPosition().x << ", " << gameObject.getPosition().y << std::endl;
-
-        net::GameMessage message;
-        message.mutable_player_info()->set_x(gameObject.getRigidBody()->GetPosition().x);
-        message.mutable_player_info()->set_y(gameObject.getRigidBody()->GetPosition().y);
-        message.mutable_player_info()->set_curranim(spriteSheet.currAnimation->name);
-        message.mutable_player_info()->set_currframe(spriteSheet.currFrame);
-        sendGameMessage(MainLoop::clientNetworkManager.getClient().getGameServerSocket(),message);
-        RigidBodyAnimation::update();
     }
 
     PlayerAnimation::PlayerAnimation(GameObject& gameObject, SpriteSheet& spriteSheet,
                                      const std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>>& map) :
             RigidBodyAnimation(gameObject, spriteSheet, map) { }
 
-    serial::Script PlayerAnimation::prefabSerialize() {
-        return {};
-    }
 }

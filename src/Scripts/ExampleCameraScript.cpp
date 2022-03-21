@@ -10,18 +10,5 @@ namespace null {
         camera.view.setCenter((sf::Vector2f) sf::Mouse::getPosition());
     }
 
-    ExampleCameraScript::ExampleCameraScript(Camera &camera) : CameraScript(camera) {}
-
-    serial::Script ExampleCameraScript::prefabSerialize() {
-        serial::Script script;
-        script.mutable_example_camera_script();
-
-        return script;
-    }
-
-    std::unique_ptr<ExampleCameraScript>
-    ExampleCameraScript::prefabDeserialize(const serial::ExampleCameraScript &script) {
-        return {};
-    }
-
+    ExampleCameraScript::ExampleCameraScript(Camera& camera) : CameraScript(camera) {}
 }

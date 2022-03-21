@@ -18,7 +18,7 @@ namespace null {
                 MainLoop::scene = newScene;
             }
         public:
-            static ClientNetworkManager clientNetworkManager;
+//            static ClientNetworkManager clientNetworkManager;
             static int run();
             static sf::Window& getWindow();
 

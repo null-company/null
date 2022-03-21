@@ -53,8 +53,4 @@ namespace null {
     }
 
     CursorAnimation::CursorAnimation(GameObject& gameObject, SpriteSheet spriteSheet) : Animation(gameObject, spriteSheet) { }
-
-    serial::Script CursorAnimation::prefabSerialize() {
-        return {};
-    }
 }

@@ -14,8 +14,13 @@ namespace null {
     constexpr unsigned int MAX_FRAMERATE = 60;
 
     std::shared_ptr<Scene> MainLoop::scene = nullptr;
-    ClientNetworkManager MainLoop::clientNetworkManager = ClientNetworkManager("127.0.0.1", 5000);
 
+    /**
+     * There potentially can be network initialization
+     * ###############################################
+     * ClientNetworkManager MainLoop::clientNetworkManager = ClientNetworkManager("127.0.0.1", 5000);
+     * ###############################################
+    **/
     sf::Window* MainLoop::window = nullptr;
 
     sf::Window& MainLoop::getWindow() {
@@ -30,14 +35,6 @@ namespace null {
         sfmlWin.setMouseCursorVisible(false);
 
         std::unordered_set<uint> gg;
-        auto& q = clientNetworkManager.subscribe(-1337, net::GameMessage::kPlayerInfo);
-
-        if (std::getenv("ROOM_CREATOR")) {
-            clientNetworkManager.getClient().createRoom();
-            LOGD << clientNetworkManager.getClient().getRoom();
-        } else {
-            clientNetworkManager.getClient().connectRoom("AAAAAA");
-        }
 
         sceneStart:
         scene->start();
@@ -46,7 +43,7 @@ namespace null {
             while (sfmlWin.isOpen()) {
                 scene->update();
 
-                // todo dispatching user events such as keyboard inputs will probably take place here
+                // TODO: dispatching user events such as keyboard inputs will probably take place here
                 sf::Event e;
                 while (sfmlWin.pollEvent(e)) {
                     switch (e.type) {
@@ -61,7 +58,7 @@ namespace null {
                 Renderer::render(sfmlWin, *MainLoop::scene);
                 sfmlWin.display();
             }
-        } 
+        }
         catch (const SceneChangedException& sceneChanged) {
             goto sceneStart;
         }

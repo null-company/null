@@ -18,15 +18,5 @@ namespace null {
     ExampleClockedScript::ExampleClockedScript(GameObject &gameObject)
             : ClockedScript(gameObject) {}
 
-    serial::Script ExampleClockedScript::prefabSerialize() {
-        serial::Script script;
-        script.mutable_example_clocked_script();
-        return script;
-    }
-
-    std::unique_ptr<ExampleClockedScript> ExampleClockedScript::prefabDeserialize(const serial::ExampleClockedScript &script) {
-        return {};
-    }
-
 }
 

@@ -15,7 +15,6 @@ namespace null{
                             std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>> map,
                             std::queue<net::GameMessage>& q, int id);
 
-        serial::Script prefabSerialize() override;
     };
 }
 

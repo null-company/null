@@ -25,17 +25,7 @@ namespace null {
         gameObject.setPosition(newPosition);
     }
 
-    ExampleScript::ExampleScript(GameObject& gameObject) : Script(gameObject) {  }
-
-    serial::Script ExampleScript::prefabSerialize() {
-        serial::Script script;
-        script.clocked_script();
-        return script;
-    }
-
-    std::unique_ptr<ExampleScript> ExampleScript::prefabDeserialize(const serial::ExampleScript &script) {
-        return {};
-    }
+    ExampleScript::ExampleScript(GameObject& gameObject) : Script(gameObject) {}
 
 }
 
