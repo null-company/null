@@ -5,3 +5,11 @@ mv src/Network/serialized/${FILE}.pb.h ./include/Network/serialized
 FILE=scene
 protoc ${FILE}.proto --cpp_out="./src/Serialization/" --proto_path="./src/Serialization/"
 mv src/Serialization/${FILE}.pb.h include/Serialization/${FILE}.pb.h
+
+FILE=scripts
+protoc ${FILE}.proto --cpp_out="./src/Serialization/" --proto_path="./src/Serialization/"
+mv src/Serialization/${FILE}.pb.h include/Serialization/${FILE}.pb.h
+
+FILE=box2d
+protoc ${FILE}.proto --cpp_out="./src/Serialization/" --proto_path="./src/Serialization/"
+mv src/Serialization/${FILE}.pb.h include/Serialization/${FILE}.pb.h

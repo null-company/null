@@ -23,6 +23,9 @@ int main() {
 #ifdef __linux
     XInitThreads();
 #endif //__linux
+#ifdef NDEBUG
+    std::cout << "huh???\n";
+#endif
 
     std::string mainMenu = "/menu";
 

@@ -1,0 +1,64 @@
+syntax = "proto3";
+package serial;
+
+import public "box2d.proto";
+
+message SpriteSheet {
+  message SpriteSheetEntry {
+    string name = 1;
+    int32 row = 2;
+    int32 start = 3;
+    int32 end = 4;
+  }
+  string image_name = 1;
+  Vector2i frame_size = 2;
+  repeated SpriteSheetEntry anim = 3;
+}
+
+message CollisionMap {
+  message CollisionMapEntry {
+    message CollisionMapEntryList {
+      repeated FixtureDef fixture_def = 1;
+    }
+    string name = 1;
+    repeated CollisionMapEntryList collision_map_entry_list = 2;
+  }
+}
+
+message RigidBodyAnimation {
+  SpriteSheet spritesheet = 1;
+  CollisionMap collision_map = 2;
+}
+
+message PlayerAnimation {
+  RigidBodyAnimation animation = 1;
+}
+message ExampleCameraScript {
+  int32 tracked_gameobject_id = 2;
+}
+message ExampleClockedScript {}
+message ReloadSceneScript {}
+message CameraScript {}
+message ButtonScript {
+  // no comment....
+  // but actually, callback functions in scripts might be illegal
+  // because they're impossible(?) to serialize
+  // possible solutions:
+  //    subclassing
+  //    some common button actions might be serializable, should look into it
+}
+message ClockedScript {}
+message ExampleScript {}
+message StraightWeaponScript {}
+message WeaponScript {}
+message BulletScript {}
+message NetworkPlayerScript {
+  // probably this script's gonna be rewritten/deleted soon
+  // so i'll just ignore it lol
+}
+message CursorAnimation {
+  SpriteSheet spritesheet = 1;
+}
+
+
+

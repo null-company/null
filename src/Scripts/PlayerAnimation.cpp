@@ -1,7 +1,6 @@
 #include "PlayerAnimation.hpp"
 
 #include <Utility.hpp>
-#include <utility>
 #include <iostream>
 #include <MainLoop.hpp>
 

@@ -14,11 +14,11 @@
 #include "serializable.h"
 
 enum class GameObjectStatus {
-    NONE, RUNNING, DEATCHED
+    NONE, RUNNING, DETACHED
 };
 namespace null {
 
-    class GameObject : public std::enable_shared_from_this<GameObject>, Serializable {
+    class GameObject : public std::enable_shared_from_this<GameObject> {
     private:
         void assertSpriteHasSize();
         void setRigidBodyDefPositionBySprite(b2BodyDef&);
@@ -111,8 +111,8 @@ namespace null {
             return nullptr;
         }
 
-        void serialize(google::protobuf::Message *) override;
-        void deserialize(google::protobuf::Message *) override;
+        void serialize(google::protobuf::Message *);
+        static std::unique_ptr<GameObject> deserialize(google::protobuf::Message *);
 
         friend Scene;
     };

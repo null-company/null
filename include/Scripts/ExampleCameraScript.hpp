@@ -20,7 +20,7 @@ namespace null {
         void setTrackedGameObject(GameObject& gameObject);
 
         void setMap(GameObject& object);
-
+        static std::unique_ptr<ExampleCameraScript> deserialize(google::protobuf::Message*) { };
 
     };
 }

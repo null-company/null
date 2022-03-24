@@ -2,6 +2,7 @@
 
 #include <queue>
 #include <RigidBodyAnimation.hpp>
+#include <network.h>
 
 namespace null{
     class NetworkPlayerScript : public RigidBodyAnimation {

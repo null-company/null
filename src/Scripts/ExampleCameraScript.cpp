@@ -56,6 +56,5 @@ namespace null {
         map = &newMap;
     }
 
-
 }
 

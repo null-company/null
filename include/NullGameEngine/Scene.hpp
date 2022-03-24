@@ -10,7 +10,7 @@
 #include "WindowMetaInfo.hpp"
 
 namespace null {
-    class Scene : public std::enable_shared_from_this<Scene>, Serializable {
+    class Scene : public std::enable_shared_from_this<Scene> {
     private:
         mutable WindowMetaInfo windowMetaInfo;
         mutable std::shared_ptr<GameObject> camera = std::make_shared<GameObject>(std::set<std::string>({"camera"}));
@@ -43,9 +43,9 @@ namespace null {
 
         friend SceneLoader;
 
-        void serialize(google::protobuf::Message*) override;
+        void serialize(google::protobuf::Message*);
 
-        void deserialize(google::protobuf::Message*) override;
+        static std::unique_ptr<Scene> deserialize(google::protobuf::Message*);
 
         WindowMetaInfo& getWindowMetaInfo() const;
     };

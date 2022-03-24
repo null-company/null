@@ -19,7 +19,7 @@ PROTOBUF_PRAGMA_INIT_SEG
 namespace serial {
 constexpr Scene::Scene(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : game_object_(nullptr)
+  : game_object_()
   , camera_(nullptr){}
 struct SceneDefaultTypeInternal {
   constexpr SceneDefaultTypeInternal()
@@ -55,7 +55,8 @@ struct GameObjectDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT GameObjectDefaultTypeInternal _GameObject_default_instance_;
 constexpr Script::Script(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : _oneof_case_{}{}
+  : go_id_(0u)
+  , _oneof_case_{}{}
 struct ScriptDefaultTypeInternal {
   constexpr ScriptDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -65,83 +66,6 @@ struct ScriptDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ScriptDefaultTypeInternal _Script_default_instance_;
-constexpr BasicScript::BasicScript(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
-struct BasicScriptDefaultTypeInternal {
-  constexpr BasicScriptDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~BasicScriptDefaultTypeInternal() {}
-  union {
-    BasicScript _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT BasicScriptDefaultTypeInternal _BasicScript_default_instance_;
-constexpr ExampleCameraScript::ExampleCameraScript(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
-struct ExampleCameraScriptDefaultTypeInternal {
-  constexpr ExampleCameraScriptDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~ExampleCameraScriptDefaultTypeInternal() {}
-  union {
-    ExampleCameraScript _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ExampleCameraScriptDefaultTypeInternal _ExampleCameraScript_default_instance_;
-constexpr ExampleClockedScript::ExampleClockedScript(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
-struct ExampleClockedScriptDefaultTypeInternal {
-  constexpr ExampleClockedScriptDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~ExampleClockedScriptDefaultTypeInternal() {}
-  union {
-    ExampleClockedScript _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ExampleClockedScriptDefaultTypeInternal _ExampleClockedScript_default_instance_;
-constexpr ExampleScript::ExampleScript(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
-struct ExampleScriptDefaultTypeInternal {
-  constexpr ExampleScriptDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~ExampleScriptDefaultTypeInternal() {}
-  union {
-    ExampleScript _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ExampleScriptDefaultTypeInternal _ExampleScript_default_instance_;
-constexpr CameraScript::CameraScript(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
-struct CameraScriptDefaultTypeInternal {
-  constexpr CameraScriptDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~CameraScriptDefaultTypeInternal() {}
-  union {
-    CameraScript _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT CameraScriptDefaultTypeInternal _CameraScript_default_instance_;
-constexpr ClockedScript::ClockedScript(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
-struct ClockedScriptDefaultTypeInternal {
-  constexpr ClockedScriptDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~ClockedScriptDefaultTypeInternal() {}
-  union {
-    ClockedScript _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ClockedScriptDefaultTypeInternal _ClockedScript_default_instance_;
-constexpr ReloadSceneScript::ReloadSceneScript(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
-struct ReloadSceneScriptDefaultTypeInternal {
-  constexpr ReloadSceneScriptDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~ReloadSceneScriptDefaultTypeInternal() {}
-  union {
-    ReloadSceneScript _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ReloadSceneScriptDefaultTypeInternal _ReloadSceneScript_default_instance_;
 constexpr BasicGameObject::BasicGameObject(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : children_objects_()
@@ -152,7 +76,8 @@ constexpr BasicGameObject::BasicGameObject(
   , box2d_type_(0)
 
   , render_layer_(0)
-{}
+
+  , id_(0u){}
 struct BasicGameObjectDefaultTypeInternal {
   constexpr BasicGameObjectDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -162,19 +87,6 @@ struct BasicGameObjectDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT BasicGameObjectDefaultTypeInternal _BasicGameObject_default_instance_;
-constexpr Position::Position(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : x_(0)
-  , y_(0){}
-struct PositionDefaultTypeInternal {
-  constexpr PositionDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~PositionDefaultTypeInternal() {}
-  union {
-    Position _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PositionDefaultTypeInternal _Position_default_instance_;
 constexpr Sprite_Scale::Sprite_Scale(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : scale_x_(0)
@@ -203,7 +115,7 @@ struct SpriteDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT SpriteDefaultTypeInternal _Sprite_default_instance_;
 }  // namespace serial
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_scene_2eproto[15];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_scene_2eproto[7];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_scene_2eproto[2];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_scene_2eproto = nullptr;
 
@@ -243,49 +155,14 @@ const uint32_t TableStruct_scene_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pr
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  PROTOBUF_FIELD_OFFSET(::serial::Script, go_id_),
   PROTOBUF_FIELD_OFFSET(::serial::Script, script_instance_),
-  ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::serial::BasicScript, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::serial::ExampleCameraScript, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::serial::ExampleClockedScript, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::serial::ExampleScript, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::serial::CameraScript, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::serial::ClockedScript, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::serial::ReloadSceneScript, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::serial::BasicGameObject, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -295,18 +172,11 @@ const uint32_t TableStruct_scene_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pr
   PROTOBUF_FIELD_OFFSET(::serial::BasicGameObject, children_objects_),
   PROTOBUF_FIELD_OFFSET(::serial::BasicGameObject, children_scripts_),
   PROTOBUF_FIELD_OFFSET(::serial::BasicGameObject, tags_),
-  PROTOBUF_FIELD_OFFSET(::serial::BasicGameObject, render_layer_),
   PROTOBUF_FIELD_OFFSET(::serial::BasicGameObject, sprite_),
   PROTOBUF_FIELD_OFFSET(::serial::BasicGameObject, visible_),
   PROTOBUF_FIELD_OFFSET(::serial::BasicGameObject, box2d_type_),
-  ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::serial::Position, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::serial::Position, x_),
-  PROTOBUF_FIELD_OFFSET(::serial::Position, y_),
+  PROTOBUF_FIELD_OFFSET(::serial::BasicGameObject, render_layer_),
+  PROTOBUF_FIELD_OFFSET(::serial::BasicGameObject, id_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::serial::Sprite_Scale, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -330,17 +200,9 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 8, -1, -1, sizeof(::serial::Camera)},
   { 14, -1, -1, sizeof(::serial::GameObject)},
   { 22, -1, -1, sizeof(::serial::Script)},
-  { 36, -1, -1, sizeof(::serial::BasicScript)},
-  { 42, -1, -1, sizeof(::serial::ExampleCameraScript)},
-  { 48, -1, -1, sizeof(::serial::ExampleClockedScript)},
-  { 54, -1, -1, sizeof(::serial::ExampleScript)},
-  { 60, -1, -1, sizeof(::serial::CameraScript)},
-  { 66, -1, -1, sizeof(::serial::ClockedScript)},
-  { 72, -1, -1, sizeof(::serial::ReloadSceneScript)},
-  { 78, -1, -1, sizeof(::serial::BasicGameObject)},
-  { 91, -1, -1, sizeof(::serial::Position)},
-  { 99, -1, -1, sizeof(::serial::Sprite_Scale)},
-  { 107, -1, -1, sizeof(::serial::Sprite)},
+  { 43, -1, -1, sizeof(::serial::BasicGameObject)},
+  { 57, -1, -1, sizeof(::serial::Sprite_Scale)},
+  { 65, -1, -1, sizeof(::serial::Sprite)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -348,60 +210,60 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::serial::_Camera_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::serial::_GameObject_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::serial::_Script_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::serial::_BasicScript_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::serial::_ExampleCameraScript_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::serial::_ExampleClockedScript_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::serial::_ExampleScript_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::serial::_CameraScript_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::serial::_ClockedScript_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::serial::_ReloadSceneScript_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::serial::_BasicGameObject_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::serial::_Position_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::serial::_Sprite_Scale_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::serial::_Sprite_default_instance_),
 };
 
 const char descriptor_table_protodef_scene_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\013scene.proto\022\006serial\"P\n\005Scene\022\'\n\013game_o"
-  "bject\030\001 \001(\0132\022.serial.GameObject\022\036\n\006camer"
-  "a\030\002 \001(\0132\016.serial.Camera\"\010\n\006Camera\"Z\n\nGam"
-  "eObject\0224\n\021basic_game_object\030\001 \001(\0132\027.ser"
-  "ial.BasicGameObjectH\000B\026\n\024game_object_ins"
-  "tance\"\213\003\n\006Script\022+\n\014basic_script\030\001 \001(\0132\023"
-  ".serial.BasicScriptH\000\022-\n\rcamera_script\030\002"
-  " \001(\0132\024.serial.CameraScriptH\000\022/\n\016clocked_"
-  "script\030\003 \001(\0132\025.serial.ClockedScriptH\000\0222\n"
-  "\rreload_script\030\004 \001(\0132\031.serial.ReloadScen"
-  "eScriptH\000\022<\n\025example_camera_script\030\005 \001(\013"
-  "2\033.serial.ExampleCameraScriptH\000\022>\n\026examp"
-  "le_clocked_script\030\006 \001(\0132\034.serial.Example"
-  "ClockedScriptH\000\022/\n\016example_script\030\007 \001(\0132"
-  "\025.serial.ExampleScriptH\000B\021\n\017script_insta"
-  "nce\"\r\n\013BasicScript\"\025\n\023ExampleCameraScrip"
-  "t\"\026\n\024ExampleClockedScript\"\017\n\rExampleScri"
-  "pt\"\016\n\014CameraScript\"\017\n\rClockedScript\"\023\n\021R"
-  "eloadSceneScript\"\372\001\n\017BasicGameObject\022,\n\020"
-  "children_objects\030\001 \003(\0132\022.serial.GameObje"
-  "ct\022(\n\020children_scripts\030\002 \003(\0132\016.serial.Sc"
-  "ript\022\014\n\004tags\030\003 \003(\t\022)\n\014render_layer\030\007 \001(\016"
-  "2\023.serial.RenderLayer\022\036\n\006sprite\030\004 \001(\0132\016."
-  "serial.Sprite\022\017\n\007visible\030\005 \001(\010\022%\n\nbox2d_"
-  "type\030\006 \001(\0162\021.serial.Box2DType\" \n\010Positio"
-  "n\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\"\222\001\n\006Sprite\022\024\n\014te"
-  "xture_path\030\001 \001(\t\022\"\n\010position\030\002 \001(\0132\020.ser"
-  "ial.Position\022#\n\005scale\030\005 \001(\0132\024.serial.Spr"
-  "ite.Scale\032)\n\005Scale\022\017\n\007scale_x\030\001 \001(\002\022\017\n\007s"
-  "cale_y\030\002 \001(\002*\236\001\n\013RenderLayer\022\016\n\nBACKGROU"
-  "ND\020\000\022\017\n\013BACKGROUND1\020\001\022\017\n\013BACKGROUND2\020\002\022\017"
-  "\n\013BACKGROUND3\020\003\022\016\n\nFOREGROUND\020\004\022\017\n\013FOREG"
-  "ROUND1\020\005\022\017\n\013FOREGROUND2\020\006\022\017\n\013FOREGROUND3"
-  "\020\007\022\t\n\005ONTOP\020\010*$\n\tBox2DType\022\n\n\006STATIC\020\000\022\013"
-  "\n\007DYNAMIC\020\001b\006proto3"
+  "\n\013scene.proto\022\006serial\032\rscripts.proto\"P\n\005"
+  "Scene\022\'\n\013game_object\030\001 \003(\0132\022.serial.Game"
+  "Object\022\036\n\006camera\030\002 \001(\0132\016.serial.Camera\"\010"
+  "\n\006Camera\"Z\n\nGameObject\0224\n\021basic_game_obj"
+  "ect\030\001 \001(\0132\027.serial.BasicGameObjectH\000B\026\n\024"
+  "game_object_instance\"\350\005\n\006Script\0223\n\020playe"
+  "r_animation\030\001 \001(\0132\027.serial.PlayerAnimati"
+  "onH\000\022<\n\025example_camera_script\030\002 \001(\0132\033.se"
+  "rial.ExampleCameraScriptH\000\022>\n\026example_cl"
+  "ocked_script\030\003 \001(\0132\034.serial.ExampleClock"
+  "edScriptH\000\0228\n\023reload_scene_script\030\004 \001(\0132"
+  "\031.serial.ReloadSceneScriptH\000\022-\n\rcamera_s"
+  "cript\030\005 \001(\0132\024.serial.CameraScriptH\000\022-\n\rb"
+  "utton_script\030\006 \001(\0132\024.serial.ButtonScript"
+  "H\000\022/\n\016clocked_script\030\007 \001(\0132\025.serial.Cloc"
+  "kedScriptH\000\022/\n\016example_script\030\010 \001(\0132\025.se"
+  "rial.ExampleScriptH\000\022>\n\026straight_weapon_"
+  "script\030\t \001(\0132\034.serial.StraightWeaponScri"
+  "ptH\000\022-\n\rweapon_script\030\n \001(\0132\024.serial.Wea"
+  "ponScriptH\000\022-\n\rbullet_script\030\013 \001(\0132\024.ser"
+  "ial.BulletScriptH\000\022<\n\025network_player_scr"
+  "ipt\030\014 \001(\0132\033.serial.NetworkPlayerScriptH\000"
+  "\0223\n\020cursor_animation\030\r \001(\0132\027.serial.Curs"
+  "orAnimationH\000\022\r\n\005go_id\030\016 \001(\rB\021\n\017script_i"
+  "nstance\"\206\002\n\017BasicGameObject\022,\n\020children_"
+  "objects\030\001 \003(\0132\022.serial.GameObject\022(\n\020chi"
+  "ldren_scripts\030\002 \003(\0132\016.serial.Script\022\014\n\004t"
+  "ags\030\003 \003(\t\022\036\n\006sprite\030\004 \001(\0132\016.serial.Sprit"
+  "e\022\017\n\007visible\030\005 \001(\010\022%\n\nbox2d_type\030\006 \001(\0162\021"
+  ".serial.Box2DType\022)\n\014render_layer\030\007 \001(\0162"
+  "\023.serial.RenderLayer\022\n\n\002id\030\010 \001(\r\"\222\001\n\006Spr"
+  "ite\022\024\n\014texture_path\030\001 \001(\t\022\"\n\010position\030\002 "
+  "\001(\0132\020.serial.Vector2f\022#\n\005scale\030\005 \001(\0132\024.s"
+  "erial.Sprite.Scale\032)\n\005Scale\022\017\n\007scale_x\030\001"
+  " \001(\002\022\017\n\007scale_y\030\002 \001(\002*\236\001\n\013RenderLayer\022\016\n"
+  "\nBACKGROUND\020\000\022\017\n\013BACKGROUND1\020\001\022\017\n\013BACKGR"
+  "OUND2\020\002\022\017\n\013BACKGROUND3\020\003\022\016\n\nFOREGROUND\020\004"
+  "\022\017\n\013FOREGROUND1\020\005\022\017\n\013FOREGROUND2\020\006\022\017\n\013FO"
+  "REGROUND3\020\007\022\t\n\005ONTOP\020\010*$\n\tBox2DType\022\n\n\006S"
+  "TATIC\020\000\022\013\n\007DYNAMIC\020\001b\006proto3"
   ;
+static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_scene_2eproto_deps[1] = {
+  &::descriptor_table_scripts_2eproto,
+};
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_scene_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_scene_2eproto = {
-  false, false, 1379, descriptor_table_protodef_scene_2eproto, "scene.proto", 
-  &descriptor_table_scene_2eproto_once, nullptr, 0, 15,
+  false, false, 1588, descriptor_table_protodef_scene_2eproto, "scene.proto", 
+  &descriptor_table_scene_2eproto_once, descriptor_table_scene_2eproto_deps, 1, 7,
   schemas, file_default_instances, TableStruct_scene_2eproto::offsets,
   file_level_metadata_scene_2eproto, file_level_enum_descriptors_scene_2eproto, file_level_service_descriptors_scene_2eproto,
 };
@@ -452,21 +314,17 @@ bool Box2DType_IsValid(int value) {
 
 class Scene::_Internal {
  public:
-  static const ::serial::GameObject& game_object(const Scene* msg);
   static const ::serial::Camera& camera(const Scene* msg);
 };
 
-const ::serial::GameObject&
-Scene::_Internal::game_object(const Scene* msg) {
-  return *msg->game_object_;
-}
 const ::serial::Camera&
 Scene::_Internal::camera(const Scene* msg) {
   return *msg->camera_;
 }
 Scene::Scene(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
+  game_object_(arena) {
   SharedCtor();
   if (!is_message_owned) {
     RegisterArenaDtor(arena);
@@ -474,13 +332,9 @@ Scene::Scene(::PROTOBUF_NAMESPACE_ID::Arena* arena,
   // @@protoc_insertion_point(arena_constructor:serial.Scene)
 }
 Scene::Scene(const Scene& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      game_object_(from.game_object_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  if (from._internal_has_game_object()) {
-    game_object_ = new ::serial::GameObject(*from.game_object_);
-  } else {
-    game_object_ = nullptr;
-  }
   if (from._internal_has_camera()) {
     camera_ = new ::serial::Camera(*from.camera_);
   } else {
@@ -490,10 +344,7 @@ Scene::Scene(const Scene& from)
 }
 
 inline void Scene::SharedCtor() {
-::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-    reinterpret_cast<char*>(&game_object_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&camera_) -
-    reinterpret_cast<char*>(&game_object_)) + sizeof(camera_));
+camera_ = nullptr;
 }
 
 Scene::~Scene() {
@@ -505,7 +356,6 @@ Scene::~Scene() {
 
 inline void Scene::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  if (this != internal_default_instance()) delete game_object_;
   if (this != internal_default_instance()) delete camera_;
 }
 
@@ -525,10 +375,7 @@ void Scene::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  if (GetArenaForAllocation() == nullptr && game_object_ != nullptr) {
-    delete game_object_;
-  }
-  game_object_ = nullptr;
+  game_object_.Clear();
   if (GetArenaForAllocation() == nullptr && camera_ != nullptr) {
     delete camera_;
   }
@@ -542,11 +389,16 @@ const char* Scene::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::inte
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // .serial.GameObject game_object = 1;
+      // repeated .serial.GameObject game_object = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_game_object(), ptr);
-          CHK_(ptr);
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_game_object(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
         } else
           goto handle_unusual;
         continue;
@@ -587,12 +439,12 @@ uint8_t* Scene::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .serial.GameObject game_object = 1;
-  if (this->_internal_has_game_object()) {
+  // repeated .serial.GameObject game_object = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->_internal_game_object_size()); i < n; i++) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        1, _Internal::game_object(this), target, stream);
+      InternalWriteMessage(1, this->_internal_game_object(i), target, stream);
   }
 
   // .serial.Camera camera = 2;
@@ -619,11 +471,11 @@ size_t Scene::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // .serial.GameObject game_object = 1;
-  if (this->_internal_has_game_object()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *game_object_);
+  // repeated .serial.GameObject game_object = 1;
+  total_size += 1UL * this->_internal_game_object_size();
+  for (const auto& msg : this->game_object_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
   // .serial.Camera camera = 2;
@@ -655,9 +507,7 @@ void Scene::MergeFrom(const Scene& from) {
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from._internal_has_game_object()) {
-    _internal_mutable_game_object()->::serial::GameObject::MergeFrom(from._internal_game_object());
-  }
+  game_object_.MergeFrom(from.game_object_);
   if (from._internal_has_camera()) {
     _internal_mutable_camera()->::serial::Camera::MergeFrom(from._internal_camera());
   }
@@ -678,12 +528,8 @@ bool Scene::IsInitialized() const {
 void Scene::InternalSwap(Scene* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(Scene, camera_)
-      + sizeof(Scene::camera_)
-      - PROTOBUF_FIELD_OFFSET(Scene, game_object_)>(
-          reinterpret_cast<char*>(&game_object_),
-          reinterpret_cast<char*>(&other->game_object_));
+  game_object_.InternalSwap(&other->game_object_);
+  swap(camera_, other->camera_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Scene::GetMetadata() const {
@@ -978,30 +824,24 @@ void GameObject::InternalSwap(GameObject* other) {
 
 class Script::_Internal {
  public:
-  static const ::serial::BasicScript& basic_script(const Script* msg);
-  static const ::serial::CameraScript& camera_script(const Script* msg);
-  static const ::serial::ClockedScript& clocked_script(const Script* msg);
-  static const ::serial::ReloadSceneScript& reload_script(const Script* msg);
+  static const ::serial::PlayerAnimation& player_animation(const Script* msg);
   static const ::serial::ExampleCameraScript& example_camera_script(const Script* msg);
   static const ::serial::ExampleClockedScript& example_clocked_script(const Script* msg);
+  static const ::serial::ReloadSceneScript& reload_scene_script(const Script* msg);
+  static const ::serial::CameraScript& camera_script(const Script* msg);
+  static const ::serial::ButtonScript& button_script(const Script* msg);
+  static const ::serial::ClockedScript& clocked_script(const Script* msg);
   static const ::serial::ExampleScript& example_script(const Script* msg);
+  static const ::serial::StraightWeaponScript& straight_weapon_script(const Script* msg);
+  static const ::serial::WeaponScript& weapon_script(const Script* msg);
+  static const ::serial::BulletScript& bullet_script(const Script* msg);
+  static const ::serial::NetworkPlayerScript& network_player_script(const Script* msg);
+  static const ::serial::CursorAnimation& cursor_animation(const Script* msg);
 };
 
-const ::serial::BasicScript&
-Script::_Internal::basic_script(const Script* msg) {
-  return *msg->script_instance_.basic_script_;
-}
-const ::serial::CameraScript&
-Script::_Internal::camera_script(const Script* msg) {
-  return *msg->script_instance_.camera_script_;
-}
-const ::serial::ClockedScript&
-Script::_Internal::clocked_script(const Script* msg) {
-  return *msg->script_instance_.clocked_script_;
-}
-const ::serial::ReloadSceneScript&
-Script::_Internal::reload_script(const Script* msg) {
-  return *msg->script_instance_.reload_script_;
+const ::serial::PlayerAnimation&
+Script::_Internal::player_animation(const Script* msg) {
+  return *msg->script_instance_.player_animation_;
 }
 const ::serial::ExampleCameraScript&
 Script::_Internal::example_camera_script(const Script* msg) {
@@ -1011,76 +851,79 @@ const ::serial::ExampleClockedScript&
 Script::_Internal::example_clocked_script(const Script* msg) {
   return *msg->script_instance_.example_clocked_script_;
 }
+const ::serial::ReloadSceneScript&
+Script::_Internal::reload_scene_script(const Script* msg) {
+  return *msg->script_instance_.reload_scene_script_;
+}
+const ::serial::CameraScript&
+Script::_Internal::camera_script(const Script* msg) {
+  return *msg->script_instance_.camera_script_;
+}
+const ::serial::ButtonScript&
+Script::_Internal::button_script(const Script* msg) {
+  return *msg->script_instance_.button_script_;
+}
+const ::serial::ClockedScript&
+Script::_Internal::clocked_script(const Script* msg) {
+  return *msg->script_instance_.clocked_script_;
+}
 const ::serial::ExampleScript&
 Script::_Internal::example_script(const Script* msg) {
   return *msg->script_instance_.example_script_;
 }
-void Script::set_allocated_basic_script(::serial::BasicScript* basic_script) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  clear_script_instance();
-  if (basic_script) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::serial::BasicScript>::GetOwningArena(basic_script);
-    if (message_arena != submessage_arena) {
-      basic_script = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, basic_script, submessage_arena);
-    }
-    set_has_basic_script();
-    script_instance_.basic_script_ = basic_script;
-  }
-  // @@protoc_insertion_point(field_set_allocated:serial.Script.basic_script)
+const ::serial::StraightWeaponScript&
+Script::_Internal::straight_weapon_script(const Script* msg) {
+  return *msg->script_instance_.straight_weapon_script_;
 }
-void Script::set_allocated_camera_script(::serial::CameraScript* camera_script) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  clear_script_instance();
-  if (camera_script) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::serial::CameraScript>::GetOwningArena(camera_script);
-    if (message_arena != submessage_arena) {
-      camera_script = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, camera_script, submessage_arena);
-    }
-    set_has_camera_script();
-    script_instance_.camera_script_ = camera_script;
-  }
-  // @@protoc_insertion_point(field_set_allocated:serial.Script.camera_script)
+const ::serial::WeaponScript&
+Script::_Internal::weapon_script(const Script* msg) {
+  return *msg->script_instance_.weapon_script_;
 }
-void Script::set_allocated_clocked_script(::serial::ClockedScript* clocked_script) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  clear_script_instance();
-  if (clocked_script) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::serial::ClockedScript>::GetOwningArena(clocked_script);
-    if (message_arena != submessage_arena) {
-      clocked_script = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, clocked_script, submessage_arena);
-    }
-    set_has_clocked_script();
-    script_instance_.clocked_script_ = clocked_script;
-  }
-  // @@protoc_insertion_point(field_set_allocated:serial.Script.clocked_script)
+const ::serial::BulletScript&
+Script::_Internal::bullet_script(const Script* msg) {
+  return *msg->script_instance_.bullet_script_;
 }
-void Script::set_allocated_reload_script(::serial::ReloadSceneScript* reload_script) {
+const ::serial::NetworkPlayerScript&
+Script::_Internal::network_player_script(const Script* msg) {
+  return *msg->script_instance_.network_player_script_;
+}
+const ::serial::CursorAnimation&
+Script::_Internal::cursor_animation(const Script* msg) {
+  return *msg->script_instance_.cursor_animation_;
+}
+void Script::set_allocated_player_animation(::serial::PlayerAnimation* player_animation) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   clear_script_instance();
-  if (reload_script) {
+  if (player_animation) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::serial::ReloadSceneScript>::GetOwningArena(reload_script);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(player_animation));
     if (message_arena != submessage_arena) {
-      reload_script = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, reload_script, submessage_arena);
+      player_animation = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, player_animation, submessage_arena);
     }
-    set_has_reload_script();
-    script_instance_.reload_script_ = reload_script;
+    set_has_player_animation();
+    script_instance_.player_animation_ = player_animation;
   }
-  // @@protoc_insertion_point(field_set_allocated:serial.Script.reload_script)
+  // @@protoc_insertion_point(field_set_allocated:serial.Script.player_animation)
+}
+void Script::clear_player_animation() {
+  if (_internal_has_player_animation()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete script_instance_.player_animation_;
+    }
+    clear_has_script_instance();
+  }
 }
 void Script::set_allocated_example_camera_script(::serial::ExampleCameraScript* example_camera_script) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   clear_script_instance();
   if (example_camera_script) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::serial::ExampleCameraScript>::GetOwningArena(example_camera_script);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(example_camera_script));
     if (message_arena != submessage_arena) {
       example_camera_script = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, example_camera_script, submessage_arena);
@@ -1090,12 +933,22 @@ void Script::set_allocated_example_camera_script(::serial::ExampleCameraScript* 
   }
   // @@protoc_insertion_point(field_set_allocated:serial.Script.example_camera_script)
 }
+void Script::clear_example_camera_script() {
+  if (_internal_has_example_camera_script()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete script_instance_.example_camera_script_;
+    }
+    clear_has_script_instance();
+  }
+}
 void Script::set_allocated_example_clocked_script(::serial::ExampleClockedScript* example_clocked_script) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   clear_script_instance();
   if (example_clocked_script) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::serial::ExampleClockedScript>::GetOwningArena(example_clocked_script);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(example_clocked_script));
     if (message_arena != submessage_arena) {
       example_clocked_script = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, example_clocked_script, submessage_arena);
@@ -1105,12 +958,122 @@ void Script::set_allocated_example_clocked_script(::serial::ExampleClockedScript
   }
   // @@protoc_insertion_point(field_set_allocated:serial.Script.example_clocked_script)
 }
+void Script::clear_example_clocked_script() {
+  if (_internal_has_example_clocked_script()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete script_instance_.example_clocked_script_;
+    }
+    clear_has_script_instance();
+  }
+}
+void Script::set_allocated_reload_scene_script(::serial::ReloadSceneScript* reload_scene_script) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_script_instance();
+  if (reload_scene_script) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(reload_scene_script));
+    if (message_arena != submessage_arena) {
+      reload_scene_script = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, reload_scene_script, submessage_arena);
+    }
+    set_has_reload_scene_script();
+    script_instance_.reload_scene_script_ = reload_scene_script;
+  }
+  // @@protoc_insertion_point(field_set_allocated:serial.Script.reload_scene_script)
+}
+void Script::clear_reload_scene_script() {
+  if (_internal_has_reload_scene_script()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete script_instance_.reload_scene_script_;
+    }
+    clear_has_script_instance();
+  }
+}
+void Script::set_allocated_camera_script(::serial::CameraScript* camera_script) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_script_instance();
+  if (camera_script) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(camera_script));
+    if (message_arena != submessage_arena) {
+      camera_script = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, camera_script, submessage_arena);
+    }
+    set_has_camera_script();
+    script_instance_.camera_script_ = camera_script;
+  }
+  // @@protoc_insertion_point(field_set_allocated:serial.Script.camera_script)
+}
+void Script::clear_camera_script() {
+  if (_internal_has_camera_script()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete script_instance_.camera_script_;
+    }
+    clear_has_script_instance();
+  }
+}
+void Script::set_allocated_button_script(::serial::ButtonScript* button_script) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_script_instance();
+  if (button_script) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(button_script));
+    if (message_arena != submessage_arena) {
+      button_script = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, button_script, submessage_arena);
+    }
+    set_has_button_script();
+    script_instance_.button_script_ = button_script;
+  }
+  // @@protoc_insertion_point(field_set_allocated:serial.Script.button_script)
+}
+void Script::clear_button_script() {
+  if (_internal_has_button_script()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete script_instance_.button_script_;
+    }
+    clear_has_script_instance();
+  }
+}
+void Script::set_allocated_clocked_script(::serial::ClockedScript* clocked_script) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_script_instance();
+  if (clocked_script) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(clocked_script));
+    if (message_arena != submessage_arena) {
+      clocked_script = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, clocked_script, submessage_arena);
+    }
+    set_has_clocked_script();
+    script_instance_.clocked_script_ = clocked_script;
+  }
+  // @@protoc_insertion_point(field_set_allocated:serial.Script.clocked_script)
+}
+void Script::clear_clocked_script() {
+  if (_internal_has_clocked_script()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete script_instance_.clocked_script_;
+    }
+    clear_has_script_instance();
+  }
+}
 void Script::set_allocated_example_script(::serial::ExampleScript* example_script) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   clear_script_instance();
   if (example_script) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::serial::ExampleScript>::GetOwningArena(example_script);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(example_script));
     if (message_arena != submessage_arena) {
       example_script = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, example_script, submessage_arena);
@@ -1119,6 +1082,139 @@ void Script::set_allocated_example_script(::serial::ExampleScript* example_scrip
     script_instance_.example_script_ = example_script;
   }
   // @@protoc_insertion_point(field_set_allocated:serial.Script.example_script)
+}
+void Script::clear_example_script() {
+  if (_internal_has_example_script()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete script_instance_.example_script_;
+    }
+    clear_has_script_instance();
+  }
+}
+void Script::set_allocated_straight_weapon_script(::serial::StraightWeaponScript* straight_weapon_script) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_script_instance();
+  if (straight_weapon_script) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(straight_weapon_script));
+    if (message_arena != submessage_arena) {
+      straight_weapon_script = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, straight_weapon_script, submessage_arena);
+    }
+    set_has_straight_weapon_script();
+    script_instance_.straight_weapon_script_ = straight_weapon_script;
+  }
+  // @@protoc_insertion_point(field_set_allocated:serial.Script.straight_weapon_script)
+}
+void Script::clear_straight_weapon_script() {
+  if (_internal_has_straight_weapon_script()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete script_instance_.straight_weapon_script_;
+    }
+    clear_has_script_instance();
+  }
+}
+void Script::set_allocated_weapon_script(::serial::WeaponScript* weapon_script) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_script_instance();
+  if (weapon_script) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(weapon_script));
+    if (message_arena != submessage_arena) {
+      weapon_script = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, weapon_script, submessage_arena);
+    }
+    set_has_weapon_script();
+    script_instance_.weapon_script_ = weapon_script;
+  }
+  // @@protoc_insertion_point(field_set_allocated:serial.Script.weapon_script)
+}
+void Script::clear_weapon_script() {
+  if (_internal_has_weapon_script()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete script_instance_.weapon_script_;
+    }
+    clear_has_script_instance();
+  }
+}
+void Script::set_allocated_bullet_script(::serial::BulletScript* bullet_script) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_script_instance();
+  if (bullet_script) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(bullet_script));
+    if (message_arena != submessage_arena) {
+      bullet_script = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, bullet_script, submessage_arena);
+    }
+    set_has_bullet_script();
+    script_instance_.bullet_script_ = bullet_script;
+  }
+  // @@protoc_insertion_point(field_set_allocated:serial.Script.bullet_script)
+}
+void Script::clear_bullet_script() {
+  if (_internal_has_bullet_script()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete script_instance_.bullet_script_;
+    }
+    clear_has_script_instance();
+  }
+}
+void Script::set_allocated_network_player_script(::serial::NetworkPlayerScript* network_player_script) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_script_instance();
+  if (network_player_script) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(network_player_script));
+    if (message_arena != submessage_arena) {
+      network_player_script = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, network_player_script, submessage_arena);
+    }
+    set_has_network_player_script();
+    script_instance_.network_player_script_ = network_player_script;
+  }
+  // @@protoc_insertion_point(field_set_allocated:serial.Script.network_player_script)
+}
+void Script::clear_network_player_script() {
+  if (_internal_has_network_player_script()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete script_instance_.network_player_script_;
+    }
+    clear_has_script_instance();
+  }
+}
+void Script::set_allocated_cursor_animation(::serial::CursorAnimation* cursor_animation) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_script_instance();
+  if (cursor_animation) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(cursor_animation));
+    if (message_arena != submessage_arena) {
+      cursor_animation = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, cursor_animation, submessage_arena);
+    }
+    set_has_cursor_animation();
+    script_instance_.cursor_animation_ = cursor_animation;
+  }
+  // @@protoc_insertion_point(field_set_allocated:serial.Script.cursor_animation)
+}
+void Script::clear_cursor_animation() {
+  if (_internal_has_cursor_animation()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete script_instance_.cursor_animation_;
+    }
+    clear_has_script_instance();
+  }
 }
 Script::Script(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -1132,22 +1228,11 @@ Script::Script(::PROTOBUF_NAMESPACE_ID::Arena* arena,
 Script::Script(const Script& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  go_id_ = from.go_id_;
   clear_has_script_instance();
   switch (from.script_instance_case()) {
-    case kBasicScript: {
-      _internal_mutable_basic_script()->::serial::BasicScript::MergeFrom(from._internal_basic_script());
-      break;
-    }
-    case kCameraScript: {
-      _internal_mutable_camera_script()->::serial::CameraScript::MergeFrom(from._internal_camera_script());
-      break;
-    }
-    case kClockedScript: {
-      _internal_mutable_clocked_script()->::serial::ClockedScript::MergeFrom(from._internal_clocked_script());
-      break;
-    }
-    case kReloadScript: {
-      _internal_mutable_reload_script()->::serial::ReloadSceneScript::MergeFrom(from._internal_reload_script());
+    case kPlayerAnimation: {
+      _internal_mutable_player_animation()->::serial::PlayerAnimation::MergeFrom(from._internal_player_animation());
       break;
     }
     case kExampleCameraScript: {
@@ -1158,8 +1243,44 @@ Script::Script(const Script& from)
       _internal_mutable_example_clocked_script()->::serial::ExampleClockedScript::MergeFrom(from._internal_example_clocked_script());
       break;
     }
+    case kReloadSceneScript: {
+      _internal_mutable_reload_scene_script()->::serial::ReloadSceneScript::MergeFrom(from._internal_reload_scene_script());
+      break;
+    }
+    case kCameraScript: {
+      _internal_mutable_camera_script()->::serial::CameraScript::MergeFrom(from._internal_camera_script());
+      break;
+    }
+    case kButtonScript: {
+      _internal_mutable_button_script()->::serial::ButtonScript::MergeFrom(from._internal_button_script());
+      break;
+    }
+    case kClockedScript: {
+      _internal_mutable_clocked_script()->::serial::ClockedScript::MergeFrom(from._internal_clocked_script());
+      break;
+    }
     case kExampleScript: {
       _internal_mutable_example_script()->::serial::ExampleScript::MergeFrom(from._internal_example_script());
+      break;
+    }
+    case kStraightWeaponScript: {
+      _internal_mutable_straight_weapon_script()->::serial::StraightWeaponScript::MergeFrom(from._internal_straight_weapon_script());
+      break;
+    }
+    case kWeaponScript: {
+      _internal_mutable_weapon_script()->::serial::WeaponScript::MergeFrom(from._internal_weapon_script());
+      break;
+    }
+    case kBulletScript: {
+      _internal_mutable_bullet_script()->::serial::BulletScript::MergeFrom(from._internal_bullet_script());
+      break;
+    }
+    case kNetworkPlayerScript: {
+      _internal_mutable_network_player_script()->::serial::NetworkPlayerScript::MergeFrom(from._internal_network_player_script());
+      break;
+    }
+    case kCursorAnimation: {
+      _internal_mutable_cursor_animation()->::serial::CursorAnimation::MergeFrom(from._internal_cursor_animation());
       break;
     }
     case SCRIPT_INSTANCE_NOT_SET: {
@@ -1170,6 +1291,7 @@ Script::Script(const Script& from)
 }
 
 inline void Script::SharedCtor() {
+go_id_ = 0u;
 clear_has_script_instance();
 }
 
@@ -1200,27 +1322,9 @@ void Script::SetCachedSize(int size) const {
 void Script::clear_script_instance() {
 // @@protoc_insertion_point(one_of_clear_start:serial.Script)
   switch (script_instance_case()) {
-    case kBasicScript: {
+    case kPlayerAnimation: {
       if (GetArenaForAllocation() == nullptr) {
-        delete script_instance_.basic_script_;
-      }
-      break;
-    }
-    case kCameraScript: {
-      if (GetArenaForAllocation() == nullptr) {
-        delete script_instance_.camera_script_;
-      }
-      break;
-    }
-    case kClockedScript: {
-      if (GetArenaForAllocation() == nullptr) {
-        delete script_instance_.clocked_script_;
-      }
-      break;
-    }
-    case kReloadScript: {
-      if (GetArenaForAllocation() == nullptr) {
-        delete script_instance_.reload_script_;
+        delete script_instance_.player_animation_;
       }
       break;
     }
@@ -1236,9 +1340,63 @@ void Script::clear_script_instance() {
       }
       break;
     }
+    case kReloadSceneScript: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete script_instance_.reload_scene_script_;
+      }
+      break;
+    }
+    case kCameraScript: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete script_instance_.camera_script_;
+      }
+      break;
+    }
+    case kButtonScript: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete script_instance_.button_script_;
+      }
+      break;
+    }
+    case kClockedScript: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete script_instance_.clocked_script_;
+      }
+      break;
+    }
     case kExampleScript: {
       if (GetArenaForAllocation() == nullptr) {
         delete script_instance_.example_script_;
+      }
+      break;
+    }
+    case kStraightWeaponScript: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete script_instance_.straight_weapon_script_;
+      }
+      break;
+    }
+    case kWeaponScript: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete script_instance_.weapon_script_;
+      }
+      break;
+    }
+    case kBulletScript: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete script_instance_.bullet_script_;
+      }
+      break;
+    }
+    case kNetworkPlayerScript: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete script_instance_.network_player_script_;
+      }
+      break;
+    }
+    case kCursorAnimation: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete script_instance_.cursor_animation_;
       }
       break;
     }
@@ -1256,6 +1414,7 @@ void Script::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  go_id_ = 0u;
   clear_script_instance();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -1266,58 +1425,114 @@ const char* Script::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::int
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // .serial.BasicScript basic_script = 1;
+      // .serial.PlayerAnimation player_animation = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_basic_script(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_player_animation(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // .serial.CameraScript camera_script = 2;
+      // .serial.ExampleCameraScript example_camera_script = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          ptr = ctx->ParseMessage(_internal_mutable_camera_script(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // .serial.ClockedScript clocked_script = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
-          ptr = ctx->ParseMessage(_internal_mutable_clocked_script(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // .serial.ReloadSceneScript reload_script = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          ptr = ctx->ParseMessage(_internal_mutable_reload_script(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // .serial.ExampleCameraScript example_camera_script = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
           ptr = ctx->ParseMessage(_internal_mutable_example_camera_script(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // .serial.ExampleClockedScript example_clocked_script = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
+      // .serial.ExampleClockedScript example_clocked_script = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
           ptr = ctx->ParseMessage(_internal_mutable_example_clocked_script(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // .serial.ExampleScript example_script = 7;
+      // .serial.ReloadSceneScript reload_scene_script = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          ptr = ctx->ParseMessage(_internal_mutable_reload_scene_script(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .serial.CameraScript camera_script = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
+          ptr = ctx->ParseMessage(_internal_mutable_camera_script(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .serial.ButtonScript button_script = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
+          ptr = ctx->ParseMessage(_internal_mutable_button_script(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .serial.ClockedScript clocked_script = 7;
       case 7:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
+          ptr = ctx->ParseMessage(_internal_mutable_clocked_script(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .serial.ExampleScript example_script = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 66)) {
           ptr = ctx->ParseMessage(_internal_mutable_example_script(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .serial.StraightWeaponScript straight_weapon_script = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 74)) {
+          ptr = ctx->ParseMessage(_internal_mutable_straight_weapon_script(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .serial.WeaponScript weapon_script = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 82)) {
+          ptr = ctx->ParseMessage(_internal_mutable_weapon_script(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .serial.BulletScript bullet_script = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 90)) {
+          ptr = ctx->ParseMessage(_internal_mutable_bullet_script(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .serial.NetworkPlayerScript network_player_script = 12;
+      case 12:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 98)) {
+          ptr = ctx->ParseMessage(_internal_mutable_network_player_script(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .serial.CursorAnimation cursor_animation = 13;
+      case 13:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 106)) {
+          ptr = ctx->ParseMessage(_internal_mutable_cursor_animation(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 go_id = 14;
+      case 14:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 112)) {
+          go_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -1351,60 +1566,114 @@ uint8_t* Script::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .serial.BasicScript basic_script = 1;
-  if (_internal_has_basic_script()) {
+  // .serial.PlayerAnimation player_animation = 1;
+  if (_internal_has_player_animation()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        1, _Internal::basic_script(this), target, stream);
+        1, _Internal::player_animation(this), target, stream);
   }
 
-  // .serial.CameraScript camera_script = 2;
-  if (_internal_has_camera_script()) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        2, _Internal::camera_script(this), target, stream);
-  }
-
-  // .serial.ClockedScript clocked_script = 3;
-  if (_internal_has_clocked_script()) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        3, _Internal::clocked_script(this), target, stream);
-  }
-
-  // .serial.ReloadSceneScript reload_script = 4;
-  if (_internal_has_reload_script()) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        4, _Internal::reload_script(this), target, stream);
-  }
-
-  // .serial.ExampleCameraScript example_camera_script = 5;
+  // .serial.ExampleCameraScript example_camera_script = 2;
   if (_internal_has_example_camera_script()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        5, _Internal::example_camera_script(this), target, stream);
+        2, _Internal::example_camera_script(this), target, stream);
   }
 
-  // .serial.ExampleClockedScript example_clocked_script = 6;
+  // .serial.ExampleClockedScript example_clocked_script = 3;
   if (_internal_has_example_clocked_script()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        6, _Internal::example_clocked_script(this), target, stream);
+        3, _Internal::example_clocked_script(this), target, stream);
   }
 
-  // .serial.ExampleScript example_script = 7;
+  // .serial.ReloadSceneScript reload_scene_script = 4;
+  if (_internal_has_reload_scene_script()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        4, _Internal::reload_scene_script(this), target, stream);
+  }
+
+  // .serial.CameraScript camera_script = 5;
+  if (_internal_has_camera_script()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        5, _Internal::camera_script(this), target, stream);
+  }
+
+  // .serial.ButtonScript button_script = 6;
+  if (_internal_has_button_script()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        6, _Internal::button_script(this), target, stream);
+  }
+
+  // .serial.ClockedScript clocked_script = 7;
+  if (_internal_has_clocked_script()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        7, _Internal::clocked_script(this), target, stream);
+  }
+
+  // .serial.ExampleScript example_script = 8;
   if (_internal_has_example_script()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        7, _Internal::example_script(this), target, stream);
+        8, _Internal::example_script(this), target, stream);
+  }
+
+  // .serial.StraightWeaponScript straight_weapon_script = 9;
+  if (_internal_has_straight_weapon_script()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        9, _Internal::straight_weapon_script(this), target, stream);
+  }
+
+  // .serial.WeaponScript weapon_script = 10;
+  if (_internal_has_weapon_script()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        10, _Internal::weapon_script(this), target, stream);
+  }
+
+  // .serial.BulletScript bullet_script = 11;
+  if (_internal_has_bullet_script()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        11, _Internal::bullet_script(this), target, stream);
+  }
+
+  // .serial.NetworkPlayerScript network_player_script = 12;
+  if (_internal_has_network_player_script()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        12, _Internal::network_player_script(this), target, stream);
+  }
+
+  // .serial.CursorAnimation cursor_animation = 13;
+  if (_internal_has_cursor_animation()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        13, _Internal::cursor_animation(this), target, stream);
+  }
+
+  // uint32 go_id = 14;
+  if (this->_internal_go_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(14, this->_internal_go_id(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1423,54 +1692,101 @@ size_t Script::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  // uint32 go_id = 14;
+  if (this->_internal_go_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32SizePlusOne(this->_internal_go_id());
+  }
+
   switch (script_instance_case()) {
-    // .serial.BasicScript basic_script = 1;
-    case kBasicScript: {
+    // .serial.PlayerAnimation player_animation = 1;
+    case kPlayerAnimation: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *script_instance_.basic_script_);
+          *script_instance_.player_animation_);
       break;
     }
-    // .serial.CameraScript camera_script = 2;
-    case kCameraScript: {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *script_instance_.camera_script_);
-      break;
-    }
-    // .serial.ClockedScript clocked_script = 3;
-    case kClockedScript: {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *script_instance_.clocked_script_);
-      break;
-    }
-    // .serial.ReloadSceneScript reload_script = 4;
-    case kReloadScript: {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *script_instance_.reload_script_);
-      break;
-    }
-    // .serial.ExampleCameraScript example_camera_script = 5;
+    // .serial.ExampleCameraScript example_camera_script = 2;
     case kExampleCameraScript: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *script_instance_.example_camera_script_);
       break;
     }
-    // .serial.ExampleClockedScript example_clocked_script = 6;
+    // .serial.ExampleClockedScript example_clocked_script = 3;
     case kExampleClockedScript: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *script_instance_.example_clocked_script_);
       break;
     }
-    // .serial.ExampleScript example_script = 7;
+    // .serial.ReloadSceneScript reload_scene_script = 4;
+    case kReloadSceneScript: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *script_instance_.reload_scene_script_);
+      break;
+    }
+    // .serial.CameraScript camera_script = 5;
+    case kCameraScript: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *script_instance_.camera_script_);
+      break;
+    }
+    // .serial.ButtonScript button_script = 6;
+    case kButtonScript: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *script_instance_.button_script_);
+      break;
+    }
+    // .serial.ClockedScript clocked_script = 7;
+    case kClockedScript: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *script_instance_.clocked_script_);
+      break;
+    }
+    // .serial.ExampleScript example_script = 8;
     case kExampleScript: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *script_instance_.example_script_);
+      break;
+    }
+    // .serial.StraightWeaponScript straight_weapon_script = 9;
+    case kStraightWeaponScript: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *script_instance_.straight_weapon_script_);
+      break;
+    }
+    // .serial.WeaponScript weapon_script = 10;
+    case kWeaponScript: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *script_instance_.weapon_script_);
+      break;
+    }
+    // .serial.BulletScript bullet_script = 11;
+    case kBulletScript: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *script_instance_.bullet_script_);
+      break;
+    }
+    // .serial.NetworkPlayerScript network_player_script = 12;
+    case kNetworkPlayerScript: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *script_instance_.network_player_script_);
+      break;
+    }
+    // .serial.CursorAnimation cursor_animation = 13;
+    case kCursorAnimation: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *script_instance_.cursor_animation_);
       break;
     }
     case SCRIPT_INSTANCE_NOT_SET: {
@@ -1499,21 +1815,12 @@ void Script::MergeFrom(const Script& from) {
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from._internal_go_id() != 0) {
+    _internal_set_go_id(from._internal_go_id());
+  }
   switch (from.script_instance_case()) {
-    case kBasicScript: {
-      _internal_mutable_basic_script()->::serial::BasicScript::MergeFrom(from._internal_basic_script());
-      break;
-    }
-    case kCameraScript: {
-      _internal_mutable_camera_script()->::serial::CameraScript::MergeFrom(from._internal_camera_script());
-      break;
-    }
-    case kClockedScript: {
-      _internal_mutable_clocked_script()->::serial::ClockedScript::MergeFrom(from._internal_clocked_script());
-      break;
-    }
-    case kReloadScript: {
-      _internal_mutable_reload_script()->::serial::ReloadSceneScript::MergeFrom(from._internal_reload_script());
+    case kPlayerAnimation: {
+      _internal_mutable_player_animation()->::serial::PlayerAnimation::MergeFrom(from._internal_player_animation());
       break;
     }
     case kExampleCameraScript: {
@@ -1524,8 +1831,44 @@ void Script::MergeFrom(const Script& from) {
       _internal_mutable_example_clocked_script()->::serial::ExampleClockedScript::MergeFrom(from._internal_example_clocked_script());
       break;
     }
+    case kReloadSceneScript: {
+      _internal_mutable_reload_scene_script()->::serial::ReloadSceneScript::MergeFrom(from._internal_reload_scene_script());
+      break;
+    }
+    case kCameraScript: {
+      _internal_mutable_camera_script()->::serial::CameraScript::MergeFrom(from._internal_camera_script());
+      break;
+    }
+    case kButtonScript: {
+      _internal_mutable_button_script()->::serial::ButtonScript::MergeFrom(from._internal_button_script());
+      break;
+    }
+    case kClockedScript: {
+      _internal_mutable_clocked_script()->::serial::ClockedScript::MergeFrom(from._internal_clocked_script());
+      break;
+    }
     case kExampleScript: {
       _internal_mutable_example_script()->::serial::ExampleScript::MergeFrom(from._internal_example_script());
+      break;
+    }
+    case kStraightWeaponScript: {
+      _internal_mutable_straight_weapon_script()->::serial::StraightWeaponScript::MergeFrom(from._internal_straight_weapon_script());
+      break;
+    }
+    case kWeaponScript: {
+      _internal_mutable_weapon_script()->::serial::WeaponScript::MergeFrom(from._internal_weapon_script());
+      break;
+    }
+    case kBulletScript: {
+      _internal_mutable_bullet_script()->::serial::BulletScript::MergeFrom(from._internal_bullet_script());
+      break;
+    }
+    case kNetworkPlayerScript: {
+      _internal_mutable_network_player_script()->::serial::NetworkPlayerScript::MergeFrom(from._internal_network_player_script());
+      break;
+    }
+    case kCursorAnimation: {
+      _internal_mutable_cursor_animation()->::serial::CursorAnimation::MergeFrom(from._internal_cursor_animation());
       break;
     }
     case SCRIPT_INSTANCE_NOT_SET: {
@@ -1549,6 +1892,7 @@ bool Script::IsInitialized() const {
 void Script::InternalSwap(Script* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(go_id_, other->go_id_);
   swap(script_instance_, other->script_instance_);
   swap(_oneof_case_[0], other->_oneof_case_[0]);
 }
@@ -1557,279 +1901,6 @@ void Script::InternalSwap(Script* other) {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_scene_2eproto_getter, &descriptor_table_scene_2eproto_once,
       file_level_metadata_scene_2eproto[3]);
-}
-
-// ===================================================================
-
-class BasicScript::_Internal {
- public:
-};
-
-BasicScript::BasicScript(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
-  // @@protoc_insertion_point(arena_constructor:serial.BasicScript)
-}
-BasicScript::BasicScript(const BasicScript& from)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:serial.BasicScript)
-}
-
-
-
-
-
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData BasicScript::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
-};
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*BasicScript::GetClassData() const { return &_class_data_; }
-
-
-
-
-
-
-
-::PROTOBUF_NAMESPACE_ID::Metadata BasicScript::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
-      &descriptor_table_scene_2eproto_getter, &descriptor_table_scene_2eproto_once,
-      file_level_metadata_scene_2eproto[4]);
-}
-
-// ===================================================================
-
-class ExampleCameraScript::_Internal {
- public:
-};
-
-ExampleCameraScript::ExampleCameraScript(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
-  // @@protoc_insertion_point(arena_constructor:serial.ExampleCameraScript)
-}
-ExampleCameraScript::ExampleCameraScript(const ExampleCameraScript& from)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:serial.ExampleCameraScript)
-}
-
-
-
-
-
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ExampleCameraScript::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
-};
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ExampleCameraScript::GetClassData() const { return &_class_data_; }
-
-
-
-
-
-
-
-::PROTOBUF_NAMESPACE_ID::Metadata ExampleCameraScript::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
-      &descriptor_table_scene_2eproto_getter, &descriptor_table_scene_2eproto_once,
-      file_level_metadata_scene_2eproto[5]);
-}
-
-// ===================================================================
-
-class ExampleClockedScript::_Internal {
- public:
-};
-
-ExampleClockedScript::ExampleClockedScript(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
-  // @@protoc_insertion_point(arena_constructor:serial.ExampleClockedScript)
-}
-ExampleClockedScript::ExampleClockedScript(const ExampleClockedScript& from)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:serial.ExampleClockedScript)
-}
-
-
-
-
-
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ExampleClockedScript::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
-};
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ExampleClockedScript::GetClassData() const { return &_class_data_; }
-
-
-
-
-
-
-
-::PROTOBUF_NAMESPACE_ID::Metadata ExampleClockedScript::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
-      &descriptor_table_scene_2eproto_getter, &descriptor_table_scene_2eproto_once,
-      file_level_metadata_scene_2eproto[6]);
-}
-
-// ===================================================================
-
-class ExampleScript::_Internal {
- public:
-};
-
-ExampleScript::ExampleScript(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
-  // @@protoc_insertion_point(arena_constructor:serial.ExampleScript)
-}
-ExampleScript::ExampleScript(const ExampleScript& from)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:serial.ExampleScript)
-}
-
-
-
-
-
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ExampleScript::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
-};
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ExampleScript::GetClassData() const { return &_class_data_; }
-
-
-
-
-
-
-
-::PROTOBUF_NAMESPACE_ID::Metadata ExampleScript::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
-      &descriptor_table_scene_2eproto_getter, &descriptor_table_scene_2eproto_once,
-      file_level_metadata_scene_2eproto[7]);
-}
-
-// ===================================================================
-
-class CameraScript::_Internal {
- public:
-};
-
-CameraScript::CameraScript(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
-  // @@protoc_insertion_point(arena_constructor:serial.CameraScript)
-}
-CameraScript::CameraScript(const CameraScript& from)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:serial.CameraScript)
-}
-
-
-
-
-
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CameraScript::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
-};
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CameraScript::GetClassData() const { return &_class_data_; }
-
-
-
-
-
-
-
-::PROTOBUF_NAMESPACE_ID::Metadata CameraScript::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
-      &descriptor_table_scene_2eproto_getter, &descriptor_table_scene_2eproto_once,
-      file_level_metadata_scene_2eproto[8]);
-}
-
-// ===================================================================
-
-class ClockedScript::_Internal {
- public:
-};
-
-ClockedScript::ClockedScript(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
-  // @@protoc_insertion_point(arena_constructor:serial.ClockedScript)
-}
-ClockedScript::ClockedScript(const ClockedScript& from)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:serial.ClockedScript)
-}
-
-
-
-
-
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ClockedScript::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
-};
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ClockedScript::GetClassData() const { return &_class_data_; }
-
-
-
-
-
-
-
-::PROTOBUF_NAMESPACE_ID::Metadata ClockedScript::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
-      &descriptor_table_scene_2eproto_getter, &descriptor_table_scene_2eproto_once,
-      file_level_metadata_scene_2eproto[9]);
-}
-
-// ===================================================================
-
-class ReloadSceneScript::_Internal {
- public:
-};
-
-ReloadSceneScript::ReloadSceneScript(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
-  // @@protoc_insertion_point(arena_constructor:serial.ReloadSceneScript)
-}
-ReloadSceneScript::ReloadSceneScript(const ReloadSceneScript& from)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:serial.ReloadSceneScript)
-}
-
-
-
-
-
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ReloadSceneScript::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
-};
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ReloadSceneScript::GetClassData() const { return &_class_data_; }
-
-
-
-
-
-
-
-::PROTOBUF_NAMESPACE_ID::Metadata ReloadSceneScript::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
-      &descriptor_table_scene_2eproto_getter, &descriptor_table_scene_2eproto_once,
-      file_level_metadata_scene_2eproto[10]);
 }
 
 // ===================================================================
@@ -1867,16 +1938,16 @@ BasicGameObject::BasicGameObject(const BasicGameObject& from)
     sprite_ = nullptr;
   }
   ::memcpy(&visible_, &from.visible_,
-    static_cast<size_t>(reinterpret_cast<char*>(&render_layer_) -
-    reinterpret_cast<char*>(&visible_)) + sizeof(render_layer_));
+    static_cast<size_t>(reinterpret_cast<char*>(&id_) -
+    reinterpret_cast<char*>(&visible_)) + sizeof(id_));
   // @@protoc_insertion_point(copy_constructor:serial.BasicGameObject)
 }
 
 inline void BasicGameObject::SharedCtor() {
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&sprite_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&render_layer_) -
-    reinterpret_cast<char*>(&sprite_)) + sizeof(render_layer_));
+    0, static_cast<size_t>(reinterpret_cast<char*>(&id_) -
+    reinterpret_cast<char*>(&sprite_)) + sizeof(id_));
 }
 
 BasicGameObject::~BasicGameObject() {
@@ -1915,8 +1986,8 @@ void BasicGameObject::Clear() {
   }
   sprite_ = nullptr;
   ::memset(&visible_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&render_layer_) -
-      reinterpret_cast<char*>(&visible_)) + sizeof(render_layer_));
+      reinterpret_cast<char*>(&id_) -
+      reinterpret_cast<char*>(&visible_)) + sizeof(id_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1998,6 +2069,14 @@ const char* BasicGameObject::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPAC
           uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
           _internal_set_render_layer(static_cast<::serial::RenderLayer>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 id = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 64)) {
+          id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -2084,6 +2163,12 @@ uint8_t* BasicGameObject::_InternalSerialize(
       7, this->_internal_render_layer(), target);
   }
 
+  // uint32 id = 8;
+  if (this->_internal_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(8, this->_internal_id(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -2146,6 +2231,11 @@ size_t BasicGameObject::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_render_layer());
   }
 
+  // uint32 id = 8;
+  if (this->_internal_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32SizePlusOne(this->_internal_id());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
 }
 
@@ -2183,6 +2273,9 @@ void BasicGameObject::MergeFrom(const BasicGameObject& from) {
   if (from._internal_render_layer() != 0) {
     _internal_set_render_layer(from._internal_render_layer());
   }
+  if (from._internal_id() != 0) {
+    _internal_set_id(from._internal_id());
+  }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -2204,8 +2297,8 @@ void BasicGameObject::InternalSwap(BasicGameObject* other) {
   children_scripts_.InternalSwap(&other->children_scripts_);
   tags_.InternalSwap(&other->tags_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(BasicGameObject, render_layer_)
-      + sizeof(BasicGameObject::render_layer_)
+      PROTOBUF_FIELD_OFFSET(BasicGameObject, id_)
+      + sizeof(BasicGameObject::id_)
       - PROTOBUF_FIELD_OFFSET(BasicGameObject, sprite_)>(
           reinterpret_cast<char*>(&sprite_),
           reinterpret_cast<char*>(&other->sprite_));
@@ -2214,243 +2307,7 @@ void BasicGameObject::InternalSwap(BasicGameObject* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata BasicGameObject::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_scene_2eproto_getter, &descriptor_table_scene_2eproto_once,
-      file_level_metadata_scene_2eproto[11]);
-}
-
-// ===================================================================
-
-class Position::_Internal {
- public:
-};
-
-Position::Position(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor();
-  if (!is_message_owned) {
-    RegisterArenaDtor(arena);
-  }
-  // @@protoc_insertion_point(arena_constructor:serial.Position)
-}
-Position::Position(const Position& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::memcpy(&x_, &from.x_,
-    static_cast<size_t>(reinterpret_cast<char*>(&y_) -
-    reinterpret_cast<char*>(&x_)) + sizeof(y_));
-  // @@protoc_insertion_point(copy_constructor:serial.Position)
-}
-
-inline void Position::SharedCtor() {
-::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-    reinterpret_cast<char*>(&x_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&y_) -
-    reinterpret_cast<char*>(&x_)) + sizeof(y_));
-}
-
-Position::~Position() {
-  // @@protoc_insertion_point(destructor:serial.Position)
-  if (GetArenaForAllocation() != nullptr) return;
-  SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
-
-inline void Position::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-}
-
-void Position::ArenaDtor(void* object) {
-  Position* _this = reinterpret_cast< Position* >(object);
-  (void)_this;
-}
-void Position::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
-void Position::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
-}
-
-void Position::Clear() {
-// @@protoc_insertion_point(message_clear_start:serial.Position)
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  ::memset(&x_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&y_) -
-      reinterpret_cast<char*>(&x_)) + sizeof(y_));
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
-
-const char* Position::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // float x = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 13)) {
-          x_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
-          ptr += sizeof(float);
-        } else
-          goto handle_unusual;
-        continue;
-      // float y = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 21)) {
-          y_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
-          ptr += sizeof(float);
-        } else
-          goto handle_unusual;
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
-}
-
-uint8_t* Position::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:serial.Position)
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // float x = 1;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_x = this->_internal_x();
-  uint32_t raw_x;
-  memcpy(&raw_x, &tmp_x, sizeof(tmp_x));
-  if (raw_x != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(1, this->_internal_x(), target);
-  }
-
-  // float y = 2;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_y = this->_internal_y();
-  uint32_t raw_y;
-  memcpy(&raw_y, &tmp_y, sizeof(tmp_y));
-  if (raw_y != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(2, this->_internal_y(), target);
-  }
-
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:serial.Position)
-  return target;
-}
-
-size_t Position::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:serial.Position)
-  size_t total_size = 0;
-
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // float x = 1;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_x = this->_internal_x();
-  uint32_t raw_x;
-  memcpy(&raw_x, &tmp_x, sizeof(tmp_x));
-  if (raw_x != 0) {
-    total_size += 1 + 4;
-  }
-
-  // float y = 2;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_y = this->_internal_y();
-  uint32_t raw_y;
-  memcpy(&raw_y, &tmp_y, sizeof(tmp_y));
-  if (raw_y != 0) {
-    total_size += 1 + 4;
-  }
-
-  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
-}
-
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData Position::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
-    Position::MergeImpl
-};
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*Position::GetClassData() const { return &_class_data_; }
-
-void Position::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
-                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-  static_cast<Position *>(to)->MergeFrom(
-      static_cast<const Position &>(from));
-}
-
-
-void Position::MergeFrom(const Position& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:serial.Position)
-  GOOGLE_DCHECK_NE(&from, this);
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_x = from._internal_x();
-  uint32_t raw_x;
-  memcpy(&raw_x, &tmp_x, sizeof(tmp_x));
-  if (raw_x != 0) {
-    _internal_set_x(from._internal_x());
-  }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_y = from._internal_y();
-  uint32_t raw_y;
-  memcpy(&raw_y, &tmp_y, sizeof(tmp_y));
-  if (raw_y != 0) {
-    _internal_set_y(from._internal_y());
-  }
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-}
-
-void Position::CopyFrom(const Position& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:serial.Position)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool Position::IsInitialized() const {
-  return true;
-}
-
-void Position::InternalSwap(Position* other) {
-  using std::swap;
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(Position, y_)
-      + sizeof(Position::y_)
-      - PROTOBUF_FIELD_OFFSET(Position, x_)>(
-          reinterpret_cast<char*>(&x_),
-          reinterpret_cast<char*>(&other->x_));
-}
-
-::PROTOBUF_NAMESPACE_ID::Metadata Position::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
-      &descriptor_table_scene_2eproto_getter, &descriptor_table_scene_2eproto_once,
-      file_level_metadata_scene_2eproto[12]);
+      file_level_metadata_scene_2eproto[4]);
 }
 
 // ===================================================================
@@ -2686,24 +2543,30 @@ void Sprite_Scale::InternalSwap(Sprite_Scale* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata Sprite_Scale::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_scene_2eproto_getter, &descriptor_table_scene_2eproto_once,
-      file_level_metadata_scene_2eproto[13]);
+      file_level_metadata_scene_2eproto[5]);
 }
 
 // ===================================================================
 
 class Sprite::_Internal {
  public:
-  static const ::serial::Position& position(const Sprite* msg);
+  static const ::serial::Vector2f& position(const Sprite* msg);
   static const ::serial::Sprite_Scale& scale(const Sprite* msg);
 };
 
-const ::serial::Position&
+const ::serial::Vector2f&
 Sprite::_Internal::position(const Sprite* msg) {
   return *msg->position_;
 }
 const ::serial::Sprite_Scale&
 Sprite::_Internal::scale(const Sprite* msg) {
   return *msg->scale_;
+}
+void Sprite::clear_position() {
+  if (GetArenaForAllocation() == nullptr && position_ != nullptr) {
+    delete position_;
+  }
+  position_ = nullptr;
 }
 Sprite::Sprite(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -2726,7 +2589,7 @@ Sprite::Sprite(const Sprite& from)
       GetArenaForAllocation());
   }
   if (from._internal_has_position()) {
-    position_ = new ::serial::Position(*from.position_);
+    position_ = new ::serial::Vector2f(*from.position_);
   } else {
     position_ = nullptr;
   }
@@ -2807,7 +2670,7 @@ const char* Sprite::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::int
         } else
           goto handle_unusual;
         continue;
-      // .serial.Position position = 2;
+      // .serial.Vector2f position = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           ptr = ctx->ParseMessage(_internal_mutable_position(), ptr);
@@ -2862,7 +2725,7 @@ uint8_t* Sprite::_InternalSerialize(
         1, this->_internal_texture_path(), target);
   }
 
-  // .serial.Position position = 2;
+  // .serial.Vector2f position = 2;
   if (this->_internal_has_position()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
@@ -2901,7 +2764,7 @@ size_t Sprite::ByteSizeLong() const {
         this->_internal_texture_path());
   }
 
-  // .serial.Position position = 2;
+  // .serial.Vector2f position = 2;
   if (this->_internal_has_position()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
@@ -2941,7 +2804,7 @@ void Sprite::MergeFrom(const Sprite& from) {
     _internal_set_texture_path(from._internal_texture_path());
   }
   if (from._internal_has_position()) {
-    _internal_mutable_position()->::serial::Position::MergeFrom(from._internal_position());
+    _internal_mutable_position()->::serial::Vector2f::MergeFrom(from._internal_position());
   }
   if (from._internal_has_scale()) {
     _internal_mutable_scale()->::serial::Sprite_Scale::MergeFrom(from._internal_scale());
@@ -2981,7 +2844,7 @@ void Sprite::InternalSwap(Sprite* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata Sprite::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_scene_2eproto_getter, &descriptor_table_scene_2eproto_once,
-      file_level_metadata_scene_2eproto[14]);
+      file_level_metadata_scene_2eproto[6]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -2999,32 +2862,8 @@ template<> PROTOBUF_NOINLINE ::serial::GameObject* Arena::CreateMaybeMessage< ::
 template<> PROTOBUF_NOINLINE ::serial::Script* Arena::CreateMaybeMessage< ::serial::Script >(Arena* arena) {
   return Arena::CreateMessageInternal< ::serial::Script >(arena);
 }
-template<> PROTOBUF_NOINLINE ::serial::BasicScript* Arena::CreateMaybeMessage< ::serial::BasicScript >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::serial::BasicScript >(arena);
-}
-template<> PROTOBUF_NOINLINE ::serial::ExampleCameraScript* Arena::CreateMaybeMessage< ::serial::ExampleCameraScript >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::serial::ExampleCameraScript >(arena);
-}
-template<> PROTOBUF_NOINLINE ::serial::ExampleClockedScript* Arena::CreateMaybeMessage< ::serial::ExampleClockedScript >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::serial::ExampleClockedScript >(arena);
-}
-template<> PROTOBUF_NOINLINE ::serial::ExampleScript* Arena::CreateMaybeMessage< ::serial::ExampleScript >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::serial::ExampleScript >(arena);
-}
-template<> PROTOBUF_NOINLINE ::serial::CameraScript* Arena::CreateMaybeMessage< ::serial::CameraScript >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::serial::CameraScript >(arena);
-}
-template<> PROTOBUF_NOINLINE ::serial::ClockedScript* Arena::CreateMaybeMessage< ::serial::ClockedScript >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::serial::ClockedScript >(arena);
-}
-template<> PROTOBUF_NOINLINE ::serial::ReloadSceneScript* Arena::CreateMaybeMessage< ::serial::ReloadSceneScript >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::serial::ReloadSceneScript >(arena);
-}
 template<> PROTOBUF_NOINLINE ::serial::BasicGameObject* Arena::CreateMaybeMessage< ::serial::BasicGameObject >(Arena* arena) {
   return Arena::CreateMessageInternal< ::serial::BasicGameObject >(arena);
-}
-template<> PROTOBUF_NOINLINE ::serial::Position* Arena::CreateMaybeMessage< ::serial::Position >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::serial::Position >(arena);
 }
 template<> PROTOBUF_NOINLINE ::serial::Sprite_Scale* Arena::CreateMaybeMessage< ::serial::Sprite_Scale >(Arena* arena) {
   return Arena::CreateMessageInternal< ::serial::Sprite_Scale >(arena);

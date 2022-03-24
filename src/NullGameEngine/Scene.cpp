@@ -105,12 +105,16 @@ namespace null {
         }
     }
 
-    void Scene::deserialize(google::protobuf::Message* message) {
+    std::unique_ptr<Scene> Scene::deserialize(google::protobuf::Message* message) {
+
+        auto scene = std::make_unique<Scene>();
         auto msg = (serial::Scene*) message;
+
         for (auto i: msg->game_object()) {
-            auto new_go = std::make_shared<GameObject>();
-            new_go->deserialize(&i);
+            auto go = std::shared_ptr(GameObject::deserialize((google::protobuf::Message*) &i));
+            scene->addRootGameObject(std::move(go));
         }
+        return std::move(scene);
     }
 
 }

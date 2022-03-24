@@ -2,6 +2,16 @@
 
 #include <box2d/b2_math.h>
 #include <SFML/System/Vector2.hpp>
+#include <unordered_map>
+#include <GameObject.hpp>
+#include <typeindex>
+#include <ExampleScript.hpp>
+#include <PlayerAnimation.hpp>
+#include "Component.hpp"
+#include "ExampleCameraScript.hpp"
+#include "Weapon/StraightWeaponScript.hpp"
+#include <Weapon/BulletScript.hpp>
+#include <NetworkPlayerScript.hpp>
 
 namespace null {
     class Utility {
@@ -23,6 +33,8 @@ namespace null {
 
             return sf::Vector2<T>(x, y);
         }
+        const static std::unordered_map<serial::Script::ScriptInstanceCase, std::function<std::unique_ptr<Script>(google::protobuf::Message*)>>
+                scriptSerializationMap;
     };
 
 }

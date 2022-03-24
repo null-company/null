@@ -1,5 +1,6 @@
 syntax = "proto3";
 package serial;
+import "scripts.proto";
 
 message Scene{
   repeated GameObject game_object = 1;
@@ -14,26 +15,32 @@ message GameObject{
   }
 }
 
-message Script{
+message Script {
   oneof script_instance {
-    BasicScript basic_script = 1;
-    CameraScript camera_script = 2;
-    ClockedScript clocked_script = 3;
-    ReloadSceneScript reload_script = 4;
-    ExampleCameraScript example_camera_script = 5;
-    ExampleClockedScript example_clocked_script = 6;
-    ExampleScript example_script = 7;
-
+    PlayerAnimation player_animation = 1;
+    ExampleCameraScript example_camera_script = 2;
+    ExampleClockedScript example_clocked_script = 3;
+    ReloadSceneScript reload_scene_script = 4;
+    CameraScript camera_script = 5;
+    ButtonScript button_script = 6;
+    ClockedScript clocked_script = 7;
+    ExampleScript example_script = 8;
+    StraightWeaponScript straight_weapon_script = 9;
+    WeaponScript weapon_script = 10;
+    BulletScript bullet_script = 11;
+    NetworkPlayerScript network_player_script = 12;
+    CursorAnimation cursor_animation = 13;
   }
+  uint32 go_id = 14;
 }
 
-message BasicScript{}
-message ExampleCameraScript{}
-message ExampleClockedScript{}
-message ExampleScript{}
-message CameraScript{}
-message ClockedScript{}
-message ReloadSceneScript{}
+//message BasicScript{}
+//message ExampleCameraScript{}
+//message ExampleClockedScript{}
+//message ExampleScript{}
+//message CameraScript{}
+//message ClockedScript{}
+//message ReloadSceneScript{}
 
 message BasicGameObject{
   repeated GameObject children_objects = 1;
@@ -47,17 +54,13 @@ message BasicGameObject{
   uint32 id = 8;
 }
 
-message Position{
-  float x = 1;
-  float y = 2;
-}
 message Sprite{
   message Scale{
     float scale_x = 1;
     float scale_y = 2;
   }
   string texture_path = 1;
-  Position position = 2;
+  Vector2f position = 2;
   Scale scale = 5;
 }
 enum RenderLayer {

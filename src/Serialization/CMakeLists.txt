@@ -10,6 +10,10 @@ set(SRC
         ${INCROOT}/serializable.h
         ${INCROOT}/scene.pb.h
         ${SRCROOT}/scene.pb.cc
+        ${INCROOT}/scripts.pb.h
+        ${SRCROOT}/scripts.pb.cc
+        ${INCROOT}/box2d.pb.h
+        ${SRCROOT}/box2d.pb.cc
         )
 
 add_library(serialization STATIC ${SRC})

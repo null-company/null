@@ -28,5 +28,8 @@ namespace null {
 
         bool checkIfCanShoot();
         void saveShotInfo();
+
+        void serialize(google::protobuf::Message *message) { };
+        static std::unique_ptr<WeaponScript> deserialize(google::protobuf::Message *message) { };
     };
 };

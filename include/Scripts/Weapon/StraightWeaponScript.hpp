@@ -17,6 +17,9 @@ namespace null {
         void shoot(sf::Vector2f from, sf::Vector2f to) override;
 
         void setWeaponRotation();
+
+        void serialize(google::protobuf::Message *message) { };
+        static std::unique_ptr<StraightWeaponScript> deserialize(google::protobuf::Message *message) { };
     };
 }
 

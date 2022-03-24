@@ -7,6 +7,7 @@
 #include <GameObject.hpp>
 #include <Script.hpp>
 #include <ResourceManager.hpp>
+#include "Utility.hpp"
 
 namespace null {
     uint GameObject::maxId = 0;
@@ -238,7 +239,7 @@ namespace null {
         auto s_sprite = new serial::Sprite();
         s_sprite->set_texture_path(ResourceManager::getTexturePath(sprite.getTexture()));
 
-        auto s_pos = new serial::Position();
+        auto s_pos = new serial::Vector2f();
         s_pos->set_x(sprite.getPosition().x);
         s_pos->set_y(sprite.getPosition().y);
         s_sprite->set_allocated_position(s_pos);
@@ -265,43 +266,32 @@ namespace null {
         }
     }
 
-    void GameObject::deserialize(google::protobuf::Message *msg) {
+    std::unique_ptr<GameObject> GameObject::deserialize(google::protobuf::Message *msg) {
         auto s_go = dynamic_cast<serial::BasicGameObject*>(msg);
-        id = s_go->id();
-        renderLayer = s_go->render_layer();
-        visible = s_go->visible();
+        auto p_go = std::make_unique<GameObject>();
+        p_go->id = s_go->id();
+        p_go->renderLayer = s_go->render_layer();
+        p_go->visible = s_go->visible();
 
-        sprite.setTexture(*ResourceManager::loadTexture(s_go->sprite().texture_path()));
-        sprite.setPosition(s_go->sprite().position().x(), s_go->sprite().position().y());
-        sprite.setScale(s_go->sprite().scale().scale_x(), s_go->sprite().scale().scale_y());
+        p_go->sprite.setTexture(*ResourceManager::loadTexture(s_go->sprite().texture_path()));
+        p_go->sprite.setPosition(s_go->sprite().position().x(), s_go->sprite().position().y());
+        p_go->sprite.setScale(s_go->sprite().scale().scale_x(), s_go->sprite().scale().scale_y());
 
         for (auto& t: s_go->tags()) {
-            addTag(t);
+            p_go->addTag(t);
         }
 
         for (auto& s: s_go->children_scripts()) {
-            switch (s.script_instance_case()) {
-                case serial::Script::ScriptInstanceCase::kBasicScript:
-
-                    break;
-                case serial::Script::ScriptInstanceCase::kClockedScript:
-                    break;
-                case serial::Script::ScriptInstanceCase::kExampleCameraScript:
-                    break;
-                case serial::Script::ScriptInstanceCase::kExampleScript:
-                    break;
-                default:
-                    break;
-            }
-
-            //TODO how do we get Script types to do this???
+            auto deserializationFunc = Utility::scriptSerializationMap.at(s.script_instance_case());
+            auto actualScript = deserializationFunc((google::protobuf::Message*) &s);
+            p_go->addScript(std::move(actualScript));
         }
 
         for (auto& c: s_go->children_objects()) {
-            auto child = std::make_shared<GameObject>();
-            child->deserialize((google::protobuf::Message*) &c);
-            addChild(std::move(child));
+            p_go->addChild(deserialize((google::protobuf::Message*) &c));
         }
+
+        return std::move(p_go);
     }
 
 }
