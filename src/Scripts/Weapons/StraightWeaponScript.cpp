@@ -16,7 +16,7 @@ namespace null {
         gameObject.getSprite().setOrigin(sf::Vector2f(250, 150));
         gameObject.getSprite().setTexture(*weaponTexture);
         gameObject.getSprite().scale(0.24, 0.24);
-        gameObject.renderLayer = FOREGROUND2;
+        gameObject.renderLayer = serial::FOREGROUND2;
         gameObject.visible = true;
 //        gameObject.makeDynamic(gameObject.getScene().lock()->getBox2dWorld());
 

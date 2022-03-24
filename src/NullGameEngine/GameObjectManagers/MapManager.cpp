@@ -34,7 +34,7 @@ namespace null {
             wall->getSprite().setTextureRect(borderShapes[i]);
             wall->setPosition(pos[i]);
             wall->makeStatic(box2dWorld);
-            wall->renderLayer = FOREGROUND1;
+            wall->renderLayer = serial::FOREGROUND1;
             wall->visible = true;
             walls->addChild(std::move(wall));
         }

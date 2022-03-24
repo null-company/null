@@ -1,17 +1,23 @@
 #pragma once
 
 #include <NullGameEngine.hpp>
-#include <string>
+#include "scene.pb.h"
+#include "serializable.h"
+
 namespace null {
-    class Component {
+    class Component : public Serializable {
     protected:
         null::GameObject& gameObject;
     public:
-        Component(GameObject&);
+        explicit Component(GameObject &);
 
         virtual void start() {};
 
         virtual void update() {};
+
+        void serialize(google::protobuf::Message *message) override { };
+        void deserialize(google::protobuf::Message *message) override { };
+
     };
 }
 

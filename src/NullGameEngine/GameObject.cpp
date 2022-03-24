@@ -6,14 +6,15 @@
 
 #include <GameObject.hpp>
 #include <Script.hpp>
+#include <ResourceManager.hpp>
 
 namespace null {
-
+    uint GameObject::maxId = 0;
     constexpr static int meterToPixel = 100;
     constexpr static float pixelToMeter = 1.0f / static_cast<float>(meterToPixel);
     constexpr static double pi = 3.14159265358979323846;
 
-    GameObject::GameObject() : visible(false) {};
+    GameObject::GameObject(): visible(false), renderLayer(serial::BACKGROUND), id(maxId++) { };
 
     GameObject::~GameObject() {
         if (scene.lock()) {
@@ -25,8 +26,7 @@ namespace null {
 
     std::weak_ptr<GameObject> GameObject::addChild(std::shared_ptr<GameObject>&& child) {
         child->scene = scene;
-        auto parentwptr = weak_from_this();
-        child->parent = parentwptr;
+        child->parent = weak_from_this();
         children.push_back(child);
 
         return child;
@@ -87,10 +87,8 @@ namespace null {
         detachFromPhysicsWorld();
 
         b2BodyDef bodyDef;
-        b2BodyUserData userData;
-        userData.pointer = reinterpret_cast<uintptr_t>(this);
-        bodyDef.userData = userData;
         setRigidBodyDefPositionBySprite(bodyDef);
+        bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
         b2Body* rigidBody = box2dWorld.CreateBody(&bodyDef);
 
         b2PolygonShape shape;
@@ -106,9 +104,7 @@ namespace null {
 
         b2BodyDef bodyDef;
         bodyDef.type = b2_dynamicBody;
-        b2BodyUserData userData;
-        userData.pointer = reinterpret_cast<uintptr_t>(this);
-        bodyDef.userData = userData;
+        bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
         setRigidBodyDefPositionBySprite(bodyDef);
 
         b2Body* rigidBody = box2dWorld.CreateBody(&bodyDef);
@@ -208,7 +204,7 @@ namespace null {
         }
         if (rigidBody) {
             sf::Vector2f newPosition =
-                    meterToPixelVector<float>(rigidBody->GetPosition());
+                meterToPixelVector<float>(rigidBody->GetPosition());
             sprite.setPosition(newPosition);
             sprite.setRotation(rigidBody->GetAngle() * (180.0 / pi));
         }
@@ -224,6 +220,88 @@ namespace null {
 
     std::weak_ptr<GameObject> GameObject::getParent() const {
         return parent;
+    }
+
+    void GameObject::serialize(google::protobuf::Message* msg) {
+        auto new_msg = new serial::BasicGameObject();
+        new_msg->set_render_layer(renderLayer);
+        new_msg->set_id(id);
+        new_msg->set_visible(visible);
+        if (rigidBody) {
+            if (rigidBody->GetType() == b2_dynamicBody) {
+                new_msg->set_box2d_type(serial::DYNAMIC);
+            } else {
+                new_msg->set_box2d_type(serial::STATIC);
+            }
+        }
+
+        auto s_sprite = new serial::Sprite();
+        s_sprite->set_texture_path(ResourceManager::getTexturePath(sprite.getTexture()));
+
+        auto s_pos = new serial::Position();
+        s_pos->set_x(sprite.getPosition().x);
+        s_pos->set_y(sprite.getPosition().y);
+        s_sprite->set_allocated_position(s_pos);
+
+        auto s_scale = new serial::Sprite_Scale();
+        s_scale->set_scale_x(sprite.getScale().x);
+        s_scale->set_scale_y(sprite.getScale().y);
+        s_sprite->set_allocated_scale(s_scale);
+
+        new_msg->set_allocated_sprite(s_sprite);
+
+        for (auto& t: tags) {
+            new_msg->add_tags(t);
+        }
+
+        for (auto& script: scripts) {
+            auto s_script = new_msg->add_children_scripts();;
+            script->serialize(s_script);
+        }
+
+        for (auto& child: children) {
+            auto s_child = new_msg->add_children_objects();
+            child->serialize(s_child);
+        }
+    }
+
+    void GameObject::deserialize(google::protobuf::Message *msg) {
+        auto s_go = dynamic_cast<serial::BasicGameObject*>(msg);
+        id = s_go->id();
+        renderLayer = s_go->render_layer();
+        visible = s_go->visible();
+
+        sprite.setTexture(*ResourceManager::loadTexture(s_go->sprite().texture_path()));
+        sprite.setPosition(s_go->sprite().position().x(), s_go->sprite().position().y());
+        sprite.setScale(s_go->sprite().scale().scale_x(), s_go->sprite().scale().scale_y());
+
+        for (auto& t: s_go->tags()) {
+            addTag(t);
+        }
+
+        for (auto& s: s_go->children_scripts()) {
+            switch (s.script_instance_case()) {
+                case serial::Script::ScriptInstanceCase::kBasicScript:
+
+                    break;
+                case serial::Script::ScriptInstanceCase::kClockedScript:
+                    break;
+                case serial::Script::ScriptInstanceCase::kExampleCameraScript:
+                    break;
+                case serial::Script::ScriptInstanceCase::kExampleScript:
+                    break;
+                default:
+                    break;
+            }
+
+            //TODO how do we get Script types to do this???
+        }
+
+        for (auto& c: s_go->children_objects()) {
+            auto child = std::make_shared<GameObject>();
+            child->deserialize((google::protobuf::Message*) &c);
+            addChild(std::move(child));
+        }
     }
 
 }

@@ -10,7 +10,7 @@
 #include "WindowMetaInfo.hpp"
 
 namespace null {
-    class Scene : public std::enable_shared_from_this<Scene> {
+    class Scene : public std::enable_shared_from_this<Scene>, Serializable {
     private:
         mutable WindowMetaInfo windowMetaInfo;
         mutable std::shared_ptr<GameObject> camera = std::make_shared<GameObject>(std::set<std::string>({"camera"}));
@@ -20,7 +20,7 @@ namespace null {
         Scene();
 
         void objectTreeForEachDo(GameObject&,
-                                 std::function<void(GameObject&)>) const;
+                std::function<void(GameObject&)>) const; 
 
         void sceneTreeForEachDo(std::function<void(GameObject&)>) const;
 
@@ -42,6 +42,10 @@ namespace null {
         friend Renderer;
 
         friend SceneLoader;
+
+        void serialize(google::protobuf::Message*) override;
+
+        void deserialize(google::protobuf::Message*) override;
 
         WindowMetaInfo& getWindowMetaInfo() const;
     };

@@ -68,7 +68,7 @@ message(STATUS "box2d downloaded")
 
 add_subdirectory(./src/)
 add_subdirectory(./test/)
-add_executable(NULL_GAME main.cpp)
+add_executable(NULL_GAME main.cpp include/Serialization/Serializer.cpp include/Serialization/Serializer.hpp)
 
 
 target_link_libraries(NULL_GAME

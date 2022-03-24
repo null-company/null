@@ -11,18 +11,21 @@
 #include <Script.hpp>
 #include <RenderLayer.hpp>
 #include <algorithm>
+#include "serializable.h"
 
 enum class GameObjectStatus {
     NONE, RUNNING, DEATCHED
 };
 namespace null {
 
-    class GameObject : public std::enable_shared_from_this<GameObject> {
+    class GameObject : public std::enable_shared_from_this<GameObject>, Serializable {
     private:
         void assertSpriteHasSize();
         void setRigidBodyDefPositionBySprite(b2BodyDef&);
         void setShapeAsBoxBySprite(b2PolygonShape&);
         std::weak_ptr<Scene> scene;
+        uint id;
+        static uint maxId;
     protected:
         sf::Sprite sprite;
         b2Body* rigidBody = nullptr;
@@ -107,6 +110,9 @@ namespace null {
             }
             return nullptr;
         }
+
+        void serialize(google::protobuf::Message *) override;
+        void deserialize(google::protobuf::Message *) override;
 
         friend Scene;
     };

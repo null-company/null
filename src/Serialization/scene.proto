@@ -2,7 +2,7 @@ syntax = "proto3";
 package serial;
 
 message Scene{
-  GameObject game_object = 1;
+  repeated GameObject game_object = 1;
   Camera camera = 2;
 }
 message Camera{}
@@ -39,11 +39,12 @@ message BasicGameObject{
   repeated GameObject children_objects = 1;
   repeated Script children_scripts = 2;
   repeated string tags = 3;
-  RenderLayer render_layer = 7;
   Sprite sprite = 4;
   bool visible = 5;
   //TODO Need to be refactored since now it connect objects only to main window
   Box2DType box2d_type = 6;
+  RenderLayer render_layer = 7;
+  uint32 id = 8;
 }
 
 message Position{

@@ -11,6 +11,8 @@ namespace null {
         static std::map<std::string, sf::Texture *> textureMap;
     public:
         static sf::Texture *loadTexture(const std::string &filename);
+
+        static std::string getTexturePath(const sf::Texture* p_texture);
     };
 }
 

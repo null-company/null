@@ -97,5 +97,21 @@ namespace null {
         return windowMetaInfo;
     }
 
+    void Scene::serialize(google::protobuf::Message* message) {
+        auto msg = (serial::Scene*) message;
+        for (auto& i: rootGameObjects) {
+            auto s_go = msg->add_game_object();
+            i->serialize(s_go);
+        }
+    }
+
+    void Scene::deserialize(google::protobuf::Message* message) {
+        auto msg = (serial::Scene*) message;
+        for (auto i: msg->game_object()) {
+            auto new_go = std::make_shared<GameObject>();
+            new_go->deserialize(&i);
+        }
+    }
+
 }
 

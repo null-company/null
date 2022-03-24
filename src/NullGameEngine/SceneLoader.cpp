@@ -1,7 +1,7 @@
 #include <memory>
 
 #include <box2d/box2d.h>
-
+        
 #include <Scene.hpp>
 #include <SceneLoader.hpp>
 #include <MainLoop.hpp>
@@ -64,7 +64,7 @@ namespace null {
         auto nullGameLogo = std::make_shared<GameObject>();
         nullGameLogo->getSprite().setTexture(*nullTexture);
         nullGameLogo->getSprite().setScale({8.0f, 8.0f});
-        nullGameLogo->renderLayer = BACKGROUND;
+        nullGameLogo->renderLayer = serial::BACKGROUND;
         nullGameLogo->visible = true;
 
         auto boxTexture = ResourceManager::loadTexture("box.png");
@@ -73,7 +73,7 @@ namespace null {
         boxObject->getSprite().setTexture(*boxTexture);
         boxObject->getSprite().setScale(0.125f, 0.125f);
         boxObject->setPosition(200, 0);
-        boxObject->renderLayer = FOREGROUND;
+        boxObject->renderLayer = serial::FOREGROUND;
         boxObject->visible = true;
 
         auto boxObject2 = std::make_shared<GameObject>();
@@ -81,7 +81,7 @@ namespace null {
         boxObject2->getSprite().setScale(0.125f, 0.125f);
         boxObject2->setPosition(750.0f, 200.0f);
         boxObject2->getSprite().setColor(sf::Color(255U, 0U, 0U));
-        boxObject2->renderLayer = BACKGROUND1;
+        boxObject2->renderLayer = serial::BACKGROUND1;
         boxObject2->visible = true;
         auto createGround = [&box2dWorld, &newScene](float x, float y) {
             auto groundObject = std::make_shared<GameObject>();
@@ -89,7 +89,7 @@ namespace null {
             groundSprite.setTexture(*ResourceManager::loadTexture("platform.png"));
             groundSprite.setScale(3.0f, 3.0f);
             groundSprite.setPosition(x, y);
-            groundObject->renderLayer = FOREGROUND;
+            groundObject->renderLayer = serial::FOREGROUND;
             groundObject->visible = true;
             groundObject->makeStatic(box2dWorld);
             groundObject->addScript<ReloadSceneScript>(*groundObject);
@@ -111,7 +111,7 @@ namespace null {
         auto spriteSheet = SpriteSheet("cursorAnim.png", sf::Vector2i(16, 16), {{"cursorAnim", 0, 0, 5}});
         cursorObject->addScript<CursorAnimation>(*cursorObject, spriteSheet);
         cursorObject->getSprite().setScale(4.0f, 4.0f);
-        cursorObject->renderLayer = FOREGROUND;
+        cursorObject->renderLayer = serial::FOREGROUND;
         cursorObject->visible = true;
 
         auto player = std::make_shared<GameObject>();
@@ -119,7 +119,7 @@ namespace null {
         player->getSprite().setScale(3.0f, 3.0f);
 //        player->setPosition(300, 300);
         player->visible = true;
-        player->renderLayer = FOREGROUND1;
+        player->renderLayer = serial::FOREGROUND1;
         player->makeDynamic(box2dWorld);
         player->getRigidBody()->SetFixedRotation(true);
         auto playerSpriteSheet = SpriteSheet("playerAnim_v2.png", {30, 54}, {{"idle",      0, 0, 7},
@@ -162,7 +162,9 @@ namespace null {
         MapManager mapManager(box2dWorld);
         newScene->addRootGameObject(std::move(mapManager.makeBorder(nullGameLogo->getSprite())));
         nullGameLogo->addChild(std::move(boxObject));
+        //nullGameLogo->addChild(std::move(boxObject2));
         newScene->addRootGameObject(std::move(nullGameLogo));
+        //newScene->addRootGameObject(std::move(cursorObject));
         newScene->addRootGameObject(std::move(player));
         return newScene;
     }
@@ -192,14 +194,14 @@ namespace null {
         auto background = std::make_shared<GameObject>();
         background->getSprite().setTexture(*nullTexture);
         background->getSprite().setPosition({0, 0});
-        background->renderLayer = BACKGROUND;
+        background->renderLayer = serial::BACKGROUND;
         background->visible = true;
 
         auto cursorObject = std::make_shared<GameObject>(std::set<std::string>({"cursor"}));
 
         auto spriteSheet = SpriteSheet("cursorAnim.png", sf::Vector2i(16, 16), {{"cursorAnim", 0, 0, 5}});
         cursorObject->addScript<CursorAnimation>(*cursorObject, spriteSheet);
-        cursorObject->renderLayer = FOREGROUND3;
+        cursorObject->renderLayer = serial::FOREGROUND3;
         cursorObject->addTag("cursor");
         cursorObject->visible = true;
         cursorObject->getSprite().setScale(0.1f, 0.1f);
@@ -215,7 +217,7 @@ namespace null {
         playButton->addScript<ButtonScript>(*playButton, *playButtonTexture, *pressedTexture, []() -> void {
             SceneLoader::changeScene("/demo");
         });
-        playButton->renderLayer = FOREGROUND;
+        playButton->renderLayer = serial::FOREGROUND;
         playButton->visible = true;
 
         auto exitButton = std::make_shared<GameObject>();
@@ -224,7 +226,7 @@ namespace null {
         exitButton->addScript<ButtonScript>(*exitButton, *exitButtonTexture, *pressedTexture, []() -> void {
             std::exit(0);
         });
-        exitButton->renderLayer = FOREGROUND;
+        exitButton->renderLayer = serial::FOREGROUND;
         exitButton->visible = true;
 
 
@@ -233,7 +235,7 @@ namespace null {
         optionsButton->setPosition(320, 490);
         optionsButton->addScript<ButtonScript>(*optionsButton, *optionsButtonTexture, *pressedTexture,
                                                []() -> void {});
-        optionsButton->renderLayer = FOREGROUND;
+        optionsButton->renderLayer = serial::FOREGROUND;
         optionsButton->visible = true;
 
 
