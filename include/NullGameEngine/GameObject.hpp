@@ -109,6 +109,8 @@ namespace null {
         }
 
         friend Scene;
+
+        void makeDynamic();
     };
 
 }

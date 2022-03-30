@@ -6,6 +6,7 @@
 
 #include <GameObject.hpp>
 #include <Script.hpp>
+#include <Scene.hpp>
 
 namespace null {
 
@@ -100,6 +101,10 @@ namespace null {
         this->rigidBody = rigidBody;
     }
 
+    void GameObject::makeDynamic() {
+        makeDynamic(getScene().lock()->getBox2dWorld());
+    }
+
     void GameObject::makeDynamic(b2World& box2dWorld) {
         assertSpriteHasSize();
         detachFromPhysicsWorld();
@@ -184,7 +189,7 @@ namespace null {
         }
     }
 
-    void GameObject::setPosition(const sf::Vector2f &pos) {
+    void GameObject::setPosition(const sf::Vector2f& pos) {
         sprite.setPosition(pos);
         if (rigidBody) {
             b2Vec2 newPosition = pixelToMetersVector(pos);

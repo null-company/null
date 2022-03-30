@@ -13,14 +13,13 @@ namespace null {
         using clock = std::chrono::steady_clock;
         using time_point = std::chrono::time_point<clock>;
 
-    private:
+    protected:
         mills restartTime = 100ms;
         time_point lastShot;
 
         std::random_device rd{};
         std::mt19937 gen{rd()};
         std::normal_distribution<> d{0, 0};
-
     public:
         explicit WeaponScript(GameObject& object);
 

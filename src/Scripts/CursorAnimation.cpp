@@ -24,7 +24,6 @@ namespace null {
 
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             auto rigidBody = gameObject.getRigidBody();
-            std::cout << rigidBody->GetPosition().x << " " << rigidBody->GetPosition().y << std::endl;
             if (rigidBody == nullptr) {
                 return;
             }
