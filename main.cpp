@@ -24,7 +24,7 @@ int main() {
     XInitThreads();
 #endif //__linux
 
-    std::string mainMenu = "/menu";
+    std::string mainMenu = "/demo";
 
     null::SceneLoader::loadSceneFromFile(mainMenu);
 
