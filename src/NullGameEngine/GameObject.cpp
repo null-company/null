@@ -3,7 +3,7 @@
 #include <box2d/box2d.h>
 #include <box2d/b2_math.h>
 #include <box2d/b2_body.h>
-
+#include <iostream>
 #include <GameObject.hpp>
 #include <Script.hpp>
 #include <Scene.hpp>
@@ -145,11 +145,23 @@ namespace null {
         return result;
     }
 
+    void GameObject::deleteChild(GameObject* childToDelete) {
+        auto it = std::remove_if(children.begin(), children.end(), [childToDelete](auto child) {
+            return &*child == childToDelete;
+        });
+
+        children.erase(it, children.end());
+    }
+
+    void GameObject::deleteMe() {
+        parent.lock()->deleteChild(this);
+    }
+
     std::weak_ptr<GameObject> GameObject::getChild(int index) {
         return children[index];
     }
 
-    // todo concern pointer leakage
+    // todo concern pointer leakage // todo todo todo todo todo я люблю когда волосатые мужики обмазываются маслом
     std::vector<std::unique_ptr<Script>>& GameObject::getScripts() {
         return scripts;
     }
@@ -189,6 +201,24 @@ namespace null {
         }
     }
 
+    GameObject* GameObject::getCollied() {
+        auto body = getRigidBody();
+        auto contactList = rigidBody->GetContactList();
+        for (b2ContactEdge* edge = contactList; edge; edge = edge->next) {
+            auto go1 = reinterpret_cast<GameObject*>(edge->contact->GetFixtureA()->GetBody()->GetUserData().pointer);
+            auto go2 = reinterpret_cast<GameObject*>(edge->contact->GetFixtureB()->GetBody()->GetUserData().pointer);
+            if (go1 == this) {
+                std::cout << "go2 returned" << std::endl;
+                return go2;
+            } else {
+                std::cout << "go1 returned" << std::endl;
+                return go1;
+            }
+        }
+        return nullptr;
+
+    }
+
     void GameObject::setPosition(const sf::Vector2f& pos) {
         sprite.setPosition(pos);
         if (rigidBody) {
@@ -196,6 +226,7 @@ namespace null {
             rigidBody->SetTransform(newPosition, rigidBody->GetAngle());
         }
     }
+
 
     void GameObject::start() {
         gameObjectStatus = GameObjectStatus::RUNNING;
@@ -229,6 +260,14 @@ namespace null {
 
     std::weak_ptr<GameObject> GameObject::getParent() const {
         return parent;
+    }
+
+    const std::string& GameObject::getName() const {
+        return name;
+    }
+
+    void GameObject::setName(const std::string& name) {
+        GameObject::name = name;
     }
 
 }

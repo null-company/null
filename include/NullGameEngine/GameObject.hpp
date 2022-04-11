@@ -20,9 +20,18 @@ namespace null {
     class GameObject : public std::enable_shared_from_this<GameObject> {
     private:
         void assertSpriteHasSize();
+
         void setRigidBodyDefPositionBySprite(b2BodyDef&);
+
         void setShapeAsBoxBySprite(b2PolygonShape&);
+
         std::weak_ptr<Scene> scene;
+        std::string name;
+    public:
+        const std::string& getName() const;
+
+        void setName(const std::string& name);
+
     protected:
         sf::Sprite sprite;
         b2Body* rigidBody = nullptr;
@@ -85,14 +94,14 @@ namespace null {
 
         void setPosition(float x, float y);
 
-        void setPosition(const sf::Vector2f &pos);
+        void setPosition(const sf::Vector2f& pos);
 
         void addScript(std::unique_ptr<Script> script);
 
         template<class T, typename... Args>
-        void addScript(Args&&... args) {
+        void addScript(Args&& ... args) {
             auto script =
-                std::make_unique<T>(std::forward<Args>(args)...);
+                    std::make_unique<T>(std::forward<Args>(args)...);
             scripts.push_back(std::move(script));
         }
 
@@ -111,6 +120,12 @@ namespace null {
         friend Scene;
 
         void makeDynamic();
+
+        void deleteChild(GameObject* childToDelete);
+
+        void deleteMe();
+
+        GameObject* getCollied();
     };
 
 }

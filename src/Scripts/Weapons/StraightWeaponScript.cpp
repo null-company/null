@@ -59,8 +59,11 @@ namespace null {
 
     void StraightWeaponScript::shoot(sf::Vector2f from, sf::Vector2f to) {
         saveShotInfo();
+        static int i = 0;
         auto bullet = std::make_shared<GameObject>();
+        bullet->setName(std::string("Bullet: ") + std::to_string(i++));
         bullet->addScript<BulletScript>(*bullet, from, gameObject.getSprite().getRotation() + d(gen), speed);
+
         gameObject.addChild(std::move(bullet));
 
 
