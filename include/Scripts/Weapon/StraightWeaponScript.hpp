@@ -6,8 +6,8 @@
 namespace null {
     class StraightWeaponScript : public WeaponScript {
     private:
-        double speed = 10;
-        b2RevoluteJoint* joint;
+        double speed = 5;
+
     public:
         explicit StraightWeaponScript(GameObject& object, double deviance);
 

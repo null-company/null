@@ -23,9 +23,8 @@ namespace null {
 
     void null::BulletScript::update() {
         Component::update();
-        auto collied = gameObject.getCollied();
-        if (collied != nullptr) {
-            std::cout << collied->getName() << std::endl;
+        if (contactedGameObject) {
+            std::cout << contactedGameObject->getName() << std::endl;
             gameObject.deleteMe();
             std::cout << gameObject.getParent().lock()->getChildren().size() << std::endl;
         }

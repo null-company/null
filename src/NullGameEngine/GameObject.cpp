@@ -207,6 +207,9 @@ namespace null {
         for (b2ContactEdge* edge = contactList; edge; edge = edge->next) {
             auto go1 = reinterpret_cast<GameObject*>(edge->contact->GetFixtureA()->GetBody()->GetUserData().pointer);
             auto go2 = reinterpret_cast<GameObject*>(edge->contact->GetFixtureB()->GetBody()->GetUserData().pointer);
+            if (!edge->contact->IsTouching()) {
+                return nullptr;
+            }
             if (go1 == this) {
                 std::cout << "go2 returned" << std::endl;
                 return go2;

@@ -9,6 +9,7 @@
 #include <NetworkPlayerScript.hpp>
 #include <exceptions/NetworkException.h>
 #include <iostream>
+#include "Physics/ContactListener.hpp"
 
 namespace null {
 
@@ -34,10 +35,10 @@ namespace null {
         window = &sfmlWin;
         sfmlWin.setFramerateLimit(MAX_FRAMERATE);
         sfmlWin.setMouseCursorVisible(false);
-
+        scene->getBox2dWorld().SetContactListener(new ContactListener());
         std::unordered_set<uint> gg;
 
-sceneStart:
+        sceneStart:
         scene->start();
 
         try {
@@ -51,7 +52,7 @@ sceneStart:
                         case sf::Event::EventType::Closed:
                             sfmlWin.close();
                             break;
-                        case sf::Event::Resized:{
+                        case sf::Event::Resized: {
                             break;
                         }
                         default:
