@@ -43,6 +43,7 @@ target_include_directories(scripts
 target_link_libraries(scripts
         nullGameEngine
         network
+        graphic-utils
         sfml-graphics
         sfml-audio
         sfml-network
