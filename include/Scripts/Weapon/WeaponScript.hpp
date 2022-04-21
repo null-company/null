@@ -1,6 +1,6 @@
 #pragma once
 
-#include<Script.hpp>
+#include <Script.hpp>
 #include <SFML/Graphics.hpp>
 #include <chrono>
 #include <random>
@@ -19,7 +19,7 @@ namespace null {
 
         std::random_device rd{};
         std::mt19937 gen{rd()};
-        std::normal_distribution<> d{0, 0};
+        std::normal_distribution<> d{0, 0.5};
     public:
         explicit WeaponScript(GameObject& object);
 
@@ -28,4 +28,4 @@ namespace null {
         bool checkIfCanShoot();
         void saveShotInfo();
     };
-};
+}
