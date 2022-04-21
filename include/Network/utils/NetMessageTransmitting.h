@@ -1,6 +1,6 @@
 #pragma once
 
-#include <serverConfig.pb.h>
+#include "serialized/serverConfig.pb.h"
 #include <SFML/Network.hpp>
 
 net::NetMessage receiveNetMessage(sf::TcpSocket &socket);

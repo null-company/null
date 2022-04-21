@@ -2,8 +2,9 @@
 
 #include <SFML/Network.hpp>
 #include <list>
+
 #include "GameServer.h"
-#include "serverConfig.pb.h"
+#include "serialized/serverConfig.pb.h"
 #include "NetClientCollector.h"
 
 class ServerArbiter : public NetClientCollector {

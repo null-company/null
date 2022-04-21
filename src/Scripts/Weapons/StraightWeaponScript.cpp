@@ -16,7 +16,7 @@ namespace null {
         sf::Texture* weaponTexture = ResourceManager::loadTexture("weapon.png");
         gameObject.getSprite().setOrigin(sf::Vector2f(250, 150));
         gameObject.getSprite().setTexture(*weaponTexture);
-        gameObject.getSprite().scale(0.24, 0.24);
+        gameObject.getSprite().scale(0.24f, 0.24f);
         gameObject.renderLayer = FOREGROUND2;
         gameObject.visible = true;
 //        gameObject.makeDynamic(gameObject.getScene().lock()->getBox2dWorld());
@@ -35,7 +35,7 @@ namespace null {
             return;
         }
         auto& winInfo = gameObject.getScene().lock()->getWindowMetaInfo();
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) and checkIfCanShoot()) {
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && checkIfCanShoot()) {
             shoot(gameObject.getPosition(), scene->getWindowMetaInfo().absoluteMouseWorldCoords);
         }
         auto coords = parent->getPosition() + sf::Vector2f(70, 70);
