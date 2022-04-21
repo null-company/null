@@ -19,7 +19,7 @@ namespace null {
 
         std::random_device rd{};
         std::mt19937 gen{rd()};
-        std::normal_distribution<> d{0, 0};
+        std::normal_distribution<> d{0, 0.1};
     public:
         explicit WeaponScript(GameObject& object);
 

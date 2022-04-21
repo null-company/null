@@ -45,15 +45,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(plog)
 FetchContent_GetProperties(plog)
 
-# YAML
-FetchContent_Declare(
-        yaml-cpp
-        GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
-        GIT_TAG yaml-cpp-0.6.3
-)
-set(YAML_CPP_BUILD_TESTS OFF)
-FetchContent_MakeAvailable(yaml-cpp)
-
 message(STATUS "SFML downloaded")
 
 FetchContent_Declare(
@@ -76,7 +67,6 @@ target_link_libraries(NULL_GAME
         nullGameEngine
         sfml-network
         network
-        yaml-cpp
         serialization
         sfml-graphics
         sfml-audio
