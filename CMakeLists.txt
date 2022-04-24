@@ -32,5 +32,3 @@ target_link_libraries(NULL_GAME
         sfml-window
         sfml-system
         )
-
-
