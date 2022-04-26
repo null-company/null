@@ -50,9 +50,9 @@ target_include_directories(network
         )
 protobuf_generate(TARGET network)
 
-add_executable(SERVER server.cpp)
+add_executable(server server.cpp)
 
-target_link_libraries(SERVER
+target_link_libraries(server
         network
         )
 target_link_libraries(network

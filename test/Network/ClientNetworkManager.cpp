@@ -38,6 +38,8 @@
 //}
 
 TEST(NetworkClientManager, subtest) {
+    using namespace std::chrono_literals;
+
     ServerArbiter serverArbiter;
     int port = rand() % 23 + 5000;
     serverArbiter.listen("127.0.0.1", port);
@@ -72,7 +74,7 @@ TEST(NetworkClientManager, subtest) {
     sendNetMessage(client2.getClient().getGameServerSocket(), netMessage);
     client2.getClient();
 
-    sleep(1);
+    std::this_thread::sleep_for(1s);
 
     try {
         while (true) {
