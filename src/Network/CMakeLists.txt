@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-find_package(Protobuf CONFIG REQUIRED)
+find_package(Protobuf REQUIRED)
 
 set(INCROOT ${PROJECT_SOURCE_DIR}/include/Network/)
 set(SRCROOT ${PROJECT_SOURCE_DIR}/src/Network/)
