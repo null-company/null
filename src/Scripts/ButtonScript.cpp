@@ -2,7 +2,6 @@
 #include <Script.hpp>
 #include <GameObject.hpp>
 #include <Scene.hpp>
-#include <iostream>
 
 namespace null {
 
@@ -12,12 +11,11 @@ namespace null {
         sprite->setTexture(unpressedButtonTexture);
         gameObject.makeStatic(gameObject.getScene().lock()->getBox2dWorld());
         rigidBody = gameObject.getRigidBody();
-        std::cout << rigidBody->GetPosition().x << " " << rigidBody->GetPosition().y << std::endl;
         rigidBody->GetFixtureList()->SetSensor(true);
     }
 
     void ButtonScript::update() {
-        // only the head of the list is checked under the assumtion that
+        // only the head of the list is checked under the assumption that
         // this script is used for menus
         auto contactList = rigidBody->GetContactList();
         bool cursorIsHovered = false;
@@ -35,7 +33,6 @@ namespace null {
     ButtonScript::ButtonScript(GameObject& gameObject, sf::Texture unpressedButtonTexture,
                                sf::Texture pressedButtonTexture, const std::function<void()> callback) :
             Script(gameObject), unpressedButtonTexture(unpressedButtonTexture),
-            pressedButtonTexture(pressedButtonTexture), callback(callback) {};
+            pressedButtonTexture(pressedButtonTexture), callback(callback) {}
 
 }
-
