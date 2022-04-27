@@ -5,7 +5,7 @@
 #include "Scene.hpp"
 #include "box2d/box2d.h"
 #include "Weapon/BulletScript.hpp"
-#include "Vector.hpp"
+#include "Graphic/Vector.hpp"
 
 namespace null {
     void StraightWeaponScript::start() {

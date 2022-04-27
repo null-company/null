@@ -33,7 +33,7 @@ set(SRC
         ${INCROOT}/Weapon/WeaponScript.hpp
         ${SRCROOT}/Weapons/BulletScript.cpp
         ${INCROOT}/Weapon/BulletScript.hpp
-        )
+        Weapons/GrenadeBunchScript.cpp ../../include/Scripts/Weapon/GrenadeScript.hpp Weapons/GrenadeScript.cpp ../../include/Scripts/Weapon/GrenadeScript.hpp Weapons/WeaponStorage.cpp ../../include/Scripts/Weapon/WeaponStorage.hpp)
 
 add_library(scripts STATIC ${SRC})
 target_include_directories(scripts
@@ -43,7 +43,7 @@ target_include_directories(scripts
 target_link_libraries(scripts
         nullGameEngine
         network
-        graphic-utils
+        utils
         sfml-graphics
         sfml-audio
         sfml-network

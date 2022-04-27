@@ -16,7 +16,7 @@
 #include "Weapon/WeaponScript.hpp"
 #include "Weapon/StraightWeaponScript.hpp"
 #include <MapManager/MapManager.hpp>
-
+#include <Weapon/GrenadeBunchScript.hpp>
 namespace null {
 
     // todo this is a dummy implementation
@@ -127,7 +127,7 @@ namespace null {
                                                                              {"walkLeft",  2, 0, 3}});
 
         auto weapon = std::make_shared<GameObject>();
-        weapon->addScript<StraightWeaponScript>(*weapon, 5);
+        weapon->addScript<GrenadeBunchScript>(*weapon);
 
         player->addChild(std::move(weapon));
         newScene->camera->getScript<ExampleCameraScript>()->setTrackedGameObject(*player);

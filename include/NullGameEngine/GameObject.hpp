@@ -71,6 +71,10 @@ namespace null {
 
         void makeDynamic(b2World& box2dWorld);
 
+        void setCollisionCategories(uint16_t categoryBits);
+
+        void setCollisionMasks(uint16_t maskBits);
+
         void detachFromPhysicsWorld();
 
         // Returns the children of this GameObject
@@ -126,6 +130,8 @@ namespace null {
         void deleteMe();
 
         GameObject* getCollied();
+
+        Scene& getSceneForce();
     };
 
 }

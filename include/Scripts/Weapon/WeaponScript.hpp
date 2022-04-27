@@ -26,6 +26,8 @@ namespace null {
         virtual void shoot(sf::Vector2f from, sf::Vector2f to) = 0;
 
         bool checkIfCanShoot();
+
         void saveShotInfo();
+
     };
 };

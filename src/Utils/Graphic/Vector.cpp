@@ -1,4 +1,4 @@
-#include <Vector.hpp>
+#include "Graphic/Vector.hpp"
 #include <cmath>
 
 sf::Vector2f null::normalize(sf::Vector2f vector) {

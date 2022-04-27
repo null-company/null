@@ -37,6 +37,10 @@ namespace null {
         return scene;
     }
 
+    Scene& GameObject::getSceneForce() {
+        return *scene.lock();
+    }
+
     sf::Sprite& GameObject::getSprite() {
         return sprite;
     }
@@ -271,6 +275,18 @@ namespace null {
 
     void GameObject::setName(const std::string& name) {
         GameObject::name = name;
+    }
+
+    void GameObject::setCollisionCategories(uint16_t categoryBits) {
+        b2Filter b2Filter = this->getRigidBody()->GetFixtureList()->GetFilterData();
+        b2Filter.categoryBits = categoryBits;
+        this->getRigidBody()->GetFixtureList()->SetFilterData(b2Filter);
+    }
+
+    void GameObject::setCollisionMasks(uint16_t maskBits) {
+        b2Filter b2Filter = this->getRigidBody()->GetFixtureList()->GetFilterData();
+        b2Filter.maskBits = maskBits;
+        this->getRigidBody()->GetFixtureList()->SetFilterData(b2Filter);
     }
 
 }

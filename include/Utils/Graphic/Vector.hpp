@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
+#include "_deps/sfml-src/include/SFML/Graphics.hpp"
 
 namespace null {
     sf::Vector2f normalize(sf::Vector2f vector);

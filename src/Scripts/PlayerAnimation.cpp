@@ -4,8 +4,9 @@
 #include <utility>
 #include <iostream>
 #include <MainLoop.hpp>
+#include "Physics/CollisionCategories.hpp"
 
-namespace  null {
+namespace null {
     void PlayerAnimation::start() {
         spriteSheet.setAnimation("walkRight");
         RigidBodyAnimation::update();
@@ -24,8 +25,13 @@ namespace  null {
 
                 auto* otherRb = contact->other;
                 auto* otherGo = (GameObject*) otherRb->GetUserData().pointer;
-                if (otherRb->GetWorldCenter().y - Utility::pixelToMetersVector<float>({0, otherGo->getSprite().getTextureRect().height * otherGo->getSprite().getScale().y}).y / 2 + 1 >
-                    rb->GetWorldCenter().y + Utility::pixelToMetersVector<float>({0, gameObject.getSprite().getTextureRect().height * gameObject.getSprite().getScale().y}).y / 2) {
+                if (otherRb->GetWorldCenter().y - Utility::pixelToMetersVector<float>(
+                        {0, otherGo->getSprite().getTextureRect().height * otherGo->getSprite().getScale().y}).y / 2 +
+                    1 >
+                    rb->GetWorldCenter().y + Utility::pixelToMetersVector<float>({0,
+                                                                                  gameObject.getSprite().getTextureRect().height *
+                                                                                  gameObject.getSprite().getScale().y}).y /
+                                             2) {
                     canJump = true;
                     rb->SetLinearVelocity({rb->GetLinearVelocity().x, 0});
                     break;
@@ -64,7 +70,8 @@ namespace  null {
         fram++;
         if (fram >= 3) {
             fram = 0;
-            spriteSheet.setFrame(spriteSheet.currFrame == spriteSheet.currAnimation->end ? 0 : spriteSheet.currFrame + 1);
+            spriteSheet.setFrame(
+                    spriteSheet.currFrame == spriteSheet.currAnimation->end ? 0 : spriteSheet.currFrame + 1);
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && canJump) {
@@ -72,10 +79,15 @@ namespace  null {
             canJump = false;
         }
         RigidBodyAnimation::update();
+        if (gameObject.getRigidBody()->GetFixtureList() != nullptr) {
+            gameObject.setCollisionCategories(PLAYER_CATEGORY);
+            gameObject.setCollisionMasks(ALL_CATEGORIES & ~GRENADE_CATEGORY);
+        }
     }
 
     PlayerAnimation::PlayerAnimation(GameObject& gameObject, SpriteSheet& spriteSheet,
-                                     const std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>>& map) :
-            RigidBodyAnimation(gameObject, spriteSheet, map) { }
+                                     const std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>>& map)
+            :
+            RigidBodyAnimation(gameObject, spriteSheet, map) {}
 
 }
