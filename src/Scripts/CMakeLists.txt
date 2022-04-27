@@ -33,6 +33,8 @@ set(SRC
         ${INCROOT}/Weapon/WeaponScript.hpp
         ${SRCROOT}/Weapons/BulletScript.cpp
         ${INCROOT}/Weapon/BulletScript.hpp
+        ${SRCROOT}/PlayerControlledBox/PlayerControlledBox.cpp
+        ${INCROOT}/PlayerControlledBox/PlayerControlledBox.hpp
         )
 
 add_library(scripts STATIC ${SRC})

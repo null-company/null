@@ -1,4 +1,6 @@
 #include <memory>
+#include <functional>
+#include <unordered_map>
 
 #include <box2d/box2d.h>
 
@@ -10,23 +12,16 @@
 #include <ResourceManager.hpp>
 #include <PlayerAnimation.hpp>
 #include <Utility.hpp>
-#include <functional>
-#include <unordered_map>
-#include "MapManager/MapManager.hpp"
-#include "Weapon/WeaponScript.hpp"
-#include "Weapon/StraightWeaponScript.hpp"
 #include <MapManager/MapManager.hpp>
+#include <Weapon/StraightWeaponScript.hpp>
+#include <PlayerControlledBox/PlayerControlledBox.hpp>
 
 namespace null {
 
     // todo this is a dummy implementation
     // later reimplement this by loading stuff from file 
     // and using a resource manager
-    void SceneLoader::loadSceneFromFile(std::filesystem::path path) {
-
-        enum Level {
-            Demo, Menu
-        };
+    void SceneLoader::loadSceneFromFile(const std::filesystem::path &path) {
 
         // a temporary solution to get a scene by keyword
         // while we don't store them in files
@@ -38,17 +33,33 @@ namespace null {
                 {"/menu/play",            getPlayScene},
                 {"/menu/play/createRoom", getCreateRoomScene},
                 {"/menu/play/joinRoom",   getJoinRoomScene},
-                {"/game",                 getGameScene}
+                {"/game",                 getGameScene},
+                {"/network-demo", getNetworkDemoScene}
         };
 
         std::shared_ptr<Scene> scene;
 
-        scene = keywordToLevelGetter.at(keyword)();
+        try {
+            scene = keywordToLevelGetter.at(keyword)();
+        } catch (const std::out_of_range& e) {
+            throw null::UnknownSceneException();
+        }
         MainLoop::provideScene(scene);
     }
 
     static std::shared_ptr<Scene> getGameScene() {
         return nullptr;
+    }
+
+    std::shared_ptr<Scene> SceneLoader::getNetworkDemoScene() {
+        auto newScene = std::make_shared<Scene>();
+        auto& box2dWorld = newScene->getBox2dWorld();
+
+        auto boxObject = std::make_shared<GameObject>();
+        boxObject->addScript<PlayerControlledBox>(*boxObject);
+
+        newScene->addRootGameObject(std::move(boxObject));
+        return newScene;
     }
 
     std::shared_ptr<Scene> SceneLoader::getDemoScene() {
@@ -247,12 +258,11 @@ namespace null {
         newScene->addRootGameObject(std::move(exitButton));
 
         return newScene;
-    };
+    }
 
-    void SceneLoader::changeScene(std::filesystem::path path) {
+    void SceneLoader::changeScene(const std::filesystem::path &path) {
         loadSceneFromFile(path);
         throw SceneChangedException();
     }
 
 }
-

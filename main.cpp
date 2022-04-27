@@ -24,9 +24,19 @@ int main() {
     XInitThreads();
 #endif //__linux
 
-    std::string mainMenu = "/demo";
+    std::string levelToLoad; // see /menu or /network-demo or /demo
+    bool sceneIsLoaded = false;
+    std::cout << "Type level uri to load" << std::endl;
+    while(!sceneIsLoaded) {
+        std::cin >> levelToLoad;
+        try {
+            null::SceneLoader::loadSceneFromFile(levelToLoad);
+            sceneIsLoaded = true;
+        } catch (const null::UnknownSceneException& e) {
+            std::cout << "Unknown scene, try again" << std::endl;
+        }
+    }
 
-    null::SceneLoader::loadSceneFromFile(mainMenu);
 
     return null::MainLoop::run();
 }
