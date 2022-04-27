@@ -12,6 +12,3 @@ private:
 public:
     sf::Vector2f step() override;
 };
-
-
-
