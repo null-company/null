@@ -36,5 +36,4 @@ public:
 
     std::set<int> &getSubscribedSet(int messageId);
 
-
 };
