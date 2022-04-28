@@ -8,9 +8,9 @@ GameServer::GameServer() :
 
 uint8_t GameServer::globalGameID = 1;
 
-void GameServer::broadcastMessage(const net::GameMessage &message, int cliendId) {
+void GameServer::broadcastMessage(const net::GameMessage &message, int clientId) {
     for (int i = 0; i < clientCount(); i++) {
-        if (i == cliendId)
+        if (i == clientId)
             continue;
         sendGameMessage(getClient(i), message);
     }

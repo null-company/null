@@ -13,7 +13,7 @@ public:
 
     void handleNetMessage(int clientIdx, const net::NetMessage &message) override;
 
-    void broadcastMessage(const net::GameMessage &message, int cliendId);
+    void broadcastMessage(const net::GameMessage &message, int clientId);
 
     void handleGameMessage(int clientIdx, const net::GameMessage &message);
 
