@@ -30,12 +30,11 @@ std::string ServerArbiter::createNewGameSimulation() {
 
 ServerArbiter::ServerArbiter() : NetClientCollector(),
                                  freePorts({6000, 6001, 6002, 6003, 6004, 6005, 6006, 6007, 6008, 6009, 6010}),
-                                 gameServers() {
-}
+                                 gameServers() {}
 
-ServerArbiter::ServerArbiter(std::function<void()> simulationThread) : NetClientCollector(
-        std::move(simulationThread)) {}
-
+ServerArbiter::ServerArbiter(std::function<void()> simulationThread)
+        : NetClientCollector(std::move(simulationThread)),
+        freePorts({6000, 6001, 6002, 6003, 6004, 6005, 6006, 6007, 6008, 6009, 6010}) {}
 
 void ServerArbiter::sendGameServerConfig(sf::TcpSocket& client, const std::string& roomCode) {
     net::NetMessage message;

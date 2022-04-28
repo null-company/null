@@ -8,6 +8,7 @@
 #include "NetClientCollector.h"
 
 class ServerArbiter : public NetClientCollector {
+private:
     ServerArbiter(std::function<void()> simulationThread);
 
     std::vector<std::unique_ptr<GameServer>> gameServers;

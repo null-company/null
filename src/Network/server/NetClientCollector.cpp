@@ -1,7 +1,3 @@
-//
-// Created by artemonchelus on 28.11.2021.
-//
-
 #include <server/NetClientCollector.h>
 #include <SFML/Network.hpp>
 #include <cstdint>
@@ -94,18 +90,17 @@ int NetClientCollector::getFirstReadySocketIdx() {
     }
     if (socketSelector.isReady(listener)) {
         return -1;
-    };
+    }
     for (int idx = 0; idx < clients.size(); idx++) {
         if (socketSelector.isReady(*clients[idx])) {
             return idx;
-        };
+        }
     }
     throw NetworkException("Unexpected socket selector case");
 }
 
 void NetClientCollector::listen(sf::IpAddress address, const std::vector<uint16_t> &ports) {
     ipAddress = address;
-    //TODO: Meow
     for (const auto port: ports) {
         auto status = listener.listen(port, ipAddress);
         if (status == sf::Socket::Done) {

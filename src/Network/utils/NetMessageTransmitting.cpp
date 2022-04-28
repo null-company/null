@@ -25,7 +25,7 @@ void sendNetMessage(sf::TcpSocket &socket, const net::NetMessage &message) {
         LOGD << "Cannot send message";
         throw ReceiveException("Error occurred while trying to send message to client", status);
     }
-//    LOGD << "Message send successful";
+    LOGD << "Message send successful";
 }
 
 void sendGameMessage(sf::TcpSocket &socket, const net::GameMessage &message) {
@@ -33,4 +33,3 @@ void sendGameMessage(sf::TcpSocket &socket, const net::GameMessage &message) {
     *message1.mutable_game_message() = message;
     sendNetMessage(socket, message1);
 }
-

@@ -1,4 +1,5 @@
 #pragma once
+
 #include <SFML/Network.hpp>
 #include <cstdint>
 #include <list>
@@ -13,6 +14,7 @@ protected:
 
     sf::IpAddress ipAddress;
     volatile bool threadIsActive;
+
     static void defaultSimulationThreadFunc(NetClientCollector *clientCollector);
 
     std::vector<std::unique_ptr<sf::TcpSocket>> clients;
@@ -22,11 +24,11 @@ public:
 
     int getFirstReadySocketIdx();
 
-    sf::TcpSocket &getClient(int idx);
+    sf::TcpSocket& getClient(int idx);
 
     virtual void acceptNewClient();
 
-    virtual void handleNetMessage(int clientIdx, const net::NetMessage &message) = 0;
+    virtual void handleNetMessage(int clientIdx, const net::NetMessage& message) = 0;
 
     NetClientCollector(std::function<void()> simulationThread);
 
@@ -40,7 +42,7 @@ public:
 
     virtual void disconnectClient(int idx);
 
-    void listen(sf::IpAddress address, const std::vector<uint16_t> &ports);
+    void listen(sf::IpAddress address, const std::vector<uint16_t>& ports);
 
     void listen(sf::IpAddress address, uint16_t port);
 
