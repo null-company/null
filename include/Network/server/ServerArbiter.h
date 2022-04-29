@@ -9,13 +9,19 @@
 
 class ServerArbiter : public NetClientCollector {
 private:
-    ServerArbiter(std::function<void()> simulationThread);
 
     std::vector<std::unique_ptr<GameServer>> gameServers;
     std::list<uint16_t> freePorts;
     std::map<std::string, int> roomCodeToServerNum;
 public:
     ServerArbiter();
+
+    /**
+     * Serves as a server arbiter that also manages network
+     * The simulation starts when players are connected
+     * @param simulation a function to start in a different thread which will perform simulation
+     */
+    ServerArbiter(std::function<void()> simulation);
 
     std::string createNewGameSimulation();
 

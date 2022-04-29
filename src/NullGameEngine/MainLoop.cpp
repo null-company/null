@@ -1,16 +1,15 @@
 #include <memory>
-#include <thread>
 
 #include <MainLoop.hpp>
 #include <Scene.hpp>
 #include <Renderer.hpp>
 #include <SpriteSheet.hpp>
-#include <Utility.hpp>
-#include <NetworkPlayerScript.hpp>
-#include <exceptions/NetworkException.h>
-#include <iostream>
 
 namespace null {
+
+    namespace {
+
+    }
 
     constexpr unsigned int MAX_FRAMERATE = 60;
 
@@ -20,15 +19,16 @@ namespace null {
      * There potentially can be network initialization
      * ###############################################
      * ClientNetworkManager MainLoop::clientNetworkManager = ClientNetworkManager("127.0.0.1", 5000);
+     * ServerArbiter MainLoop::serverArbiter = ServerArbiter();
      * ###############################################
     **/
+    bool MainLoop::isServer = false;
     sf::Window* MainLoop::window = nullptr;
 
     sf::Window& MainLoop::getWindow() {
         return *window;
     }
 
-    // todo this is a dummy implementation, copied from the earlier draft
     int MainLoop::run() {
         sf::RenderWindow sfmlWin(sf::VideoMode(1280, 720), "{[Null]}");
         window = &sfmlWin;
@@ -43,7 +43,7 @@ sceneStart:
 
 
                 // todo dispatching user events such as keyboard inputs will probably take place here
-                sf::Event e;
+                sf::Event e{};
                 while (sfmlWin.pollEvent(e)) {
                     switch (e.type) {
                         case sf::Event::EventType::Closed:
@@ -71,4 +71,3 @@ sceneStart:
     }
 
 }
-

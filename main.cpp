@@ -6,17 +6,14 @@
 #include <plog/Appenders/ColorConsoleAppender.h>
 #include <plog/Formatters/TxtFormatter.h>
 #include <plog/Init.h>
-#include "client/Client.h"
-// Have to do this on linux
+#include <server/ServerArbiter.h>
 
 #ifdef __linux
 #include <X11/Xlib.h>
-
 #endif //__linux
 
 int main() {
 
-    // Init logging
     static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;
     plog::init(plog::debug, &consoleAppender);
 
@@ -37,7 +34,23 @@ int main() {
         }
     }
 
+    if (null::MainLoop::isServer) {
+        null::MainLoop::serverArbiter = new ServerArbiter(null::MainLoop::run);
+        auto& serverArbiter = *null::MainLoop::serverArbiter;
+        serverArbiter.listen("127.0.0.1", 5000);
+        serverArbiter.launch();
+        while (true) {
+            std::string oper;
+            std::cin >> oper;
+            if (oper == "exit") {
+                break;
+            }
+        }
+    } else {
+        null::MainLoop::clientNetworkManager = new ClientNetworkManager("127.0.0.1", 5000);
+
+
+    }
 
     return null::MainLoop::run();
 }
-

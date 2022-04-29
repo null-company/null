@@ -15,6 +15,7 @@
 #include <MapManager/MapManager.hpp>
 #include <Weapon/StraightWeaponScript.hpp>
 #include <PlayerControlledBox/PlayerControlledBox.hpp>
+#include <server/ServerArbiter.h>
 
 namespace null {
 
@@ -34,7 +35,8 @@ namespace null {
                 {"/menu/play/createRoom", getCreateRoomScene},
                 {"/menu/play/joinRoom",   getJoinRoomScene},
                 {"/game",                 getGameScene},
-                {"/network-demo", getNetworkDemoScene}
+                {"/network-demo-client", getNetworkDemoClientScene},
+                {"/network-demo-server", getNetworkDemoServerScene}
         };
 
         std::shared_ptr<Scene> scene;
@@ -51,7 +53,20 @@ namespace null {
         return nullptr;
     }
 
-    std::shared_ptr<Scene> SceneLoader::getNetworkDemoScene() {
+    std::shared_ptr<Scene> SceneLoader::getNetworkDemoClientScene() {
+        MainLoop::isServer = false;
+        auto newScene = std::make_shared<Scene>();
+        auto& box2dWorld = newScene->getBox2dWorld();
+
+        auto boxObject = std::make_shared<GameObject>();
+        boxObject->addScript<PlayerControlledBox>(*boxObject);
+
+        newScene->addRootGameObject(std::move(boxObject));
+        return newScene;
+    }
+
+    std::shared_ptr<Scene> SceneLoader::getNetworkDemoServerScene() {
+        MainLoop::isServer = true;
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
 
