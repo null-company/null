@@ -4,11 +4,11 @@ ClientNetworkManager::ClientNetworkManager(sf::IpAddress address, uint16_t port)
         : client(address, port) {
 }
 
-std::queue<net::GameMessage> &ClientNetworkManager::subscribe(int playerId, int messageId) {
+std::queue<net::GameMessage>& ClientNetworkManager::subscribe(int playerId, int messageId) {
     LOGD << "Player with id: " << playerId << " subscribed on message with id: " << messageId;
 
-    auto &queue = getQueue(playerId);
-    auto &subscribedSet = getSubscribedSet(messageId);
+    auto& queue = getQueue(playerId);
+    auto& subscribedSet = getSubscribedSet(messageId);
     subscribedSet.insert(playerId);
     return queue;
 }
@@ -17,23 +17,22 @@ net::GameMessage ClientNetworkManager::receiveMessage() {
     return client.receiveGameMessage();
 }
 
-
-void ClientNetworkManager::multiplexMessage(net::GameMessage &gameMessage) {
+void ClientNetworkManager::multiplexMessage(net::GameMessage& gameMessage) {
     int messageType = gameMessage.message_case();
     LOGD << "Try to multiplex message with message type: " << messageType;
-    auto &playerIdSet = getSubscribedSet(messageType);
+    auto& playerIdSet = getSubscribedSet(messageType);
     for (auto playerId: playerIdSet) {
-        auto &queue = getQueue(playerId);
+        auto& queue = getQueue(playerId);
         queue.push(gameMessage);
     }
 }
 
-std::queue<net::GameMessage> &ClientNetworkManager::getQueue(int playerId) {
+std::queue<net::GameMessage>& ClientNetworkManager::getQueue(int playerId) {
     ensurePlayerChannel(playerId);
     return channels.at(playerId);
 }
 
-std::set<int> &ClientNetworkManager::getSubscribedSet(int messageId) {
+std::set<int>& ClientNetworkManager::getSubscribedSet(int messageId) {
     ensureMessageIdSet(messageId);
     return messageIdToSubscribedPlayersIds.at(messageId);
 }
@@ -60,7 +59,6 @@ void ClientNetworkManager::unsubscribe(int playerId, int messageId) {
     }
 }
 
-Client &ClientNetworkManager::getClient() {
+Client& ClientNetworkManager::getClient() {
     return client;
 }
-
