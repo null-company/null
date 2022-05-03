@@ -7,7 +7,7 @@
 #include "exceptions/NetworkException.h"
 
 Client::Client(sf::IpAddress arbiterServerAddress, uint16_t arbiterPort) {
-    LOGD << "Try to connect to arbitrary server " << arbiterServerAddress << " " << arbiterPort;
+    LOGD << "Try to connect to arbiter server " << arbiterServerAddress << " " << arbiterPort;
     sf::Socket::Status status = arbiterSocket.connect(arbiterServerAddress, arbiterPort);
     gameServerSocket.setBlocking(false);
     if (status != sf::Socket::Done) {
@@ -33,7 +33,7 @@ void Client::handleRoomCodeMessage(const net::ConnectRoom &room) {
 void Client::connectRoom(sf::IpAddress serverAddress, uint16_t port) {
     auto status = gameServerSocket.connect(serverAddress, port);
     if (status != sf::Socket::Done) {
-        throw ReceiveException("AAAAAAAAAAAAAAAAAAAAAAAAAAAa", status);
+        throw ReceiveException("Game server connection failed", status);
     }
 }
 
@@ -97,10 +97,10 @@ void Client::handleServerConfigMessageAndConnect(const net::GameServerConfig &co
 }
 
 void Client::setRoomCode(const std::string &newRoomCode) {
-    this->roomCode = newRoomCode;
+    roomCode = newRoomCode;
 }
 
-std::string Client::getRoom() {
+std::string Client::getRoomCode() {
     return roomCode;
 }
 

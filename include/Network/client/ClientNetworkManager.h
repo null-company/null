@@ -24,13 +24,17 @@ public:
     Client & getClient();
     ClientNetworkManager(sf::IpAddress address, uint16_t port);
 
-    std::queue<net::GameMessage> &subscribe(int playerId, int messageId);
+    std::queue<net::GameMessage> &subscribe(int objectId, int messageId);
 
     void unsubscribe(int playerId, int messageId);
 
     net::GameMessage receiveMessage();
 
-    void multiplexMessage(net::GameMessage &gameMessage);
+    /**
+     * Distribute a message to subscribers
+     * @param gameMessage message to distribute
+     */
+    void distributeMessageToSubscribers(net::GameMessage &gameMessage);
 
     std::queue<net::GameMessage> &getQueue(int playerId);
 

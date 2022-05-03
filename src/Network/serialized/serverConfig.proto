@@ -21,7 +21,7 @@ message SubscriberState {
 }
 
 /*
-Allows store a state by storing unlimited primitives
+Allows to store a state by storing unlimited number of primitives
 Client application should know which values and in which quantity to expect
  */
 message PrimitiveState {

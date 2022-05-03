@@ -4,12 +4,12 @@ ClientNetworkManager::ClientNetworkManager(sf::IpAddress address, uint16_t port)
         : client(address, port) {
 }
 
-std::queue<net::GameMessage>& ClientNetworkManager::subscribe(int playerId, int messageId) {
-    LOGD << "Player with id: " << playerId << " subscribed on message with id: " << messageId;
+std::queue<net::GameMessage>& ClientNetworkManager::subscribe(int objectId, int messageId) {
+    LOGD << "Object with id: " << objectId << " subscribed on message with id: " << messageId;
 
-    auto& queue = getQueue(playerId);
+    auto& queue = getQueue(objectId);
     auto& subscribedSet = getSubscribedSet(messageId);
-    subscribedSet.insert(playerId);
+    subscribedSet.insert(objectId);
     return queue;
 }
 
@@ -17,9 +17,9 @@ net::GameMessage ClientNetworkManager::receiveMessage() {
     return client.receiveGameMessage();
 }
 
-void ClientNetworkManager::multiplexMessage(net::GameMessage& gameMessage) {
+void ClientNetworkManager::distributeMessageToSubscribers(net::GameMessage& gameMessage) {
     int messageType = gameMessage.message_case();
-    LOGD << "Try to multiplex message with message type: " << messageType;
+    LOGD << "Try to distribute message with message type: " << messageType;
     auto& playerIdSet = getSubscribedSet(messageType);
     for (auto playerId: playerIdSet) {
         auto& queue = getQueue(playerId);

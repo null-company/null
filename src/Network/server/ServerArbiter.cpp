@@ -8,7 +8,7 @@
 
 //TODO: what about destruction the game?
 std::string ServerArbiter::createNewGameSimulation() {
-    PLOGD << "New game simulation is creating";
+    PLOGD << "New game simulation is being created";
     srand(time(nullptr));
     uint16_t port = freePorts.back();
     freePorts.pop_back();
@@ -52,7 +52,7 @@ void ServerArbiter::sendGameServerConfig(sf::TcpSocket& client, const std::strin
 void ServerArbiter::handleNetMessage(int clientIdx, const net::NetMessage& message) {
     switch (message.body_case()) {
         case net::NetMessage::kGenerateRoomRequest: {
-            LOGD << "Request about asking generating new game received";
+            LOGD << "New game generation request received";
             std::string roomCode = createNewGameSimulation();
             sendRoomCode(*clients[clientIdx], roomCode);
             break;

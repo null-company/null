@@ -7,9 +7,17 @@
 #include "serialized/serverConfig.pb.h"
 #include "NetClientCollector.h"
 
+/**
+ * ServerArbiter is responsible for starting new GameServer's and
+ * creating rooms.
+ */
 class ServerArbiter : public NetClientCollector {
 private:
 
+    /**
+     * GameServers that this arbiter is running
+     * Todo add support for actually running multiple of those
+     */
     std::vector<std::unique_ptr<GameServer>> gameServers;
     std::list<uint16_t> freePorts;
     std::map<std::string, int> roomCodeToServerNum;

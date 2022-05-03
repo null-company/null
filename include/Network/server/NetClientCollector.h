@@ -15,7 +15,7 @@ protected:
     sf::IpAddress ipAddress;
     volatile bool threadIsActive;
 
-    static void defaultSimulationThreadFunc(NetClientCollector *clientCollector);
+    static void defaultJob(NetClientCollector *self);
 
     std::vector<std::unique_ptr<sf::TcpSocket>> clients;
 public:

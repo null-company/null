@@ -7,7 +7,7 @@
 #include "exceptions/NetworkException.h"
 
 
-void NetClientCollector::defaultSimulationThreadFunc(NetClientCollector *self) {
+void NetClientCollector::defaultJob(NetClientCollector *self) {
     while (self->threadIsActive) {
         int readyClientIdx = self->getFirstReadySocketIdx();
         if (readyClientIdx == -2) {
@@ -40,7 +40,7 @@ NetClientCollector::NetClientCollector(std::function<void()> simulationThread) :
         simulationThread(std::move(simulationThread)) {}
 
 NetClientCollector::NetClientCollector() :
-        NetClientCollector([this]() { defaultSimulationThreadFunc(this); }) {}
+        NetClientCollector([this]() { defaultJob(this); }) {}
 
 NetClientCollector::~NetClientCollector() {
     this->threadIsActive = false;

@@ -2,6 +2,11 @@
 #include "SFML/Network.hpp"
 #include "NetClientCollector.h"
 
+/**
+ * GameServer is responsible for sending state messages,
+ * receiving (todo what kind of) messages, while running a
+ * game simulation
+ */
 class GameServer : public NetClientCollector {
 private:
     std::vector<uint8_t> clientIDs;

@@ -19,7 +19,7 @@ public:
 
     Client(sf::IpAddress serverAddress, uint16_t arbiterPort);
     ~Client();
-    std::string getRoom();
+    std::string getRoomCode();
 
     sf::TcpSocket& getGameServerSocket();
     void createRoom();
