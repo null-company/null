@@ -7,9 +7,8 @@
 
 namespace null {
 
-    namespace {
-
-    }
+    ServerArbiter* MainLoop::serverArbiter = nullptr;
+    ClientNetworkManager* MainLoop::clientNetworkManager = nullptr;
 
     constexpr unsigned int MAX_FRAMERATE = 60;
 
