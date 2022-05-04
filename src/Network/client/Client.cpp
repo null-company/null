@@ -69,13 +69,13 @@ void Client::connectRoom(const std::string &roomCode) {
     gameServerSocket.setBlocking(false);
 }
 
-void Client::sendChatMessage(const std::string &chatMessage) {
-    net::GameMessage message;
-    std::string *message_field = message.mutable_chat_message()->mutable_message();
-    *(message_field) = chatMessage;
-    sendGameMessage(gameServerSocket, message);
-    LOGD << "Chat message was send\n" << chatMessage;
-}
+//void Client::sendChatMessage(const std::string &chatMessage) {
+//    net::GameMessage message;
+//    std::string *message_field = message.mutable_chat_message()->mutable_message();
+//    *(message_field) = chatMessage;
+//    sendGameMessage(gameServerSocket, message);
+//    LOGD << "Chat message was send\n" << chatMessage;
+//}
 
 void Client::askGameServerConfigByRoomCode() {
     LOGD << "Ask arbiter server for GameServerConfig";

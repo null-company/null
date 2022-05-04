@@ -13,7 +13,7 @@ namespace null {
     class MainLoop {
     private:
         static std::shared_ptr<Scene> scene;
-        static sf::Window* window;
+//        static sf::Window* window;
         MainLoop();
         static void provideScene(std::shared_ptr<Scene> newScene) {
             MainLoop::scene = newScene;
@@ -24,6 +24,7 @@ namespace null {
         static GameServer* gameServer;
         static ClientNetworkManager* clientNetworkManager;
         static int run();
+        static int run(bool noHead);
         static sf::Window& getWindow();
 
         friend SceneLoader;

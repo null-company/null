@@ -21,12 +21,15 @@ if(MSVC AND protobuf_MSVC_STATIC_RUNTIME)
     endforeach()
 endif()
 
+set(PROTO_SRC
+        ${SRCROOT}/serialized/serverConfig.proto
+        )
+
 set(SRC
         ${INCROOT}/client/Client.h
         ${SRCROOT}/client/Client.cpp
         ${INCROOT}/server/GameServer.h
         ${SRCROOT}/server/GameServer.cpp
-        ${SRCROOT}/serialized/serverConfig.proto
         ${SRCROOT}/server/ServerArbiter.cpp
         ${SRCROOT}/server/NetClientCollector.cpp
         ${SRCROOT}/utils/NetMessageTransmitting.cpp
@@ -40,6 +43,15 @@ set(SRC
         ${INCROOT}/client/ClientNetworkManager.h)
 #SET_SOURCE_FILES_PROPERTIES(${PROTO_SRCS} ${PROTO_HDRS} PROPERTIES GENERATED TRUE)
 
+add_library(proto-stuff STATIC ${PROTO_SRC})
+target_include_directories(proto-stuff
+        PUBLIC ${CMAKE_CURRENT_BINARY_DIR}
+        )
+protobuf_generate(TARGET proto-stuff)
+target_link_libraries(proto-stuff
+        protobuf::libprotobuf
+        )
+
 add_library(network STATIC ${SRC})
 
 target_include_directories(network
@@ -48,7 +60,6 @@ target_include_directories(network
         PUBLIC ${CMAKE_CURRENT_BINARY_DIR}
         PRIVATE ${PROJECT_SOURCE_DIR}/src/Network
         )
-protobuf_generate(TARGET network)
 
 add_executable(server server.cpp)
 
@@ -57,7 +68,8 @@ target_link_libraries(server
         nullGameEngine
         )
 target_link_libraries(network
-        protobuf::libprotobuf
+        proto-stuff
+#        nullGameEngine
         plog
         sfml-graphics
         sfml-audio

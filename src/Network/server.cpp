@@ -8,9 +8,9 @@
 int main() {
     static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;
     plog::init(plog::debug, &consoleAppender);
-    ServerArbiter serverArbiter;
-    serverArbiter.listen("127.0.0.1", 5000);
-    serverArbiter.launch();
+//    ServerArbiter serverArbiter;
+//    serverArbiter.listen("127.0.0.1", 5000);
+//    serverArbiter.launch();
 
 //    while (true) {
 //        std::string oper;
@@ -33,7 +33,8 @@ int main() {
     }
 
     if (null::MainLoop::isServer) {
-        null::MainLoop::serverArbiter = new ServerArbiter(null::MainLoop::run);
+        null::MainLoop::serverArbiter = new ServerArbiter();
+        null::MainLoop::gameServer = new GameServer([](){ null::MainLoop::run(); });
         auto& serverArbiter = *null::MainLoop::serverArbiter;
         serverArbiter.listen("127.0.0.1", 5000);
         serverArbiter.launch();

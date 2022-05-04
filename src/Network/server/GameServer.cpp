@@ -6,16 +6,12 @@
 
 namespace {
 
-    void doSimulation() {
-
-    }
-
     /**
      * Run simulation AND do networking
      * @param self
      */
-    void gameServerJob(NetClientCollector* self) {
-        sf::Thread simulationThread(doSimulation); // this is so ugly my self-esteem went down
+    void gameServerJob(NetClientCollector* self, std::function<void(void)>& simulation) {
+        sf::Thread simulationThread(simulation); // this is so ugly my self-esteem went down
         simulationThread.launch();
         while (self->threadIsActive) {
             int readyClientIdx = self->getFirstReadySocketIdx();
@@ -43,8 +39,8 @@ namespace {
     }
 }
 
-GameServer::GameServer() :
-        NetClientCollector([this]() { gameServerJob(this); }) {
+GameServer::GameServer(std::function<void(void)> simulation) :
+        NetClientCollector([this, &simulation]() { gameServerJob(this, simulation); }) {
 }
 
 uint8_t GameServer::globalGameID = 1;
