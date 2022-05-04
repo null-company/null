@@ -11,28 +11,44 @@ message NetMessage {
   }
 }
 
-/*
-Allows server to send arbitrary messages for a client entity (such as game object or script or whatever
-can be a subscriber) for the client to sync it's state
- */
-message SubscriberState {
-  uint64 subscriber_id = 1;
-  PrimitiveState content = 2;
+message GameMessage {
+  /*
+  Allows server to send arbitrary messages for a client entity (such as game object or script or whatever
+  can be a subscriber) for the client to sync it's state
+   */
+  message SubscriberState {
+    uint64 subscriber_id = 1; // subscriber id on client
+    PrimitiveState content = 2;
+  }
+  /*
+  Allows client to send commands (like from a terminal) to the server
+   */
+  message ClientCommand {
+    uint64 subscriber_id = 1; // entity id on server
+    PrimitiveState content = 2;
+  }
+  /*
+  Allows to store a state by storing unlimited number of primitives
+  Client application should know which values and in which quantity to expect
+   */
+  message PrimitiveState {
+    repeated google.protobuf.Any anys = 1;
+    repeated uint32 uint32s = 2;
+    repeated uint64 uint64s = 3;
+    repeated string strings = 4;
+    repeated float floats = 5;
+    repeated double doubles = 6;
+    repeated bool bools = 7;
+  }
+  oneof message {
+    SubscriberState subscriber_state = 1;
+    ClientCommand client_command = 2;
+  }
 }
 
-/*
-Allows to store a state by storing unlimited number of primitives
-Client application should know which values and in which quantity to expect
- */
-message PrimitiveState {
-  repeated google.protobuf.Any anys = 1;
-  repeated uint32 uint32s = 2;
-  repeated uint64 uint64s = 3;
-  repeated string strings = 4;
-  repeated float floats = 5;
-  repeated double doubles = 6;
-  repeated bool bools = 7;
-}
+
+
+
 
 message GameServerConfig {
   oneof server_address {
@@ -51,15 +67,6 @@ message GenerateRoom { }
 
 message ConnectRoom {
   string room_code = 4;
-}
-
-message GameMessage {
-  uint32 game_id = 5;
-  oneof message {
-    ChatMessage chat_message = 2;
-    PlayerInfo player_info = 3;
-    BoxInfo boxInfo = 4;
-  }
 }
 
 message PlayerInfo {

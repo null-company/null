@@ -8,13 +8,17 @@
 #include <Script.hpp>
 #include <Scene.hpp>
 
+#include <Utility.hpp>
+
 namespace null {
 
     constexpr static int meterToPixel = 100;
     constexpr static float pixelToMeter = 1.0f / static_cast<float>(meterToPixel);
     constexpr static double pi = 3.14159265358979323846;
 
-    GameObject::GameObject() : visible(false) {};
+    GameObject::GameObject(uint64_t guid) : visible(false), guid(guid) {}
+
+    GameObject::GameObject() : visible(false), guid(Utility::generateGuid()) {}
 
     GameObject::~GameObject() {
         if (scene.lock()) {
@@ -223,12 +227,20 @@ namespace null {
         }
     }
 
-    GameObject::GameObject(std::set<std::string> tags) : GameObject() {
+    GameObject::GameObject(uint64_t guid, std::set<std::string> tags) : GameObject(guid) {
+        this->tags = std::move(tags);
+    }
+
+    GameObject::GameObject(std::set<std::string> tags) : GameObject(Utility::generateGuid()) {
         this->tags = std::move(tags);
     }
 
     std::weak_ptr<GameObject> GameObject::getParent() const {
         return parent;
+    }
+
+    uint64_t GameObject::getGuid() {
+        return guid;
     }
 
 }

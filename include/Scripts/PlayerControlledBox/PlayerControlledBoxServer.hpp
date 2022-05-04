@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Script.hpp"
+#include <Script.hpp>
 
 namespace null {
 
-    class PlayerControlledBox : public Script {
+    class PlayerControlledBoxServer : public Script {
     public:
         void start() override;
         void update() override;
-        explicit PlayerControlledBox(GameObject& go) : Script(go) {}
+        explicit PlayerControlledBoxServer(GameObject& go) : Script(go) {}
 
     private:
         bool isMoving = false;

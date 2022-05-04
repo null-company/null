@@ -9,7 +9,7 @@ class NetClientCollector {
 private:
     sf::TcpListener listener;
 
-protected:
+public:
     sf::Thread simulationThread;
 
     sf::IpAddress ipAddress;

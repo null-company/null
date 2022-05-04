@@ -1,43 +1,44 @@
 #pragma once
 
+#include <queue>
+#include <set>
+
 #include "SFML/Network/IpAddress.hpp"
 #include "plog/Log.h"
 #include "SFML/System/Thread.hpp"
 #include "client/Client.h"
 #include "utils/NetMessageTransmitting.h"
-#include <queue>
-#include <set>
-
+#include "serialized/serverConfig.pb.h"
 
 class ClientNetworkManager {
 private:
     Client client;
-    std::map<int, std::queue<net::GameMessage>> channels;
-    std::map<int, std::set<int>> messageIdToSubscribedPlayersIds;
+    std::map<uint64_t, std::queue<net::GameMessage::SubscriberState>> channels;
+//    std::map<uint64_t, std::set<uint64_t>> messageIdToSubscribedPlayersIds;
 
-    void ensurePlayerChannel(int playerId);
+    void ensurePlayerChannel(uint64_t subscriberEntityId);
 
-    void ensureMessageIdSet(int messageId);
+//    void ensureMessageIdSet(uint64_t subscriberEntityId);
 
 public:
 
-    Client & getClient();
+    Client& getClient();
     ClientNetworkManager(sf::IpAddress address, uint16_t port);
 
-    std::queue<net::GameMessage> &subscribe(int objectId, int messageId);
+    std::queue<net::GameMessage::SubscriberState>& subscribe(uint64_t entityId);
 
-    void unsubscribe(int playerId, int messageId);
+    void unsubscribe(uint64_t entityId);
 
     net::GameMessage receiveMessage();
 
     /**
      * Distribute a message to subscribers
-     * @param gameMessage message to distribute
+     * @param subscriberState message to distribute
      */
-    void distributeMessageToSubscribers(net::GameMessage &gameMessage);
+    void distributeMessageToSubscribers(net::GameMessage::SubscriberState& subscriberState);
 
-    std::queue<net::GameMessage> &getQueue(int playerId);
+    std::queue<net::GameMessage::SubscriberState>& getOrCreateSubscriberQueue(uint64_t playerId);
 
-    std::set<int> &getSubscribedSet(int messageId);
+//    std::set<uint64_t>& getSubscribedSet(uint64_t subscriberEntityId);
 
 };

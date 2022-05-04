@@ -14,7 +14,8 @@
 #include <Utility.hpp>
 #include <MapManager/MapManager.hpp>
 #include <Weapon/StraightWeaponScript.hpp>
-#include <PlayerControlledBox/PlayerControlledBox.hpp>
+#include "PlayerControlledBox/PlayerControlledBoxClient.hpp"
+#include "PlayerControlledBox/PlayerControlledBoxServer.hpp"
 #include <server/ServerArbiter.h>
 
 namespace null {
@@ -58,8 +59,8 @@ namespace null {
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
 
-        auto boxObject = std::make_shared<GameObject>();
-        boxObject->addScript<PlayerControlledBox>(*boxObject);
+        auto boxObject = std::make_shared<GameObject>(200200);
+        boxObject->addScript<PlayerControlledBoxClient>(*boxObject);
 
         newScene->addRootGameObject(std::move(boxObject));
         return newScene;
@@ -70,8 +71,8 @@ namespace null {
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
 
-        auto boxObject = std::make_shared<GameObject>();
-        boxObject->addScript<PlayerControlledBox>(*boxObject);
+        auto boxObject = std::make_shared<GameObject>(200200);
+        boxObject->addScript<PlayerControlledBoxServer>(*boxObject);
 
         newScene->addRootGameObject(std::move(boxObject));
         return newScene;

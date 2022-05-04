@@ -1,4 +1,4 @@
-#include "PlayerControlledBox/PlayerControlledBox.hpp"
+#include "PlayerControlledBox/PlayerControlledBoxClient.hpp"
 
 #include <unordered_map>
 
@@ -7,7 +7,7 @@
 
 namespace null {
 
-    void PlayerControlledBox::start() {
+    void PlayerControlledBoxClient::start() {
         // this is some experimental stuff:)
         auto boxTexture = ResourceManager::loadTexture("box.png");
         gameObject.getSprite().setTexture(*boxTexture);
@@ -53,7 +53,7 @@ namespace null {
         }
     }
 
-    void PlayerControlledBox::update() {
+    void PlayerControlledBoxClient::update() {
         isMoving = false;
         auto rigidBody = gameObject.getRigidBody();
         auto keysToCheck = std::vector({

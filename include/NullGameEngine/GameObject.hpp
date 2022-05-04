@@ -32,6 +32,8 @@ namespace null {
         std::vector<std::unique_ptr<Script>> scripts;
         GameObjectStatus gameObjectStatus = GameObjectStatus::NONE;
 
+        uint64_t guid;
+
         void start();
 
         void update();
@@ -40,11 +42,23 @@ namespace null {
 
         RenderLayer renderLayer;
 
+        explicit GameObject(uint64_t guid);
+
+        /**
+         * Generates guid
+         */
         GameObject();
 
-        explicit GameObject(std::set<std::string> tags);
+        GameObject(uint64_t guid, std::set<std::string> tags);
+
+        /**
+         * Generates guid
+         */
+        GameObject(std::set<std::string> tags);
 
         ~GameObject();
+
+        uint64_t getGuid();
 
         std::weak_ptr<GameObject> addChild(std::shared_ptr<GameObject>&&);
 

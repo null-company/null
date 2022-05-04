@@ -1,8 +1,7 @@
 #include "server/ServerArbiter.h"
 #include <plog/Log.h>
 #include <random>
-#include <utility>
-#include "plog/Initializers/RollingFileInitializer.h"
+#include <exception>
 #include "utils/util.h"
 #include "utils/NetMessageTransmitting.h"
 
@@ -13,6 +12,9 @@ std::string ServerArbiter::createNewGameSimulation() {
     uint16_t port = freePorts.back();
     freePorts.pop_back();
     net::GameServerConfig gameServerConfig;
+    if (!gameServers.empty()) {
+        throw std::length_error("Right now we do not allow multiple servers");
+    }
     gameServers.emplace_back(std::make_unique<GameServer>());
     gameServers.back()->listen(sf::IpAddress(this->getIP()), port);
     gameServers.back()->launch();
