@@ -1,7 +1,9 @@
 #include "PlayerControlledBox/PlayerControlledBoxServer.hpp"
+#include "serialized/serverConfig.pb.h"
 
 #include <unordered_map>
 
+#include <MainLoop.hpp>
 #include <GameObject.hpp>
 #include <ResourceManager.hpp>
 
@@ -16,6 +18,8 @@ namespace null {
         gameObject.renderLayer = FOREGROUND;
         gameObject.visible = true;
         gameObject.makeDynamic();
+
+        messageQueue = &(MainLoop::gameServer->subscribe(gameObject.getGuid()));
     }
 
     namespace {
@@ -51,26 +55,53 @@ namespace null {
         void stopRigidBody(b2Body* rigidBody) {
             rigidBody->SetLinearVelocity({0.0f, 0.0f});
         }
+        void handleMessage(GameObject& gameObject, net::GameMessage::ClientCommand& command) {
+            auto rigidBody = gameObject.getRigidBody();
+            auto direction =
+                    Direction(command.mutable_content()->uint32s(0));
+            moveRigidBody(rigidBody, direction);
+        }
+        net::GameMessage::SubscriberState makeMessage(uint64_t entityId, sf::Vector2f position) {
+            net::GameMessage::SubscriberState state;
+            state.set_subscriber_id(entityId);
+            state.mutable_content()->add_floats(position.x);
+            state.mutable_content()->add_floats(position.y);
+            return state;
+        }
     }
 
     void PlayerControlledBoxServer::update() {
-        isMoving = false;
-        auto rigidBody = gameObject.getRigidBody();
-        auto keysToCheck = std::vector({
-                                               sf::Keyboard::Left, sf::Keyboard::Up,
-                                               sf::Keyboard::Right, sf::Keyboard::Down
-                                       });
-
-        for (const auto& key :  keysToCheck) {
-            if (sf::Keyboard::isKeyPressed(key)) {
-                auto direction = getDirectionByKey(key);
-                moveRigidBody(rigidBody, direction);
-                isMoving = true;
-            }
+        net::GameMessage::ClientCommand command;
+        bool newMessage = false;
+        for (auto m = messageQueue->front(); !messageQueue->empty(); m = messageQueue->front(), messageQueue->pop()) {
+            //if (m.game_id() == id) {
+            command = m;
+            newMessage = true;
+            //}
         }
-
-        if (!isMoving) {
-            stopRigidBody(rigidBody);
+        if (newMessage) {
+            handleMessage(gameObject, command);
         }
+        MainLoop::gameServer->broadcastMessage(
+                makeMessage(gameObject.getGuid(), gameObject.getPosition())
+        );
+//        isMoving = false;
+//        auto rigidBody = gameObject.getRigidBody();
+//        auto keysToCheck = std::vector({
+//                                               sf::Keyboard::Left, sf::Keyboard::Up,
+//                                               sf::Keyboard::Right, sf::Keyboard::Down
+//                                       });
+
+//        for (const auto& key :  keysToCheck) {
+//            if (sf::Keyboard::isKeyPressed(key)) {
+//                auto direction = getDirectionByKey(key);
+//                moveRigidBody(rigidBody, direction);
+//                isMoving = true;
+//            }
+//        }
+
+//        if (!isMoving) {
+//            stopRigidBody(rigidBody);
+//        }
     }
 }

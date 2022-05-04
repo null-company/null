@@ -1,4 +1,5 @@
 #include "client/ClientNetworkManager.h"
+#include <utils/NetMessageTransmitting.h>
 
 ClientNetworkManager::ClientNetworkManager(sf::IpAddress address, uint16_t port)
         : client(address, port) {
@@ -60,4 +61,10 @@ void ClientNetworkManager::unsubscribe(uint64_t entityId) {
 
 Client& ClientNetworkManager::getClient() {
     return client;
+}
+
+void ClientNetworkManager::sendCommandToServer(const net::GameMessage::ClientCommand& message) {
+    net::GameMessage gameMessage;
+    *gameMessage.mutable_client_command() = message;
+    ::sendGameMessage(client.getGameServerSocket(), gameMessage);
 }

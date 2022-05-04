@@ -4,6 +4,8 @@
 
 #include <GameObject.hpp>
 #include <ResourceManager.hpp>
+#include <MainLoop.hpp>
+#include <utils/NetMessageTransmitting.h>
 
 namespace null {
 
@@ -16,6 +18,8 @@ namespace null {
         gameObject.renderLayer = FOREGROUND;
         gameObject.visible = true;
         gameObject.makeDynamic();
+
+        messageQueue = &(MainLoop::clientNetworkManager->subscribe(gameObject.getGuid()));
     }
 
     namespace {
@@ -53,10 +57,37 @@ namespace null {
         }
     }
 
+    namespace {
+        net::GameMessage::ClientCommand makeMessage(uint64_t entityId, Direction direction) {
+            net::GameMessage::ClientCommand command;
+            command.set_subscriber_id(entityId);
+            command.mutable_content()->add_uint32s(static_cast<uint32_t>(direction));
+            return command;
+        }
+
+        void handleMessage(GameObject& gameObject, net::GameMessage::SubscriberState& newState) {
+            // schema is uint32s: x, y
+            float x = newState.mutable_content()->floats(0);
+            float y = newState.mutable_content()->floats(1);
+            gameObject.setPosition(x, y);
+        }
+    }
+
     void PlayerControlledBoxClient::update() {
-        isMoving = false;
-        auto rigidBody = gameObject.getRigidBody();
-        auto keysToCheck = std::vector({
+        net::GameMessage::SubscriberState newState;
+        bool newMessage = false;
+        for (auto m = messageQueue->front(); !messageQueue->empty(); m = messageQueue->front(), messageQueue->pop()) {
+            //if (m.game_id() == id) {
+            newState = m;
+            newMessage = true;
+            //}
+        }
+        if (newMessage) {
+            handleMessage(gameObject, newState);
+        }
+//        isMoving = false;
+//        auto rigidBody = gameObject.getRigidBody();
+        const auto keysToCheck = std::vector({
             sf::Keyboard::Left, sf::Keyboard::Up,
             sf::Keyboard::Right, sf::Keyboard::Down
         });
@@ -64,13 +95,16 @@ namespace null {
         for (const auto& key :  keysToCheck) {
             if (sf::Keyboard::isKeyPressed(key)) {
                 auto direction = getDirectionByKey(key);
-                moveRigidBody(rigidBody, direction);
-                isMoving = true;
+                MainLoop::clientNetworkManager->sendCommandToServer(
+                        makeMessage(gameObject.getGuid(), direction)
+                );
+//                moveRigidBody(rigidBody, direction);
+//                isMoving = true;
             }
         }
 
-        if (!isMoving) {
-            stopRigidBody(rigidBody);
-        }
+//        if (!isMoving) {
+////            stopRigidBody(rigidBody);
+//        }
     }
 }

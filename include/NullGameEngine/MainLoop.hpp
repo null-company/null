@@ -21,6 +21,7 @@ namespace null {
     public:
         static bool isServer; // todo this is obviously to be refactored
         static ServerArbiter* serverArbiter;
+        static GameServer* gameServer;
         static ClientNetworkManager* clientNetworkManager;
         static int run();
         static sf::Window& getWindow();

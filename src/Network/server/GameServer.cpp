@@ -49,10 +49,8 @@ GameServer::GameServer() :
 
 uint8_t GameServer::globalGameID = 1;
 
-void GameServer::broadcastMessage(const net::GameMessage &message, int clientId) {
+void GameServer::broadcastMessage(const net::GameMessage& message) {
     for (int i = 0; i < clientCount(); i++) {
-        if (i == clientId)
-            continue;
         sendGameMessage(getClient(i), message);
     }
 }
@@ -105,4 +103,14 @@ int GameServer::clientCount() {
 
 uint8_t GameServer::getGameID(int clientIdx) {
     return clientIDs[clientIdx];
+}
+
+std::queue<net::GameMessage::ClientCommand>& GameServer::subscribe(uint64_t entityId) {
+    return entityIdToMessageQueue[entityId];
+}
+
+void GameServer::broadcastMessage(const net::GameMessage::SubscriberState& message) {
+    net::GameMessage gameMessage;
+    *gameMessage.mutable_subscriber_state() = message;
+    broadcastMessage(gameMessage);
 }

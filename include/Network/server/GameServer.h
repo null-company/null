@@ -20,14 +20,16 @@ public:
 
     int clientCount();
 
+    std::queue<net::GameMessage::ClientCommand>& subscribe(uint64_t entityId);
+
     void handleNetMessage(int clientIdx, const net::NetMessage &message) override;
 
     /**
      * Used for controlling clients
      * @param message
-     * @param clientId
      */
-    void broadcastMessage(const net::GameMessage &message, int clientId);
+    void broadcastMessage(const net::GameMessage& message);
+    void broadcastMessage(const net::GameMessage::SubscriberState& message);
 
     void distributeMessageToSubscribers(const net::GameMessage::ClientCommand& subscriberState);
 

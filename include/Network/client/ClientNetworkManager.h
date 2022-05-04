@@ -39,6 +39,8 @@ public:
 
     std::queue<net::GameMessage::SubscriberState>& getOrCreateSubscriberQueue(uint64_t playerId);
 
+    void sendCommandToServer(const net::GameMessage::ClientCommand& message);
+
 //    std::set<uint64_t>& getSubscribedSet(uint64_t subscriberEntityId);
 
 };

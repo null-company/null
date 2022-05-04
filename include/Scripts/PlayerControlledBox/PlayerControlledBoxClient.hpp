@@ -1,5 +1,8 @@
 #pragma once
 
+#include <queue>
+#include <network.h>
+
 #include "Script.hpp"
 
 namespace null {
@@ -11,6 +14,7 @@ namespace null {
         explicit PlayerControlledBoxClient(GameObject& go) : Script(go) {}
 
     private:
+        std::queue<net::GameMessage::SubscriberState>* messageQueue = nullptr;
         bool isMoving = false;
     };
 
