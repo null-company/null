@@ -154,12 +154,13 @@ namespace null {
         fixtureDef3.shape = shape3;
         fixtureDef3.density = 1;
 
-//        player->addScript<PlayerAnimation>(*player, playerSpriteSheet,
-//                                           std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>>{
-//                                                   {"idle",      {{fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}}},
-//                                                   {"walkRight", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}},
-//                                                   {"walkLeft",  {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}}
-//                                           });
+        player->addScript<PlayerAnimation>(*player, playerSpriteSheet,
+                                           std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>>{
+                                                   {"idle",      {{fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}}},
+                                                   {"walkRight", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}},
+                                                   {"walkLeft",  {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}}
+                                           });
+
         MapManager mapManager(box2dWorld);
         newScene->addRootGameObject(std::move(mapManager.makeBorder(nullGameLogo->getSprite())));
         nullGameLogo->addChild(std::move(boxObject));
