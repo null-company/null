@@ -79,7 +79,7 @@ namespace null {
     void PlayerControlledBoxClient::update() {
         net::GameMessage::SubscriberState newState;
         bool newMessage = false;
-        LOGD << "Going over message que";
+//        LOGD << "Going over message que";
         if (!messageQueue->empty()) {
             for (auto m = messageQueue->front(); !messageQueue->empty(); m = messageQueue->front()) {
                 //if (m.game_id() == id) {
@@ -92,7 +92,7 @@ namespace null {
                 //}
             }
         }
-        LOGD << "Finished que";
+//        LOGD << "Finished que";
         if (newMessage) {
             LOGD << "Message received";
             handleMessage(gameObject, newState);
