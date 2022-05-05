@@ -33,8 +33,7 @@ int main() {
     }
 
     if (null::MainLoop::isServer) {
-        null::MainLoop::serverArbiter = new ServerArbiter();
-        null::MainLoop::gameServer = new GameServer([](){ null::MainLoop::run(); });
+        null::MainLoop::serverArbiter = new ServerArbiter([](){ null::MainLoop::run(); });
         auto& serverArbiter = *null::MainLoop::serverArbiter;
         serverArbiter.listen("127.0.0.1", 5000);
         serverArbiter.launch();

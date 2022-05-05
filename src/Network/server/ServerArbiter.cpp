@@ -15,7 +15,7 @@ std::string ServerArbiter::createNewGameSimulation() {
     if (!gameServers.empty()) {
         throw std::length_error("Right now we do not allow multiple servers");
     }
-    gameServers.emplace_back(std::make_unique<GameServer>());
+    gameServers.emplace_back(std::make_unique<GameServer>(simulation));
     gameServers.back()->listen(sf::IpAddress(this->getIP()), port);
     gameServers.back()->launch();
 
@@ -35,7 +35,8 @@ ServerArbiter::ServerArbiter() : NetClientCollector(),
                                  gameServers() {}
 
 ServerArbiter::ServerArbiter(std::function<void()> simulation)
-        : NetClientCollector(std::move(simulation)),
+        : NetClientCollector(),
+        simulation(std::move(simulation)),
         freePorts({6000, 6001, 6002, 6003, 6004, 6005, 6006, 6007, 6008, 6009, 6010}) {}
 
 void ServerArbiter::sendGameServerConfig(sf::TcpSocket& client, const std::string& roomCode) {

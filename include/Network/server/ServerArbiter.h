@@ -2,6 +2,7 @@
 
 #include <SFML/Network.hpp>
 #include <list>
+#include <functional>
 
 #include "GameServer.h"
 #include "serialized/serverConfig.pb.h"
@@ -21,8 +22,17 @@ private:
     std::vector<std::unique_ptr<GameServer>> gameServers;
     std::list<uint16_t> freePorts;
     std::map<std::string, int> roomCodeToServerNum;
+    std::function<void(void)> simulation;
 public:
     ServerArbiter();
+
+    /**
+     * TODO(Roman) delete this piece of cringe
+     * @return
+     */
+    GameServer& getGameServer() {
+        return *gameServers[0];
+    }
 
     /**
      * Serves as a server arbiter that also manages network
