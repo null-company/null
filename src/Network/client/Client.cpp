@@ -24,7 +24,7 @@ void Client::sendGenerateRoomMessage() {
     LOGD << "Message was send: " << message.ShortDebugString();
 }
 
-void Client::handleRoomCodeMessage(const net::ConnectRoom &room) {
+void Client::handleRoomCodeMessage(const net::ConnectRoom& room) {
     LOGD << "try handle server game room code info";
     setRoomCode(room.room_code());
     LOGD << "Room code was received: " << roomCode;
@@ -61,7 +61,7 @@ net::GameMessage Client::receiveGameMessage() {
 }
 
 
-void Client::connectRoom(const std::string &roomCode) {
+void Client::connectRoom(const std::string& roomCode) {
     gameServerSocket.setBlocking(true);
     setRoomCode(roomCode);
     askGameServerConfigByRoomCode();
@@ -88,7 +88,7 @@ void Client::askGameServerConfigByRoomCode() {
     sendNetMessage(arbiterSocket, message);
 }
 
-void Client::handleServerConfigMessageAndConnect(const net::GameServerConfig &config) {
+void Client::handleServerConfigMessageAndConnect(const net::GameServerConfig& config) {
     sf::IpAddress gameServerAddress(config.v4());
     uint16_t gameServerPort = config.server_port();
     setRoomCode(config.room_code());
@@ -100,7 +100,7 @@ void Client::handleServerConfigMessageAndConnect(const net::GameServerConfig &co
     connectRoom(gameServerAddress, gameServerPort);
 }
 
-void Client::setRoomCode(const std::string &newRoomCode) {
+void Client::setRoomCode(const std::string& newRoomCode) {
     roomCode = newRoomCode;
 }
 
@@ -108,7 +108,7 @@ std::string Client::getRoomCode() {
     return roomCode;
 }
 
-sf::TcpSocket &Client::getGameServerSocket() {
+sf::TcpSocket& Client::getGameServerSocket() {
     return gameServerSocket;
 }
 

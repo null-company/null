@@ -26,16 +26,21 @@ namespace null {
     }
 
     namespace {
-        enum Direction { Left, Up, Right, Down };
+        enum Direction {
+            Left, Up, Right, Down, A
+        };
+
         Direction getDirectionByKey(const sf::Keyboard::Key& key) {
-            static const std::unordered_map<sf::Keyboard::Key, Direction> keyToDirection {
-                    { sf::Keyboard::Left, Left },
-                    { sf::Keyboard::Up, Up },
-                    { sf::Keyboard::Right, Right },
-                    { sf::Keyboard::Down, Down },
+            static const std::unordered_map<sf::Keyboard::Key, Direction> keyToDirection{
+                    {sf::Keyboard::Left,  Left},
+                    {sf::Keyboard::Up,    Up},
+                    {sf::Keyboard::Right, Right},
+                    {sf::Keyboard::Down,  Down},
+                    {sf::Keyboard::A,     A},
             };
             return keyToDirection.at(key);
         }
+
         void moveRigidBody(b2Body* rigidBody, Direction direction) {
             constexpr float speedModule = 3.0f;
             b2Vec2 newVelocity = rigidBody->GetLinearVelocity();
@@ -55,6 +60,7 @@ namespace null {
             }
             rigidBody->SetLinearVelocity(newVelocity);
         }
+
         void stopRigidBody(b2Body* rigidBody) {
             rigidBody->SetLinearVelocity({0.0f, 0.0f});
         }
@@ -99,12 +105,12 @@ namespace null {
         }
 //        isMoving = false;
 //        auto rigidBody = gameObject.getRigidBody();
-        const auto keysToCheck = std::vector({
-            sf::Keyboard::Left, sf::Keyboard::Up,
-            sf::Keyboard::Right, sf::Keyboard::Down
-        });
 
-        for (const auto& key :  keysToCheck) {
+        const auto keysToCheck = std::vector({
+                                                     sf::Keyboard::Left, sf::Keyboard::Up,
+                                                     sf::Keyboard::Right, sf::Keyboard::Down, sf::Keyboard::A
+                                             });
+        for (const auto& key: keysToCheck) {
             if (sf::Keyboard::isKeyPressed(key)) {
                 auto direction = getDirectionByKey(key);
                 MainLoop::clientNetworkManager->sendCommandToServer(

@@ -3,13 +3,10 @@
 #include <exceptions/NetworkException.h>
 
 
-net::NetMessage receiveNetMessage(sf::TcpSocket &socket) {
+net::NetMessage receiveNetMessage(sf::TcpSocket& socket) {
     net::NetMessage message;
     sf::Packet packet;
-    auto old = socket.isBlocking();
-    socket.setBlocking(true);
     auto status = socket.receive(packet);
-    socket.setBlocking(old);
     if (status != sf::Socket::Done) {
         throw ReceiveException("Cannot receive message", status);
     }
@@ -20,7 +17,7 @@ net::NetMessage receiveNetMessage(sf::TcpSocket &socket) {
 }
 
 
-void sendNetMessage(sf::TcpSocket &socket, const net::NetMessage &message) {
+void sendNetMessage(sf::TcpSocket& socket, const net::NetMessage& message) {
     sf::Packet packet;
     packet << message.SerializeAsString();
     auto old = socket.isBlocking();
@@ -34,7 +31,7 @@ void sendNetMessage(sf::TcpSocket &socket, const net::NetMessage &message) {
     LOGD << "Message send successful";
 }
 
-void sendGameMessage(sf::TcpSocket &socket, const net::GameMessage &message) {
+void sendGameMessage(sf::TcpSocket& socket, const net::GameMessage& message) {
     net::NetMessage message1;
     *message1.mutable_game_message() = message;
     sendNetMessage(socket, message1);

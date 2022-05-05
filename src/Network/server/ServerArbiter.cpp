@@ -37,14 +37,15 @@ ServerArbiter::ServerArbiter() : NetClientCollector(),
 
 ServerArbiter::ServerArbiter(std::function<void()> simulation)
         : NetClientCollector(),
-        simulation(std::move(simulation)),
-        freePorts({6000, 6001, 6002, 6003, 6004, 6005, 6006, 6007, 6008, 6009, 6010}) {}
+          simulation(std::move(simulation)),
+          freePorts({6000, 6001, 6002, 6003, 6004, 6005, 6006, 6007, 6008, 6009, 6010}) {}
 
 void ServerArbiter::sendGameServerConfig(sf::TcpSocket& client, const std::string& roomCode) {
     net::NetMessage message;
     net::GameServerConfig* serverConfig = message.mutable_server_config();
     if (!roomCodeToServerNum.contains(roomCode)) {
-        sendNetMessage(client, message);
+        throw std::logic_error("No such room");
+//        sendNetMessage(client, message);
     }
     GameServer& server = *(gameServers[roomCodeToServerNum[roomCode]]);
     serverConfig->set_room_code(roomCode);

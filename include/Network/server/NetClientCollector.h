@@ -7,15 +7,17 @@
 
 class NetClientCollector {
 private:
+
     sf::TcpListener listener;
 
 public:
+    std::mutex m;
     sf::Thread simulationThread;
 
     sf::IpAddress ipAddress;
     volatile bool threadIsActive;
 
-    static void defaultJob(NetClientCollector *self);
+    static void defaultJob(NetClientCollector* self);
 
     std::vector<std::unique_ptr<sf::TcpSocket>> clients;
 public:

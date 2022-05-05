@@ -24,18 +24,23 @@ namespace null {
     }
 
     namespace {
-        enum Direction { Left, Up, Right, Down };
+        enum Direction {
+            Left, Up, Right, Down, Stop
+        };
+
         Direction getDirectionByKey(const sf::Keyboard::Key& key) {
-            static const std::unordered_map<sf::Keyboard::Key, Direction> keyToDirection {
-                    { sf::Keyboard::Left, Left },
-                    { sf::Keyboard::Up, Up },
-                    { sf::Keyboard::Right, Right },
-                    { sf::Keyboard::Down, Down },
+            static const std::unordered_map<sf::Keyboard::Key, Direction> keyToDirection{
+                    {sf::Keyboard::Left,  Left},
+                    {sf::Keyboard::Up,    Up},
+                    {sf::Keyboard::Right, Right},
+                    {sf::Keyboard::Down,  Down},
+                    {sf::Keyboard::A, Stop}
             };
             return keyToDirection.at(key);
         }
+
         void moveRigidBody(b2Body* rigidBody, Direction direction) {
-            constexpr float speedModule = 3.0f;
+            constexpr float speedModule = 0.01f;
             b2Vec2 newVelocity = rigidBody->GetLinearVelocity();
             switch (direction) {
                 case Left:
@@ -50,18 +55,25 @@ namespace null {
                 case Down:
                     newVelocity.y = +speedModule;
                     break;
+                case Stop:
+                    newVelocity.x = 0;
+                    newVelocity.y = 0;
+
             }
             rigidBody->SetLinearVelocity(newVelocity);
         }
+
         void stopRigidBody(b2Body* rigidBody) {
             rigidBody->SetLinearVelocity({0.0f, 0.0f});
         }
+
         void handleMessage(GameObject& gameObject, net::GameMessage::ClientCommand& command) {
             auto rigidBody = gameObject.getRigidBody();
             auto direction =
                     Direction(command.mutable_content()->uint32s(0));
             moveRigidBody(rigidBody, direction);
         }
+
         net::GameMessage::SubscriberState makeMessage(uint64_t entityId, sf::Vector2f position) {
             net::GameMessage::SubscriberState state;
             state.set_subscriber_id(entityId);

@@ -23,21 +23,22 @@ namespace null {
     // todo this is a dummy implementation
     // later reimplement this by loading stuff from file 
     // and using a resource manager
-    void SceneLoader::loadSceneFromFile(const std::filesystem::path &path) {
+    void SceneLoader::loadSceneFromFile(const std::filesystem::path& path) {
 
         // a temporary solution to get a scene by keyword
         // while we don't store them in files
         auto keyword = path.string();
 
         const std::unordered_map<std::string, std::function<std::shared_ptr<Scene>(void)>> keywordToLevelGetter = {
-                {"/demo",                 getDemoScene},
-                {"/menu",                 getMenuScene},
-                {"/menu/play",            getPlayScene},
-                {"/menu/play/createRoom", getCreateRoomScene},
-                {"/menu/play/joinRoom",   getJoinRoomScene},
-                {"/game",                 getGameScene},
-                {"/network-demo-client", getNetworkDemoClientScene},
-                {"/network-demo-server", getNetworkDemoServerScene}
+                {"/demo",                   getDemoScene},
+                {"/menu",                   getMenuScene},
+                {"/menu/play",              getPlayScene},
+                {"/menu/play/createRoom",   getCreateRoomScene},
+                {"/menu/play/joinRoom",     getJoinRoomScene},
+                {"/game",                   getGameScene},
+                {"/network-demo-client",    getNetworkDemoClientScene},
+                {"/network-demo-server",    getNetworkDemoServerScene},
+                {"/network-demo-connector", getNetworkDemoClientScene}
         };
 
         std::shared_ptr<Scene> scene;
@@ -276,7 +277,7 @@ namespace null {
         return newScene;
     }
 
-    void SceneLoader::changeScene(const std::filesystem::path &path) {
+    void SceneLoader::changeScene(const std::filesystem::path& path) {
         loadSceneFromFile(path);
         throw SceneChangedException();
     }

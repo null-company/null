@@ -4,6 +4,7 @@
 #include <Scene.hpp>
 #include <Renderer.hpp>
 #include <SpriteSheet.hpp>
+#include "exceptions/NetworkException.h"
 
 namespace null {
 
@@ -44,7 +45,6 @@ namespace null {
 
         sceneStart:
         scene->start();
-
         try {
             bool cont = sfmlWin == nullptr || sfmlWin->isOpen();
             while (cont) {
@@ -58,7 +58,7 @@ namespace null {
                             case sf::Event::EventType::Closed:
                                 sfmlWin->close();
                                 break;
-                            case sf::Event::Resized:{
+                            case sf::Event::Resized: {
                                 break;
                             }
                             default:
@@ -66,8 +66,20 @@ namespace null {
                         }
                     }
                 }
+                if (!noHead) {
+                    try {
+                        while (true) {
 
+                            auto message = receiveNetMessage(
+                                    clientNetworkManager->getClient().getGameServerSocket()).game_message();
+                            clientNetworkManager->distributeMessageToSubscribers(*message.mutable_subscriber_state());
+                        }
+                    } catch (ReceiveException e) {
+
+                    }
+                }
                 scene->update();
+
                 if (!noHead) {
                     sfmlWin->clear(sf::Color::Black);
                     Renderer::render(*sfmlWin, *MainLoop::scene);

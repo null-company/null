@@ -15,5 +15,5 @@ std::string generateSixLetterCode() {
     for (char &c: s) {
         c = char_set[dist(engine)];
     }
-    return s;
+    return "AAAAAA";
 }

@@ -12,6 +12,7 @@
  */
 class GameServer : public NetClientCollector {
 private:
+    std::mutex m;
     std::vector<uint8_t> clientIDs;
     static uint8_t globalGameID;
     std::map<uint64_t, std::queue<net::GameMessage::ClientCommand>> entityIdToMessageQueue;
