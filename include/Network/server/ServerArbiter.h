@@ -3,6 +3,7 @@
 #include <SFML/Network.hpp>
 #include <list>
 #include <functional>
+#include <plog/Log.h>
 
 #include "GameServer.h"
 #include "serialized/serverConfig.pb.h"
@@ -31,6 +32,7 @@ public:
      * @return
      */
     GameServer& getGameServer() {
+        LOGD << "Server count: " << gameServers.size() << " Should be 1";
         return *gameServers[0];
     }
 

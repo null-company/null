@@ -16,7 +16,7 @@ private:
     static uint8_t globalGameID;
     std::map<uint64_t, std::queue<net::GameMessage::ClientCommand>> entityIdToMessageQueue;
 public:
-    explicit GameServer(std::function<void(void)>);
+    explicit GameServer(std::function<void(void)>& simulation);
 
     int clientCount();
 

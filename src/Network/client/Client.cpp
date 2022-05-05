@@ -31,6 +31,7 @@ void Client::handleRoomCodeMessage(const net::ConnectRoom &room) {
 }
 
 void Client::connectRoom(sf::IpAddress serverAddress, uint16_t port) {
+    gameServerSocket.setBlocking(true);
     auto status = gameServerSocket.connect(serverAddress, port);
     if (status != sf::Socket::Done) {
         throw ReceiveException("Game server connection failed", status);
@@ -38,13 +39,16 @@ void Client::connectRoom(sf::IpAddress serverAddress, uint16_t port) {
 }
 
 void Client::createRoom() {
+    LOGD << "Creating room";
     arbiterSocket.setBlocking(true);
     sendGenerateRoomMessage();
+    LOGD << "Sent generate room message";
     net::NetMessage message = receiveNetMessage(arbiterSocket);
     if (!message.has_connect_room()) {
         throw std::invalid_argument("Expected room code");
     }
     connectRoom(message.connect_room().room_code());
+    LOGD << "Connected to room";
     arbiterSocket.setBlocking(false);
 }
 

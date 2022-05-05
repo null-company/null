@@ -8,7 +8,7 @@
 namespace null {
 
     ServerArbiter* MainLoop::serverArbiter = nullptr;
-    GameServer* MainLoop::gameServer = nullptr;
+//    GameServer* MainLoop::gameServer = nullptr;
     ClientNetworkManager* MainLoop::clientNetworkManager = nullptr;
 
     constexpr unsigned int MAX_FRAMERATE = 60;
@@ -30,7 +30,7 @@ namespace null {
 //    }
 
     int MainLoop::run() {
-        return run(true);
+        return run(false);
     }
 
     int MainLoop::run(bool noHead) {

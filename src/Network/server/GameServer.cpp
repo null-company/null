@@ -11,7 +11,7 @@ namespace {
      * @param self
      */
     void gameServerJob(NetClientCollector* self, std::function<void(void)>& simulation) {
-        sf::Thread simulationThread(simulation); // this is so ugly my self-esteem went down
+        sf::Thread simulationThread(std::move(simulation)); // this is so ugly my self-esteem went down
         simulationThread.launch();
         while (self->threadIsActive) {
             int readyClientIdx = self->getFirstReadySocketIdx();
@@ -39,7 +39,7 @@ namespace {
     }
 }
 
-GameServer::GameServer(std::function<void(void)> simulation) :
+GameServer::GameServer(std::function<void(void)>& simulation) :
         NetClientCollector([this, &simulation]() { gameServerJob(this, simulation); }) {
 }
 

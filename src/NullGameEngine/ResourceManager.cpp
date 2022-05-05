@@ -10,7 +10,7 @@ namespace null {
         try {
             texture = ResourceManager::textureMap.at(filename);
         } catch (std::out_of_range &exception) {
-            texture->loadFromFile("../res/textures/" + filename);
+            texture->loadFromFile(R"(E:\projects\git-repos\null\res\textures\)" + filename);
             ResourceManager::textureMap[filename] = texture;
         }
         return texture;

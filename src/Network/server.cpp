@@ -33,6 +33,7 @@ int main() {
     }
 
     if (null::MainLoop::isServer) {
+        LOGD << "This is a server";
         null::MainLoop::serverArbiter = new ServerArbiter([](){ null::MainLoop::run(); });
         auto& serverArbiter = *null::MainLoop::serverArbiter;
         serverArbiter.listen("127.0.0.1", 5000);
@@ -44,5 +45,12 @@ int main() {
                 break;
             }
         }
+    } else {
+        LOGD << "This is a client";
+        null::MainLoop::clientNetworkManager = new ClientNetworkManager("127.0.0.1", 5000);
+        auto& clientNetworkManager = *null::MainLoop::clientNetworkManager;
+        clientNetworkManager.getClient().createRoom();
+        LOGD << clientNetworkManager.getClient().getRoomCode();
+        null::MainLoop::run();
     }
 }

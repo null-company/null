@@ -51,6 +51,7 @@ void ClientNetworkManager::ensurePlayerChannel(uint64_t subscriberEntityId) {
     if (!channels.contains(subscriberEntityId)) {
         LOGD << "New channel need to be created for player id: " << subscriberEntityId;
         channels.insert({subscriberEntityId, std::queue<net::GameMessage::SubscriberState>()});
+        LOGD << "Inserted a channel";
     }
 }
 

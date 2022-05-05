@@ -2,6 +2,7 @@
 
 #include <SceneLoader.hpp>
 #include <MainLoop.hpp>
+#include <iostream>
 #include <plog/Log.h>
 #include <plog/Appenders/ColorConsoleAppender.h>
 #include <plog/Formatters/TxtFormatter.h>
@@ -33,9 +34,10 @@ int main() {
             std::cout << "Unknown scene, try again" << std::endl;
         }
     }
-
+    LOGD << "Here";
     if (null::MainLoop::isServer) {
-        null::MainLoop::serverArbiter = new ServerArbiter(null::MainLoop::run);
+        LOGD << "This is a server";
+        null::MainLoop::serverArbiter = new ServerArbiter([]() { null::MainLoop::run();} );
         auto& serverArbiter = *null::MainLoop::serverArbiter;
         serverArbiter.listen("127.0.0.1", 5000);
         serverArbiter.launch();
@@ -47,8 +49,11 @@ int main() {
             }
         }
     } else {
+        LOGD << "This is a client";
         null::MainLoop::clientNetworkManager = new ClientNetworkManager("127.0.0.1", 5000);
-
+        auto& clientNetworkManager = *null::MainLoop::clientNetworkManager;
+        clientNetworkManager.getClient().createRoom();
+        LOGD << clientNetworkManager.getClient().getRoomCode();
 
     }
 

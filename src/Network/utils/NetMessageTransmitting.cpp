@@ -6,7 +6,10 @@
 net::NetMessage receiveNetMessage(sf::TcpSocket &socket) {
     net::NetMessage message;
     sf::Packet packet;
+    auto old = socket.isBlocking();
+    socket.setBlocking(true);
     auto status = socket.receive(packet);
+    socket.setBlocking(old);
     if (status != sf::Socket::Done) {
         throw ReceiveException("Cannot receive message", status);
     }
@@ -20,7 +23,10 @@ net::NetMessage receiveNetMessage(sf::TcpSocket &socket) {
 void sendNetMessage(sf::TcpSocket &socket, const net::NetMessage &message) {
     sf::Packet packet;
     packet << message.SerializeAsString();
+    auto old = socket.isBlocking();
+    socket.setBlocking(true);
     auto status = socket.send(packet);
+    socket.setBlocking(old);
     if (status != sf::Socket::Done) {
         LOGD << "Cannot send message";
         throw ReceiveException("Error occurred while trying to send message to client", status);

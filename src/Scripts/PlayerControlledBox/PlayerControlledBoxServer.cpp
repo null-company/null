@@ -18,8 +18,9 @@ namespace null {
         gameObject.renderLayer = FOREGROUND;
         gameObject.visible = true;
         gameObject.makeDynamic();
+        gameObject.getRigidBody()->SetGravityScale(0.0f);
 
-        messageQueue = &(MainLoop::gameServer->subscribe(gameObject.getGuid()));
+        messageQueue = &(MainLoop::serverArbiter->getGameServer().subscribe(gameObject.getGuid()));
     }
 
     namespace {
@@ -73,16 +74,22 @@ namespace null {
     void PlayerControlledBoxServer::update() {
         net::GameMessage::ClientCommand command;
         bool newMessage = false;
-        for (auto m = messageQueue->front(); !messageQueue->empty(); m = messageQueue->front(), messageQueue->pop()) {
-            //if (m.game_id() == id) {
-            command = m;
-            newMessage = true;
-            //}
+        if (!messageQueue->empty()) {
+            for (auto m = messageQueue->front(); !messageQueue->empty(); m = messageQueue->front()) {
+                //if (m.game_id() == id) {
+                command = m;
+                newMessage = true;
+                messageQueue->pop();
+                if (messageQueue->empty()) {
+                    break;
+                }
+                //}
+            }
         }
         if (newMessage) {
             handleMessage(gameObject, command);
         }
-        MainLoop::gameServer->broadcastMessage(
+        MainLoop::serverArbiter->getGameServer().broadcastMessage(
                 makeMessage(gameObject.getGuid(), gameObject.getPosition())
         );
 //        isMoving = false;

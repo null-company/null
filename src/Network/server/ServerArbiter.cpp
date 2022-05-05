@@ -13,6 +13,7 @@ std::string ServerArbiter::createNewGameSimulation() {
     freePorts.pop_back();
     net::GameServerConfig gameServerConfig;
     if (!gameServers.empty()) {
+        LOGD << "ERROR multiple servers";
         throw std::length_error("Right now we do not allow multiple servers");
     }
     gameServers.emplace_back(std::make_unique<GameServer>(simulation));
@@ -21,8 +22,8 @@ std::string ServerArbiter::createNewGameSimulation() {
 
     std::string roomCode = generateSixLetterCode();
     while (roomCodeToServerNum.contains(roomCode)) {
-        //roomCode = generateSixLetterCode();
-        roomCode = "AAAAAA";
+        roomCode = generateSixLetterCode();
+//        roomCode = "AAAAAA";
     }
 
     PLOGD << "Room code was chosen: " << roomCode;

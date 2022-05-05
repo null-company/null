@@ -2,6 +2,8 @@
 
 #include <unordered_map>
 
+#include <plog/Log.h>
+
 #include <GameObject.hpp>
 #include <ResourceManager.hpp>
 #include <MainLoop.hpp>
@@ -18,6 +20,7 @@ namespace null {
         gameObject.renderLayer = FOREGROUND;
         gameObject.visible = true;
         gameObject.makeDynamic();
+        gameObject.getRigidBody()->SetGravityScale(0.0f);
 
         messageQueue = &(MainLoop::clientNetworkManager->subscribe(gameObject.getGuid()));
     }
@@ -76,13 +79,22 @@ namespace null {
     void PlayerControlledBoxClient::update() {
         net::GameMessage::SubscriberState newState;
         bool newMessage = false;
-        for (auto m = messageQueue->front(); !messageQueue->empty(); m = messageQueue->front(), messageQueue->pop()) {
-            //if (m.game_id() == id) {
-            newState = m;
-            newMessage = true;
-            //}
+        LOGD << "Going over message que";
+        if (!messageQueue->empty()) {
+            for (auto m = messageQueue->front(); !messageQueue->empty(); m = messageQueue->front()) {
+                //if (m.game_id() == id) {
+                newState = m;
+                newMessage = true;
+                messageQueue->pop();
+                if (messageQueue->empty()) {
+                    break;
+                }
+                //}
+            }
         }
+        LOGD << "Finished que";
         if (newMessage) {
+            LOGD << "Message received";
             handleMessage(gameObject, newState);
         }
 //        isMoving = false;
