@@ -57,9 +57,10 @@ namespace null {
                         }
                         case sf::Event::KeyPressed: {
                             scene->windowMetaInfo.keyEvent = e.key;
+                            break;
                         }
                         case sf::Event::KeyReleased: {
-
+                            break;
                         }
                         default:
                             break;

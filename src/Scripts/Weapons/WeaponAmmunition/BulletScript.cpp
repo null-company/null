@@ -1,9 +1,9 @@
 
 #include "Component.hpp"
-#include "Weapon/BulletScript.hpp"
+#include "Weapons/WeaponAmmunition/BulletScript.hpp"
 #include "GameObject.hpp"
-#include <ResourceManager.hpp>
-#include <Scene.hpp>
+#include "ResourceManager.hpp"
+#include "Scene.hpp"
 #include <iostream>
 
 namespace null {

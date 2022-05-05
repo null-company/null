@@ -2,12 +2,12 @@
 // Created by artemonchelus on 27.04.22.
 //
 
-#include "Weapon/GrenadeBunchScript.hpp"
+#include "Weapons/WeaponHolders/GrenadeBunchScript.hpp"
 #include "ResourceManager.hpp"
 #include "GameObject.hpp"
 #include "Scene.hpp"
 #include "Graphic/Vector.hpp"
-#include "Weapon/GrenadeScript.hpp"
+#include "Weapons/WeaponAmmunition/GrenadeScript.hpp"
 
 namespace null {
     void GrenadeBunchScript::start() {

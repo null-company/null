@@ -40,7 +40,7 @@ set(SRC
         ${INCROOT}/MapManager/MapManager.hpp
         ${SRCROOT}/Movement/Movable.cpp
         ${SRCROOT}/Movement/LinearMovable.cpp
-        ${INCROOT}/Movememt/LinearMovable.hpp Physics/ContactListener.cpp ../../include/NullGameEngine/Physics/ContactListener.hpp ../../include/Scripts/Weapon/GrenadeBunchScript.hpp ../../include/NullGameEngine/Physics/CollisionCategories.hpp)
+        ${INCROOT}/Movememt/LinearMovable.hpp Physics/ContactListener.cpp ../../include/NullGameEngine/Physics/ContactListener.hpp ../../include/Scripts/Weapons/WeaponHolders/GrenadeBunchScript.hpp ../../include/NullGameEngine/Physics/CollisionCategories.hpp)
 
 add_library(nullGameEngine STATIC ${SRC})
 target_include_directories(nullGameEngine

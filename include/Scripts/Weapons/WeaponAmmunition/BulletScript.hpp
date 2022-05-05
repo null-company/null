@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Script.hpp>
+#include "Script.hpp"
 #include "SFML/System/Vector2.hpp"
 
 namespace null {

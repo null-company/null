@@ -13,11 +13,12 @@
 #include <functional>
 #include <unordered_map>
 #include "MapManager/MapManager.hpp"
-#include "Weapon/WeaponScript.hpp"
-#include "Weapon/StraightWeaponScript.hpp"
-#include "Weapon/WeaponStorage.hpp"
+#include "Weapons/WeaponHolders/WeaponScript.hpp"
+#include "Weapons/WeaponHolders/StraightWeaponScript.hpp"
+#include "Weapons/WeaponHolders/WeaponStorage.hpp"
 #include <MapManager/MapManager.hpp>
-#include <Weapon/GrenadeBunchScript.hpp>
+#include "Weapons/WeaponHolders/GrenadeBunchScript.hpp"
+#include "Weapons/WeaponGenerator.hpp"
 
 namespace null {
 
@@ -62,6 +63,11 @@ namespace null {
         // this texture is not released on purpose, because it MUST exist for as long
         // as the sprite lives. todo manage it with resource manager
         sf::Texture* nullTexture = ResourceManager::loadTexture("background.png");
+        auto parentGameObject = std::make_shared<GameObject>();
+        auto weaponGenerator = std::make_shared<GameObject>();
+
+        weaponGenerator->addScript<WeaponGenerator>(*weaponGenerator);
+        parentGameObject->addChild(std::move(weaponGenerator));
 
         auto nullGameLogo = std::make_shared<GameObject>();
         nullGameLogo->getSprite().setTexture(*nullTexture);
@@ -93,6 +99,7 @@ namespace null {
             groundSprite.setPosition(x, y);
             groundObject->renderLayer = FOREGROUND;
             groundObject->visible = true;
+            groundObject->addTag("platform");
             groundObject->makeStatic(box2dWorld);
             groundObject->addScript<ReloadSceneScript>(*groundObject);
             newScene->addRootGameObject(std::move(groundObject));
@@ -195,6 +202,7 @@ namespace null {
         newScene->addRootGameObject(std::move(nullGameLogo));
         newScene->addRootGameObject(std::move(player));
         newScene->addRootGameObject(std::move(cursorObject));
+        newScene->addRootGameObject(std::move(parentGameObject));
         return newScene;
     }
 

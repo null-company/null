@@ -1,5 +1,5 @@
 #include "Physics/ContactListener.hpp"
-#include "Weapon/BulletScript.hpp"
+#include "Weapons/WeaponAmmunition/BulletScript.hpp"
 
 namespace null {
 //TODO: Make chain call pattern

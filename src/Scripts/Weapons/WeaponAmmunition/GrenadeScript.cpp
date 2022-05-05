@@ -1,4 +1,4 @@
-#include "Weapon/GrenadeScript.hpp"
+#include "Weapons/WeaponAmmunition/GrenadeScript.hpp"
 #include "GameObject.hpp"
 #include "Scene.hpp"
 #include "Graphic/Vector.hpp"

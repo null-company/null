@@ -2,7 +2,7 @@
 // Created by artemonchelus on 28.04.22.
 //
 
-#include "Weapon/WeaponStorage.hpp"
+#include "Weapons/WeaponHolders/WeaponStorage.hpp"
 #include "Scene.hpp"
 #include <utility>
 #include <GameObject.hpp>

@@ -1,10 +1,10 @@
-#include "Weapon/StraightWeaponScript.hpp"
+#include "Weapons/WeaponHolders/StraightWeaponScript.hpp"
 #include "Script.hpp"
 #include "GameObject.hpp"
 #include "ResourceManager.hpp"
 #include "Scene.hpp"
 #include "box2d/box2d.h"
-#include "Weapon/BulletScript.hpp"
+#include "Weapons/WeaponAmmunition/BulletScript.hpp"
 #include "Graphic/Vector.hpp"
 
 namespace null {

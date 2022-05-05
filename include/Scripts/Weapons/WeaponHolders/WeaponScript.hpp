@@ -1,10 +1,10 @@
 #pragma once
 
-#include<Script.hpp>
-#include <SFML/Graphics.hpp>
+#include"Script.hpp"
+#include "_deps/sfml-src/include/SFML/Graphics.hpp"
 #include <chrono>
 #include <random>
-#include <Script.hpp>
+#include "Script.hpp"
 
 using namespace std::chrono_literals;
 namespace null {

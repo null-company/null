@@ -27,13 +27,18 @@ set(SRC
         ${SRCROOT}/ButtonScript.cpp
         ${INCROOT}/ButtonScript.hpp
         ${SRCROOT}/NetworkPlayerScript.cpp
-        ${SRCROOT}Weapons/WeaponScript.cpp
-        ${SRCROOT}/Weapons/StraightWeaponScript.cpp
-        ${INCROOT}/Weapon/StraightWeaponScript.hpp
-        ${INCROOT}/Weapon/WeaponScript.hpp
-        ${SRCROOT}/Weapons/BulletScript.cpp
-        ${INCROOT}/Weapon/BulletScript.hpp
-        Weapons/GrenadeBunchScript.cpp ../../include/Scripts/Weapon/GrenadeScript.hpp Weapons/GrenadeScript.cpp ../../include/Scripts/Weapon/GrenadeScript.hpp Weapons/WeaponStorage.cpp ../../include/Scripts/Weapon/WeaponStorage.hpp)
+        ${SRCROOT}/Weapons/WeaponHolders/WeaponScript.cpp
+        ${SRCROOT}/Weapons/WeaponHolders/StraightWeaponScript.cpp
+        ${INCROOT}/Weapons/WeaponHolders/StraightWeaponScript.hpp
+        ${INCROOT}/Weapons/WeaponHolders/WeaponScript.hpp
+        ${SRCROOT}/Weapons/WeaponAmmunition/BulletScript.cpp
+        ${INCROOT}/Weapons/WeaponAmmunition/BulletScript.hpp
+        ${SRCROOT}/Weapons/WeaponHolders/GrenadeBunchScript.cpp
+        ${INCROOT}/Weapons/WeaponAmmunition/GrenadeScript.hpp
+        ${SRCROOT}/Weapons/WeaponAmmunition/GrenadeScript.cpp
+        ${INCROOT}/Weapons/WeaponAmmunition/GrenadeScript.hpp
+        ${SRCROOT}/Weapons/WeaponHolders/WeaponStorage.cpp
+        ${INCROOT}/Weapons/WeaponHolders/WeaponStorage.hpp Weapons/WeaponGenerator.cpp ../../include/Scripts/Weapons/WeaponGenerator.hpp)
 
 add_library(scripts STATIC ${SRC})
 target_include_directories(scripts

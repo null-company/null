@@ -1,7 +1,7 @@
 #pragma once
 
 #include <queue>
-#include <GameObject.hpp>
+#include "GameObject.hpp"
 #include <memory>
 
 namespace null {
