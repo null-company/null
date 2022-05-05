@@ -132,6 +132,8 @@ namespace null {
         GameObject* getCollied();
 
         Scene& getSceneForce();
+
+        std::shared_ptr<GameObject> findFirstChildrenByTag(const std::string& tag);
     };
 
 }

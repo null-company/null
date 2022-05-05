@@ -45,6 +45,15 @@ namespace null {
         return sprite;
     }
 
+
+    std::shared_ptr<GameObject> GameObject::findFirstChildrenByTag(const std::string& tag) {
+        auto res = *std::find_if(children.begin(), children.end(),
+                                 [&tag](std::shared_ptr<GameObject>& gameObject) {
+                                     return gameObject->hasTag(tag);
+                                 });
+        return res;
+    }
+
     b2Body* GameObject::getRigidBody() {
         return rigidBody;
     }

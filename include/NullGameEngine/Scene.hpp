@@ -12,11 +12,12 @@
 namespace null {
     class Scene : public std::enable_shared_from_this<Scene> {
     private:
-        mutable WindowMetaInfo windowMetaInfo;
         mutable std::shared_ptr<GameObject> camera = std::make_shared<GameObject>(std::set<std::string>({"camera"}));
         std::vector<std::shared_ptr<GameObject>> rootGameObjects;
         b2World box2dWorld;
     public:
+        mutable WindowMetaInfo windowMetaInfo;
+
         Scene();
 
         void objectTreeForEachDo(GameObject&,
@@ -34,7 +35,7 @@ namespace null {
 
         std::weak_ptr<GameObject> addRootGameObject(std::shared_ptr<GameObject>&&);
 
-        b2World &getBox2dWorld();
+        b2World& getBox2dWorld();
 
         class GameObjectNotFoundException : public std::exception {
         };

@@ -15,8 +15,10 @@
 #include "MapManager/MapManager.hpp"
 #include "Weapon/WeaponScript.hpp"
 #include "Weapon/StraightWeaponScript.hpp"
+#include "Weapon/WeaponStorage.hpp"
 #include <MapManager/MapManager.hpp>
 #include <Weapon/GrenadeBunchScript.hpp>
+
 namespace null {
 
     // todo this is a dummy implementation
@@ -126,10 +128,17 @@ namespace null {
                                                                              {"walkRight", 1, 0, 3},
                                                                              {"walkLeft",  2, 0, 3}});
 
-        auto weapon = std::make_shared<GameObject>();
-        weapon->addScript<GrenadeBunchScript>(*weapon);
+        auto grenadeBunch = std::make_shared<GameObject>();
+        grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
 
-        player->addChild(std::move(weapon));
+        auto gun = std::make_shared<GameObject>();
+        gun->addScript<StraightWeaponScript>(*gun, 0.01);
+
+        auto weaponStorage = std::make_shared<GameObject>();
+        std::vector guns{gun, grenadeBunch};
+        weaponStorage->addScript<WeaponStorage>(*weaponStorage, guns);
+
+        player->addChild(std::move(weaponStorage));
         newScene->camera->getScript<ExampleCameraScript>()->setTrackedGameObject(*player);
         newScene->camera->getScript<ExampleCameraScript>()->setMap(*nullGameLogo);
 
@@ -155,10 +164,30 @@ namespace null {
         fixtureDef3.density = 1;
 
         player->addScript<PlayerAnimation>(*player, playerSpriteSheet,
-                                           std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>>{
-                                                   {"idle",      {{fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}}},
-                                                   {"walkRight", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}},
-                                                   {"walkLeft",  {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}}
+                                           std::unordered_map<std::string,
+                                                   std::vector<std::vector<b2FixtureDef>>>{
+                                                   {
+                                                           "idle",      {{fixtureDef3},
+                                                                                {fixtureDef3},
+                                                                                {fixtureDef3},
+                                                                                {fixtureDef3},
+                                                                                {fixtureDef3},
+                                                                                {fixtureDef3},
+                                                                                {fixtureDef3},
+                                                                                {fixtureDef3}}
+                                                   },
+                                                   {
+                                                           "walkRight", {{fixtureDef1},
+                                                                                {fixtureDef2},
+                                                                                {fixtureDef1},
+                                                                                {fixtureDef2}}
+                                                   },
+                                                   {
+                                                           "walkLeft",  {{fixtureDef1},
+                                                                                {fixtureDef2},
+                                                                                {fixtureDef1},
+                                                                                {fixtureDef2}}
+                                                   }
                                            });
         MapManager mapManager(box2dWorld);
         newScene->addRootGameObject(std::move(mapManager.makeBorder(nullGameLogo->getSprite())));

@@ -55,6 +55,12 @@ namespace null {
                         case sf::Event::Resized: {
                             break;
                         }
+                        case sf::Event::KeyPressed: {
+                            scene->windowMetaInfo.keyEvent = e.key;
+                        }
+                        case sf::Event::KeyReleased: {
+
+                        }
                         default:
                             break;
                     }
@@ -64,6 +70,7 @@ namespace null {
                 sfmlWin.clear(sf::Color::Black);
                 Renderer::render(sfmlWin, *MainLoop::scene);
                 sfmlWin.display();
+                scene->windowMetaInfo.resetKey();
             }
         }
         catch (const SceneChangedException& sceneChanged) {
