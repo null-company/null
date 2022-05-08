@@ -23,7 +23,6 @@ std::string ServerArbiter::createNewGameSimulation() {
     std::string roomCode = generateSixLetterCode();
     while (roomCodeToServerNum.contains(roomCode)) {
         roomCode = generateSixLetterCode();
-//        roomCode = "AAAAAA";
     }
 
     PLOGD << "Room code was chosen: " << roomCode;

@@ -33,7 +33,7 @@ int main() {
     int port = 5002;
     if (null::MainLoop::isServer && levelToLoad != "/network-demo-connector") {
         LOGD << "This is a server";
-        null::MainLoop::serverArbiter = new ServerArbiter([]() { null::MainLoop::run(true); });
+        null::MainLoop::serverArbiter = new ServerArbiter([]() { null::MainLoop::run(); });
         auto& serverArbiter = *null::MainLoop::serverArbiter;
         serverArbiter.listen("127.0.0.1", port);
         serverArbiter.launch();

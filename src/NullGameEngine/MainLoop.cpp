@@ -31,12 +31,8 @@ namespace null {
 //    }
 
     int MainLoop::run() {
-        return run(false);
-    }
-
-    int MainLoop::run(bool noHead) {
         sf::RenderWindow* sfmlWin = nullptr;
-        if (!noHead) {
+        if (!isServer) {
             sfmlWin = new sf::RenderWindow(sf::VideoMode(1280, 720), "{[Null]}");
             // window = &sfmlWin;
             sfmlWin->setFramerateLimit(MAX_FRAMERATE);
@@ -52,7 +48,7 @@ namespace null {
 
                 // todo dispatching user events such as keyboard inputs will probably take place here
                 sf::Event e{};
-                if (!noHead) {
+                if (!isServer) {
                     while (sfmlWin->pollEvent(e)) {
                         switch (e.type) {
                             case sf::Event::EventType::Closed:
@@ -66,8 +62,8 @@ namespace null {
                         }
                     }
                 }
-                if (!noHead) {
-                    try {
+                if (!isServer) {
+                    try { // client
                         while (true) {
 
                             auto message = receiveNetMessage(
@@ -77,10 +73,37 @@ namespace null {
                     } catch (ReceiveException e) {
 
                     }
+                } else {
+                    auto gameServerStep = []() {
+                        auto& gameServer  = serverArbiter->getGameServer();
+                        int readyClientIdx = gameServer.getFirstReadySocketIdx();
+                        if (readyClientIdx == -2) {
+                            return ;
+                        }
+                        if (readyClientIdx == -1) {
+                            gameServer.acceptNewClient();
+                            return;
+                        }
+                        try {
+                            sf::TcpSocket& client = gameServer.getClient(readyClientIdx);
+                            net::NetMessage message = receiveNetMessage(client);
+                            gameServer.handleNetMessage(readyClientIdx, message);
+                        } catch (const ReceiveException& exception) {
+                            auto status = exception.getStatus();
+                            if (status == sf::Socket::Disconnected) {
+                                gameServer.disconnectClient(readyClientIdx);
+                                return;
+                            }
+                            std::cout << status << std::endl;
+                            throw ReceiveException("Unexpected client receive exception status",
+                                                   exception.getStatus());
+                        }
+                    };
+                    gameServerStep();
                 }
                 scene->update();
 
-                if (!noHead) {
+                if (!isServer) {
                     sfmlWin->clear(sf::Color::Black);
                     Renderer::render(*sfmlWin, *MainLoop::scene);
                     sfmlWin->display();

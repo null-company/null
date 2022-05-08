@@ -24,7 +24,6 @@ namespace null {
 //        static GameServer* gameServer;
         static ClientNetworkManager* clientNetworkManager;
         static int run();
-        static int run(bool noHead);
         static sf::Window& getWindow();
 
         friend SceneLoader;

@@ -35,7 +35,7 @@ namespace null {
         };
 
         void moveGameObject(GameObject& gameObject, Direction direction) {
-            constexpr float delta = 1.0f;
+            constexpr float delta = 3.0f;
             sf::Vector2f positionDelta;
             switch (direction) {
                 case Left:
@@ -66,7 +66,6 @@ namespace null {
         net::GameMessage::SubscriberState makeMessage(uint64_t entityId, sf::Vector2f position) {
             net::GameMessage::SubscriberState state;
             state.set_subscriber_id(entityId);
-            std::cout << "Sending x " << position.x << " y " << position.y << std::endl;
             state.mutable_content()->add_floats(position.x);
             state.mutable_content()->add_floats(position.y);
             return state;

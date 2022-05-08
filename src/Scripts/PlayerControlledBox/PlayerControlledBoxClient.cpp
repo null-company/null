@@ -52,7 +52,6 @@ namespace null {
             // schema is floats: x, y
             float x = newState.mutable_content()->floats(0);
             float y = newState.mutable_content()->floats(1);
-            std::cout << "Got x " << x << " y " << y << std::endl;
             gameObject.setPosition(x, y);
         }
     }

@@ -1,7 +1,6 @@
 #include <plog/Log.h>
 #include "server/GameServer.h"
 #include "utils/NetMessageTransmitting.h"
-#include <mutex>
 #include "serialized/serverConfig.pb.h"
 #include "exceptions/NetworkException.h"
 
@@ -11,32 +10,9 @@ namespace {
      * Run simulation AND do networking
      * @param self
      */
-    void gameServerJob(NetClientCollector* self, std::function<void(void)>& simulation) {
-        sf::Thread simulationThread(std::move(simulation)); // this is so ugly my self-esteem went down
+    void gameServerJob(NetClientCollector* self, std::function<void(void)>& simulationStep) {
+        sf::Thread simulationThread(std::move(simulationStep)); // this is so ugly my self-esteem went down
         simulationThread.launch();
-        while (self->threadIsActive) {
-            int readyClientIdx = self->getFirstReadySocketIdx();
-            if (readyClientIdx == -2) {
-                continue;
-            }
-            if (readyClientIdx == -1) {
-                self->acceptNewClient();
-                continue;
-            }
-            try {
-                sf::TcpSocket& client = self->getClient(readyClientIdx);
-                net::NetMessage message = receiveNetMessage(client);
-                self->handleNetMessage(readyClientIdx, message);
-            } catch (const ReceiveException& exception) {
-                auto status = exception.getStatus();
-                if (status == sf::Socket::Disconnected) {
-                    self->disconnectClient(readyClientIdx);
-                    continue;
-                }
-                std::cout << status << std::endl;
-                throw ReceiveException("Unexpected client receive exception status", exception.getStatus());
-            }
-        }
     }
 }
 
@@ -48,7 +24,6 @@ uint8_t GameServer::globalGameID = 1;
 
 
 void GameServer::broadcastMessage(const net::GameMessage& message) {
-    std::lock_guard<std::mutex> guard(m);
     for (int i = 0; i < clientCount(); i++) {
         sendGameMessage(getClient(i), message);
     }
@@ -83,7 +58,6 @@ void GameServer::distributeMessageToSubscribers(const net::GameMessage::ClientCo
 }
 
 void GameServer::acceptNewClient() {
-    std::lock_guard<std::mutex> guard(m);
     NetClientCollector::acceptNewClient();
     clientIDs.emplace_back(globalGameID++);
 }
