@@ -27,7 +27,7 @@ int main() {
     std::cout << "huh???\n";
 #endif
 
-    std::string mainMenu = "/menu";
+    std::string mainMenu = "/demo";
 
     null::SceneLoader::loadSceneFromFile(mainMenu);
 

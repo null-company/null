@@ -1,7 +1,7 @@
 #include <memory>
 
 #include <box2d/box2d.h>
-        
+
 #include <Scene.hpp>
 #include <SceneLoader.hpp>
 #include <MainLoop.hpp>
@@ -106,11 +106,11 @@ namespace null {
         }
         boxObject->makeDynamic(box2dWorld);
 
-        auto cursorObject = std::make_shared<GameObject>();
+        auto cursorObject = std::make_shared<GameObject>(std::set<std::string>({"cursor"}));
 
         auto spriteSheet = SpriteSheet("cursorAnim.png", sf::Vector2i(16, 16), {{"cursorAnim", 0, 0, 5}});
         cursorObject->addScript<CursorAnimation>(*cursorObject, spriteSheet);
-        cursorObject->getSprite().setScale(4.0f, 4.0f);
+        cursorObject->addTag("cursor");
         cursorObject->renderLayer = serial::FOREGROUND;
         cursorObject->visible = true;
 
@@ -127,7 +127,8 @@ namespace null {
                                                                              {"walkLeft",  2, 0, 3}});
 
         auto weapon = std::make_shared<GameObject>();
-        weapon->addScript<StraightWeaponScript>(*weapon);
+        weapon->addScript<StraightWeaponScript>(*weapon, 5);
+
         player->addChild(std::move(weapon));
         newScene->camera->getScript<ExampleCameraScript>()->setTrackedGameObject(*player);
         newScene->camera->getScript<ExampleCameraScript>()->setMap(*nullGameLogo);
@@ -159,13 +160,13 @@ namespace null {
                                                    {"walkRight", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}},
                                                    {"walkLeft",  {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}}
                                            });
+
         MapManager mapManager(box2dWorld);
         newScene->addRootGameObject(std::move(mapManager.makeBorder(nullGameLogo->getSprite())));
         nullGameLogo->addChild(std::move(boxObject));
-        //nullGameLogo->addChild(std::move(boxObject2));
         newScene->addRootGameObject(std::move(nullGameLogo));
-        //newScene->addRootGameObject(std::move(cursorObject));
         newScene->addRootGameObject(std::move(player));
+        newScene->addRootGameObject(std::move(cursorObject));
         return newScene;
     }
 
@@ -190,6 +191,7 @@ namespace null {
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
         sf::Texture* nullTexture = ResourceManager::loadTexture("menu/menu_background.png");
+
 
         auto background = std::make_shared<GameObject>();
         background->getSprite().setTexture(*nullTexture);

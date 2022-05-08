@@ -115,6 +115,8 @@ namespace null {
         static std::unique_ptr<GameObject> deserialize(google::protobuf::Message *);
 
         friend Scene;
+
+        void makeDynamic();
     };
 
 }

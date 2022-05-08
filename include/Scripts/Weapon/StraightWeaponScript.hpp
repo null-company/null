@@ -5,10 +5,9 @@
 namespace null {
     class StraightWeaponScript : public WeaponScript {
     private:
-        double speed = 1;
-
+        double speed = 10;
     public:
-        explicit StraightWeaponScript(GameObject& object);
+        explicit StraightWeaponScript(GameObject& object, double deviance);
 
         void start() override;
 

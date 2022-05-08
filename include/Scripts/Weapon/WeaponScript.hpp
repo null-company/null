@@ -1,6 +1,6 @@
 #pragma once
 
-#include<Script.hpp>
+#include <Script.hpp>
 #include <SFML/Graphics.hpp>
 #include <chrono>
 #include <random>
@@ -13,14 +13,13 @@ namespace null {
         using clock = std::chrono::steady_clock;
         using time_point = std::chrono::time_point<clock>;
 
-    private:
+    protected:
         mills restartTime = 100ms;
         time_point lastShot;
 
         std::random_device rd{};
         std::mt19937 gen{rd()};
-        std::normal_distribution<> d{0, 0};
-
+        std::normal_distribution<> d{0, 0.5};
     public:
         explicit WeaponScript(GameObject& object);
 
@@ -32,4 +31,4 @@ namespace null {
         void serialize(google::protobuf::Message *message) { };
         static std::unique_ptr<WeaponScript> deserialize(google::protobuf::Message *message) { };
     };
-};
+}

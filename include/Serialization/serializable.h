@@ -2,6 +2,9 @@
 
 #include <scene.pb.h>
 #include <Script.hpp>
+#include <google/protobuf/message.h>
+
+#include "serialized/serverConfig.pb.h"
 
 //template <class T>
 //concept SerializableConcept = requires(google::protobuf::Message* m, T t) {

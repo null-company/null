@@ -2,6 +2,7 @@
 
 #include <queue>
 #include <RigidBodyAnimation.hpp>
+#include "serialized/serverConfig.pb.h"
 #include <network.h>
 
 namespace null{

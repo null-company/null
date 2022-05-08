@@ -29,7 +29,8 @@ namespace null {
                 queue.push(spriteRefPair);
             }
         });
-        for (auto& srp = (SpriteRefPair&) queue.top(); !queue.empty(); srp = queue.top()) {
+        while(!queue.empty()) {
+            auto& srp = queue.top();
             window.draw(*(srp.sprite_ref));
             queue.pop();
         }

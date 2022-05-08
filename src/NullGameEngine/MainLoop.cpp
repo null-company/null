@@ -35,8 +35,6 @@ namespace null {
         sfmlWin.setFramerateLimit(MAX_FRAMERATE);
         sfmlWin.setMouseCursorVisible(false);
 
-        std::unordered_set<uint> gg;
-
 sceneStart:
         scene->start();
 
