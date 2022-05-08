@@ -1,5 +1,5 @@
-#include <serverConfig.pb.h>
-#include "NetworkPlayerScript.hpp"
+#include <NetworkPlayerScript.hpp>
+#include "serialized/serverConfig.pb.h"
 
 namespace null {
 

@@ -1,6 +1,6 @@
 #pragma once
-#include "SFML/Network.hpp"
-#include "serverConfig.pb.h"
+#include <SFML/Network.hpp>
+#include "serialized/serverConfig.pb.h"
 
 class Client {
 private:

@@ -160,6 +160,7 @@ namespace null {
                                                    {"walkRight", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}},
                                                    {"walkLeft",  {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}}
                                            });
+
         MapManager mapManager(box2dWorld);
         newScene->addRootGameObject(std::move(mapManager.makeBorder(nullGameLogo->getSprite())));
         nullGameLogo->addChild(std::move(boxObject));

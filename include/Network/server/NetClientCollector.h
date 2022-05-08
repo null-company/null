@@ -2,7 +2,7 @@
 #include <SFML/Network.hpp>
 #include <cstdint>
 #include <list>
-#include <serverConfig.pb.h>
+#include "serialized/serverConfig.pb.h"
 
 class NetClientCollector {
 private:

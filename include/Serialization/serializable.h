@@ -1,6 +1,8 @@
 #pragma once
 
-#include <scene.pb.h>
+#include <google/protobuf/message.h>
+
+#include "serialized/serverConfig.pb.h"
 
 class Serializable {
     // Suppose in every method make downcast to the specific message type
