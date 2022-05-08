@@ -40,7 +40,7 @@ public:
 
     static void handleChatMessage(const net::ChatMessage &chatMessage);
 
-    void connectRoom(const std::string &roomCode);
+    void connectRoom(const std::string &roomCodeToConnect);
 
     net::GameMessage receiveGameMessage();
 

@@ -1,6 +1,7 @@
 #include <plog/Log.h>
 #include "server/GameServer.h"
 #include "utils/NetMessageTransmitting.h"
+#include <mutex>
 #include "serialized/serverConfig.pb.h"
 #include "exceptions/NetworkException.h"
 
@@ -95,7 +96,7 @@ void GameServer::disconnectClient(int idx) {
     clientIDs.resize(clientIDs.size() - 1);
 }
 
-int GameServer::clientCount() {
+uint32_t GameServer::clientCount() {
     assert(clients.size() == clientIDs.size());
     return clients.size();
 }

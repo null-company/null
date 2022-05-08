@@ -19,7 +19,7 @@ private:
 public:
     explicit GameServer(std::function<void(void)>& simulation);
 
-    int clientCount();
+    uint32_t clientCount();
 
     std::queue<net::GameMessage::ClientCommand>& subscribe(uint64_t entityId);
 

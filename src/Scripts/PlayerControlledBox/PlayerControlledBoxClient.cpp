@@ -2,8 +2,6 @@
 
 #include <unordered_map>
 
-#include <plog/Log.h>
-
 #include <GameObject.hpp>
 #include <ResourceManager.hpp>
 #include <MainLoop.hpp>
@@ -27,7 +25,7 @@ namespace null {
 
     namespace {
         enum Direction {
-            Left, Up, Right, Down, A
+            Left, Up, Right, Down, Stop
         };
 
         Direction getDirectionByKey(const sf::Keyboard::Key& key) {
@@ -36,33 +34,9 @@ namespace null {
                     {sf::Keyboard::Up,    Up},
                     {sf::Keyboard::Right, Right},
                     {sf::Keyboard::Down,  Down},
-                    {sf::Keyboard::A,     A},
+                    {sf::Keyboard::A,     Stop},
             };
             return keyToDirection.at(key);
-        }
-
-        void moveRigidBody(b2Body* rigidBody, Direction direction) {
-            constexpr float speedModule = 3.0f;
-            b2Vec2 newVelocity = rigidBody->GetLinearVelocity();
-            switch (direction) {
-                case Left:
-                    newVelocity.x = -speedModule;
-                    break;
-                case Up:
-                    newVelocity.y = -speedModule;
-                    break;
-                case Right:
-                    newVelocity.x = +speedModule;
-                    break;
-                case Down:
-                    newVelocity.y = +speedModule;
-                    break;
-            }
-            rigidBody->SetLinearVelocity(newVelocity);
-        }
-
-        void stopRigidBody(b2Body* rigidBody) {
-            rigidBody->SetLinearVelocity({0.0f, 0.0f});
         }
     }
 
@@ -75,36 +49,22 @@ namespace null {
         }
 
         void handleMessage(GameObject& gameObject, net::GameMessage::SubscriberState& newState) {
-            // schema is uint32s: x, y
+            // schema is floats: x, y
             float x = newState.mutable_content()->floats(0);
             float y = newState.mutable_content()->floats(1);
+            std::cout << "Got x " << x << " y " << y << std::endl;
             gameObject.setPosition(x, y);
         }
     }
 
     void PlayerControlledBoxClient::update() {
-        net::GameMessage::SubscriberState newState;
-        bool newMessage = false;
-//        LOGD << "Going over message que";
+
         if (!messageQueue->empty()) {
-            for (auto m = messageQueue->front(); !messageQueue->empty(); m = messageQueue->front()) {
-                //if (m.game_id() == id) {
-                newState = m;
-                newMessage = true;
-                messageQueue->pop();
-                if (messageQueue->empty()) {
-                    break;
-                }
-                //}
-            }
+            auto lastStateMessage = messageQueue->back();
+            std::queue<net::GameMessage::SubscriberState> emptyQueue;
+            std::swap(*messageQueue, emptyQueue);
+            handleMessage(gameObject, lastStateMessage);
         }
-//        LOGD << "Finished que";
-        if (newMessage) {
-            LOGD << "Message received";
-            handleMessage(gameObject, newState);
-        }
-//        isMoving = false;
-//        auto rigidBody = gameObject.getRigidBody();
 
         const auto keysToCheck = std::vector({
                                                      sf::Keyboard::Left, sf::Keyboard::Up,
@@ -116,13 +76,7 @@ namespace null {
                 MainLoop::clientNetworkManager->sendCommandToServer(
                         makeMessage(gameObject.getGuid(), direction)
                 );
-//                moveRigidBody(rigidBody, direction);
-//                isMoving = true;
             }
         }
-
-//        if (!isMoving) {
-////            stopRigidBody(rigidBody);
-//        }
     }
 }
