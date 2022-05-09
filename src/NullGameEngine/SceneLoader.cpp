@@ -17,6 +17,8 @@
 #include "PlayerControlledBox/PlayerControlledBoxClient.hpp"
 #include "PlayerControlledBox/PlayerControlledBoxServer.hpp"
 #include <server/ServerArbiter.h>
+#include <Network/NetworkManagerClientScript.hpp>
+#include <Network/NetworkManagerServerScript.hpp>
 
 namespace null {
 
@@ -56,11 +58,16 @@ namespace null {
     }
 
     std::shared_ptr<Scene> SceneLoader::getNetworkDemoClientScene() {
+        MainLoop::isNetworkingEnabled = true;
         MainLoop::isServer = false;
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
 
         auto boxObject = std::make_shared<GameObject>(200200);
+        auto& clientScript = boxObject->addScript<NetworkManagerClientScript>(*boxObject);
+        clientScript.ipToConnectTo = "127.0.0.1";
+        clientScript.port = 5002;
+
         boxObject->addScript<PlayerControlledBoxClient>(*boxObject);
 
         newScene->addRootGameObject(std::move(boxObject));
@@ -68,11 +75,13 @@ namespace null {
     }
 
     std::shared_ptr<Scene> SceneLoader::getNetworkDemoServerScene() {
+        MainLoop::isNetworkingEnabled = true;
         MainLoop::isServer = true;
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
 
         auto boxObject = std::make_shared<GameObject>(200200);
+        auto& serverScript = boxObject->addScript<NetworkManagerServerScript>(*boxObject);
         boxObject->addScript<PlayerControlledBoxServer>(*boxObject);
 
         newScene->addRootGameObject(std::move(boxObject));

@@ -20,7 +20,23 @@ add_subdirectory(./test/)
 
 add_executable(NULL_GAME main.cpp)
 
+add_executable(NULL_GAME_SERVER server.cpp)
+
 target_link_libraries(NULL_GAME
+        scripts
+        nullGameEngine
+        sfml-network
+        network
+        yaml-cpp
+        serialization
+        sfml-graphics
+        sfml-audio
+        sfml-window
+        sfml-system
+        )
+
+
+target_link_libraries(NULL_GAME_SERVER
         scripts
         nullGameEngine
         sfml-network

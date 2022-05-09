@@ -13,13 +13,14 @@ namespace null {
 
     class MainLoop {
     private:
-        static std::shared_ptr<Scene> scene;
+        static std::shared_ptr<Scene> scene; // TODO has to be thread_local
         static void provideScene(std::shared_ptr<Scene> newScene) {
             MainLoop::scene = std::move(newScene);
         }
     public:
         MainLoop() = delete;
         static ServerArbiter* serverArbiter;
+        static bool isNetworkingEnabled;
         thread_local static bool isServer;
         thread_local static GameServer* gameServer;
         thread_local static ClientNetworkManager* clientNetworkManager;

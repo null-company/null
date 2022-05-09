@@ -6,6 +6,7 @@
 #include <ResourceManager.hpp>
 #include <MainLoop.hpp>
 #include <utils/NetMessageTransmitting.h>
+#include <Network/NetworkManagerClientScript.hpp>
 
 namespace null {
 
@@ -20,7 +21,8 @@ namespace null {
         gameObject.makeDynamic();
         gameObject.getRigidBody()->SetGravityScale(0.0f);
 
-        messageQueue = &(MainLoop::clientNetworkManager->subscribe(gameObject.getGuid()));
+        auto networkScript = gameObject.getScript<NetworkManagerClientScript>();
+        messageQueue = &networkScript->subscribe(gameObject.getGuid());
     }
 
     namespace {

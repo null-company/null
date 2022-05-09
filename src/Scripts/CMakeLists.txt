@@ -37,6 +37,10 @@ set(SRC
         ${INCROOT}/PlayerControlledBox/PlayerControlledBoxClient.hpp
         ${SRCROOT}/PlayerControlledBox/PlayerControlledBoxServer.cpp
         ${INCROOT}/PlayerControlledBox/PlayerControlledBoxServer.hpp
+        ${SRCROOT}/Network/NetworkManagerClientScript.cpp
+        ${INCROOT}/Network/NetworkManagerClientScript.hpp
+        ${SRCROOT}/Network/NetworkManagerServerScript.cpp
+        ${INCROOT}/Network/NetworkManagerServerScript.hpp
         )
 
 add_library(scripts STATIC ${SRC})

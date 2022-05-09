@@ -6,22 +6,22 @@
 #include <MainLoop.hpp>
 #include <GameObject.hpp>
 #include <ResourceManager.hpp>
+#include <Network/NetworkManagerServerScript.hpp>
 
 namespace null {
 
     void PlayerControlledBoxServer::start() {
         // this is some experimental stuff:)
-        auto boxTexture = ResourceManager::loadTexture("box.png");
-        gameObject.getSprite().setTexture(*boxTexture);
-        gameObject.getSprite().setScale(0.125f, 0.125f);
+//        auto boxTexture = ResourceManager::loadTexture("box.png");
+//        gameObject.getSprite().setTexture(*boxTexture);
+//        gameObject.getSprite().setScale(0.125f, 0.125f);
         gameObject.setPosition(200, 0);
-        gameObject.renderLayer = FOREGROUND;
-        gameObject.visible = true;
-        gameObject.makeDynamic();
-        gameObject.getRigidBody()->SetGravityScale(0.0f);
+//        gameObject.renderLayer = FOREGROUND;
+//        gameObject.visible = true;
+//        gameObject.makeDynamic();
+//        gameObject.getRigidBody()->SetGravityScale(0.0f);
 
-
-        messageQueue = &(MainLoop::serverArbiter->getGameServer().subscribe(gameObject.getGuid()));
+        messageQueue = &gameObject.getScript<NetworkManagerServerScript>()->subscribe(gameObject.getGuid());
     }
 
     namespace {

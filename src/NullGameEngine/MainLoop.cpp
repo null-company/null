@@ -12,43 +12,15 @@ namespace null {
     thread_local GameServer* MainLoop::gameServer = nullptr;
     thread_local ClientNetworkManager* MainLoop::clientNetworkManager = nullptr;
     thread_local bool MainLoop::isServer = false;
+    bool MainLoop::isNetworkingEnabled = false;
 
     std::shared_ptr<Scene> MainLoop::scene = nullptr;
 
     namespace {
         constexpr unsigned int MAX_FRAMERATE = 60;
         void clientNetworkJobStep(ClientNetworkManager& clientNetworkManager) {
-            try {
-                while (true) {
-
-                    auto message = receiveNetMessage(
-                            clientNetworkManager.getClient().getGameServerSocket()).game_message();
-                    clientNetworkManager.distributeMessageToSubscribers(*message.mutable_subscriber_state());
-                }
-            } catch (const ReceiveException& noMessagesLeft) { }
         }
         void serverNetworkJobStep(GameServer& gameServer) {
-            int readyClientIdx = gameServer.getFirstReadySocketIdx();
-            if (readyClientIdx == -2) {
-                return;
-            }
-            if (readyClientIdx == -1) {
-                gameServer.acceptNewClient();
-                return;
-            }
-            try {
-                sf::TcpSocket& client = gameServer.getClient(readyClientIdx);
-                net::NetMessage message = receiveNetMessage(client);
-                gameServer.handleNetMessage(readyClientIdx, message);
-            } catch (const ReceiveException& exception) {
-                auto status = exception.getStatus();
-                if (status == sf::Socket::Disconnected) {
-                    gameServer.disconnectClient(readyClientIdx);
-                    return;
-                }
-                throw ReceiveException("Unexpected client receive exception status",
-                                       exception.getStatus());
-            }
         }
         /**
          * @return false iff simulation is over

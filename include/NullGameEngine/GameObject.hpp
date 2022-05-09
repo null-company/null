@@ -104,13 +104,14 @@ namespace null {
         void addScript(std::unique_ptr<Script> script);
 
         template<class T, typename... Args>
-        void addScript(Args&&... args) {
+        T& addScript(Args&&... args) {
             auto script =
                 std::make_unique<T>(std::forward<Args>(args)...);
+            auto& ref = *script;
             scripts.push_back(std::move(script));
+            return ref;
         }
 
-        // Returns a script by a given name (each script must have name)
         template<class T>
         T* getScript() {
             for (auto& script: getScripts()) {
