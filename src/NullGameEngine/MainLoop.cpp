@@ -9,8 +9,8 @@
 namespace null {
 
     ServerArbiter* MainLoop::serverArbiter = nullptr;
-    thread_local GameServer* MainLoop::gameServer = nullptr;
-    thread_local ClientNetworkManager* MainLoop::clientNetworkManager = nullptr;
+//    thread_local GameServer* MainLoop::gameServer = nullptr;
+//    thread_local ClientNetworkManager* MainLoop::clientNetworkManager = nullptr;
     thread_local bool MainLoop::isServer = false;
     bool MainLoop::isNetworkingEnabled = false;
 
@@ -18,17 +18,11 @@ namespace null {
 
     namespace {
         constexpr unsigned int MAX_FRAMERATE = 60;
-        void clientNetworkJobStep(ClientNetworkManager& clientNetworkManager) {
-        }
-        void serverNetworkJobStep(GameServer& gameServer) {
-        }
         /**
          * @return false iff simulation is over
          */
         bool simulationStep(Scene* scene,
                             sf::RenderWindow* sfmlWin,
-                            ServerArbiter* serverArbiter,
-                            ClientNetworkManager* clientNetworkManager,
                             bool isServer) {
             bool continueMainLoop = sfmlWin == nullptr || sfmlWin->isOpen();
             if (!continueMainLoop) {
@@ -50,16 +44,6 @@ namespace null {
                         default:
                             break;
                     }
-                }
-            }
-            if (isServer) {
-                if (serverArbiter == nullptr) {
-                    throw std::logic_error("server doesn't have no serverArbiter");
-                }
-                serverNetworkJobStep(serverArbiter->getGameServer());
-            } else {
-                if (clientNetworkManager != nullptr) {
-                    clientNetworkJobStep(*clientNetworkManager);
                 }
             }
             scene->update();
@@ -85,11 +69,7 @@ namespace null {
         scene->start();
         try {
             while (true) {
-                if (!simulationStep(scene.get(),
-                                    sfmlWin,
-                                    serverArbiter,
-                                    clientNetworkManager,
-                                    isServer)) {
+                if (!simulationStep(scene.get(), sfmlWin, isServer)) {
                     break;
                 }
             }

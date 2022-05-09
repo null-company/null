@@ -48,7 +48,7 @@ void ServerArbiter::sendGameServerConfig(sf::TcpSocket& client, const std::strin
     }
     GameServer& server = *(gameServers[roomCodeToServerNum[roomCode]]);
     serverConfig->set_room_code(roomCode);
-    serverConfig->set_v4(server.getIP());
+    serverConfig->set_v4(sf::IpAddress("127.0.0.1").toInteger());
     serverConfig->set_server_port(server.getPort());
     sendNetMessage(client, message);
 }

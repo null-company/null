@@ -22,8 +22,8 @@ namespace null {
         static ServerArbiter* serverArbiter;
         static bool isNetworkingEnabled;
         thread_local static bool isServer;
-        thread_local static GameServer* gameServer;
-        thread_local static ClientNetworkManager* clientNetworkManager;
+//        thread_local static GameServer* gameServer;
+//        thread_local static ClientNetworkManager* clientNetworkManager;
         static int run();
 
         friend SceneLoader;

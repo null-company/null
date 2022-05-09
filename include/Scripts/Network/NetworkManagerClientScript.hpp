@@ -24,7 +24,8 @@ namespace null {
         void update() override;
         explicit NetworkManagerClientScript(GameObject& go);
 
-        std::queue<net::GameMessage::SubscriberState>& subscribe(uint64_t guid);
+        [[nodiscard]]
+        ClientNetworkManager& getNetworkManager() const;
 
     private: // TODO consider making public?
         std::unique_ptr<ClientNetworkManager> networkManager{};

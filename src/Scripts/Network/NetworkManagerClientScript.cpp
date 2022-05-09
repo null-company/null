@@ -1,8 +1,6 @@
 #include "Network/NetworkManagerClientScript.hpp"
 #include "exceptions/NetworkException.h"
 
-#include <unordered_map>
-
 #include <GameObject.hpp>
 #include <MainLoop.hpp>
 #include <utils/NetMessageTransmitting.h>
@@ -27,9 +25,9 @@ namespace null {
         } catch (const ReceiveException& noMessagesLeft) { }
     }
 
-    std::queue<net::GameMessage::SubscriberState>& NetworkManagerClientScript::subscribe(uint64_t guid) {
-        return networkManager->subscribe(guid);
-    }
-
     NetworkManagerClientScript::NetworkManagerClientScript(GameObject& go) : Script(go) { }
+
+    ClientNetworkManager& NetworkManagerClientScript::getNetworkManager() const {
+        return *networkManager;
+    }
 }

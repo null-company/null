@@ -11,7 +11,6 @@ private:
     sf::TcpListener listener;
 
 public:
-    std::mutex m;
     sf::Thread jobThread;
 
     sf::IpAddress ipAddress;
@@ -38,7 +37,7 @@ public:
 
     void launch();
 
-    uint32_t getIP();
+    uint32_t getIP() const;
 
     uint16_t getPort() const;
 

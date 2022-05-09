@@ -119,7 +119,7 @@ void NetClientCollector::launch() {
     LOGD << "New NetClientCollector was launched for new incoming connections";
 }
 
-uint32_t NetClientCollector::getIP() {
+uint32_t NetClientCollector::getIP() const {
     return ipAddress.toInteger();
 }
 

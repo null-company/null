@@ -3,7 +3,8 @@
 #include <queue>
 #include <network.h>
 
-#include "Script.hpp"
+#include <Script.hpp>
+#include <Network/NetworkManagerClientScript.hpp>
 
 namespace null {
 
@@ -16,6 +17,7 @@ namespace null {
     private:
         std::queue<net::GameMessage::SubscriberState>* messageQueue = nullptr;
         bool isMoving = false;
+        NetworkManagerClientScript* networkManagerScript;
     };
 
 }

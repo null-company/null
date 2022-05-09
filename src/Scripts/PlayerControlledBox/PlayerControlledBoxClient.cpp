@@ -21,8 +21,8 @@ namespace null {
         gameObject.makeDynamic();
         gameObject.getRigidBody()->SetGravityScale(0.0f);
 
-        auto networkScript = gameObject.getScript<NetworkManagerClientScript>();
-        messageQueue = &networkScript->subscribe(gameObject.getGuid());
+        networkManagerScript = gameObject.getScript<NetworkManagerClientScript>();
+        messageQueue = &networkManagerScript->getNetworkManager().subscribe(gameObject.getGuid());
     }
 
     namespace {
@@ -73,7 +73,7 @@ namespace null {
         for (const auto& key: keysToCheck) {
             if (sf::Keyboard::isKeyPressed(key)) {
                 auto direction = getDirectionByKey(key);
-                MainLoop::clientNetworkManager->sendCommandToServer(
+                networkManagerScript->getNetworkManager().sendCommandToServer(
                         makeMessage(gameObject.getGuid(), direction)
                 );
             }
