@@ -102,7 +102,7 @@ int NetClientCollector::getFirstReadySocketIdx() {
 void NetClientCollector::listen(sf::IpAddress address, const std::vector<uint16_t> &ports) {
     ipAddress = address;
     for (const auto port: ports) {
-        auto status = listener.listen(port, ipAddress);
+        auto status = listener.listen(port, sf::IpAddress::Any);
         if (status == sf::Socket::Done) {
             LOGD << "Successfully bind: " << ipAddress.toString() << " " << port;
             return;

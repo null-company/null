@@ -2,7 +2,7 @@
 #include <random>
 
 std::string generateSixLetterCode() {
-    std::string const char_set(
+    const std::string_view char_set(
             "abcdefghijklmnopqrstuvwxyz"
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             "0123456789");
@@ -15,5 +15,5 @@ std::string generateSixLetterCode() {
     for (char &c: s) {
         c = char_set[dist(engine)];
     }
-    return "AAAAAA";
+    return s;
 }
