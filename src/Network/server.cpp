@@ -1,3 +1,4 @@
+#error we do not need this target rn
 #include <server/ServerArbiter.h>
 #include <plog/Appenders/ConsoleAppender.h>
 #include <plog/Init.h>

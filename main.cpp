@@ -17,6 +17,8 @@ int main() {
 //    static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;
 //    plog::init(plog::debug, &consoleAppender);
 
+    const std::string ip("127.0.0.1");
+
     // try /menu or /network-demo-(client|connector|server) or /demo
     std::string levelToLoad;
     bool sceneIsLoaded = false;
@@ -30,10 +32,10 @@ int main() {
             std::cout << "Unknown scene, try again" << std::endl;
         }
     }
-    if (null::MainLoop::isServer && levelToLoad != "/network-demo-connector") {
+    if (null::MainLoop::isServer) {
         LOGD << "This is a server";
         null::MainLoop::serverArbiter = new ServerArbiter([]() {
-            null::MainLoop::isServer = true;
+            null::MainLoop::isServer = true; // needs to be set in this thread, because isServer is thread_local
             null::MainLoop::run();
         });
         auto& serverArbiter = *null::MainLoop::serverArbiter;
@@ -60,20 +62,20 @@ int main() {
             return 1;
         }
         uint16_t port;
-        std::cout << "Port: ";
+        std::cout << "Port: " << std::flush;
         std::cin >> port;
         std::cout << std::endl;
         if (createRoom == "y") {
             LOGD << "This is a client which will create a room";
-            null::MainLoop::clientNetworkManager = new ClientNetworkManager("127.0.0.1", port);
+            null::MainLoop::clientNetworkManager = new ClientNetworkManager(ip, port);
             auto& clientNetworkManager = *null::MainLoop::clientNetworkManager;
             clientNetworkManager.getClient().createRoom();
-            std::cout << "Room: " << clientNetworkManager.getClient().getRoomCode();
+            std::cout << "Room: " << clientNetworkManager.getClient().getRoomCode() << std::endl;
             LOGD << clientNetworkManager.getClient().getRoomCode();
             null::MainLoop::run();
         } else if (createRoom == "n") {
             LOGD << "This is a client that wants to connect";
-            null::MainLoop::clientNetworkManager = new ClientNetworkManager("127.0.0.1", port);
+            null::MainLoop::clientNetworkManager = new ClientNetworkManager(ip, port);
             auto& clientNetworkManager = *null::MainLoop::clientNetworkManager;
             std::cout << "Room code: " << std::flush;
             std::string roomCode;
