@@ -49,7 +49,7 @@ TEST(NetworkClientManager, subtest) {
     ClientNetworkManager client3("127.0.0.1", port);
     ClientNetworkManager client4("127.0.0.1", port);
 
-    client1.getClient().createRoom();
+    client1.getClient().createRoomAndConnect();
 
     std::string roomCode = client1.getClient().getRoomCode();
     client2.getClient().connectRoom(roomCode);

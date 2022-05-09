@@ -58,7 +58,7 @@ int main() {
         LOGD << "This is a client";
         null::MainLoop::clientNetworkManager = new ClientNetworkManager("127.0.0.1", port);
         auto& clientNetworkManager = *null::MainLoop::clientNetworkManager;
-        clientNetworkManager.getClient().createRoom();
+        clientNetworkManager.getClient().createRoomAndConnect();
         LOGD << clientNetworkManager.getClient().getRoomCode();
         null::MainLoop::run();
     }

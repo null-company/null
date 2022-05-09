@@ -22,7 +22,7 @@ public:
     std::string getRoomCode();
 
     sf::TcpSocket& getGameServerSocket();
-    void createRoom();
+    void createRoomAndConnect();
 
     void connectRoom(sf::IpAddress serverAddress, uint16_t port);
 

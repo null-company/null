@@ -38,7 +38,7 @@ void Client::connectRoom(sf::IpAddress serverAddress, uint16_t port) {
     }
 }
 
-void Client::createRoom() {
+void Client::createRoomAndConnect() {
     LOGD << "Creating room";
     arbiterSocket.setBlocking(true);
     sendGenerateRoomMessage();
