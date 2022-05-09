@@ -44,9 +44,9 @@ public:
 
     virtual void disconnectClient(int idx);
 
-    void listen(sf::IpAddress address, const std::vector<uint16_t>& ports);
+    void listen(const std::vector<uint16_t>& ports);
 
-    void listen(sf::IpAddress address, uint16_t port);
+    void listen(uint16_t port);
 
     static bool isListener(int idx);
 

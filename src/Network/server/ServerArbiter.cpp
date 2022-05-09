@@ -17,7 +17,7 @@ std::string ServerArbiter::createNewGameSimulation() {
         throw std::length_error("Right now we do not allow multiple servers");
     }
     gameServers.emplace_back(std::make_unique<GameServer>(simulation));
-    gameServers.back()->listen(sf::IpAddress(this->getIP()), port);
+    gameServers.back()->listen(port);
     gameServers.back()->launch();
 
     std::string roomCode = generateSixLetterCode();

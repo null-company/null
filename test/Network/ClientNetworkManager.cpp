@@ -42,7 +42,7 @@ TEST(NetworkClientManager, subtest) {
 
     ServerArbiter serverArbiter;
     int port = rand() % 23 + 5000;
-    serverArbiter.listen("127.0.0.1", port);
+    serverArbiter.listen(port);
     serverArbiter.launch();
     ClientNetworkManager client1("127.0.0.1", port);
     ClientNetworkManager client2("127.0.0.1", port);

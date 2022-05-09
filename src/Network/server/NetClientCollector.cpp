@@ -99,8 +99,7 @@ int NetClientCollector::getFirstReadySocketIdx() {
     throw NetworkException("Unexpected socket selector case");
 }
 
-void NetClientCollector::listen(sf::IpAddress address, const std::vector<uint16_t> &ports) {
-    ipAddress = address;
+void NetClientCollector::listen(const std::vector<uint16_t>& ports) {
     for (const auto port: ports) {
         auto status = listener.listen(port, sf::IpAddress::Any);
         if (status == sf::Socket::Done) {
@@ -111,8 +110,8 @@ void NetClientCollector::listen(sf::IpAddress address, const std::vector<uint16_
     }
 }
 
-void NetClientCollector::listen(sf::IpAddress address, uint16_t port) {
-    listen(address, std::vector({port}));
+void NetClientCollector::listen(uint16_t port) {
+    listen(std::vector({port}));
 }
 
 void NetClientCollector::launch() {
