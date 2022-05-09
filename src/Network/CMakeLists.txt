@@ -61,15 +61,8 @@ target_include_directories(network
         PRIVATE ${PROJECT_SOURCE_DIR}/src/Network
         )
 
-add_executable(server server.cpp)
-
-target_link_libraries(server
-        network
-        nullGameEngine
-        )
 target_link_libraries(network
         proto-stuff
-#        nullGameEngine
         plog
         sfml-graphics
         sfml-audio
