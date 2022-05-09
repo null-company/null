@@ -14,10 +14,10 @@
 #endif //__linux
 
 int main() {
-//    static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;
-//    plog::init(plog::debug, &consoleAppender);
+    static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;
+    plog::init(plog::debug, &consoleAppender);
 
-    const std::string ip("127.0.0.1");
+    const std::string ipToConnect("127.0.0.1");
 
     // try /menu or /network-demo-(client|connector|server) or /demo
     std::string levelToLoad;
@@ -43,7 +43,7 @@ int main() {
         std::cout << "Port to connect " << std::flush;
         std::cin >> port;
         std::cout << std::endl;
-        serverArbiter.listen("127.0.0.1", port);
+        serverArbiter.listen(port);
         serverArbiter.launch();
         while (true) {
             std::string oper;
@@ -67,7 +67,7 @@ int main() {
         std::cout << std::endl;
         if (createRoom == "y") {
             LOGD << "This is a client which will create a room";
-            null::MainLoop::clientNetworkManager = new ClientNetworkManager(ip, port);
+            null::MainLoop::clientNetworkManager = new ClientNetworkManager(ipToConnect, port);
             auto& clientNetworkManager = *null::MainLoop::clientNetworkManager;
             clientNetworkManager.getClient().createRoom();
             std::cout << "Room: " << clientNetworkManager.getClient().getRoomCode() << std::endl;
@@ -75,7 +75,7 @@ int main() {
             null::MainLoop::run();
         } else if (createRoom == "n") {
             LOGD << "This is a client that wants to connect";
-            null::MainLoop::clientNetworkManager = new ClientNetworkManager(ip, port);
+            null::MainLoop::clientNetworkManager = new ClientNetworkManager(ipToConnect, port);
             auto& clientNetworkManager = *null::MainLoop::clientNetworkManager;
             std::cout << "Room code: " << std::flush;
             std::string roomCode;
