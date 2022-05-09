@@ -21,11 +21,6 @@ namespace null {
         gameObject.getRigidBody()->SetGravityScale(0.0f);
 
 
-        b2MassData massData;
-        massData.mass = 5.0f;
-        massData.center = gameObject.getRigidBody()->GetLocalCenter();
-        gameObject.getRigidBody()->SetMassData(&massData);
-
         messageQueue = &(MainLoop::serverArbiter->getGameServer().subscribe(gameObject.getGuid()));
     }
 

@@ -81,9 +81,14 @@ namespace null {
                 }
             }
             if (isServer) {
+                if (serverArbiter == nullptr) {
+                    throw std::logic_error("server doesn't have no serverArbiter");
+                }
                 serverNetworkJobStep(serverArbiter->getGameServer());
             } else {
-                clientNetworkJobStep(*clientNetworkManager);
+                if (clientNetworkManager != nullptr) {
+                    clientNetworkJobStep(*clientNetworkManager);
+                }
             }
             scene->update();
 

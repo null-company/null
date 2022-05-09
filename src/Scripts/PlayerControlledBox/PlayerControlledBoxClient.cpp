@@ -65,10 +65,9 @@ namespace null {
             handleMessage(gameObject, lastStateMessage);
         }
 
-        const auto keysToCheck = std::vector({
-                                                     sf::Keyboard::Left, sf::Keyboard::Up,
-                                                     sf::Keyboard::Right, sf::Keyboard::Down, sf::Keyboard::A
-                                             });
+        const auto keysToCheck =
+                std::vector({sf::Keyboard::Left, sf::Keyboard::Up,
+                             sf::Keyboard::Right, sf::Keyboard::Down, sf::Keyboard::A});
         for (const auto& key: keysToCheck) {
             if (sf::Keyboard::isKeyPressed(key)) {
                 auto direction = getDirectionByKey(key);
