@@ -38,7 +38,6 @@ public:
     /**
      * Serves as a server arbiter that also manages network
      * The simulation starts when players are connected
-     * @param simulation a function to start in a different thread which will perform simulation
      */
     ServerArbiter(std::function<void()> simulation);
 

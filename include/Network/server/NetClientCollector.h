@@ -12,7 +12,7 @@ private:
 
 public:
     std::mutex m;
-    sf::Thread simulationThread;
+    sf::Thread jobThread;
 
     sf::IpAddress ipAddress;
     volatile bool threadIsActive;
@@ -32,7 +32,7 @@ public:
 
     virtual void handleNetMessage(int clientIdx, const net::NetMessage& message) = 0;
 
-    NetClientCollector(std::function<void()> simulationThread);
+    NetClientCollector(std::function<void()> jobThread);
 
     virtual ~NetClientCollector();
 

@@ -33,18 +33,18 @@ void NetClientCollector::defaultJob(NetClientCollector *self) {
     }
 }
 
-NetClientCollector::NetClientCollector(std::function<void()> simulationThread) :
+NetClientCollector::NetClientCollector(std::function<void()> jobThread) :
         listener(),
         ipAddress(),
         threadIsActive(true),
-        simulationThread(std::move(simulationThread)) {}
+        jobThread(std::move(jobThread)) {}
 
 NetClientCollector::NetClientCollector() :
         NetClientCollector([this]() { defaultJob(this); }) {}
 
 NetClientCollector::~NetClientCollector() {
     this->threadIsActive = false;
-    simulationThread.wait();
+    jobThread.wait();
     for (int i = 0; i < clients.size();) {
         disconnectClient(i);
     }
@@ -116,7 +116,7 @@ void NetClientCollector::listen(sf::IpAddress address, uint16_t port) {
 }
 
 void NetClientCollector::launch() {
-    simulationThread.launch();
+    jobThread.launch();
     LOGD << "New NetClientCollector was launched for new incoming connections";
 }
 

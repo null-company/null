@@ -14,8 +14,8 @@
 #endif //__linux
 
 int main() {
-//    static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;
-//    plog::init(plog::debug, &consoleAppender);
+    static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;
+    plog::init(plog::debug, &consoleAppender);
 
     // try /menu or /network-demo-(client|connector|server) or /demo
     std::string levelToLoad;
@@ -26,14 +26,17 @@ int main() {
         try {
             null::SceneLoader::loadSceneFromFile(levelToLoad);
             sceneIsLoaded = true;
-        } catch (const null::UnknownSceneException& _) {
+        } catch (const null::UnknownSceneException& ignored) {
             std::cout << "Unknown scene, try again" << std::endl;
         }
     }
     int port = 5002;
     if (null::MainLoop::isServer && levelToLoad != "/network-demo-connector") {
         LOGD << "This is a server";
-        null::MainLoop::serverArbiter = new ServerArbiter([]() { null::MainLoop::run(); });
+        null::MainLoop::serverArbiter = new ServerArbiter([]() {
+            null::MainLoop::isServer = true;
+            null::MainLoop::run();
+        });
         auto& serverArbiter = *null::MainLoop::serverArbiter;
         serverArbiter.listen("127.0.0.1", port);
         serverArbiter.launch();

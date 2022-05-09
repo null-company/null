@@ -2,23 +2,9 @@
 #include "server/GameServer.h"
 #include "utils/NetMessageTransmitting.h"
 #include "serialized/serverConfig.pb.h"
-#include "exceptions/NetworkException.h"
-
-namespace {
-
-    /**
-     * Run simulation AND do networking
-     * @param self
-     */
-    void gameServerJob(NetClientCollector* self, std::function<void(void)>& simulationStep) {
-        sf::Thread simulationThread(std::move(simulationStep)); // this is so ugly my self-esteem went down
-        simulationThread.launch();
-    }
-}
 
 GameServer::GameServer(std::function<void(void)>& simulation) :
-        NetClientCollector([this, &simulation]() { gameServerJob(this, simulation); }) {
-}
+        NetClientCollector(std::move(simulation)) {}
 
 uint8_t GameServer::globalGameID = 1;
 
