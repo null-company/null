@@ -11,6 +11,9 @@
 namespace null {
 
     void PlayerControlledBoxServer::start() {
+        //  NOTE: server doesn't have to have graphical stuff, but it is still good
+        // to keep it so that nothing breaks (too often)
+
         // this is some experimental stuff:)
 //        auto boxTexture = ResourceManager::loadTexture("box.png");
 //        gameObject.getSprite().setTexture(*boxTexture);
@@ -57,14 +60,6 @@ namespace null {
                     Direction(command.mutable_content()->uint32s(0));
             moveGameObject(gameObject, direction);
         }
-
-        net::GameMessage::SubscriberState makeMessage(uint64_t entityId, sf::Vector2f position) {
-            net::GameMessage::SubscriberState state;
-            state.set_subscriber_id(entityId);
-            state.mutable_content()->add_floats(position.x);
-            state.mutable_content()->add_floats(position.y);
-            return state;
-        }
     }
 
     void PlayerControlledBoxServer::update() {
@@ -75,8 +70,14 @@ namespace null {
             handleMessage(gameObject, lastCommandMessage);
         }
 
+        net::GameMessage::SubscriberState stateToBroadcast;
+        stateToBroadcast.set_subscriber_id(gameObject.getGuid());
+
+        const auto& position = gameObject.getPosition();
+        *stateToBroadcast.mutable_content() =
+                NetworkStateManager::makeStateMessageFrom(position.x, position.y);
         MainLoop::serverArbiter->getGameServer().broadcastMessage(
-                makeMessage(gameObject.getGuid(), gameObject.getPosition())
+                stateToBroadcast
         );
     }
 }

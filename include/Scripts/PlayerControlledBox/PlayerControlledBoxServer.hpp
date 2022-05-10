@@ -3,6 +3,7 @@
 #include <queue>
 #include <Script.hpp>
 #include "serialized/serverConfig.pb.h"
+#include <Network/NetworkStateManager.hpp>
 
 namespace null {
 
@@ -14,7 +15,6 @@ namespace null {
 
     private:
         std::queue<net::GameMessage::ClientCommand>* messageQueue = nullptr;
-        bool isMoving = false;
     };
 
 }

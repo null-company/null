@@ -49,13 +49,6 @@ namespace null {
             command.mutable_content()->add_uint32s(static_cast<uint32_t>(direction));
             return command;
         }
-
-        void handleMessage(GameObject& gameObject, net::GameMessage::SubscriberState& newState) {
-            // schema is floats: x, y
-            float x = newState.mutable_content()->floats(0);
-            float y = newState.mutable_content()->floats(1);
-            gameObject.setPosition(x, y);
-        }
     }
 
     void PlayerControlledBoxClient::update() {
@@ -64,7 +57,17 @@ namespace null {
             auto lastStateMessage = messageQueue->back();
             std::queue<net::GameMessage::SubscriberState> emptyQueue;
             std::swap(*messageQueue, emptyQueue);
-            handleMessage(gameObject, lastStateMessage);
+            networkStateManager.restoreStateFromMessage(lastStateMessage.content());
+            gameObject.setPosition(x, y);
+        }
+
+        if (!messageQueue->empty()) {
+            auto lastStateMessage = messageQueue->back();
+            std::queue<net::GameMessage::SubscriberState> emptyQueue;
+            std::swap(*messageQueue, emptyQueue);
+            float posX, posY;
+            NetworkStateManager::restoreStateFromMessage(lastStateMessage.content(), posX, posY);
+            gameObject.setPosition(x, y);
         }
 
         const auto keysToCheck =
@@ -79,4 +82,7 @@ namespace null {
             }
         }
     }
+
+    PlayerControlledBoxClient::PlayerControlledBoxClient(GameObject& go)
+            : Script(go) { }
 }

@@ -41,6 +41,8 @@ set(SRC
         ${INCROOT}/Network/NetworkManagerClientScript.hpp
         ${SRCROOT}/Network/NetworkManagerServerScript.cpp
         ${INCROOT}/Network/NetworkManagerServerScript.hpp
+        ${SRCROOT}/Network/NetworkStateManager.cpp
+        ${INCROOT}/Network/NetworkStateManager.hpp
         )
 
 add_library(scripts STATIC ${SRC})
