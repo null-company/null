@@ -20,10 +20,7 @@ namespace null {
     public:
         MainLoop() = delete;
         static ServerArbiter* serverArbiter;
-        static bool isNetworkingEnabled;
-        thread_local static bool isServer;
-//        thread_local static GameServer* gameServer;
-//        thread_local static ClientNetworkManager* clientNetworkManager;
+        thread_local static bool attachWindow;
         static int run();
 
         friend SceneLoader;

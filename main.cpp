@@ -7,7 +7,6 @@
 #include <plog/Appenders/ColorConsoleAppender.h>
 #include <plog/Formatters/TxtFormatter.h>
 #include <plog/Init.h>
-#include <server/ServerArbiter.h>
 
 #ifdef __linux
 #include <X11/Xlib.h>
@@ -20,9 +19,13 @@ int main() {
     // try /menu or /network-demo-(client|connector|server) or /demo
     std::string levelToLoad;
     bool sceneIsLoaded = false;
-    std::cout << "Type level uri to load" << std::endl;
+    const std::string defaultLevel = "/network-demo-client";
+    std::cout << "Type level uri to load. Empty string for default /network-demo-client" << std::endl;
     while (!sceneIsLoaded) {
-        std::cin >> levelToLoad;
+        std::getline(std::cin, levelToLoad);
+        if (levelToLoad.empty()) {
+            levelToLoad = defaultLevel;
+        }
         try {
             null::SceneLoader::loadSceneFromFile(levelToLoad);
             sceneIsLoaded = true;

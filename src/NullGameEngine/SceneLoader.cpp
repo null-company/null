@@ -58,8 +58,7 @@ namespace null {
     }
 
     std::shared_ptr<Scene> SceneLoader::getNetworkDemoClientScene() {
-        MainLoop::isNetworkingEnabled = true;
-        MainLoop::isServer = false;
+        MainLoop::attachWindow = false;
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
 
@@ -75,8 +74,7 @@ namespace null {
     }
 
     std::shared_ptr<Scene> SceneLoader::getNetworkDemoServerScene() {
-        MainLoop::isNetworkingEnabled = true;
-        MainLoop::isServer = true;
+        MainLoop::attachWindow = true;
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
 

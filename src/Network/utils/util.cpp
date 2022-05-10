@@ -3,7 +3,6 @@
 
 std::string generateSixLetterCode() {
     const std::string_view char_set(
-            "abcdefghijklmnopqrstuvwxyz"
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             "0123456789");
 

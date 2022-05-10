@@ -9,10 +9,7 @@
 namespace null {
 
     ServerArbiter* MainLoop::serverArbiter = nullptr;
-//    thread_local GameServer* MainLoop::gameServer = nullptr;
-//    thread_local ClientNetworkManager* MainLoop::clientNetworkManager = nullptr;
-    thread_local bool MainLoop::isServer = false;
-    bool MainLoop::isNetworkingEnabled = false;
+    thread_local bool MainLoop::attachWindow = false;
 
     std::shared_ptr<Scene> MainLoop::scene = nullptr;
 
@@ -59,7 +56,7 @@ namespace null {
 
     int MainLoop::run() {
         sf::RenderWindow* sfmlWin = nullptr;
-        if (!isServer) {
+        if (!attachWindow) {
             sfmlWin = new sf::RenderWindow(sf::VideoMode(1280, 720), "{[Null]}");
             sfmlWin->setFramerateLimit(MAX_FRAMERATE);
             sfmlWin->setMouseCursorVisible(false);
@@ -69,7 +66,7 @@ namespace null {
         scene->start();
         try {
             while (true) {
-                if (!simulationStep(scene.get(), sfmlWin, isServer)) {
+                if (!simulationStep(scene.get(), sfmlWin, attachWindow)) {
                     break;
                 }
             }
