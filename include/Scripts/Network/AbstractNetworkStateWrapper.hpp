@@ -19,7 +19,6 @@
   }
  */
 namespace null {
-    template <class MessageType>
     class AbstractNetworkStateWrapper {
     private:
         using allowedVariant = std::variant<uint32_t *, uint64_t *, std::string *, float *, double *, bool *>;
@@ -39,7 +38,6 @@ namespace null {
     public:
 
         template<typename T>
-        [[maybe_unused]] // compiler not smart enough
         explicit AbstractNetworkStateWrapper(T& t) {
             propsToManage.emplace_back(&t);
         }
@@ -55,7 +53,7 @@ namespace null {
          * Note: things such as id should be set outside and can't be managed by this class
          * @param stateMessage message object in which to write current state of watched properties
          */
-        void serializeStateToMessage(MessageType& stateMessage) const {
+        void serializeStateToMessage(net::GameMessage::PrimitiveState& stateMessage) const {
             for (const auto& prop: propsToManage) {
                 auto type = static_cast<VariantType>(prop.index());
                 switch (type) {
@@ -95,7 +93,7 @@ namespace null {
 
         [[nodiscard]]
         net::GameMessage::PrimitiveState makeStateMessage() const {
-            MessageType message;
+            net::GameMessage::PrimitiveState message;
             serializeStateToMessage(message);
             return message;
         }
@@ -160,6 +158,8 @@ namespace null {
         }
     };
 
-    using NetworkStateManager = AbstractNetworkStateWrapper<net::GameMessage::SubscriberState>;
-    using NetworkCommandManager = AbstractNetworkStateWrapper<net::GameMessage::ClientCommand>;
+//    using NetworkStateManager = AbstractNetworkStateWrapper<net::GameMessage::SubscriberState>;
+//    using NetworkCommandManager = AbstractNetworkStateWrapper<net::GameMessage::ClientCommand>;
+    using NetworkStateManager = AbstractNetworkStateWrapper;
+    using NetworkCommandManager = AbstractNetworkStateWrapper;
 }

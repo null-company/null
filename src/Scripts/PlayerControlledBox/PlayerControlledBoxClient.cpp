@@ -56,7 +56,8 @@ namespace null {
                 auto direction = getDirectionByKey(key);
                 net::GameMessage::ClientCommand commandMessage;
                 commandMessage.set_subscriber_id(gameObject.getGuid());
-                *commandMessage.mutable_content() = NetworkCommandManager::makeStateMessageFrom(direction);
+                *commandMessage.mutable_content() =
+                        NetworkCommandManager::makeStateMessageFrom(static_cast<uint32_t>(direction));
                 networkManagerScript->getNetworkManager().sendCommandToServer(commandMessage);
             }
         }

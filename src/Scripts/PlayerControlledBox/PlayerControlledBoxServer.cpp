@@ -1,8 +1,6 @@
 #include "PlayerControlledBox/PlayerControlledBoxServer.hpp"
 #include "serialized/serverConfig.pb.h"
 
-#include <unordered_map>
-
 #include <MainLoop.hpp>
 #include <GameObject.hpp>
 #include <ResourceManager.hpp>
@@ -30,7 +28,7 @@ namespace null {
     }
 
     namespace {
-        enum Direction {
+        enum Direction: uint32_t {
             Left, Up, Right, Down, Stop
         };
 
@@ -61,7 +59,8 @@ namespace null {
     void PlayerControlledBoxServer::update() {
         messageQueue.processMessageIfAny([this](net::GameMessage::ClientCommand& commandMessage) {
             Direction direction;
-            NetworkCommandManager::restoreStateFromMessage(commandMessage.content(), direction);
+            NetworkCommandManager::restoreStateFromMessage(commandMessage.content(),
+                                                           reinterpret_cast<uint32_t&>(direction));
             moveGameObject(gameObject, direction);
         });
 
