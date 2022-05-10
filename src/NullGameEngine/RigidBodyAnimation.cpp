@@ -36,7 +36,7 @@ namespace null {
     }
 
     void RigidBodyAnimation::destroyAllFixtures() {
-        for (auto fx = gameObject.getRigidBody()->GetFixtureList(); fx != nullptr; fx = fx->GetNext()) {
+        for (auto fx = gameObject.getRigidBody()->GetFixtureList(); fx != nullptr; fx = gameObject.getRigidBody()->GetFixtureList()) {
             gameObject.getRigidBody()->DestroyFixture(fx);
         }
     }
