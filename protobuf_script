@@ -1,7 +1,0 @@
-FILE=serverConfig
-protoc ${FILE}.proto --cpp_out="./src/Network/serialized" --proto_path="./src/Network/serialized"
-mv src/Network/serialized/${FILE}.pb.h ./include/Network/serialized
-
-FILE=scene
-protoc ${FILE}.proto --cpp_out="./src/Serialization/" --proto_path="./src/Serialization/"
-mv src/Serialization/${FILE}.pb.h include/Serialization/${FILE}.pb.h
