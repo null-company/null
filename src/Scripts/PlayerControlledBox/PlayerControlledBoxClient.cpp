@@ -22,7 +22,7 @@ namespace null {
         gameObject.getRigidBody()->SetGravityScale(0.0f);
 
         networkManagerScript = gameObject.getScript<NetworkManagerClientScript>();
-        messageQueue = &networkManagerScript->getNetworkManager().subscribe(gameObject.getGuid());
+        messageQueue.attachTo(&networkManagerScript->getNetworkManager().subscribe(gameObject.getGuid()));
     }
 
     namespace {
@@ -42,33 +42,11 @@ namespace null {
         }
     }
 
-    namespace {
-        net::GameMessage::ClientCommand makeMessage(uint64_t entityId, Direction direction) {
-            net::GameMessage::ClientCommand command;
-            command.set_subscriber_id(entityId);
-            command.mutable_content()->add_uint32s(static_cast<uint32_t>(direction));
-            return command;
-        }
-    }
-
     void PlayerControlledBoxClient::update() {
-
-        if (!messageQueue->empty()) {
-            auto lastStateMessage = messageQueue->back();
-            std::queue<net::GameMessage::SubscriberState> emptyQueue;
-            std::swap(*messageQueue, emptyQueue);
-            networkStateManager.restoreStateFromMessage(lastStateMessage.content());
+        messageQueue.processMessageIfAny([this](net::GameMessage::SubscriberState& message) {
+            networkStateManager.restoreStateFromMessage(message.content());
             gameObject.setPosition(x, y);
-        }
-
-        if (!messageQueue->empty()) {
-            auto lastStateMessage = messageQueue->back();
-            std::queue<net::GameMessage::SubscriberState> emptyQueue;
-            std::swap(*messageQueue, emptyQueue);
-            float posX, posY;
-            NetworkStateManager::restoreStateFromMessage(lastStateMessage.content(), posX, posY);
-            gameObject.setPosition(x, y);
-        }
+        });
 
         const auto keysToCheck =
                 std::vector({sf::Keyboard::Left, sf::Keyboard::Up,
@@ -76,9 +54,10 @@ namespace null {
         for (const auto& key: keysToCheck) {
             if (sf::Keyboard::isKeyPressed(key)) {
                 auto direction = getDirectionByKey(key);
-                networkManagerScript->getNetworkManager().sendCommandToServer(
-                        makeMessage(gameObject.getGuid(), direction)
-                );
+                net::GameMessage::ClientCommand commandMessage;
+                commandMessage.set_subscriber_id(gameObject.getGuid());
+                *commandMessage.mutable_content() = NetworkCommandManager::makeStateMessageFrom(direction);
+                networkManagerScript->getNetworkManager().sendCommandToServer(commandMessage);
             }
         }
     }

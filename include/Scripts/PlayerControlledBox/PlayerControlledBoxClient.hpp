@@ -5,7 +5,8 @@
 
 #include <Script.hpp>
 #include <Network/NetworkManagerClientScript.hpp>
-#include <Network/NetworkStateManager.hpp>
+#include <Network/AbstractNetworkStateWrapper.hpp>
+#include <Network/Utility/LastAcceptedMessageProcessor.hpp>
 
 namespace null {
 
@@ -18,7 +19,7 @@ namespace null {
     private:
         float x{}, y{};
         NetworkStateManager networkStateManager{x, y}; // network state manager will be restoring these values
-        std::queue<net::GameMessage::SubscriberState>* messageQueue = nullptr;
+        LastAcceptedMessageProcessor<net::GameMessage::SubscriberState> messageQueue{};
         NetworkManagerClientScript* networkManagerScript{};
     };
 

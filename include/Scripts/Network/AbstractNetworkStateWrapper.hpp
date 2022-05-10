@@ -19,7 +19,8 @@
   }
  */
 namespace null {
-    class NetworkStateManager {
+    template <class MessageType>
+    class AbstractNetworkStateWrapper {
     private:
         using allowedVariant = std::variant<uint32_t *, uint64_t *, std::string *, float *, double *, bool *>;
         enum VariantType : uint8_t {
@@ -32,19 +33,19 @@ namespace null {
         };
 
     private:
-        std::vector<allowedVariant> propsToManage;
+        std::vector<allowedVariant> propsToManage{};
+        AbstractNetworkStateWrapper() = default;
 
     public:
-        NetworkStateManager() = delete;
 
         template<typename T>
         [[maybe_unused]] // compiler not smart enough
-        explicit NetworkStateManager(T& t) {
+        explicit AbstractNetworkStateWrapper(T& t) {
             propsToManage.emplace_back(&t);
         }
 
         template<typename T, typename... Args>
-        explicit NetworkStateManager(T& t, Args& ... args) : NetworkStateManager(args...) {
+        explicit AbstractNetworkStateWrapper(T& t, Args& ... args) : AbstractNetworkStateWrapper(args...) {
             propsToManage.emplace_back(&t);
         }
 
@@ -54,7 +55,7 @@ namespace null {
          * Note: things such as id should be set outside and can't be managed by this class
          * @param stateMessage message object in which to write current state of watched properties
          */
-        void serializeStateToMessage(net::GameMessage::PrimitiveState& stateMessage) const {
+        void serializeStateToMessage(MessageType& stateMessage) const {
             for (const auto& prop: propsToManage) {
                 auto type = static_cast<VariantType>(prop.index());
                 switch (type) {
@@ -94,19 +95,19 @@ namespace null {
 
         [[nodiscard]]
         net::GameMessage::PrimitiveState makeStateMessage() const {
-            net::GameMessage::PrimitiveState message;
+            MessageType message;
             serializeStateToMessage(message);
             return message;
         }
 
         template <typename... Args>
         static net::GameMessage::PrimitiveState makeStateMessageFrom(Args ... props) {
-            return NetworkStateManager(props...).makeStateMessage();
+            return AbstractNetworkStateWrapper(props...).makeStateMessage();
         }
 
         template <typename... Args>
         static void restoreStateFromMessage(const net::GameMessage::PrimitiveState& stateMessage, Args& ... props) {
-            NetworkStateManager(props...).restoreStateFromMessage(stateMessage);
+            AbstractNetworkStateWrapper(props...).restoreStateFromMessage(stateMessage);
         }
 
         /**
@@ -158,4 +159,7 @@ namespace null {
             }
         }
     };
+
+    using NetworkStateManager = AbstractNetworkStateWrapper<net::GameMessage::SubscriberState>;
+    using NetworkCommandManager = AbstractNetworkStateWrapper<net::GameMessage::ClientCommand>;
 }

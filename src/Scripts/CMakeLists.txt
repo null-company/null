@@ -43,6 +43,8 @@ set(SRC
         ${INCROOT}/Network/NetworkManagerServerScript.hpp
         ${SRCROOT}/Network/NetworkStateManager.cpp
         ${INCROOT}/Network/NetworkStateManager.hpp
+        ${SRCROOT}/Network/Utility/LastAcceptedMessageProcessor.cpp
+        ${INCROOT}/Network/Utility/LastAcceptedMessageProcessor.hpp
         )
 
 add_library(scripts STATIC ${SRC})

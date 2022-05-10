@@ -3,7 +3,8 @@
 #include <queue>
 #include <Script.hpp>
 #include "serialized/serverConfig.pb.h"
-#include <Network/NetworkStateManager.hpp>
+#include <Network/AbstractNetworkStateWrapper.hpp>
+#include <Network/Utility/LastAcceptedMessageProcessor.hpp>
 
 namespace null {
 
@@ -14,7 +15,7 @@ namespace null {
         explicit PlayerControlledBoxServer(GameObject& go) : Script(go) {}
 
     private:
-        std::queue<net::GameMessage::ClientCommand>* messageQueue = nullptr;
+        LastAcceptedMessageProcessor<net::GameMessage::ClientCommand> messageQueue{};
     };
 
 }

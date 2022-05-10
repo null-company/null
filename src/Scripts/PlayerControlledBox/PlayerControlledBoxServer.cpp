@@ -24,7 +24,9 @@ namespace null {
 //        gameObject.makeDynamic();
 //        gameObject.getRigidBody()->SetGravityScale(0.0f);
 
-        messageQueue = &gameObject.getScript<NetworkManagerServerScript>()->subscribe(gameObject.getGuid());
+        messageQueue.attachTo(
+                &gameObject.getScript<NetworkManagerServerScript>()->subscribe(gameObject.getGuid())
+        );
     }
 
     namespace {
@@ -54,21 +56,14 @@ namespace null {
             auto currentPosition = gameObject.getPosition();
             gameObject.setPosition(currentPosition + positionDelta);
         }
-
-        void handleMessage(GameObject& gameObject, net::GameMessage::ClientCommand& command) {
-            auto direction =
-                    Direction(command.mutable_content()->uint32s(0));
-            moveGameObject(gameObject, direction);
-        }
     }
 
     void PlayerControlledBoxServer::update() {
-        if (!messageQueue->empty()) {
-            auto lastCommandMessage = messageQueue->back();
-            std::queue<net::GameMessage::ClientCommand> emptyQueue;
-            std::swap(*messageQueue, emptyQueue);
-            handleMessage(gameObject, lastCommandMessage);
-        }
+        messageQueue.processMessageIfAny([this](net::GameMessage::ClientCommand& commandMessage) {
+            Direction direction;
+            NetworkCommandManager::restoreStateFromMessage(commandMessage.content(), direction);
+            moveGameObject(gameObject, direction);
+        });
 
         net::GameMessage::SubscriberState stateToBroadcast;
         stateToBroadcast.set_subscriber_id(gameObject.getGuid());
