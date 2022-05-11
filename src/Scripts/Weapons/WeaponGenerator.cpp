@@ -1,9 +1,11 @@
 #include "Weapons/WeaponGenerator.hpp"
 #include "Weapons/WeaponHolders/StraightWeaponScript.hpp"
 #include "Weapons/WeaponAmmunition/GrenadeScript.hpp"
+#include "GameObjectSensor.hpp"
 #include <Scene.hpp>
 #include <random>
 #include <Weapons/WeaponHolders/GrenadeBunchScript.hpp>
+#include <DeleteScript.hpp>
 
 namespace null {
     void WeaponGenerator::start() {
@@ -14,7 +16,7 @@ namespace null {
     void WeaponGenerator::update() {
         if (timer.expired()) {
             addWeaponToPlatform();
-            timer.expired();
+            timer.start();
         }
         Component::update();
     }
@@ -54,7 +56,11 @@ namespace null {
             default:
                 return nullptr;
         }
-        return weapon;
+        weapon->addTag("weapon");
+        auto sensor = std::make_shared<GameObject>();
+        sensor->addScript<GameObjectSensor>(*sensor, sf::Vector2f{30, -30}, weapon, onPlayerEnter);
+        sensor->addScript<DeleteScript>(*sensor);
+        return sensor;
     }
 
     void WeaponGenerator::addWeaponToPlatform() {

@@ -12,12 +12,7 @@
 namespace null {
     void GrenadeBunchScript::start() {
         Component::start();
-        sf::Texture* weaponTexture = ResourceManager::loadTexture("weapons/grenade.png");
-        gameObject.getSprite().setTexture(*weaponTexture);
-        gameObject.getSprite().scale(0.3, 0.3);
-        gameObject.renderLayer = FOREGROUND2;
-        gameObject.visible = true;
-        restartTime = 2000ms;
+
     }
 
     void null::GrenadeBunchScript::update() {
@@ -35,7 +30,14 @@ namespace null {
         }
     }
 
-    GrenadeBunchScript::GrenadeBunchScript(GameObject& object) : WeaponScript(object) {}
+    GrenadeBunchScript::GrenadeBunchScript(GameObject& object) : WeaponScript(object) {
+        sf::Texture* weaponTexture = ResourceManager::loadTexture("weapons/grenade.png");
+        gameObject.getSprite().setTexture(*weaponTexture);
+        gameObject.getSprite().scale(0.3, 0.3);
+        gameObject.renderLayer = FOREGROUND2;
+        gameObject.visible = true;
+        restartTime = 2000ms;
+    }
 
     void GrenadeBunchScript::shoot(sf::Vector2f from, sf::Vector2f to) {
         saveShotInfo();

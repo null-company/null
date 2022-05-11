@@ -68,7 +68,7 @@ namespace null {
         b2Body* getRigidBody();
 
         void makeStatic(b2World& box2dWorld);
-
+        void makeStatic();
         void makeDynamic(b2World& box2dWorld);
 
         void setCollisionCategories(uint16_t categoryBits);

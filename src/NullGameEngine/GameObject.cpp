@@ -47,11 +47,14 @@ namespace null {
 
 
     std::shared_ptr<GameObject> GameObject::findFirstChildrenByTag(const std::string& tag) {
-        auto res = *std::find_if(children.begin(), children.end(),
-                                 [&tag](std::shared_ptr<GameObject>& gameObject) {
-                                     return gameObject->hasTag(tag);
-                                 });
-        return res;
+        auto resIt = std::find_if(children.begin(), children.end(),
+                                  [&tag](std::shared_ptr<GameObject>& gameObject) {
+                                      return gameObject->hasTag(tag);
+                                  });
+        if (resIt == children.end()) {
+            return nullptr;
+        }
+        return *resIt;
     }
 
     b2Body* GameObject::getRigidBody() {
@@ -296,6 +299,10 @@ namespace null {
         b2Filter b2Filter = this->getRigidBody()->GetFixtureList()->GetFilterData();
         b2Filter.maskBits = maskBits;
         this->getRigidBody()->GetFixtureList()->SetFilterData(b2Filter);
+    }
+
+    void GameObject::makeStatic() {
+        makeStatic(getScene().lock()->getBox2dWorld());
     }
 
 }

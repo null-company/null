@@ -12,10 +12,13 @@ namespace null {
         static int counter;
     public:
         WeaponStorage(GameObject& object, std::vector<std::shared_ptr<GameObject>> weapons);
+
         void start() override;
 
         void update() override;
 
         void swapWeapon();
+
+        void addWeapon(std::shared_ptr<GameObject> weapon);
     };
 }

@@ -10,16 +10,6 @@
 namespace null {
     void StraightWeaponScript::start() {
         Component::start();
-        auto parent = gameObject.getParent().lock();
-        if (parent == nullptr) {
-            return;
-        }
-        sf::Texture* weaponTexture = ResourceManager::loadTexture("weapon.png");
-        gameObject.getSprite().setOrigin(sf::Vector2f(250, 100));
-        gameObject.getSprite().setTexture(*weaponTexture);
-        gameObject.getSprite().scale(0.24, 0.24);
-        gameObject.renderLayer = FOREGROUND2;
-        gameObject.visible = true;
 
     }
 
@@ -71,5 +61,11 @@ namespace null {
 
     StraightWeaponScript::StraightWeaponScript(GameObject& object, double deviance) : WeaponScript(object) {
         d = std::normal_distribution<>(0, deviance);
+        sf::Texture* weaponTexture = ResourceManager::loadTexture("weapon.png");
+        gameObject.getSprite().setOrigin(sf::Vector2f(250, 100));
+        gameObject.getSprite().setTexture(*weaponTexture);
+        gameObject.getSprite().scale(0.24, 0.24);
+        gameObject.renderLayer = FOREGROUND2;
+        gameObject.visible = true;
     }
 }

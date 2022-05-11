@@ -135,14 +135,14 @@ namespace null {
                                                                              {"walkRight", 1, 0, 3},
                                                                              {"walkLeft",  2, 0, 3}});
 
-        auto grenadeBunch = std::make_shared<GameObject>();
-        grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
+//        auto grenadeBunch = std::make_shared<GameObject>();
+//        grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
 
-        auto gun = std::make_shared<GameObject>();
-        gun->addScript<StraightWeaponScript>(*gun, 0.01);
+//        auto gun = std::make_shared<GameObject>();
+//        gun->addScript<StraightWeaponScript>(*gun, 0.01);
 
         auto weaponStorage = std::make_shared<GameObject>();
-        std::vector guns{gun, grenadeBunch};
+        std::vector<std::shared_ptr<GameObject>> guns{};
         weaponStorage->addScript<WeaponStorage>(*weaponStorage, guns);
 
         player->addChild(std::move(weaponStorage));

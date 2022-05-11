@@ -1,5 +1,6 @@
 #include "Physics/ContactListener.hpp"
 #include "Weapons/WeaponAmmunition/BulletScript.hpp"
+#include "GameObjectSensor.hpp"
 
 namespace null {
 //TODO: Make chain call pattern
@@ -12,6 +13,11 @@ namespace null {
                 if (go->getScript<BulletScript>() and edge->IsTouching()) {
                     auto otherGo = go == go1 ? go2 : go1;
                     go->getScript<BulletScript>()->contactedGameObject = otherGo;
+                }
+                // This block of code for describing behavior of Player and Sensor Go
+                if (go->getScript<GameObjectSensor>() and edge->IsTouching()) {
+                    auto otherGo = go == go1 ? go2 : go1;
+                    go->getScript<GameObjectSensor>()->onTouch(otherGo);
                 }
             }
         }
