@@ -44,7 +44,7 @@ namespace null {
 
     void PlayerControlledBoxClient::update() {
         messageQueue.processMessageIfAny([this](net::GameMessage::SubscriberState& message) {
-            networkStateManager.restoreStateFromMessage(message.content());
+            networkStateManager.restoreFromMessage(message.content());
             gameObject.setPosition(x, y);
         });
 
@@ -57,7 +57,7 @@ namespace null {
                 net::GameMessage::ClientCommand commandMessage;
                 commandMessage.set_subscriber_id(gameObject.getGuid());
                 *commandMessage.mutable_content() =
-                        NetworkCommandManager::makeStateMessageFrom(static_cast<uint32_t>(direction));
+                        CommandConverter::makeMessageFrom(static_cast<uint32_t>(direction));
                 networkManagerScript->getNetworkManager().sendCommandToServer(commandMessage);
             }
         }

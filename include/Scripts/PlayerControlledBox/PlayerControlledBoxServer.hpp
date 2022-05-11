@@ -3,7 +3,7 @@
 #include <queue>
 #include <Script.hpp>
 #include "serialized/serverConfig.pb.h"
-#include <Network/AbstractNetworkStateWrapper.hpp>
+#include <Network/PrimitiveStateConverter.hpp>
 #include <Network/Utility/LastAcceptedMessageProcessor.hpp>
 
 namespace null {

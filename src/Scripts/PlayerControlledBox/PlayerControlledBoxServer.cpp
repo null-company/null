@@ -59,8 +59,8 @@ namespace null {
     void PlayerControlledBoxServer::update() {
         messageQueue.processMessageIfAny([this](net::GameMessage::ClientCommand& commandMessage) {
             Direction direction;
-            NetworkCommandManager::restoreStateFromMessage(commandMessage.content(),
-                                                           reinterpret_cast<uint32_t&>(direction));
+            CommandConverter::restoreFromMessage(commandMessage.content(),
+                                                 reinterpret_cast<uint32_t&>(direction));
             moveGameObject(gameObject, direction);
         });
 
@@ -69,7 +69,7 @@ namespace null {
 
         const auto& position = gameObject.getPosition();
         *stateToBroadcast.mutable_content() =
-                NetworkStateManager::makeStateMessageFrom(position.x, position.y);
+                StateConverter::makeMessageFrom(position.x, position.y);
         MainLoop::serverArbiter->getGameServer().broadcastMessage(
                 stateToBroadcast
         );

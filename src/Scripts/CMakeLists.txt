@@ -41,8 +41,8 @@ set(SRC
         ${INCROOT}/Network/NetworkManagerClientScript.hpp
         ${SRCROOT}/Network/NetworkManagerServerScript.cpp
         ${INCROOT}/Network/NetworkManagerServerScript.hpp
-        ${SRCROOT}/Network/AbstractNetworkStateWrapper.cpp
-        ${INCROOT}/Network/AbstractNetworkStateWrapper.hpp
+        ${SRCROOT}/Network/PrimitiveStateConverter.cpp
+        ${INCROOT}/Network/PrimitiveStateConverter.hpp
         ${SRCROOT}/Network/Utility/LastAcceptedMessageProcessor.cpp
         ${INCROOT}/Network/Utility/LastAcceptedMessageProcessor.hpp
         )
