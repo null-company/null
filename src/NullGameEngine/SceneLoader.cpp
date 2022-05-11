@@ -16,7 +16,6 @@
 #include <Weapon/StraightWeaponScript.hpp>
 #include "PlayerControlledBox/PlayerControlledBoxClient.hpp"
 #include "PlayerControlledBox/PlayerControlledBoxServer.hpp"
-#include <server/ServerArbiter.h>
 #include <Network/NetworkManagerClientScript.hpp>
 #include <Network/NetworkManagerServerScript.hpp>
 
@@ -62,14 +61,29 @@ namespace null {
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
 
-        auto boxObject = std::make_shared<GameObject>(200200);
-        auto& clientScript = boxObject->addScript<NetworkManagerClientScript>(*boxObject);
+        auto clientManagerObject = std::make_shared<GameObject>(200200);
+        clientManagerObject->addTag("network-manager");
+        auto& clientScript =
+                clientManagerObject->addScript<NetworkManagerClientScript>(*clientManagerObject);
         clientScript.ipToConnectTo = "127.0.0.1";
         clientScript.port = 5002;
+        newScene->addRootGameObject(std::move(clientManagerObject));
 
-        boxObject->addScript<PlayerControlledBoxClient>(*boxObject);
+        std::random_device dev;
+        std::mt19937 rng(dev());
+        std::uniform_real_distribution<> randX(0, 1280);
+        std::uniform_real_distribution<> randY(0, 920);
 
-        newScene->addRootGameObject(std::move(boxObject));
+        constexpr uint32_t totalBoxes = 15;
+        for (uint32_t i = 0; i < totalBoxes; i++) {
+            auto x = static_cast<float>(randX(rng));
+            auto y = static_cast<float>(randY(rng));
+            auto boxObject = std::make_shared<GameObject>(i);
+            boxObject->setPosition(x, y);
+            boxObject->addScript<PlayerControlledBoxClient>(*boxObject);
+            newScene->addRootGameObject(std::move(boxObject));
+        }
+
         return newScene;
     }
 
@@ -78,11 +92,27 @@ namespace null {
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
 
-        auto boxObject = std::make_shared<GameObject>(200200);
-        auto& serverScript = boxObject->addScript<NetworkManagerServerScript>(*boxObject);
-        boxObject->addScript<PlayerControlledBoxServer>(*boxObject);
+        auto serverNetworkManager = std::make_shared<GameObject>(200200);
+        serverNetworkManager->addTag("network-manager");
+        auto& serverScript =
+                serverNetworkManager->addScript<NetworkManagerServerScript>(*serverNetworkManager);
+        newScene->addRootGameObject(std::move(serverNetworkManager));
 
-        newScene->addRootGameObject(std::move(boxObject));
+        std::random_device dev;
+        std::mt19937 rng(dev());
+        std::uniform_real_distribution<> randX(0, 1280);
+        std::uniform_real_distribution<> randY(0, 920);
+
+        constexpr uint32_t totalBoxes = 15;
+        for (uint32_t i = 0; i < totalBoxes; i++) {
+            auto x = static_cast<float>(randX(rng));
+            auto y = static_cast<float>(randY(rng));
+            auto boxObject = std::make_shared<GameObject>(i);
+            boxObject->setPosition(x, y);
+            boxObject->addScript<PlayerControlledBoxServer>(*boxObject);
+            newScene->addRootGameObject(std::move(boxObject));
+        }
+
         return newScene;
     }
 

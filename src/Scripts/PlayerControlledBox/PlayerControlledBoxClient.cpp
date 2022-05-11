@@ -15,13 +15,13 @@ namespace null {
         auto boxTexture = ResourceManager::loadTexture("box.png");
         gameObject.getSprite().setTexture(*boxTexture);
         gameObject.getSprite().setScale(0.125f, 0.125f);
-        gameObject.setPosition(200, 0);
         gameObject.renderLayer = FOREGROUND;
         gameObject.visible = true;
         gameObject.makeDynamic();
         gameObject.getRigidBody()->SetGravityScale(0.0f);
 
-        networkManagerScript = gameObject.getScript<NetworkManagerClientScript>();
+        auto networkManagerObject = gameObject.getScene().lock()->findFirstByTag("network-manager");
+        networkManagerScript = networkManagerObject.lock()->getScript<NetworkManagerClientScript>();
         messageQueue.attachTo(&networkManagerScript->getNetworkManager().subscribe(gameObject.getGuid()));
     }
 

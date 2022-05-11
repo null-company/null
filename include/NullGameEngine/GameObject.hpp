@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <set>
+#include <algorithm>
 
 #include <box2d/box2d.h>
 
@@ -10,7 +11,6 @@
 #include <NullGameEngine.hpp>
 #include <Script.hpp>
 #include <RenderLayer.hpp>
-#include <algorithm>
 
 enum class GameObjectStatus {
     NONE, RUNNING, DEATCHED

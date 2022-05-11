@@ -16,14 +16,15 @@ namespace null {
 //        auto boxTexture = ResourceManager::loadTexture("box.png");
 //        gameObject.getSprite().setTexture(*boxTexture);
 //        gameObject.getSprite().setScale(0.125f, 0.125f);
-        gameObject.setPosition(200, 0);
+//        gameObject.setPosition(200, 0);
 //        gameObject.renderLayer = FOREGROUND;
 //        gameObject.visible = true;
 //        gameObject.makeDynamic();
 //        gameObject.getRigidBody()->SetGravityScale(0.0f);
 
         messageQueue.attachTo(
-                &gameObject.getScript<NetworkManagerServerScript>()->subscribe(gameObject.getGuid())
+                &gameObject.getScene().lock()->findFirstByTag("network-manager")
+                        .lock()->getScript<NetworkManagerServerScript>()->subscribe(gameObject.getGuid())
         );
     }
 
