@@ -2,19 +2,44 @@
 
 #include <SFML/Network.hpp>
 #include <list>
+#include <functional>
+#include <plog/Log.h>
 
 #include "GameServer.h"
 #include "serialized/serverConfig.pb.h"
 #include "NetClientCollector.h"
 
+/**
+ * ServerArbiter is responsible for starting new GameServer's and
+ * creating rooms.
+ */
 class ServerArbiter : public NetClientCollector {
-    ServerArbiter(std::function<void()> simulationThread);
+private:
 
+    /**
+     * GameServers that this arbiter is running
+     * Todo add support for actually running multiple of those
+     */
     std::vector<std::unique_ptr<GameServer>> gameServers;
     std::list<uint16_t> freePorts;
     std::map<std::string, int> roomCodeToServerNum;
+    std::function<void(void)> simulation;
 public:
     ServerArbiter();
+
+    /**
+     * TODO(Roman) delete this piece of cringe
+     * @return
+     */
+    GameServer& getGameServer() {
+        return *gameServers[0];
+    }
+
+    /**
+     * Serves as a server arbiter that also manages network
+     * The simulation starts when players are connected
+     */
+    ServerArbiter(std::function<void()> simulation);
 
     std::string createNewGameSimulation();
 

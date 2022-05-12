@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-find_package(Protobuf)
+find_package(Protobuf REQUIRED)
 
 set(INCROOT ${PROJECT_SOURCE_DIR}/include/Network/)
 set(SRCROOT ${PROJECT_SOURCE_DIR}/src/Network/)
@@ -61,14 +61,8 @@ target_include_directories(network
         PRIVATE ${PROJECT_SOURCE_DIR}/src/Network
         )
 
-add_executable(SERVER server.cpp)
-
-target_link_libraries(SERVER
-        network
-        )
 target_link_libraries(network
         proto-stuff
-#        nullGameEngine
         plog
         sfml-graphics
         sfml-audio

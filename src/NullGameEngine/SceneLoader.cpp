@@ -1,4 +1,6 @@
 #include <memory>
+#include <functional>
+#include <unordered_map>
 
 #include <box2d/box2d.h>
 
@@ -10,45 +12,108 @@
 #include <ResourceManager.hpp>
 #include <PlayerAnimation.hpp>
 #include <Utility.hpp>
-#include <functional>
-#include <unordered_map>
-#include "MapManager/MapManager.hpp"
-#include "Weapon/WeaponScript.hpp"
-#include "Weapon/StraightWeaponScript.hpp"
 #include <MapManager/MapManager.hpp>
+#include <Weapon/StraightWeaponScript.hpp>
+#include "PlayerControlledBox/PlayerControlledBoxClient.hpp"
+#include "PlayerControlledBox/PlayerControlledBoxServer.hpp"
+#include <Network/NetworkManagerClientScript.hpp>
+#include <Network/NetworkManagerServerScript.hpp>
 
 namespace null {
 
     // todo this is a dummy implementation
     // later reimplement this by loading stuff from file 
     // and using a resource manager
-    void SceneLoader::loadSceneFromFile(std::filesystem::path path) {
-
-        enum Level {
-            Demo, Menu
-        };
+    void SceneLoader::loadSceneFromFile(const std::filesystem::path& path) {
 
         // a temporary solution to get a scene by keyword
         // while we don't store them in files
         auto keyword = path.string();
 
         const std::unordered_map<std::string, std::function<std::shared_ptr<Scene>(void)>> keywordToLevelGetter = {
-                {"/demo",                 getDemoScene},
-                {"/menu",                 getMenuScene},
-                {"/menu/play",            getPlayScene},
-                {"/menu/play/createRoom", getCreateRoomScene},
-                {"/menu/play/joinRoom",   getJoinRoomScene},
-                {"/game",                 getGameScene}
+                {"/demo",                   getDemoScene},
+                {"/menu",                   getMenuScene},
+                {"/menu/play",              getPlayScene},
+                {"/menu/play/createRoom",   getCreateRoomScene},
+                {"/menu/play/joinRoom",     getJoinRoomScene},
+                {"/game",                   getGameScene},
+                {"/network-demo-client",    getNetworkDemoClientScene},
+                {"/network-demo-server",    getNetworkDemoServerScene},
+                {"/network-demo-connector", getNetworkDemoClientScene}
         };
 
         std::shared_ptr<Scene> scene;
 
-        scene = keywordToLevelGetter.at(keyword)();
+        try {
+            scene = keywordToLevelGetter.at(keyword)();
+        } catch (const std::out_of_range& e) {
+            throw null::UnknownSceneException();
+        }
         MainLoop::provideScene(scene);
     }
 
     static std::shared_ptr<Scene> getGameScene() {
         return nullptr;
+    }
+
+    std::shared_ptr<Scene> SceneLoader::getNetworkDemoClientScene() {
+        MainLoop::attachWindow = false;
+        auto newScene = std::make_shared<Scene>();
+        auto& box2dWorld = newScene->getBox2dWorld();
+
+        auto clientManagerObject = std::make_shared<GameObject>(200200);
+        clientManagerObject->addTag("network-manager");
+        auto& clientScript =
+                clientManagerObject->addScript<NetworkManagerClientScript>(*clientManagerObject);
+        clientScript.ipToConnectTo = "127.0.0.1";
+        clientScript.port = 5002;
+        newScene->addRootGameObject(std::move(clientManagerObject));
+
+        std::random_device dev;
+        std::mt19937 rng(dev());
+        std::uniform_real_distribution<> randX(0, 1280);
+        std::uniform_real_distribution<> randY(0, 920);
+
+        constexpr uint32_t totalBoxes = 15;
+        for (uint32_t i = 0; i < totalBoxes; i++) {
+            auto x = static_cast<float>(randX(rng));
+            auto y = static_cast<float>(randY(rng));
+            auto boxObject = std::make_shared<GameObject>(i);
+            boxObject->setPosition(x, y);
+            boxObject->addScript<PlayerControlledBoxClient>(*boxObject);
+            newScene->addRootGameObject(std::move(boxObject));
+        }
+
+        return newScene;
+    }
+
+    std::shared_ptr<Scene> SceneLoader::getNetworkDemoServerScene() {
+        MainLoop::attachWindow = true;
+        auto newScene = std::make_shared<Scene>();
+        auto& box2dWorld = newScene->getBox2dWorld();
+
+        auto serverNetworkManager = std::make_shared<GameObject>(200200);
+        serverNetworkManager->addTag("network-manager");
+        auto& serverScript =
+                serverNetworkManager->addScript<NetworkManagerServerScript>(*serverNetworkManager);
+        newScene->addRootGameObject(std::move(serverNetworkManager));
+
+        std::random_device dev;
+        std::mt19937 rng(dev());
+        std::uniform_real_distribution<> randX(0, 1280);
+        std::uniform_real_distribution<> randY(0, 920);
+
+        constexpr uint32_t totalBoxes = 15;
+        for (uint32_t i = 0; i < totalBoxes; i++) {
+            auto x = static_cast<float>(randX(rng));
+            auto y = static_cast<float>(randY(rng));
+            auto boxObject = std::make_shared<GameObject>(i);
+            boxObject->setPosition(x, y);
+            boxObject->addScript<PlayerControlledBoxServer>(*boxObject);
+            newScene->addRootGameObject(std::move(boxObject));
+        }
+
+        return newScene;
     }
 
     std::shared_ptr<Scene> SceneLoader::getDemoScene() {
@@ -248,12 +313,11 @@ namespace null {
         newScene->addRootGameObject(std::move(exitButton));
 
         return newScene;
-    };
+    }
 
-    void SceneLoader::changeScene(std::filesystem::path path) {
+    void SceneLoader::changeScene(const std::filesystem::path& path) {
         loadSceneFromFile(path);
         throw SceneChangedException();
     }
 
 }
-

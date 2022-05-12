@@ -8,4 +8,3 @@ net::NetMessage receiveNetMessage(sf::TcpSocket &socket);
 void sendNetMessage(sf::TcpSocket &socket, const net::NetMessage &message);
 
 void sendGameMessage(sf::TcpSocket &socket, const net::GameMessage &message);
-

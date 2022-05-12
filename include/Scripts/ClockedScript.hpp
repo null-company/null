@@ -10,7 +10,7 @@ namespace null {
      * that use clock on every update (for physics, presumably)
      * Instead of overriding start and update, override
      * clockedStart and clockedUpdate
-     * In clockedUpdate, use ClockedScript::elapsed. It is amount of
+     * In clockedUpdate, use ClockedScript::elapsed. It is the amount of
      * time since the last update
      */
     class ClockedScript : public Script {

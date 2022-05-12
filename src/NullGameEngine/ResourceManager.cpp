@@ -2,16 +2,17 @@
 #include <ResourceManager.hpp>
 
 namespace null {
-    std::map<std::string, sf::Texture *> ResourceManager::textureMap =
-            std::map<std::string, sf::Texture *>();
+    std::map<std::string, sf::Texture*> ResourceManager::textureCache =
+            std::map<std::string, sf::Texture*>();
 
-    sf::Texture *ResourceManager::loadTexture(const std::string &filename) {
-        auto texture = new sf::Texture();
+    sf::Texture* ResourceManager::loadTexture(const std::string& textureName) {
+        sf::Texture* texture;
         try {
-            texture = ResourceManager::textureMap.at(filename);
-        } catch (std::out_of_range &exception) {
-            texture->loadFromFile("../res/textures/" + filename);
-            ResourceManager::textureMap[filename] = texture;
+            texture = ResourceManager::textureCache.at(textureName);
+        } catch (std::out_of_range& exception) {
+            texture = new sf::Texture();
+            texture->loadFromFile("../res/textures/" + textureName);
+            ResourceManager::textureCache[textureName] = texture;
         }
         return texture;
     }

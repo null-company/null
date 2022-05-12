@@ -33,6 +33,18 @@ set(SRC
         ${INCROOT}/Weapon/WeaponScript.hpp
         ${SRCROOT}/Weapons/BulletScript.cpp
         ${INCROOT}/Weapon/BulletScript.hpp
+        ${SRCROOT}/PlayerControlledBox/PlayerControlledBoxClient.cpp
+        ${INCROOT}/PlayerControlledBox/PlayerControlledBoxClient.hpp
+        ${SRCROOT}/PlayerControlledBox/PlayerControlledBoxServer.cpp
+        ${INCROOT}/PlayerControlledBox/PlayerControlledBoxServer.hpp
+        ${SRCROOT}/Network/NetworkManagerClientScript.cpp
+        ${INCROOT}/Network/NetworkManagerClientScript.hpp
+        ${SRCROOT}/Network/NetworkManagerServerScript.cpp
+        ${INCROOT}/Network/NetworkManagerServerScript.hpp
+        ${SRCROOT}/Network/PrimitiveStateConverter.cpp
+        ${INCROOT}/Network/PrimitiveStateConverter.hpp
+        ${SRCROOT}/Network/Utility/LastAcceptedMessageProcessor.cpp
+        ${INCROOT}/Network/Utility/LastAcceptedMessageProcessor.hpp
         )
 
 add_library(scripts STATIC ${SRC})

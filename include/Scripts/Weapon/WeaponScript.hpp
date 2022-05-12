@@ -6,7 +6,6 @@
 #include <random>
 #include <Script.hpp>
 
-using namespace std::chrono_literals;
 namespace null {
     class WeaponScript : public Script {
         using mills = std::chrono::milliseconds;
@@ -14,7 +13,7 @@ namespace null {
         using time_point = std::chrono::time_point<clock>;
 
     protected:
-        mills restartTime = 100ms;
+        mills restartTime = std::chrono::milliseconds(100);
         time_point lastShot;
 
         std::random_device rd{};

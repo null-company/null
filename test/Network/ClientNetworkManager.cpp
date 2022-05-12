@@ -14,7 +14,7 @@
 //    ClientNetworkManager client1("127.0.0.1", port);
 //
 //    client1.getClient().createRoom();
-//    std::string roomCode = client1.getClient().getRoom();
+//    std::string roomCode = client1.getClient().getRoomCode();
 //    LOGD << "room code is: " << roomCode;
 //}
 //
@@ -30,7 +30,7 @@
 //
 //    client1.getClient().createRoom();
 //
-//    std::string roomCode = client1.getClient().getRoom();
+//    std::string roomCode = client1.getClient().getRoomCode();
 //    client2.getClient().connectRoom(roomCode);
 //    client3.getClient().connectRoom(roomCode);
 //    client4.getClient().connectRoom(roomCode);
@@ -38,18 +38,20 @@
 //}
 
 TEST(NetworkClientManager, subtest) {
+    using namespace std::chrono_literals;
+
     ServerArbiter serverArbiter;
     int port = rand() % 23 + 5000;
-    serverArbiter.listen("127.0.0.1", port);
+    serverArbiter.listen(port);
     serverArbiter.launch();
     ClientNetworkManager client1("127.0.0.1", port);
     ClientNetworkManager client2("127.0.0.1", port);
     ClientNetworkManager client3("127.0.0.1", port);
     ClientNetworkManager client4("127.0.0.1", port);
 
-    client1.getClient().createRoom();
+    client1.getClient().createRoomAndConnect();
 
-    std::string roomCode = client1.getClient().getRoom();
+    std::string roomCode = client1.getClient().getRoomCode();
     client2.getClient().connectRoom(roomCode);
     client3.getClient().connectRoom(roomCode);
     client4.getClient().connectRoom(roomCode);
@@ -72,12 +74,12 @@ TEST(NetworkClientManager, subtest) {
     sendNetMessage(client2.getClient().getGameServerSocket(), netMessage);
     client2.getClient();
 
-    sleep(1);
+    std::this_thread::sleep_for(1s);
 
     try {
         while (true) {
             auto message = client1.receiveMessage();
-            client1.multiplexMessage(message);
+            client1.distributeMessageToSubscribers(message);
         }
     } catch (ReceiveException &e) {
 
@@ -85,7 +87,7 @@ TEST(NetworkClientManager, subtest) {
     try {
         while (true) {
             auto message = client3.receiveMessage();
-            client3.multiplexMessage(message);
+            client3.distributeMessageToSubscribers(message);
         }
     } catch (ReceiveException &e) {
 
