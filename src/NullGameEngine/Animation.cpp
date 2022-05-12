@@ -1,9 +1,8 @@
 #include "Animation.hpp"
-#include "Serializer.hpp"
+#include <Serializer.hpp>
 
 #include <GameObject.hpp>
 #include <ResourceManager.hpp>
-#include <iostream>
 
 namespace null {
     Animation::Animation(GameObject& gameObject, SpriteSheet const& spriteSheet):

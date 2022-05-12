@@ -42,6 +42,7 @@ target_include_directories(scripts
 
 target_link_libraries(scripts
         nullGameEngine
+        serialization
         network
         sfml-graphics
         sfml-audio

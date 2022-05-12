@@ -1,20 +1,25 @@
 #include <fstream>
-#include "Serializer.hpp"
+#include <Serializer.hpp>
 #include "plog/Log.h"
 #include <google/protobuf/util/json_util.h>
 
 namespace null {
 
+    std::unordered_set<Entity*> Serializer::deserializedEntitySet = {};
+    std::unordered_map<Entity**, uint64_t> Serializer::toBeSetEntityPointerMap = {};
+    GameObject* Serializer::currentDeserializationGameObject = nullptr;
+    Scene* Serializer::currentDeserializationScene = nullptr;
+
     void Serializer::serializeSceneToFile(const null::Scene* scene, const std::string& filename) {
         auto s_scene = serial::Scene();
-        deserializedEntitySet = {};
-        toBeSetEntityPointerMap = {};
-        currentDeserializationGameObject = nullptr;
-        currentDeserializationScene = nullptr;
         scene->serialize(s_scene);
         auto ofstream = std::ofstream(filename);
         s_scene.SerializeToOstream(&ofstream);
         ofstream.close();
+
+        GameObject bullet;
+        serial::GameObject s_bullet;
+        bullet.serialize(&s_bullet);
 
         auto filename2 = filename + ".json";
         std::string s;
@@ -27,6 +32,12 @@ namespace null {
     std::shared_ptr<Scene> Serializer::getSceneFromFile(const std::string& filename) {
         auto ifstream = std::ifstream(filename);
         auto s_scene = serial::Scene();
+
+        deserializedEntitySet = {};
+        toBeSetEntityPointerMap = {};
+        currentDeserializationGameObject = nullptr;
+        currentDeserializationScene = nullptr;
+
         s_scene.ParseFromIstream(&ifstream);
         ifstream.close();
         LOGD << "Deserializing scene (" << filename << ")";

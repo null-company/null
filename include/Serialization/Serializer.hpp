@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "../NullGameEngine/Scene.hpp"
+#include <Scene.hpp>
 
 namespace null {
     class Serializer {
