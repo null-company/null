@@ -1,6 +1,7 @@
 #include "PlayerControlledBox/PlayerControlledBoxServer.hpp"
 #include "serialized/serverConfig.pb.h"
 
+#include <SFML/System/Time.hpp>
 #include <MainLoop.hpp>
 #include <GameObject.hpp>
 #include <ResourceManager.hpp>
@@ -26,6 +27,7 @@ namespace null {
                 &gameObject.getScene().lock()->findFirstByTag("network-manager")
                         .lock()->getScript<NetworkManagerServerScript>()->subscribe(gameObject.getGuid())
         );
+        lastStateSnapshotTimer.restart();
     }
 
     namespace {
@@ -68,11 +70,15 @@ namespace null {
         net::GameMessage::SubscriberState stateToBroadcast;
         stateToBroadcast.set_subscriber_id(gameObject.getGuid());
 
-        const auto& position = gameObject.getPosition();
-        *stateToBroadcast.mutable_content() =
-                StateConverter::makeMessageFrom(position.x, position.y);
-        MainLoop::serverArbiter->getGameServer().broadcastMessage(
-                stateToBroadcast
-        );
+        const auto threshold = sf::milliseconds(10);
+        if (lastStateSnapshotTimer.getElapsedTime() > threshold) {
+            lastStateSnapshotTimer.restart();
+            const auto& position = gameObject.getPosition();
+            *stateToBroadcast.mutable_content() =
+                    StateConverter::makeMessageFrom(position.x, position.y);
+            MainLoop::serverArbiter->getGameServer().broadcastMessage(
+                    stateToBroadcast
+            );
+        }
     }
 }
