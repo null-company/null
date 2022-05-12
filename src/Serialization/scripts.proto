@@ -3,6 +3,11 @@ package serial;
 
 import public "box2d.proto";
 
+message View {
+  Vector2f center = 1;
+  Vector2f size = 2;
+}
+
 message SpriteSheet {
   message SpriteSheetEntry {
     string name = 1;
@@ -17,12 +22,17 @@ message SpriteSheet {
 
 message CollisionMap {
   message CollisionMapEntry {
-    message CollisionMapEntryList {
+    message FixtureDefList {
       repeated FixtureDef fixture_def = 1;
     }
     string name = 1;
-    repeated CollisionMapEntryList collision_map_entry_list = 2;
+    repeated FixtureDefList fixture_def_list = 2;
   }
+  repeated CollisionMapEntry collision_map_entry = 1;
+}
+
+message Animation {
+  SpriteSheet spritesheet = 1;
 }
 
 message RigidBodyAnimation {
@@ -34,11 +44,14 @@ message PlayerAnimation {
   RigidBodyAnimation animation = 1;
 }
 message ExampleCameraScript {
-  int32 tracked_gameobject_id = 2;
+  uint64 map_guid = 1;
+  uint64 tracked_object_guid = 2;
 }
 message ExampleClockedScript {}
 message ReloadSceneScript {}
-message CameraScript {}
+message CameraScript {
+  View view = 1;
+}
 message ButtonScript {
   // no comment....
   // but actually, callback functions in scripts might be illegal
@@ -47,17 +60,21 @@ message ButtonScript {
   //    subclassing
   //    some common button actions might be serializable, should look into it
 }
-message ClockedScript {}
 message ExampleScript {}
-message StraightWeaponScript {}
-message WeaponScript {}
-message BulletScript {}
+message StraightWeaponScript {
+  double deviance = 1;
+}
+message BulletScript {
+  Vector2f from = 1;
+  float rotation = 2;
+  float speed = 3;
+}
 message NetworkPlayerScript {
   // probably this script's gonna be rewritten/deleted soon
   // so i'll just ignore it lol
 }
 message CursorAnimation {
-  SpriteSheet spritesheet = 1;
+  Animation animation = 1;
 }
 
 

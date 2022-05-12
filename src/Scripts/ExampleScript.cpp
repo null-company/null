@@ -3,6 +3,7 @@
 #include <Script.hpp>
 #include <GameObject.hpp>
 #include <ExampleScript.hpp>
+#include "Serializer.hpp"
 
 namespace null {
 
@@ -26,6 +27,18 @@ namespace null {
     }
 
     ExampleScript::ExampleScript(GameObject& gameObject) : Script(gameObject) {}
+
+    void ExampleScript::serialize(google::protobuf::Message& message) const {
+        auto& msg = dynamic_cast<serial::Script&>(message);
+        msg.mutable_example_script();
+    }
+
+    std::unique_ptr<Component> ExampleScript::deserialize(const google::protobuf::Message& message) {
+        auto& msg = dynamic_cast<const serial::Script&>(message);
+        return std::make_unique<ExampleScript>(
+                *Serializer::currentDeserializationGameObject
+                );
+    }
 
 }
 

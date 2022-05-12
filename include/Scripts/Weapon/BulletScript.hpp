@@ -15,5 +15,8 @@ namespace null {
         void start() override;
 
         void update() override;
+
+        void serialize(google::protobuf::Message &) const override;
+        static std::unique_ptr<BulletScript> deserialize(const google::protobuf::Message&);
     };
 }

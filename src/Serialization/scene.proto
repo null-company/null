@@ -1,48 +1,34 @@
 syntax = "proto3";
 package serial;
-import "scripts.proto";
+import public "scripts.proto";
 
 message Scene{
   repeated GameObject game_object = 1;
-  Camera camera = 2;
-}
-message Camera{}
-
-message GameObject{
-  oneof game_object_instance {
-    BasicGameObject basic_game_object = 1;
-    // subclasses of game object
-  }
+  GameObject camera = 2;
 }
 
 message Script {
+  uint64 guid = 1;
+  uint64 gameobject_guid = 2;
+  // New scripts go here
   oneof script_instance {
-    PlayerAnimation player_animation = 1;
-    ExampleCameraScript example_camera_script = 2;
+    PlayerAnimation player_animation = 18;
+    ExampleCameraScript example_camera_script = 19;
     ExampleClockedScript example_clocked_script = 3;
     ReloadSceneScript reload_scene_script = 4;
     CameraScript camera_script = 5;
     ButtonScript button_script = 6;
-    ClockedScript clocked_script = 7;
     ExampleScript example_script = 8;
     StraightWeaponScript straight_weapon_script = 9;
-    WeaponScript weapon_script = 10;
     BulletScript bullet_script = 11;
     NetworkPlayerScript network_player_script = 12;
     CursorAnimation cursor_animation = 13;
+    Animation animation = 16;
+    RigidBodyAnimation rigid_body_animation = 17;
   }
-  uint32 go_id = 14;
 }
 
-//message BasicScript{}
-//message ExampleCameraScript{}
-//message ExampleClockedScript{}
-//message ExampleScript{}
-//message CameraScript{}
-//message ClockedScript{}
-//message ReloadSceneScript{}
-
-message BasicGameObject{
+message GameObject {
   repeated GameObject children_objects = 1;
   repeated Script children_scripts = 2;
   repeated string tags = 3;
@@ -51,7 +37,8 @@ message BasicGameObject{
   //TODO Need to be refactored since now it connect objects only to main window
   Box2DType box2d_type = 6;
   RenderLayer render_layer = 7;
-  uint32 id = 8;
+  uint64 guid = 8;
+  bool fixed_rotation = 9;
 }
 
 message Sprite{
@@ -61,6 +48,7 @@ message Sprite{
   }
   string texture_path = 1;
   Vector2f position = 2;
+  IntRect texture_rect = 3;
   Scale scale = 5;
 }
 enum RenderLayer {
@@ -76,6 +64,7 @@ enum RenderLayer {
 };
 
 enum Box2DType{
-  STATIC = 0;
-  DYNAMIC = 1;
+  NONE = 0;
+  STATIC = 1;
+  DYNAMIC = 2;
 }

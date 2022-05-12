@@ -17,8 +17,8 @@ namespace null {
 
         void setWeaponRotation();
 
-        void serialize(google::protobuf::Message *message) { };
-        static std::unique_ptr<StraightWeaponScript> deserialize(google::protobuf::Message *message) { };
+        void serialize(google::protobuf::Message &) const override;
+        static std::unique_ptr<Component> deserialize(const google::protobuf::Message&);
     };
 }
 

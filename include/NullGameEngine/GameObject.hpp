@@ -12,20 +12,19 @@
 #include <RenderLayer.hpp>
 #include <algorithm>
 #include "serializable.h"
+#include "Entity.hpp"
 
 enum class GameObjectStatus {
-    NONE, RUNNING, DETACHED
+    NONE, RUNNING, DEATCHED
 };
 namespace null {
 
-    class GameObject : public std::enable_shared_from_this<GameObject> {
+    class GameObject :  public Entity, public std::enable_shared_from_this<GameObject> {
     private:
         void assertSpriteHasSize();
         void setRigidBodyDefPositionBySprite(b2BodyDef&);
         void setShapeAsBoxBySprite(b2PolygonShape&);
         std::weak_ptr<Scene> scene;
-        uint id;
-        static uint maxId;
     protected:
         sf::Sprite sprite;
         b2Body* rigidBody = nullptr;
@@ -111,12 +110,13 @@ namespace null {
             return nullptr;
         }
 
-        void serialize(google::protobuf::Message *);
-        static std::unique_ptr<GameObject> deserialize(google::protobuf::Message *);
+        void serialize(google::protobuf::Message&) const;
+        static std::shared_ptr<GameObject> deserialize(const google::protobuf::Message&);
 
         friend Scene;
 
         void makeDynamic();
+
     };
 
 }

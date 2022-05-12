@@ -9,14 +9,16 @@
 #include <Scene.hpp>
 #include <ResourceManager.hpp>
 #include "Utility.hpp"
+#include "plog/Log.h"
+#include <Serializer.hpp>
 
 namespace null {
-    uint GameObject::maxId = 0;
+
     constexpr static int meterToPixel = 100;
     constexpr static float pixelToMeter = 1.0f / static_cast<float>(meterToPixel);
     constexpr static double pi = 3.14159265358979323846;
 
-    GameObject::GameObject(): visible(false), renderLayer(serial::BACKGROUND), id(maxId++) { };
+    GameObject::GameObject(): Entity(), renderLayer(serial::BACKGROUND), visible(false) { };
 
     GameObject::~GameObject() {
         if (scene.lock()) {
@@ -228,75 +230,116 @@ namespace null {
         return parent;
     }
 
-    void GameObject::serialize(google::protobuf::Message* msg) {
-        auto new_msg = new serial::BasicGameObject();
-        new_msg->set_render_layer(renderLayer);
-        new_msg->set_id(id);
-        new_msg->set_visible(visible);
+    void GameObject::serialize(google::protobuf::Message& msg) const {
+        auto new_msg = serial::GameObject();
+        new_msg.set_render_layer(renderLayer);
+        new_msg.set_guid(guid);
+        new_msg.set_visible(visible);
+        // TODO: Serialize whole bodies?
         if (rigidBody) {
             if (rigidBody->GetType() == b2_dynamicBody) {
-                new_msg->set_box2d_type(serial::DYNAMIC);
+                new_msg.set_box2d_type(serial::DYNAMIC);
+                new_msg.set_fixed_rotation(rigidBody->IsFixedRotation());
             } else {
-                new_msg->set_box2d_type(serial::STATIC);
+                new_msg.set_box2d_type(serial::STATIC);
             }
+
         }
 
-        auto s_sprite = new serial::Sprite();
-        s_sprite->set_texture_path(ResourceManager::getTexturePath(sprite.getTexture()));
+        auto s_sprite = serial::Sprite();
+        s_sprite.set_texture_path(ResourceManager::getTexturePath(sprite.getTexture()));
 
-        auto s_pos = new serial::Vector2f();
-        s_pos->set_x(sprite.getPosition().x);
-        s_pos->set_y(sprite.getPosition().y);
-        s_sprite->set_allocated_position(s_pos);
+        auto s_pos = serial::Vector2f();
+        s_pos.set_x(sprite.getPosition().x);
+        s_pos.set_y(sprite.getPosition().y);
+        *s_sprite.mutable_position() = s_pos;
 
-        auto s_scale = new serial::Sprite_Scale();
-        s_scale->set_scale_x(sprite.getScale().x);
-        s_scale->set_scale_y(sprite.getScale().y);
-        s_sprite->set_allocated_scale(s_scale);
+        auto s_scale = serial::Sprite_Scale();
+        s_scale.set_scale_x(sprite.getScale().x);
+        s_scale.set_scale_y(sprite.getScale().y);
+        *s_sprite.mutable_scale() = s_scale;
 
-        new_msg->set_allocated_sprite(s_sprite);
+        auto s_tr = serial::IntRect();
+        s_tr.set_top(sprite.getTextureRect().top);
+        s_tr.set_left(sprite.getTextureRect().left);
+        s_tr.set_width(sprite.getTextureRect().width);
+        s_tr.set_height(sprite.getTextureRect().height);
+        *s_sprite.mutable_texture_rect() = s_tr;
+
+        *new_msg.mutable_sprite() = s_sprite;
 
         for (auto& t: tags) {
-            new_msg->add_tags(t);
+            new_msg.add_tags(t);
         }
 
         for (auto& script: scripts) {
-            auto s_script = new_msg->add_children_scripts();;
+            auto s_script = serial::Script();
             script->serialize(s_script);
+            s_script.set_gameobject_guid(guid);
+            s_script.set_guid(script->guid);
+            new_msg.mutable_children_scripts()->Add(std::move(s_script));
         }
 
         for (auto& child: children) {
-            auto s_child = new_msg->add_children_objects();
+            auto s_child = serial::GameObject();
             child->serialize(s_child);
+            new_msg.mutable_children_objects()->Add(std::move(s_child));
         }
+        msg.CopyFrom(new_msg);
     }
 
-    std::unique_ptr<GameObject> GameObject::deserialize(google::protobuf::Message *msg) {
-        auto s_go = dynamic_cast<serial::BasicGameObject*>(msg);
-        auto p_go = std::make_unique<GameObject>();
-        p_go->id = s_go->id();
-        p_go->renderLayer = s_go->render_layer();
-        p_go->visible = s_go->visible();
+    std::shared_ptr<GameObject> GameObject::deserialize(const google::protobuf::Message &msg) {
+        auto s_go = (const serial::GameObject&) msg;
+        auto p_go = std::make_shared<GameObject>();
 
-        p_go->sprite.setTexture(*ResourceManager::loadTexture(s_go->sprite().texture_path()));
-        p_go->sprite.setPosition(s_go->sprite().position().x(), s_go->sprite().position().y());
-        p_go->sprite.setScale(s_go->sprite().scale().scale_x(), s_go->sprite().scale().scale_y());
+        LOGD << "Deserializing GameObject with guid: " << s_go.guid();
 
-        for (auto& t: s_go->tags()) {
+        // This has to be done so that this object's scripts can get its ref for construciton
+        Serializer::currentDeserializationGameObject = p_go.get();
+
+        p_go->guid = s_go.guid();
+
+        p_go->renderLayer = s_go.render_layer();
+        p_go->visible = s_go.visible();
+        if (!s_go.sprite().texture_path().empty())
+            p_go->sprite.setTexture(*ResourceManager::loadTexture(s_go.sprite().texture_path()));
+        auto s_tr = s_go.sprite().texture_rect();
+        auto texture_rect = sf::IntRect(s_tr.left(), s_tr.top(), s_tr.width(), s_tr.height());
+        p_go->sprite.setTextureRect(texture_rect);
+        p_go->sprite.setPosition(s_go.sprite().position().x(), s_go.sprite().position().y());
+        p_go->sprite.setScale(s_go.sprite().scale().scale_x(), s_go.sprite().scale().scale_y());
+
+        for (auto& t: s_go.tags()) {
             p_go->addTag(t);
         }
 
-        for (auto& s: s_go->children_scripts()) {
+        switch (s_go.box2d_type()) {
+            case serial::STATIC:
+                p_go->makeStatic(Serializer::currentDeserializationScene->getBox2dWorld());
+                break;
+            case serial::DYNAMIC:
+                p_go->makeDynamic(Serializer::currentDeserializationScene->getBox2dWorld());
+                p_go->rigidBody->SetFixedRotation(s_go.fixed_rotation());
+                break;
+            default:
+                break;
+        }
+        for (auto& s: s_go.children_scripts()) {
+            LOGD << "Deserializing script with guid " << s_go.guid() << " (" << s.script_instance_case() << ")";
             auto deserializationFunc = Utility::scriptSerializationMap.at(s.script_instance_case());
-            auto actualScript = deserializationFunc((google::protobuf::Message*) &s);
+            auto actualScript = deserializationFunc(dynamic_cast<const google::protobuf::Message&>(s));
+            actualScript->guid = s.guid();
+            Serializer::deserializedEntitySet.insert(actualScript.get());
             p_go->addScript(std::move(actualScript));
         }
 
-        for (auto& c: s_go->children_objects()) {
-            p_go->addChild(deserialize((google::protobuf::Message*) &c));
+        for (const auto& c: s_go.children_objects()) {
+            p_go->addChild(deserialize(c));
         }
 
-        return std::move(p_go);
+        Serializer::deserializedEntitySet.insert(p_go.get());
+
+        return p_go;
     }
 
 }

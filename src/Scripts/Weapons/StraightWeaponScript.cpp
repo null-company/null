@@ -5,26 +5,16 @@
 #include "Scene.hpp"
 #include "box2d/box2d.h"
 #include "Weapon/BulletScript.hpp"
+#include "Serializer.hpp"
 
 namespace null {
     void StraightWeaponScript::start() {
-        Component::start();
-        auto parent = gameObject.getParent().lock();
-        if (parent == nullptr) {
-            return;
-        }
-        sf::Texture* weaponTexture = ResourceManager::loadTexture("weapon.png");
+        WeaponScript::start();
         gameObject.getSprite().setOrigin(sf::Vector2f(250, 150));
-        gameObject.getSprite().setTexture(*weaponTexture);
-        gameObject.getSprite().scale(0.24f, 0.24f);
-        gameObject.renderLayer = serial::FOREGROUND2;
-        gameObject.visible = true;
-//        gameObject.makeDynamic(gameObject.getScene().lock()->getBox2dWorld());
-
     }
 
     void StraightWeaponScript::update() {
-        Component::update();
+        WeaponScript::update();
         auto scene = gameObject.getScene().lock();
         if (scene == nullptr) {
             return;
@@ -68,5 +58,21 @@ namespace null {
 
     StraightWeaponScript::StraightWeaponScript(GameObject& object, double deviance) : WeaponScript(object) {
         d = std::normal_distribution<>(0, deviance);
+    }
+
+    void StraightWeaponScript::serialize(google::protobuf::Message& message) const {
+        auto& msg = dynamic_cast<serial::Script&>(message);
+
+        auto s_script = msg.mutable_straight_weapon_script();
+        s_script->set_deviance(d.stddev());
+    }
+
+    std::unique_ptr<Component> StraightWeaponScript::deserialize(const google::protobuf::Message& message) {
+        auto& msg = dynamic_cast<const serial::Script&>(message);
+        auto p_script = std::make_unique<StraightWeaponScript>(
+                *Serializer::currentDeserializationGameObject,
+                msg.straight_weapon_script().deviance()
+                );
+        return p_script;
     }
 }

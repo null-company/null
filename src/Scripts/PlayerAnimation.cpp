@@ -1,4 +1,5 @@
 #include "PlayerAnimation.hpp"
+#include "Serializer.hpp"
 
 #include <Utility.hpp>
 #include <iostream>
@@ -74,7 +75,30 @@ namespace  null {
     }
 
     PlayerAnimation::PlayerAnimation(GameObject& gameObject, SpriteSheet& spriteSheet,
-                                     const std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>>& map) :
+                                     const CollisionMap& map) :
             RigidBodyAnimation(gameObject, spriteSheet, map) { }
+
+    void PlayerAnimation::serialize(google::protobuf::Message& message) const {
+        auto& msg = dynamic_cast<serial::Script&>(message);
+        auto s_anim = msg.mutable_player_animation();
+        auto s_ss = s_anim->mutable_animation()->mutable_spritesheet();
+        spriteSheet.serialize(*s_ss);
+        auto cm = s_anim->mutable_animation()->mutable_collision_map();
+        collisionMap.serialize(*cm);
+    }
+
+    std::unique_ptr<Component> PlayerAnimation::deserialize(const google::protobuf::Message& message) {
+        auto& msg = dynamic_cast<const serial::Script&>(message);
+        auto const& s_anim = msg.player_animation();
+        auto const& s_ss = s_anim.animation().spritesheet();
+        auto const& cm = s_anim.animation().collision_map();
+        auto p_ss = SpriteSheet::deserialize(s_ss);
+        auto p_cm = CollisionMap::deserialize(cm);
+        return std::make_unique<PlayerAnimation>(
+                *Serializer::currentDeserializationGameObject,
+                *p_ss,
+                *p_cm
+                );
+    }
 
 }

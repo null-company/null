@@ -21,6 +21,8 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/src/Serialization/)
 
 set(SRC
         ${INCROOT}/serializable.h
+        ${INCROOT}/Serializer.hpp
+        ${SRCROOT}/Serializer.cpp
         ${SRCROOT}/scene.proto
         ${SRCROOT}/scripts.proto
         ${SRCROOT}/box2d.proto
@@ -35,3 +37,14 @@ target_include_directories(${libname}
         PUBLIC ${PROJECT_SOURCE_DIR}/include/Serialization
         PUBLIC ${CMAKE_CURRENT_BINARY_DIR}
         PRIVATE ${PROJECT_SOURCE_DIR}/src)
+target_link_libraries(
+        serialization
+        nullGameEngine
+
+        sfml-graphics
+        yaml-cpp
+        sfml-audio
+        sfml-network
+        sfml-window
+        sfml-system
+        )

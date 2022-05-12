@@ -4,20 +4,12 @@
 #include <SFML/Graphics.hpp>
 #include <utility>
 #include <unordered_map>
+#include <google/protobuf/message.h>
 
 namespace null {
     // Represents a set of animations stored in a single texture
     class SpriteSheet {
     private:
-//        class Animation_s {
-//        public:
-//            std::string name;
-//            int row;
-//            int start;
-//            int end;
-//            std::vector<sf::Vector2i> framePositions = std::vector<sf::Vector2i>();
-//            Animation_s(std::string  name, int row, int start, int end):name(std::move(name)), row(row), start(start), end(end) { }
-//        };
         struct Animation_s {
             std::string name;
             int row;
@@ -40,6 +32,9 @@ namespace null {
         SpriteSheet(std::string , sf::Vector2i, std::vector<Animation_s>);
 
         sf::IntRect getCurrentTextureRect() const;
+
+        void serialize(google::protobuf::Message &) const;
+        static std::unique_ptr<SpriteSheet> deserialize(const google::protobuf::Message&);
 
         friend Animation;
     };

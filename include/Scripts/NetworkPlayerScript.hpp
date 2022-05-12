@@ -14,9 +14,12 @@ namespace null{
     public:
         void update() override;
         NetworkPlayerScript(GameObject& gameObject, SpriteSheet& spriteSheet,
-                            std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>> map,
+                            const CollisionMap& map,
                             std::queue<net::GameMessage>& q, int id);
-
+        // no serialization since it's deprecated
+        // TODO delete this script altogether
+        void serialize(google::protobuf::Message &) const override {};
+        static std::unique_ptr<Component> deserialize(const google::protobuf::Message&) {};
     };
 }
 

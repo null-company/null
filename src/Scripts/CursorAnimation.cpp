@@ -6,6 +6,7 @@
 #include <Scene.hpp>
 #include <ButtonScript.hpp>
 #include <MainLoop.hpp>
+#include "Serializer.hpp"
 
 namespace null {
     void CursorAnimation::start() {
@@ -57,4 +58,22 @@ namespace null {
 
     CursorAnimation::CursorAnimation(GameObject& gameObject, SpriteSheet spriteSheet) : Animation(gameObject,
                                                                                                   spriteSheet) {}
+
+    void CursorAnimation::serialize(google::protobuf::Message& message) const {
+        auto& msg = dynamic_cast<serial::Script&>(message);
+        auto s_anim = msg.mutable_cursor_animation();
+        auto s_ss = s_anim->mutable_animation()->mutable_spritesheet();
+        spriteSheet.serialize(*s_ss);
+    }
+
+    std::unique_ptr<Component> CursorAnimation::deserialize(const google::protobuf::Message& message) {
+        auto& msg = dynamic_cast<const serial::Script&>(message);
+        auto s_anim = msg.cursor_animation();
+        auto s_ss = s_anim.animation().spritesheet();
+        auto p_ss = SpriteSheet::deserialize(s_ss);
+        return std::make_unique<CursorAnimation>(
+                *Serializer::currentDeserializationGameObject,
+                *p_ss
+                );
+    }
 }

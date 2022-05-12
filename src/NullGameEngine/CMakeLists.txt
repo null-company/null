@@ -40,7 +40,11 @@ set(SRC
         ${INCROOT}/MapManager/MapManager.hpp
         ${SRCROOT}/Movement/Movable.cpp
         ${SRCROOT}/Movement/LinearMovable.cpp
-        ${INCROOT}/Movememt/LinearMovable.hpp)
+        ${INCROOT}/Movememt/LinearMovable.hpp
+        ${SRCROOT}/Entity.cpp
+        ${INCROOT}/Entity.hpp
+        ${SRCROOT}/CollisionMap.cpp
+        ${INCROOT}/CollisionMap.hpp)
 
 add_library(nullGameEngine STATIC ${SRC})
 target_include_directories(nullGameEngine

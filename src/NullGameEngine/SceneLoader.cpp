@@ -12,6 +12,7 @@
 #include <Utility.hpp>
 #include <functional>
 #include <unordered_map>
+#include <Serializer.hpp>
 #include "MapManager/MapManager.hpp"
 #include "Weapon/WeaponScript.hpp"
 #include "Weapon/StraightWeaponScript.hpp"
@@ -52,6 +53,13 @@ namespace null {
     }
 
     std::shared_ptr<Scene> SceneLoader::getDemoScene() {
+
+        // IMPORTANT!!!
+        // If you want to bypass deserialization or get the scene serialized, comment next two lines
+        // Otherwise leave them alone
+        auto sc = Serializer::getSceneFromFile("myscene.pbuf");
+        return sc;
+
         // todo this should be done in a scene file
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
@@ -127,6 +135,13 @@ namespace null {
                                                                              {"walkLeft",  2, 0, 3}});
 
         auto weapon = std::make_shared<GameObject>();
+
+        auto const* weaponTexture = ResourceManager::loadTexture("weapon.png");
+
+        weapon->getSprite().setTexture(*weaponTexture);
+        weapon->getSprite().scale(0.24f, 0.24f);
+        weapon->renderLayer = serial::FOREGROUND2;
+        weapon->visible = true;
         weapon->addScript<StraightWeaponScript>(*weapon, 5);
 
         player->addChild(std::move(weapon));
@@ -155,11 +170,11 @@ namespace null {
         fixtureDef3.density = 1;
 
         player->addScript<PlayerAnimation>(*player, playerSpriteSheet,
-                                           std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>>{
+                                           CollisionMap({
                                                    {"idle",      {{fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}}},
                                                    {"walkRight", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}},
                                                    {"walkLeft",  {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}}
-                                           });
+                                           }));
 
         MapManager mapManager(box2dWorld);
         newScene->addRootGameObject(std::move(mapManager.makeBorder(nullGameLogo->getSprite())));
@@ -167,6 +182,7 @@ namespace null {
         newScene->addRootGameObject(std::move(nullGameLogo));
         newScene->addRootGameObject(std::move(player));
         newScene->addRootGameObject(std::move(cursorObject));
+        Serializer::serializeSceneToFile(newScene.get(), "myscene.pbuf");
         return newScene;
     }
 
