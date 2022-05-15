@@ -3,7 +3,6 @@
 #include <box2d/box2d.h>
 #include <box2d/b2_math.h>
 #include <box2d/b2_body.h>
-#include <iostream>
 #include <GameObject.hpp>
 #include <Script.hpp>
 #include <Scene.hpp>
@@ -222,7 +221,6 @@ namespace null {
     }
 
     GameObject* GameObject::getCollied() {
-        auto body = getRigidBody();
         auto contactList = rigidBody->GetContactList();
         for (b2ContactEdge* edge = contactList; edge; edge = edge->next) {
             auto go1 = reinterpret_cast<GameObject*>(edge->contact->GetFixtureA()->GetBody()->GetUserData().pointer);
@@ -231,10 +229,8 @@ namespace null {
                 return nullptr;
             }
             if (go1 == this) {
-                std::cout << "go2 returned" << std::endl;
                 return go2;
             } else {
-                std::cout << "go1 returned" << std::endl;
                 return go1;
             }
         }
