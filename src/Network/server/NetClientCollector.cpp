@@ -1,7 +1,3 @@
-//
-// Created by artemonchelus on 28.11.2021.
-//
-
 #include <server/NetClientCollector.h>
 #include <SFML/Network.hpp>
 #include <cstdint>
@@ -11,7 +7,7 @@
 #include "exceptions/NetworkException.h"
 
 
-void NetClientCollector::defaultSimulationThreadFunc(NetClientCollector *self) {
+void NetClientCollector::defaultJob(NetClientCollector *self) {
     while (self->threadIsActive) {
         int readyClientIdx = self->getFirstReadySocketIdx();
         if (readyClientIdx == -2) {
@@ -37,18 +33,18 @@ void NetClientCollector::defaultSimulationThreadFunc(NetClientCollector *self) {
     }
 }
 
-NetClientCollector::NetClientCollector(std::function<void()> simulationThread) :
+NetClientCollector::NetClientCollector(std::function<void()> jobThread) :
         listener(),
         ipAddress(),
         threadIsActive(true),
-        simulationThread(std::move(simulationThread)) {}
+        jobThread(std::move(jobThread)) {}
 
 NetClientCollector::NetClientCollector() :
-        NetClientCollector([this]() { defaultSimulationThreadFunc(this); }) {}
+        NetClientCollector([this]() { defaultJob(this); }) {}
 
 NetClientCollector::~NetClientCollector() {
     this->threadIsActive = false;
-    simulationThread.wait();
+    jobThread.wait();
     for (int i = 0; i < clients.size();) {
         disconnectClient(i);
     }
@@ -94,20 +90,18 @@ int NetClientCollector::getFirstReadySocketIdx() {
     }
     if (socketSelector.isReady(listener)) {
         return -1;
-    };
+    }
     for (int idx = 0; idx < clients.size(); idx++) {
         if (socketSelector.isReady(*clients[idx])) {
             return idx;
-        };
+        }
     }
     throw NetworkException("Unexpected socket selector case");
 }
 
-void NetClientCollector::listen(sf::IpAddress address, const std::vector<uint16_t> &ports) {
-    ipAddress = address;
-    //TODO: Meow
+void NetClientCollector::listen(const std::vector<uint16_t>& ports) {
     for (const auto port: ports) {
-        auto status = listener.listen(port, ipAddress);
+        auto status = listener.listen(port, sf::IpAddress::Any);
         if (status == sf::Socket::Done) {
             LOGD << "Successfully bind: " << ipAddress.toString() << " " << port;
             return;
@@ -116,16 +110,16 @@ void NetClientCollector::listen(sf::IpAddress address, const std::vector<uint16_
     }
 }
 
-void NetClientCollector::listen(sf::IpAddress address, uint16_t port) {
-    listen(address, std::vector({port}));
+void NetClientCollector::listen(uint16_t port) {
+    listen(std::vector({port}));
 }
 
 void NetClientCollector::launch() {
-    simulationThread.launch();
+    jobThread.launch();
     LOGD << "New NetClientCollector was launched for new incoming connections";
 }
 
-uint32_t NetClientCollector::getIP() {
+uint32_t NetClientCollector::getIP() const {
     return ipAddress.toInteger();
 }
 

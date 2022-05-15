@@ -8,9 +8,9 @@
 namespace null {
     class ResourceManager {
     private:
-        static std::map<std::string, sf::Texture *> textureMap;
+        static std::map<std::string, sf::Texture *> textureCache;
     public:
-        static sf::Texture *loadTexture(const std::string &filename);
+        static sf::Texture *loadTexture(const std::string &textureName);
     };
 }
 

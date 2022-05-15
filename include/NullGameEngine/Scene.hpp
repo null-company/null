@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <functional>
 
 #include <box2d/box2d.h>
 
@@ -37,8 +38,7 @@ namespace null {
 
         b2World& getBox2dWorld();
 
-        class GameObjectNotFoundException : public std::exception {
-        };
+        class GameObjectNotFoundException : public std::exception {};
 
         friend Renderer;
 
@@ -47,4 +47,3 @@ namespace null {
         WindowMetaInfo& getWindowMetaInfo() const;
     };
 }
-

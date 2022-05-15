@@ -1,5 +1,5 @@
-#include <serverConfig.pb.h>
-#include "NetworkPlayerScript.hpp"
+#include <NetworkPlayerScript.hpp>
+#include "serialized/serverConfig.pb.h"
 
 namespace null {
 
@@ -25,12 +25,12 @@ namespace null {
     }
 
     void NetworkPlayerScript::handleMessage(net::GameMessage& msg) {
-        float x = msg.player_info().x();
-        float y = msg.player_info().y();
-        std::string currAnim = msg.player_info().curranim();
-        int currFrame = msg.player_info().currframe();
-        gameObject.getRigidBody()->SetTransform({x, y}, gameObject.getRigidBody()->GetAngle());
-        spriteSheet.setAnimation(currAnim);
-        spriteSheet.setFrame(currFrame);
+//        float x = msg.player_info().x();
+//        float y = msg.player_info().y();
+//        std::string currAnim = msg.player_info().curranim();
+//        int currFrame = msg.player_info().currframe();
+//        gameObject.getRigidBody()->SetTransform({x, y}, gameObject.getRigidBody()->GetAngle());
+//        spriteSheet.setAnimation(currAnim);
+//        spriteSheet.setFrame(currFrame);
     }
 }

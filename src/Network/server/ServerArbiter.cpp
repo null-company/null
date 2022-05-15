@@ -1,26 +1,28 @@
 #include "server/ServerArbiter.h"
 #include <plog/Log.h>
 #include <random>
-#include <utility>
-#include "plog/Initializers/RollingFileInitializer.h"
+#include <exception>
 #include "utils/util.h"
 #include "utils/NetMessageTransmitting.h"
 
 //TODO: what about destruction the game?
 std::string ServerArbiter::createNewGameSimulation() {
-    PLOGD << "New game simulation is creating";
+    PLOGD << "New game simulation is being created";
     srand(time(nullptr));
     uint16_t port = freePorts.back();
     freePorts.pop_back();
     net::GameServerConfig gameServerConfig;
-    gameServers.emplace_back(std::make_unique<GameServer>());
-    gameServers.back()->listen(sf::IpAddress(this->getIP()), port);
+    if (!gameServers.empty()) {
+        LOGD << "ERROR multiple servers";
+        throw std::length_error("Right now we do not allow multiple servers");
+    }
+    gameServers.emplace_back(std::make_unique<GameServer>(simulation));
+    gameServers.back()->listen(port);
     gameServers.back()->launch();
 
     std::string roomCode = generateSixLetterCode();
     while (roomCodeToServerNum.contains(roomCode)) {
-        //roomCode = generateSixLetterCode();
-        roomCode = "AAAAAA";
+        roomCode = generateSixLetterCode();
     }
 
     PLOGD << "Room code was chosen: " << roomCode;
@@ -30,22 +32,23 @@ std::string ServerArbiter::createNewGameSimulation() {
 
 ServerArbiter::ServerArbiter() : NetClientCollector(),
                                  freePorts({6000, 6001, 6002, 6003, 6004, 6005, 6006, 6007, 6008, 6009, 6010}),
-                                 gameServers() {
-}
+                                 gameServers() {}
 
-ServerArbiter::ServerArbiter(std::function<void()> simulationThread) : NetClientCollector(
-        std::move(simulationThread)) {}
-
+ServerArbiter::ServerArbiter(std::function<void()> simulation)
+        : NetClientCollector(),
+          simulation(std::move(simulation)),
+          freePorts({6000, 6001, 6002, 6003, 6004, 6005, 6006, 6007, 6008, 6009, 6010}) {}
 
 void ServerArbiter::sendGameServerConfig(sf::TcpSocket& client, const std::string& roomCode) {
     net::NetMessage message;
     net::GameServerConfig* serverConfig = message.mutable_server_config();
     if (!roomCodeToServerNum.contains(roomCode)) {
-        sendNetMessage(client, message);
+        throw std::logic_error("No such room");
+//        sendNetMessage(client, message);
     }
     GameServer& server = *(gameServers[roomCodeToServerNum[roomCode]]);
     serverConfig->set_room_code(roomCode);
-    serverConfig->set_v4(server.getIP());
+    serverConfig->set_v4(sf::IpAddress("127.0.0.1").toInteger());
     serverConfig->set_server_port(server.getPort());
     sendNetMessage(client, message);
 }
@@ -53,7 +56,7 @@ void ServerArbiter::sendGameServerConfig(sf::TcpSocket& client, const std::strin
 void ServerArbiter::handleNetMessage(int clientIdx, const net::NetMessage& message) {
     switch (message.body_case()) {
         case net::NetMessage::kGenerateRoomRequest: {
-            LOGD << "Request about asking generating new game received";
+            LOGD << "New game generation request received";
             std::string roomCode = createNewGameSimulation();
             sendRoomCode(*clients[clientIdx], roomCode);
             break;

@@ -38,7 +38,20 @@ set(SRC
         ${SRCROOT}/Weapons/WeaponAmmunition/GrenadeScript.cpp
         ${INCROOT}/Weapons/WeaponAmmunition/GrenadeScript.hpp
         ${SRCROOT}/Weapons/WeaponHolders/WeaponStorage.cpp
-        ${INCROOT}/Weapons/WeaponHolders/WeaponStorage.hpp Weapons/WeaponGenerator.cpp ../../include/Scripts/Weapons/WeaponGenerator.hpp GameObjectSensor.cpp ../../include/Scripts/GameObjectSensor.hpp DeleteScript.cpp ../../include/Scripts/DeleteScript.hpp)
+        ${INCROOT}/Weapons/WeaponHolders/WeaponStorage.hpp Weapons/WeaponGenerator.cpp ../../include/Scripts/Weapons/WeaponGenerator.hpp GameObjectSensor.cpp ../../include/Scripts/GameObjectSensor.hpp DeleteScript.cpp ../../include/Scripts/DeleteScript.hpp
+        ${SRCROOT}/PlayerControlledBox/PlayerControlledBoxClient.cpp
+        ${INCROOT}/PlayerControlledBox/PlayerControlledBoxClient.hpp
+        ${SRCROOT}/PlayerControlledBox/PlayerControlledBoxServer.cpp
+        ${INCROOT}/PlayerControlledBox/PlayerControlledBoxServer.hpp
+        ${SRCROOT}/Network/NetworkManagerClientScript.cpp
+        ${INCROOT}/Network/NetworkManagerClientScript.hpp
+        ${SRCROOT}/Network/NetworkManagerServerScript.cpp
+        ${INCROOT}/Network/NetworkManagerServerScript.hpp
+        ${SRCROOT}/Network/PrimitiveStateConverter.cpp
+        ${INCROOT}/Network/PrimitiveStateConverter.hpp
+        ${SRCROOT}/Network/Utility/LastAcceptedMessageProcessor.cpp
+        ${INCROOT}/Network/Utility/LastAcceptedMessageProcessor.hpp
+        )
 
 add_library(scripts STATIC ${SRC})
 target_include_directories(scripts

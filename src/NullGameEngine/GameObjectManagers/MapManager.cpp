@@ -1,12 +1,6 @@
-//
-// Created by artemonchelus on 09.03.2022.
-//
-
 #include "MapManager/MapManager.hpp"
 #include "GameObject.hpp"
 #include "Utility.hpp"
-#include <box2d/box2d.h>
-#include <box2d/b2_math.h>
 #include <ResourceManager.hpp>
 #include <iostream>
 #include <SFML/Graphics.hpp>
@@ -14,7 +8,7 @@
 namespace null {
 
     std::shared_ptr<GameObject>
-    null::MapManager::makeBorder(float x, float y, float width, float height, float bsize) {
+    MapManager::makeBorder(float x, float y, float width, float height, float bsize) {
 
         auto borderShapes = std::vector<sf::IntRect>();
         borderShapes.emplace_back(0, 0, int(width + 2 * bsize), int(bsize));
@@ -43,7 +37,7 @@ namespace null {
     }
 
     std::shared_ptr<GameObject>
-    null::MapManager::makeBorder(sf::Sprite& sprite, float bsize) {
+    MapManager::makeBorder(sf::Sprite& sprite, float bsize) {
         auto x = sprite.getPosition().x;
         auto y = sprite.getPosition().y;
         auto width = sprite.getGlobalBounds().width;

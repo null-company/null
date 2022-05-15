@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <set>
+#include <algorithm>
 
 #include <box2d/box2d.h>
 
@@ -10,7 +11,6 @@
 #include <NullGameEngine.hpp>
 #include <Script.hpp>
 #include <RenderLayer.hpp>
-#include <algorithm>
 
 enum class GameObjectStatus {
     NONE, RUNNING, DEATCHED
@@ -41,6 +41,8 @@ namespace null {
         std::vector<std::unique_ptr<Script>> scripts;
         GameObjectStatus gameObjectStatus = GameObjectStatus::NONE;
 
+        uint64_t guid;
+
         void start();
 
         void update();
@@ -49,11 +51,23 @@ namespace null {
 
         RenderLayer renderLayer;
 
+        explicit GameObject(uint64_t guid);
+
+        /**
+         * Generates guid
+         */
         GameObject();
 
-        explicit GameObject(std::set<std::string> tags);
+        GameObject(uint64_t guid, std::set<std::string> tags);
+
+        /**
+         * Generates guid
+         */
+        GameObject(std::set<std::string> tags);
 
         ~GameObject();
+
+        uint64_t getGuid();
 
         std::weak_ptr<GameObject> addChild(std::shared_ptr<GameObject>&&);
 
@@ -103,13 +117,14 @@ namespace null {
         void addScript(std::unique_ptr<Script> script);
 
         template<class T, typename... Args>
-        void addScript(Args&& ... args) {
+        T& addScript(Args&&... args) {
             auto script =
-                    std::make_unique<T>(std::forward<Args>(args)...);
+                std::make_unique<T>(std::forward<Args>(args)...);
+            auto& ref = *script;
             scripts.push_back(std::move(script));
+            return ref;
         }
 
-        // Returns a script by a given name (each script must have name)
         template<class T>
         T* getScript() {
             for (auto& script: getScripts()) {

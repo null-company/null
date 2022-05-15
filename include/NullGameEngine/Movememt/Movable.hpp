@@ -5,6 +5,3 @@
 class Movable {
     virtual sf::Vector2f step() = 0;
 };
-
-
-

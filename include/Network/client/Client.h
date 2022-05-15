@@ -1,6 +1,6 @@
 #pragma once
-#include "SFML/Network.hpp"
-#include "serverConfig.pb.h"
+#include <SFML/Network.hpp>
+#include "serialized/serverConfig.pb.h"
 
 class Client {
 private:
@@ -19,10 +19,10 @@ public:
 
     Client(sf::IpAddress serverAddress, uint16_t arbiterPort);
     ~Client();
-    std::string getRoom();
+    std::string getRoomCode();
 
     sf::TcpSocket& getGameServerSocket();
-    void createRoom();
+    void createRoomAndConnect();
 
     void connectRoom(sf::IpAddress serverAddress, uint16_t port);
 
@@ -40,7 +40,7 @@ public:
 
     static void handleChatMessage(const net::ChatMessage &chatMessage);
 
-    void connectRoom(const std::string &roomCode);
+    void connectRoom(const std::string &roomCodeToConnect);
 
     net::GameMessage receiveGameMessage();
 

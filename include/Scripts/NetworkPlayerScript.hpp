@@ -2,6 +2,7 @@
 
 #include <queue>
 #include <RigidBodyAnimation.hpp>
+#include "serialized/serverConfig.pb.h"
 
 namespace null{
     class NetworkPlayerScript : public RigidBodyAnimation {

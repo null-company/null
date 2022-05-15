@@ -1,7 +1,8 @@
 syntax = "proto3";
+import "google/protobuf/any.proto";
 package net;
-message NetMessage{
-  oneof body{
+message NetMessage {
+  oneof body {
     GameServerConfig server_config = 5;
     ClientInfo client_info = 6;
     GenerateRoom generate_room_request = 7;
@@ -10,8 +11,47 @@ message NetMessage{
   }
 }
 
-message GameServerConfig{
-  oneof server_address{
+message GameMessage {
+  /*
+  Allows server to send arbitrary messages for a client entity (such as game object or script or whatever
+  can be a subscriber) for the client to sync it's state
+   */
+  message SubscriberState {
+    uint64 subscriber_id = 1; // subscriber id on client
+    PrimitiveState content = 2;
+  }
+  /*
+  Allows client to send commands (like from a terminal) to the server
+   */
+  message ClientCommand {
+    uint64 subscriber_id = 1; // entity id on server
+    PrimitiveState content = 2;
+  }
+  /*
+  Allows to store a state by storing unlimited number of primitives
+  Client application should know which values and in which quantity to expect
+   */
+  message PrimitiveState {
+    repeated google.protobuf.Any anys = 1;
+    repeated uint32 uint32s = 2;
+    repeated uint64 uint64s = 3;
+    repeated string strings = 4;
+    repeated float floats = 5;
+    repeated double doubles = 6;
+    repeated bool bools = 7;
+  }
+  oneof message {
+    SubscriberState subscriber_state = 1;
+    ClientCommand client_command = 2;
+  }
+}
+
+
+
+
+
+message GameServerConfig {
+  oneof server_address {
     fixed32 v4 = 1;
     bytes v6 = 2;
   };
@@ -19,24 +59,14 @@ message GameServerConfig{
   string room_code = 5;
 }
 
-message ClientInfo{
+message ClientInfo {
   string client_name = 1;
 }
 
-message GenerateRoom{
-}
+message GenerateRoom { }
 
-message ConnectRoom{
+message ConnectRoom {
   string room_code = 4;
-}
-
-message GameMessage{
-  uint32 game_id = 5;
-  oneof message {
-    ChatMessage chat_message = 2;
-    PlayerInfo player_info = 3;
-    BoxInfo boxInfo = 4;
-  }
 }
 
 message PlayerInfo {
@@ -46,10 +76,10 @@ message PlayerInfo {
   int32 currFrame = 4;
 }
 
-message BoxInfo{
+message BoxInfo {
   int32 meow = 1;
 }
-message ChatMessage{
+message ChatMessage {
   uint32 game_id = 5;
   string message = 1;
 }

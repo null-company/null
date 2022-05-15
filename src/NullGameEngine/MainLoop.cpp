@@ -1,10 +1,10 @@
 #include <memory>
-#include <thread>
 
 #include <MainLoop.hpp>
 #include <Scene.hpp>
 #include <Renderer.hpp>
 #include <SpriteSheet.hpp>
+#include "exceptions/NetworkException.h"
 #include <Utility.hpp>
 #include <NetworkPlayerScript.hpp>
 #include <exceptions/NetworkException.h>
@@ -13,44 +13,32 @@
 
 namespace null {
 
-    constexpr unsigned int MAX_FRAMERATE = 60;
+    ServerArbiter* MainLoop::serverArbiter = nullptr;
+    thread_local bool MainLoop::attachWindow = false;
 
     std::shared_ptr<Scene> MainLoop::scene = nullptr;
 
-    /**
-     * There potentially can be network initialization
-     * ###############################################
-     * ClientNetworkManager MainLoop::clientNetworkManager = ClientNetworkManager("127.0.0.1", 5000);
-     * ###############################################
-    **/
-    sf::Window* MainLoop::window = nullptr;
-
-    sf::Window& MainLoop::getWindow() {
-        return *window;
-    }
-
-    // todo this is a dummy implementation, copied from the earlier draft
-    int MainLoop::run() {
-        sf::RenderWindow sfmlWin(sf::VideoMode(1280, 720), "{[Null]}");
-        window = &sfmlWin;
-        sfmlWin.setFramerateLimit(MAX_FRAMERATE);
-        sfmlWin.setMouseCursorVisible(false);
-        scene->getBox2dWorld().SetContactListener(new ContactListener());
-        std::unordered_set<uint> gg;
-
-        sceneStart:
-        scene->start();
-
-        try {
-            while (sfmlWin.isOpen()) {
-
-
-                // todo dispatching user events such as keyboard inputs will probably take place here
-                sf::Event e;
-                while (sfmlWin.pollEvent(e)) {
+    namespace {
+        constexpr unsigned int MAX_FRAMERATE = 60;
+        /**
+         * @return false iff simulation is over
+         */
+        bool simulationStep(Scene* scene,
+                            sf::RenderWindow* sfmlWin,
+                            bool isServer) {
+            bool continueMainLoop = sfmlWin == nullptr || sfmlWin->isOpen();
+            if (!continueMainLoop) {
+                return false;
+            }
+            sf::Event e{};
+            if (!isServer) {
+                if (sfmlWin == nullptr) {
+                    throw std::logic_error("no window exists for client");
+                }
+                while (sfmlWin->pollEvent(e)) {
                     switch (e.type) {
                         case sf::Event::EventType::Closed:
-                            sfmlWin.close();
+                            sfmlWin->close();
                             break;
                         case sf::Event::Resized: {
                             break;
@@ -66,20 +54,43 @@ namespace null {
                             break;
                     }
                 }
-
-                scene->update();
-                sfmlWin.clear(sf::Color::Black);
-                Renderer::render(sfmlWin, *MainLoop::scene);
-                sfmlWin.display();
-                scene->windowMetaInfo.resetKey();
             }
-        }
-        catch (const SceneChangedException& sceneChanged) {
-            goto sceneStart;
-        }
+            scene->update();
 
-        return 0;
+            if (!isServer) {
+                sfmlWin->clear(sf::Color::Black);
+                Renderer::render(*sfmlWin, *scene);
+                sfmlWin->display();
+            }
+            return true;
+        }
     }
 
-}
+    int MainLoop::run() {
+        sf::RenderWindow* sfmlWin = nullptr;
+        if (!attachWindow) {
+            sfmlWin = new sf::RenderWindow(sf::VideoMode(1280, 720), "{[Null]}");
+            sfmlWin->setFramerateLimit(MAX_FRAMERATE);
+            sfmlWin->setMouseCursorVisible(false);
+            sf::RenderWindow sfmlWin(sf::VideoMode(1280, 720), "{[Null]}");
+//            window = &sfmlWin;
+            sfmlWin.setFramerateLimit(MAX_FRAMERATE);
+            sfmlWin.setMouseCursorVisible(false);
+            scene->getBox2dWorld().SetContactListener(new ContactListener());
+//            std::unordered_set<uint> gg;
+        }
 
+        sceneStart:
+        scene->start();
+        try {
+            while (true) {
+                if (!simulationStep(scene.get(), sfmlWin, attachWindow)) {
+                    break;
+                }
+            }
+        } catch (const SceneChangedException& sceneChanged) {
+            goto sceneStart;
+        }
+        return 0;
+    }
+}
