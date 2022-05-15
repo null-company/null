@@ -7,7 +7,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <unordered_map>
 #include "scene.pb.h"
-#include "Script.hpp"
+#include <Script.hpp>
 #include "Component.hpp"
 #include <Scripts.hpp>
 
@@ -40,7 +40,6 @@ namespace null::Utility {
             );
             return dis(engine);
         }
-    }
     }
 
     // TODO fix targets to get rid of "inline" keyword

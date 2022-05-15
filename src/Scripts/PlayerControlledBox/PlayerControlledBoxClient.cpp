@@ -15,14 +15,14 @@ namespace null {
         auto boxTexture = ResourceManager::loadTexture("box.png");
         gameObject.getSprite().setTexture(*boxTexture);
         gameObject.getSprite().setScale(0.125f, 0.125f);
-        gameObject.renderLayer = FOREGROUND;
+        gameObject.renderLayer = serial::FOREGROUND;
         gameObject.visible = true;
         gameObject.makeDynamic();
         gameObject.getRigidBody()->SetGravityScale(0.0f);
 
         auto networkManagerObject = gameObject.getScene().lock()->findFirstByTag("network-manager");
         networkManagerScript = networkManagerObject.lock()->getScript<NetworkManagerClientScript>();
-        messageQueue.attachTo(&networkManagerScript->getNetworkManager().subscribe(gameObject.getGuid()));
+        messageQueue.attachTo(&networkManagerScript->getNetworkManager().subscribe(gameObject.guid));
     }
 
     namespace {
@@ -55,7 +55,7 @@ namespace null {
             if (sf::Keyboard::isKeyPressed(key)) {
                 auto direction = getDirectionByKey(key);
                 net::GameMessage::ClientCommand commandMessage;
-                commandMessage.set_subscriber_id(gameObject.getGuid());
+                commandMessage.set_subscriber_id(gameObject.guid);
                 *commandMessage.mutable_content() =
                         CommandConverter::makeMessageFrom(static_cast<uint32_t>(direction));
                 networkManagerScript->getNetworkManager().sendCommandToServer(commandMessage);

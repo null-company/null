@@ -17,10 +17,6 @@ namespace null {
         s_scene.SerializeToOstream(&ofstream);
         ofstream.close();
 
-        GameObject bullet;
-        serial::GameObject s_bullet;
-        bullet.serialize(&s_bullet);
-
         auto filename2 = filename + ".json";
         std::string s;
         ofstream = std::ofstream(filename2);

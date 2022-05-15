@@ -43,15 +43,13 @@ namespace null {
         std::vector<std::unique_ptr<Script>> scripts;
         GameObjectStatus gameObjectStatus = GameObjectStatus::NONE;
 
-        uint64_t guid;
-
         void start();
 
         void update();
 
     public:
 
-        RenderLayer renderLayer;
+        RenderLayer renderLayer = serial::BACKGROUND;
 
         explicit GameObject(uint64_t guid);
 
@@ -75,7 +73,7 @@ namespace null {
 
         std::weak_ptr<Scene> getScene();
 
-        bool visible;
+        bool visible = false;
 
         sf::Sprite& getSprite();
 
