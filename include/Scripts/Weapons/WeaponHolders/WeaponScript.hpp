@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <chrono>
 #include <random>
-#include <Script.hpp>
+#include "Script.hpp"
 
 namespace null {
     class WeaponScript : public Script {
@@ -18,13 +18,15 @@ namespace null {
 
         std::random_device rd{};
         std::mt19937 gen{rd()};
-        std::normal_distribution<> d{0, 0.5};
+        std::normal_distribution<> d{0, 0.1};
     public:
         explicit WeaponScript(GameObject& object);
 
         virtual void shoot(sf::Vector2f from, sf::Vector2f to) = 0;
 
         bool checkIfCanShoot();
+
         void saveShotInfo();
+
     };
 }

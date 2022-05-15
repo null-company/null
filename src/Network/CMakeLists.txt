@@ -31,6 +31,7 @@ set(SRC
         ${INCROOT}/server/GameServer.h
         ${SRCROOT}/server/GameServer.cpp
         ${SRCROOT}/server/ServerArbiter.cpp
+        ${INCROOT}/server/ServerArbiter.h
         ${SRCROOT}/server/NetClientCollector.cpp
         ${SRCROOT}/utils/NetMessageTransmitting.cpp
         ${INCROOT}/utils/NetMessageTransmitting.h

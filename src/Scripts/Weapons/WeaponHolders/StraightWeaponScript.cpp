@@ -1,25 +1,15 @@
-#include "Weapon/StraightWeaponScript.hpp"
+#include "Weapons/WeaponHolders/StraightWeaponScript.hpp"
 #include "Script.hpp"
 #include "GameObject.hpp"
 #include "ResourceManager.hpp"
 #include "Scene.hpp"
 #include "box2d/box2d.h"
-#include "Weapon/BulletScript.hpp"
+#include "Weapons/WeaponAmmunition/BulletScript.hpp"
+#include "Graphic/Vector.hpp"
 
 namespace null {
     void StraightWeaponScript::start() {
         Component::start();
-        auto parent = gameObject.getParent().lock();
-        if (parent == nullptr) {
-            return;
-        }
-        sf::Texture* weaponTexture = ResourceManager::loadTexture("weapon.png");
-        gameObject.getSprite().setOrigin(sf::Vector2f(250, 150));
-        gameObject.getSprite().setTexture(*weaponTexture);
-        gameObject.getSprite().scale(0.24f, 0.24f);
-        gameObject.renderLayer = FOREGROUND2;
-        gameObject.visible = true;
-//        gameObject.makeDynamic(gameObject.getScene().lock()->getBox2dWorld());
 
     }
 
@@ -36,7 +26,11 @@ namespace null {
         }
         auto& winInfo = gameObject.getScene().lock()->getWindowMetaInfo();
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && checkIfCanShoot()) {
-            shoot(gameObject.getPosition(), scene->getWindowMetaInfo().absoluteMouseWorldCoords);
+            auto windowInfo = scene->getWindowMetaInfo().absoluteMouseWorldCoords;
+            sf::Vector2f weaponDirection = windowInfo - gameObject.getPosition();
+            weaponDirection = normalize(weaponDirection);
+            weaponDirection *= 120.0f;
+            shoot(gameObject.getPosition() + weaponDirection, scene->getWindowMetaInfo().absoluteMouseWorldCoords);
         }
         auto coords = parent->getPosition() + sf::Vector2f(70, 70);
         gameObject.setPosition(coords);
@@ -50,17 +44,16 @@ namespace null {
         }
         auto window_info = scene->getWindowMetaInfo().absoluteMouseWorldCoords;
         sf::Vector2f weapondirection = window_info - gameObject.getPosition();
-        double delta = 0;
-        if (weapondirection.x < 0) {
-            delta = 180;
-        }
-        gameObject.getSprite().setRotation(delta + atan(weapondirection.y / weapondirection.x) * 180 / 3.141592);
+        gameObject.getSprite().setRotation(getAngle(weapondirection));
     }
 
     void StraightWeaponScript::shoot(sf::Vector2f from, sf::Vector2f to) {
         saveShotInfo();
+        static int i = 0;
         auto bullet = std::make_shared<GameObject>();
+        bullet->setName(std::string("Bullet: ") + std::to_string(i++));
         bullet->addScript<BulletScript>(*bullet, from, gameObject.getSprite().getRotation() + d(gen), speed);
+
         gameObject.addChild(std::move(bullet));
 
 
@@ -68,5 +61,11 @@ namespace null {
 
     StraightWeaponScript::StraightWeaponScript(GameObject& object, double deviance) : WeaponScript(object) {
         d = std::normal_distribution<>(0, deviance);
+        sf::Texture* weaponTexture = ResourceManager::loadTexture("weapon.png");
+        gameObject.getSprite().setOrigin(sf::Vector2f(250, 100));
+        gameObject.getSprite().setTexture(*weaponTexture);
+        gameObject.getSprite().scale(0.24, 0.24);
+        gameObject.renderLayer = FOREGROUND2;
+        gameObject.visible = true;
     }
 }

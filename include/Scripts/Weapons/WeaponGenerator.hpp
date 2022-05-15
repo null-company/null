@@ -1,0 +1,29 @@
+#pragma once
+
+#include <memory>
+#include <vector>
+
+#include "Script.hpp"
+#include "GameObject.hpp"
+#include "Schedulers/Timer.hpp"
+
+namespace null {
+
+    class WeaponGenerator : public Script {
+        Timer timer{std::chrono::milliseconds{3000}};
+    public:
+
+        WeaponGenerator(GameObject& object);
+
+        void start() override;
+
+        void update() override;
+
+        std::vector<std::shared_ptr<GameObject>> getAllPlatforms();
+
+        std::shared_ptr<GameObject> generateWeapon();
+
+        void addWeaponToPlatform();
+    };
+
+}

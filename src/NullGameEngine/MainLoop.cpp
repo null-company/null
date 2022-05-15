@@ -5,6 +5,11 @@
 #include <Renderer.hpp>
 #include <SpriteSheet.hpp>
 #include "exceptions/NetworkException.h"
+#include <Utility.hpp>
+#include <NetworkPlayerScript.hpp>
+#include <exceptions/NetworkException.h>
+#include <iostream>
+#include "Physics/ContactListener.hpp"
 
 namespace null {
 
@@ -15,6 +20,7 @@ namespace null {
 
     namespace {
         constexpr unsigned int MAX_FRAMERATE = 60;
+
         /**
          * @return false iff simulation is over
          */
@@ -38,13 +44,20 @@ namespace null {
                         case sf::Event::Resized: {
                             break;
                         }
+                        case sf::Event::KeyPressed: {
+                            scene->windowMetaInfo.keyEvent = e.key;
+                            break;
+                        }
+                        case sf::Event::KeyReleased: {
+                            break;
+                        }
                         default:
                             break;
                     }
                 }
             }
             scene->update();
-
+            scene->windowMetaInfo.resetKey();
             if (!isServer) {
                 sfmlWin->clear(sf::Color::Black);
                 Renderer::render(*sfmlWin, *scene);
@@ -60,9 +73,16 @@ namespace null {
             sfmlWin = new sf::RenderWindow(sf::VideoMode(1280, 720), "{[Null]}");
             sfmlWin->setFramerateLimit(MAX_FRAMERATE);
             sfmlWin->setMouseCursorVisible(false);
+            sf::RenderWindow sfmlWin(sf::VideoMode(1280, 720), "{[Null]}");
+            sfmlWin.setFramerateLimit(MAX_FRAMERATE);
+            sfmlWin.setMouseCursorVisible(false);
+//            std::unordered_set<uint> gg;
         }
 
         sceneStart:
+        if(!attachWindow){
+            scene->getBox2dWorld().SetContactListener(new ContactListener());
+        }
         scene->start();
         try {
             while (true) {

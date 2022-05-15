@@ -12,12 +12,19 @@
 #include <ResourceManager.hpp>
 #include <PlayerAnimation.hpp>
 #include <Utility.hpp>
+#include <functional>
+#include <unordered_map>
+#include "MapManager/MapManager.hpp"
+#include "Weapons/WeaponHolders/WeaponScript.hpp"
+#include "Weapons/WeaponHolders/StraightWeaponScript.hpp"
+#include "Weapons/WeaponHolders/WeaponStorage.hpp"
 #include <MapManager/MapManager.hpp>
-#include <Weapon/StraightWeaponScript.hpp>
 #include "PlayerControlledBox/PlayerControlledBoxClient.hpp"
 #include "PlayerControlledBox/PlayerControlledBoxServer.hpp"
 #include <Network/NetworkManagerClientScript.hpp>
 #include <Network/NetworkManagerServerScript.hpp>
+#include "Weapons/WeaponHolders/GrenadeBunchScript.hpp"
+#include "Weapons/WeaponGenerator.hpp"
 
 namespace null {
 
@@ -125,6 +132,11 @@ namespace null {
         // this texture is not released on purpose, because it MUST exist for as long
         // as the sprite lives. todo manage it with resource manager
         sf::Texture* nullTexture = ResourceManager::loadTexture("background.png");
+        auto parentGameObject = std::make_shared<GameObject>();
+        auto weaponGenerator = std::make_shared<GameObject>();
+
+        weaponGenerator->addScript<WeaponGenerator>(*weaponGenerator);
+        parentGameObject->addChild(std::move(weaponGenerator));
 
         auto nullGameLogo = std::make_shared<GameObject>();
         nullGameLogo->getSprite().setTexture(*nullTexture);
@@ -156,6 +168,7 @@ namespace null {
             groundSprite.setPosition(x, y);
             groundObject->renderLayer = FOREGROUND;
             groundObject->visible = true;
+            groundObject->addTag("platform");
             groundObject->makeStatic(box2dWorld);
             groundObject->addScript<ReloadSceneScript>(*groundObject);
             newScene->addRootGameObject(std::move(groundObject));
@@ -191,10 +204,17 @@ namespace null {
                                                                              {"walkRight", 1, 0, 3},
                                                                              {"walkLeft",  2, 0, 3}});
 
-        auto weapon = std::make_shared<GameObject>();
-        weapon->addScript<StraightWeaponScript>(*weapon, 5);
+//        auto grenadeBunch = std::make_shared<GameObject>();
+//        grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
 
-        player->addChild(std::move(weapon));
+//        auto gun = std::make_shared<GameObject>();
+//        gun->addScript<StraightWeaponScript>(*gun, 0.01);
+
+        auto weaponStorage = std::make_shared<GameObject>();
+        std::vector<std::shared_ptr<GameObject>> guns{};
+        weaponStorage->addScript<WeaponStorage>(*weaponStorage, guns);
+
+        player->addChild(std::move(weaponStorage));
         newScene->camera->getScript<ExampleCameraScript>()->setTrackedGameObject(*player);
         newScene->camera->getScript<ExampleCameraScript>()->setMap(*nullGameLogo);
 
@@ -220,10 +240,30 @@ namespace null {
         fixtureDef3.density = 1;
 
         player->addScript<PlayerAnimation>(*player, playerSpriteSheet,
-                                           std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>>{
-                                                   {"idle",      {{fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}}},
-                                                   {"walkRight", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}},
-                                                   {"walkLeft",  {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}}
+                                           std::unordered_map<std::string,
+                                                   std::vector<std::vector<b2FixtureDef>>>{
+                                                   {
+                                                           "idle",      {{fixtureDef3},
+                                                                                {fixtureDef3},
+                                                                                {fixtureDef3},
+                                                                                {fixtureDef3},
+                                                                                {fixtureDef3},
+                                                                                {fixtureDef3},
+                                                                                {fixtureDef3},
+                                                                                {fixtureDef3}}
+                                                   },
+                                                   {
+                                                           "walkRight", {{fixtureDef1},
+                                                                                {fixtureDef2},
+                                                                                {fixtureDef1},
+                                                                                {fixtureDef2}}
+                                                   },
+                                                   {
+                                                           "walkLeft",  {{fixtureDef1},
+                                                                                {fixtureDef2},
+                                                                                {fixtureDef1},
+                                                                                {fixtureDef2}}
+                                                   }
                                            });
 
         MapManager mapManager(box2dWorld);
@@ -232,6 +272,7 @@ namespace null {
         newScene->addRootGameObject(std::move(nullGameLogo));
         newScene->addRootGameObject(std::move(player));
         newScene->addRootGameObject(std::move(cursorObject));
+        newScene->addRootGameObject(std::move(parentGameObject));
         return newScene;
     }
 

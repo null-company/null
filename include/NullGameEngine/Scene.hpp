@@ -13,11 +13,12 @@
 namespace null {
     class Scene : public std::enable_shared_from_this<Scene> {
     private:
-        mutable WindowMetaInfo windowMetaInfo;
         mutable std::shared_ptr<GameObject> camera = std::make_shared<GameObject>(std::set<std::string>({"camera"}));
         std::vector<std::shared_ptr<GameObject>> rootGameObjects;
         b2World box2dWorld;
     public:
+        mutable WindowMetaInfo windowMetaInfo;
+
         Scene();
 
         void objectTreeForEachDo(GameObject&,

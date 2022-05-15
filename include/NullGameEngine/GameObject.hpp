@@ -20,9 +20,18 @@ namespace null {
     class GameObject : public std::enable_shared_from_this<GameObject> {
     private:
         void assertSpriteHasSize();
+
         void setRigidBodyDefPositionBySprite(b2BodyDef&);
+
         void setShapeAsBoxBySprite(b2PolygonShape&);
+
         std::weak_ptr<Scene> scene;
+        std::string name;
+    public:
+        const std::string& getName() const;
+
+        void setName(const std::string& name);
+
     protected:
         sf::Sprite sprite;
         b2Body* rigidBody = nullptr;
@@ -73,8 +82,12 @@ namespace null {
         b2Body* getRigidBody();
 
         void makeStatic(b2World& box2dWorld);
-
+        void makeStatic();
         void makeDynamic(b2World& box2dWorld);
+
+        void setCollisionCategories(uint16_t categoryBits);
+
+        void setCollisionMasks(uint16_t maskBits);
 
         void detachFromPhysicsWorld();
 
@@ -99,7 +112,7 @@ namespace null {
 
         void setPosition(float x, float y);
 
-        void setPosition(const sf::Vector2f &pos);
+        void setPosition(const sf::Vector2f& pos);
 
         void addScript(std::unique_ptr<Script> script);
 
@@ -126,6 +139,16 @@ namespace null {
         friend Scene;
 
         void makeDynamic();
+
+        void deleteChild(GameObject* childToDelete);
+
+        void deleteMe();
+
+        GameObject* getCollied();
+
+        Scene& getSceneForce();
+
+        std::shared_ptr<GameObject> findFirstChildrenByTag(const std::string& tag);
     };
 
 }

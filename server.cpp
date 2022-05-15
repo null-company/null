@@ -1,9 +1,10 @@
-#include <server/ServerArbiter.h>
+#include <network.h>
 #include <plog/Appenders/ConsoleAppender.h>
 #include <plog/Init.h>
 #include <plog/Formatters/TxtFormatter.h>
 #include <SceneLoader.hpp>
 #include <MainLoop.hpp>
+#include <iostream>
 
 int main() {
     static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;

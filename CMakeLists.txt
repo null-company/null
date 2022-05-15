@@ -11,7 +11,7 @@ if (WIN32 AND MSVC)
     # https://github.com/protocolbuffers/protobuf/blob/main/cmake/README.md#notes-on-compiler-warnings
     # applied globally because that's just easier
     add_compile_options(/wd4251)
-endif()
+endif ()
 
 include(cmake/libraries.txt)
 
@@ -26,15 +26,15 @@ target_link_libraries(NULL_GAME
         scripts
         nullGameEngine
         sfml-network
+        plog
         network
-        yaml-cpp
         serialization
         sfml-graphics
         sfml-audio
         sfml-window
         sfml-system
+        sfml-network
         )
-
 
 target_link_libraries(NULL_GAME_SERVER
         scripts
@@ -42,9 +42,11 @@ target_link_libraries(NULL_GAME_SERVER
         sfml-network
         network
         yaml-cpp
+        plog
         serialization
         sfml-graphics
         sfml-audio
         sfml-window
         sfml-system
         )
+

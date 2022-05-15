@@ -1,4 +1,4 @@
-#include <Weapon/WeaponScript.hpp>
+#include <Weapons/WeaponHolders/WeaponScript.hpp>
 
 null::WeaponScript::WeaponScript(null::GameObject& object) : Component(object) {}
 

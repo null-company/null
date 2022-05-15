@@ -1,11 +1,13 @@
 #pragma once
 
-#include <Weapon/WeaponScript.hpp>
+#include "WeaponScript.hpp"
+#include "box2d/box2d.h"
 
 namespace null {
     class StraightWeaponScript : public WeaponScript {
     private:
-        double speed = 10;
+        double speed = 5;
+
     public:
         explicit StraightWeaponScript(GameObject& object, double deviance);
 

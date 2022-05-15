@@ -27,12 +27,24 @@ set(SRC
         ${SRCROOT}/ButtonScript.cpp
         ${INCROOT}/ButtonScript.hpp
         ${SRCROOT}/NetworkPlayerScript.cpp
-        ${SRCROOT}Weapons/WeaponScript.cpp
-        ${SRCROOT}/Weapons/StraightWeaponScript.cpp
-        ${INCROOT}/Weapon/StraightWeaponScript.hpp
-        ${INCROOT}/Weapon/WeaponScript.hpp
-        ${SRCROOT}/Weapons/BulletScript.cpp
-        ${INCROOT}/Weapon/BulletScript.hpp
+        ${SRCROOT}/Weapons/WeaponHolders/WeaponScript.cpp
+        ${SRCROOT}/Weapons/WeaponHolders/StraightWeaponScript.cpp
+        ${INCROOT}/Weapons/WeaponHolders/StraightWeaponScript.hpp
+        ${INCROOT}/Weapons/WeaponHolders/WeaponScript.hpp
+        ${SRCROOT}/Weapons/WeaponAmmunition/BulletScript.cpp
+        ${INCROOT}/Weapons/WeaponAmmunition/BulletScript.hpp
+        ${SRCROOT}/Weapons/WeaponHolders/GrenadeBunchScript.cpp
+        ${INCROOT}/Weapons/WeaponAmmunition/GrenadeScript.hpp
+        ${SRCROOT}/Weapons/WeaponAmmunition/GrenadeScript.cpp
+        ${INCROOT}/Weapons/WeaponAmmunition/GrenadeScript.hpp
+        ${SRCROOT}/Weapons/WeaponHolders/WeaponStorage.cpp
+        ${INCROOT}/Weapons/WeaponHolders/WeaponStorage.hpp
+        ${SRCROOT}/Weapons/WeaponGenerator.cpp
+        ${INCROOT}/Weapons/WeaponGenerator.hpp
+        ${SRCROOT}/GameObjectSensor.cpp
+        ${INCROOT}/GameObjectSensor.hpp
+        ${SRCROOT}/DeleteScript.cpp
+        ${INCROOT}/DeleteScript.hpp
         ${SRCROOT}/PlayerControlledBox/PlayerControlledBoxClient.cpp
         ${INCROOT}/PlayerControlledBox/PlayerControlledBoxClient.hpp
         ${SRCROOT}/PlayerControlledBox/PlayerControlledBoxServer.cpp
@@ -55,6 +67,7 @@ target_include_directories(scripts
 target_link_libraries(scripts
         nullGameEngine
         network
+        utils
         sfml-graphics
         sfml-audio
         sfml-network
