@@ -20,7 +20,7 @@ int main() {
     std::string levelToLoad;
     bool sceneIsLoaded = false;
     const std::string defaultLevel = "/network-demo-client";
-    std::cout << "Type level uri to load. Empty string for default /network-demo-client" << std::endl;
+    std::cout << "Type level uri to load. Empty string for default /network-demo-client. Try /demo for single player" << std::endl;
     while (!sceneIsLoaded) {
         std::getline(std::cin, levelToLoad);
         if (levelToLoad.empty()) {
