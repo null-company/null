@@ -18,6 +18,9 @@ namespace null {
         void shoot(sf::Vector2f from, sf::Vector2f to) override;
 
         void setWeaponRotation();
+
+        void serialize(google::protobuf::Message &) const override;
+        static std::unique_ptr<Component> deserialize(const google::protobuf::Message&);
     };
 }
 

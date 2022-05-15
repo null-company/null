@@ -16,7 +16,8 @@ namespace null {
 
         explicit CursorAnimation(GameObject&, SpriteSheet);
 
-
+        void serialize(google::protobuf::Message &) const override;
+        static std::unique_ptr<Component> deserialize(const google::protobuf::Message&);
     };
 
 }

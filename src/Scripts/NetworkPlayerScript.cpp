@@ -5,9 +5,9 @@ namespace null {
 
 
     NetworkPlayerScript::NetworkPlayerScript(GameObject& gameObject, SpriteSheet& spriteSheet,
-                                             std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>> map,
+                                             const CollisionMap& map,
                                              std::queue<net::GameMessage>& q, int id) :
-            RigidBodyAnimation(gameObject, spriteSheet, map), queue(q), id(id) {}
+            RigidBodyAnimation(gameObject, spriteSheet, map), id(id), queue(q) {}
 
     void NetworkPlayerScript::update() {
         net::GameMessage message;

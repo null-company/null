@@ -1,0 +1,45 @@
+syntax = "proto3";
+package serial;
+
+message Vector2i {
+  int32 x = 1;
+  int32 y = 2;
+}
+
+message Vector2f {
+  float x = 1;
+  float y = 2;
+}
+
+message FixtureDef {
+  float density = 1;
+  bool is_sensor = 2;
+  float friction = 3;
+  float restitution = 4;
+  float restitution_threshold = 5;
+  Shape shape = 6;
+  Filter filter = 7;
+}
+
+message Polygon {
+  repeated Vector2f vertices = 1;
+}
+
+message Shape {
+  oneof shape_type{
+    Polygon polygon = 1;
+  }
+}
+
+message Filter {
+  uint32 category_bits = 1;
+  uint32 mask_bits = 2;
+  int32 group_index = 3;
+}
+
+message IntRect {
+  int32 left = 1;
+  int32 top = 2;
+  int32 height = 3;
+  int32 width = 4;
+}

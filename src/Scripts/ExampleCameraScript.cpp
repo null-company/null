@@ -1,6 +1,8 @@
 #include "ExampleCameraScript.hpp"
 #include "Scene.hpp"
+#include "plog/Log.h"
 #include <algorithm>
+#include <Serializer.hpp>
 
 namespace null {
 
@@ -56,6 +58,33 @@ namespace null {
         map = &newMap;
     }
 
+    void ExampleCameraScript::serialize(google::protobuf::Message& message) const {
+        auto& msg = dynamic_cast<serial::Script&>(message);
+        auto s_script = msg.mutable_example_camera_script();
+        s_script->set_tracked_object_guid(trackedObject->guid);
+        s_script->set_map_guid(map->guid);
+    }
+
+    std::unique_ptr<Component> ExampleCameraScript::deserialize(const google::protobuf::Message& message) {
+        auto& msg = dynamic_cast<const serial::Script&>(message);
+        auto const& s_script = msg.example_camera_script();
+        auto p_script = std::make_unique<ExampleCameraScript>(
+                *Serializer::currentDeserializationGameObject
+                );
+        // This is an example of getting the pointers to serialized entities
+        // (they're set in Serializer::getSceneFromFile)
+        Serializer::toBeSetEntityPointerMap.insert(
+                {(Entity**)(&p_script->map), s_script.map_guid()}
+                );
+        auto asdf = Serializer::toBeSetEntityPointerMap.find((Entity**)&p_script->map);
+        Serializer::toBeSetEntityPointerMap.insert(
+                {(Entity**)(&p_script->trackedObject), s_script.tracked_object_guid()}
+                );
+
+        asdf = Serializer::toBeSetEntityPointerMap.find((Entity**)&p_script->trackedObject);
+
+        return p_script;
+    }
 
 }
 

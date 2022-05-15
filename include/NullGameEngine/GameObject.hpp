@@ -11,13 +11,15 @@
 #include <NullGameEngine.hpp>
 #include <Script.hpp>
 #include <RenderLayer.hpp>
+#include "serializable.h"
+#include "Entity.hpp"
 
 enum class GameObjectStatus {
     NONE, RUNNING, DEATCHED
 };
 namespace null {
 
-    class GameObject : public std::enable_shared_from_this<GameObject> {
+    class GameObject :  public Entity, public std::enable_shared_from_this<GameObject> {
     private:
         void assertSpriteHasSize();
 
@@ -66,8 +68,6 @@ namespace null {
         GameObject(std::set<std::string> tags);
 
         ~GameObject();
-
-        uint64_t getGuid();
 
         std::weak_ptr<GameObject> addChild(std::shared_ptr<GameObject>&&);
 
@@ -135,6 +135,9 @@ namespace null {
             }
             return nullptr;
         }
+
+        void serialize(google::protobuf::Message&) const;
+        static std::shared_ptr<GameObject> deserialize(const google::protobuf::Message&);
 
         friend Scene;
 

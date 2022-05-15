@@ -8,3 +8,8 @@
 #include <ExampleCameraScript.hpp>
 #include <CursorAnimation.hpp>
 #include <ButtonScript.hpp>
+#include <Weapon/BulletScript.hpp>
+#include <Weapon/StraightWeaponScript.hpp>
+#include <Weapon/WeaponScript.hpp>
+#include <PlayerAnimation.hpp>
+#include <NetworkPlayerScript.hpp>

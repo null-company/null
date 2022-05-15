@@ -4,9 +4,7 @@
 #include <functional>
 
 #include <box2d/box2d.h>
-
-#include <NullGameEngine.hpp>
-#include <GameObject.hpp>
+#include "GameObject.hpp"
 #include <Camera.hpp>
 #include "WindowMetaInfo.hpp"
 
@@ -22,13 +20,13 @@ namespace null {
         Scene();
 
         void objectTreeForEachDo(GameObject&,
-                                 std::function<void(GameObject&)>) const;
+                const std::function<void(GameObject&)>&) const;
 
-        void sceneTreeForEachDo(std::function<void(GameObject&)>) const;
+        void sceneTreeForEachDo(const std::function<void(GameObject&)>&) const;
 
-        std::weak_ptr<GameObject> findFirstByTag(const std::string& tag);
+        std::weak_ptr<GameObject> findFirstByTag(const std::string& tag) const;
 
-        std::vector<std::weak_ptr<GameObject>> findAllByTag(const std::string& tag);
+        std::vector<std::weak_ptr<GameObject>> findAllByTag(const std::string& tag) const;
 
         void start();
 
@@ -43,6 +41,10 @@ namespace null {
         friend Renderer;
 
         friend SceneLoader;
+
+        void serialize(google::protobuf::Message &) const;
+
+        static std::shared_ptr<Scene> deserialize(const google::protobuf::Message &);
 
         WindowMetaInfo& getWindowMetaInfo() const;
     };

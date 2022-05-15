@@ -1,6 +1,8 @@
 #include <memory>
 
 #include <Scene.hpp>
+#include "plog/Log.h"
+#include "Serializer.hpp"
 
 namespace null {
 
@@ -9,7 +11,7 @@ namespace null {
     Scene::Scene() : box2dWorld(b2Vec2(0.0, 9.8f)) { }
 
     void Scene::objectTreeForEachDo(GameObject& gameObject,
-                                    std::function<void(GameObject&)> function) const {
+                                    const std::function<void(GameObject&)>& function) const {
 
         std::function<void(GameObject&)> walk;
         walk = [&function, &walk](GameObject& go) -> void {
@@ -26,13 +28,13 @@ namespace null {
         walk(gameObject);
     }
 
-    void Scene::sceneTreeForEachDo(std::function<void(GameObject&)> function) const {
+    void Scene::sceneTreeForEachDo(const std::function<void(GameObject&)>& function) const {
         for (const auto& obj: rootGameObjects) {
             objectTreeForEachDo(*obj, function);
         }
     }
 
-    std::weak_ptr<GameObject> Scene::findFirstByTag(const std::string& tag) {
+    std::weak_ptr<GameObject> Scene::findFirstByTag(const std::string& tag) const {
         std::weak_ptr<GameObject> res;
         bool found = false;
         sceneTreeForEachDo([&tag, &res, &found](GameObject& obj) -> void {
@@ -50,7 +52,7 @@ namespace null {
         return res;
     }
 
-    std::vector<std::weak_ptr<GameObject>> Scene::findAllByTag(const std::string& tag) {
+    std::vector<std::weak_ptr<GameObject>> Scene::findAllByTag(const std::string& tag) const {
         std::vector<std::weak_ptr<GameObject>> res;
         sceneTreeForEachDo([&tag, &res](GameObject& obj) -> void {
             if (obj.hasTag(tag)) {
@@ -72,6 +74,9 @@ namespace null {
     void Scene::start() {
         auto cameraCopy = camera;
         addRootGameObject(std::move(cameraCopy));
+        sceneTreeForEachDo([this](GameObject& obj) -> void {
+            obj.scene = weak_from_this();
+        });
         sceneTreeForEachDo([](GameObject& obj) -> void {
             obj.start();
         });
@@ -97,5 +102,29 @@ namespace null {
         return windowMetaInfo;
     }
 
+    void Scene::serialize(google::protobuf::Message& message) const {
+        auto msg = (serial::Scene&) message;
+        auto cam = msg.mutable_camera();
+        camera->serialize(*cam);
+        auto gos = msg.mutable_game_object();
+        for (auto const& i: rootGameObjects) {
+            auto s_go = serial::GameObject();
+            i->serialize(s_go);
+            gos->Add(std::move(s_go));
+        }
+        message.CopyFrom(msg);
+    }
+
+    std::shared_ptr<Scene> Scene::deserialize(const google::protobuf::Message& message) {
+        auto scene = std::make_shared<Scene>();
+        auto msg = (const serial::Scene&) message;
+        Serializer::currentDeserializationScene = scene.get();
+        scene->camera = GameObject::deserialize(msg.camera());
+        for (auto const& i: msg.game_object()) {
+            auto go = GameObject::deserialize(i);
+            scene->addRootGameObject(std::move(go));
+        }
+        return scene;
+    }
 }
 
