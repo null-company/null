@@ -10,12 +10,12 @@ namespace null {
             auto go1 = reinterpret_cast<GameObject*>(edge->GetFixtureA()->GetBody()->GetUserData().pointer);
             auto go2 = reinterpret_cast<GameObject*>(edge->GetFixtureB()->GetBody()->GetUserData().pointer);
             for (auto go: std::vector{go1, go2}) {
-                if (go->getScript<BulletScript>() and edge->IsTouching()) {
+                if (go->getScript<BulletScript>() && edge->IsTouching()) {
                     auto otherGo = go == go1 ? go2 : go1;
                     go->getScript<BulletScript>()->contactedGameObject = otherGo;
                 }
                 // This block of code for describing behavior of Player and Sensor Go
-                if (go->getScript<GameObjectSensor>() and edge->IsTouching()) {
+                if (go->getScript<GameObjectSensor>() && edge->IsTouching()) {
                     auto otherGo = go == go1 ? go2 : go1;
                     go->getScript<GameObjectSensor>()->onTouch(otherGo);
                 }

@@ -20,11 +20,11 @@ namespace null {
         gameObject.setPosition(gameObject.getParent().lock()->getPosition() + sf::Vector2f(10, 30));
 
         auto& scene = gameObject.getSceneForce();
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) and !scheduler.isStarted() and checkIfCanShoot()) {
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !scheduler.isStarted() && checkIfCanShoot()) {
             scheduler.start();
             return;
         }
-        if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) and scheduler.isStarted()) {
+        if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && scheduler.isStarted()) {
             scheduler.end();
             shoot(gameObject.getPosition(), scene.getWindowMetaInfo().absoluteMouseWorldCoords);
         }

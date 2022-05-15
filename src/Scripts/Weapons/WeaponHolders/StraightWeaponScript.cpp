@@ -25,7 +25,7 @@ namespace null {
             return;
         }
         auto& winInfo = gameObject.getScene().lock()->getWindowMetaInfo();
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) and checkIfCanShoot()) {
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && checkIfCanShoot()) {
             auto windowInfo = scene->getWindowMetaInfo().absoluteMouseWorldCoords;
             sf::Vector2f weaponDirection = windowInfo - gameObject.getPosition();
             weaponDirection = normalize(weaponDirection);
