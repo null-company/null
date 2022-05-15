@@ -1,7 +1,7 @@
 #pragma once
 
 #include "WeaponScript.hpp"
-#include "_deps/box2d-src/include/box2d/box2d.h"
+#include "box2d/box2d.h"
 
 namespace null {
     class StraightWeaponScript : public WeaponScript {

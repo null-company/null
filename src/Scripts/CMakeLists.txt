@@ -38,7 +38,13 @@ set(SRC
         ${SRCROOT}/Weapons/WeaponAmmunition/GrenadeScript.cpp
         ${INCROOT}/Weapons/WeaponAmmunition/GrenadeScript.hpp
         ${SRCROOT}/Weapons/WeaponHolders/WeaponStorage.cpp
-        ${INCROOT}/Weapons/WeaponHolders/WeaponStorage.hpp Weapons/WeaponGenerator.cpp ../../include/Scripts/Weapons/WeaponGenerator.hpp GameObjectSensor.cpp ../../include/Scripts/GameObjectSensor.hpp DeleteScript.cpp ../../include/Scripts/DeleteScript.hpp
+        ${INCROOT}/Weapons/WeaponHolders/WeaponStorage.hpp
+        ${SRCROOT}/Weapons/WeaponGenerator.cpp
+        ${INCROOT}/Weapons/WeaponGenerator.hpp
+        ${SRCROOT}/GameObjectSensor.cpp
+        ${INCROOT}/GameObjectSensor.hpp
+        ${SRCROOT}/DeleteScript.cpp
+        ${INCROOT}/DeleteScript.hpp
         ${SRCROOT}/PlayerControlledBox/PlayerControlledBoxClient.cpp
         ${INCROOT}/PlayerControlledBox/PlayerControlledBoxClient.hpp
         ${SRCROOT}/PlayerControlledBox/PlayerControlledBoxServer.cpp

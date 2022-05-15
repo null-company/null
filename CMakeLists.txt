@@ -11,20 +11,9 @@ if (WIN32 AND MSVC)
     # https://github.com/protocolbuffers/protobuf/blob/main/cmake/README.md#notes-on-compiler-warnings
     # applied globally because that's just easier
     add_compile_options(/wd4251)
-endif()
+endif ()
 
 include(cmake/libraries.txt)
-message(STATUS "SFML downloaded")
-
-FetchContent_Declare(
-        box2d
-        GIT_REPOSITORY https://github.com/erincatto/box2d.git
-        GIT_TAG v2.4.1
-)
-message(STATUS "Started downloading box2d")
-FetchContent_MakeAvailable(box2d)
-message(STATUS "box2d downloaded")
-
 
 add_subdirectory(./src/)
 add_subdirectory(./test/)
@@ -37,6 +26,7 @@ target_link_libraries(NULL_GAME
         scripts
         nullGameEngine
         sfml-network
+        plog
         network
         serialization
         sfml-graphics
@@ -46,4 +36,17 @@ target_link_libraries(NULL_GAME
         sfml-network
         )
 
+target_link_libraries(NULL_GAME_SERVER
+        scripts
+        nullGameEngine
+        sfml-network
+        network
+        yaml-cpp
+        plog
+        serialization
+        sfml-graphics
+        sfml-audio
+        sfml-window
+        sfml-system
+        )
 

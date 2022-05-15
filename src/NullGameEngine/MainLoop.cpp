@@ -20,6 +20,7 @@ namespace null {
 
     namespace {
         constexpr unsigned int MAX_FRAMERATE = 60;
+
         /**
          * @return false iff simulation is over
          */
@@ -56,7 +57,7 @@ namespace null {
                 }
             }
             scene->update();
-
+            scene->windowMetaInfo.resetKey();
             if (!isServer) {
                 sfmlWin->clear(sf::Color::Black);
                 Renderer::render(*sfmlWin, *scene);
@@ -73,14 +74,15 @@ namespace null {
             sfmlWin->setFramerateLimit(MAX_FRAMERATE);
             sfmlWin->setMouseCursorVisible(false);
             sf::RenderWindow sfmlWin(sf::VideoMode(1280, 720), "{[Null]}");
-//            window = &sfmlWin;
             sfmlWin.setFramerateLimit(MAX_FRAMERATE);
             sfmlWin.setMouseCursorVisible(false);
-            scene->getBox2dWorld().SetContactListener(new ContactListener());
 //            std::unordered_set<uint> gg;
         }
 
         sceneStart:
+        if(!attachWindow){
+            scene->getBox2dWorld().SetContactListener(new ContactListener());
+        }
         scene->start();
         try {
             while (true) {
