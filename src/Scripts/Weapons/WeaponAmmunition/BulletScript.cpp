@@ -1,10 +1,8 @@
-
 #include "Component.hpp"
 #include "Weapons/WeaponAmmunition/BulletScript.hpp"
 #include "GameObject.hpp"
 #include "ResourceManager.hpp"
 #include "Scene.hpp"
-#include <iostream>
 
 namespace null {
     void null::BulletScript::start() {
@@ -24,9 +22,7 @@ namespace null {
     void null::BulletScript::update() {
         Component::update();
         if (contactedGameObject) {
-            std::cout << contactedGameObject->getName() << std::endl;
             gameObject.deleteMe();
-            std::cout << gameObject.getParent().lock()->getChildren().size() << std::endl;
         }
     }
 
@@ -37,4 +33,3 @@ namespace null {
               speed(speed) {
     }
 }
-
