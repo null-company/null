@@ -21,6 +21,7 @@ namespace null {
 
         float getValue();
 
+        [[nodiscard]]
         bool isStarted() const;
     };
 }

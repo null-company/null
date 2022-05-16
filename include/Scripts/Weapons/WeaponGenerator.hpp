@@ -3,9 +3,9 @@
 #include <memory>
 #include <vector>
 
-#include "Script.hpp"
-#include "GameObject.hpp"
-#include "Schedulers/Timer.hpp"
+#include <Script.hpp>
+#include <GameObject.hpp>
+#include <Schedulers/Timer.hpp>
 
 namespace null {
 
@@ -13,7 +13,7 @@ namespace null {
         Timer timer{std::chrono::milliseconds{3000}};
     public:
 
-        WeaponGenerator(GameObject& object);
+        explicit WeaponGenerator(GameObject& object);
 
         void start() override;
 

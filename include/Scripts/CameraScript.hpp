@@ -2,7 +2,7 @@
 
 #include <GameObject.hpp>
 #include <Camera.hpp>
-#include "WindowMetaInfo.hpp"
+#include <WindowMetaInfo.hpp>
 
 namespace null {
     class CameraScript : public Script {

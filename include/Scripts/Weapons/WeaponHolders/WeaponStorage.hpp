@@ -1,8 +1,9 @@
 #pragma once
 
 #include <queue>
-#include "GameObject.hpp"
 #include <memory>
+
+#include <GameObject.hpp>
 
 namespace null {
     class WeaponStorage : public Script {
@@ -11,7 +12,7 @@ namespace null {
         std::map<std::shared_ptr<GameObject>, std::string> weaponToTag;
         static int counter;
     public:
-        WeaponStorage(GameObject& object, std::vector<std::shared_ptr<GameObject>> weapons);
+        WeaponStorage(GameObject& object, const std::vector<std::shared_ptr<GameObject>>& weapons);
 
         void start() override;
 
@@ -19,6 +20,6 @@ namespace null {
 
         void swapWeapon();
 
-        void addWeapon(std::shared_ptr<GameObject> weapon);
+        void addWeapon(const std::shared_ptr<GameObject> &weapon);
     };
 }

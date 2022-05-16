@@ -20,7 +20,7 @@ namespace null {
         Component::update();
         gameObject.setPosition(gameObject.getParent().lock()->getPosition() + bias);
         if (timer.expired()) {
-            gameObject.deleteMe();
+            gameObject.destroy();
         }
     }
 
@@ -54,7 +54,7 @@ namespace null {
             auto weaponStorage = touchedObject->findFirstChildrenByTag("WeaponStorage");
             auto script = weaponStorage->getScript<WeaponStorage>();
             script->addWeapon(std::move(sensorObject->getScript<GameObjectSensor>()->getObjectToAdd()));
-            sensorObject->getScript<DeleteScript>()->del();
+            sensorObject->getScript<DeleteScript>()->deleteGameObject();
         }
     }
 }

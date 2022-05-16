@@ -1,7 +1,8 @@
 #pragma once
 
-#include <Script.hpp>
 #include <SFML/System.hpp>
+
+#include <Script.hpp>
 
 namespace null {
 

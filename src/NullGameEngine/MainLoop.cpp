@@ -4,11 +4,7 @@
 #include <Scene.hpp>
 #include <Renderer.hpp>
 #include <SpriteSheet.hpp>
-#include "exceptions/NetworkException.h"
 #include <Utility.hpp>
-#include <NetworkPlayerScript.hpp>
-#include <exceptions/NetworkException.h>
-#include <iostream>
 #include "Physics/ContactListener.hpp"
 
 namespace null {
@@ -76,9 +72,7 @@ namespace null {
         }
 
         sceneStart:
-        if(!attachWindow){
-            scene->getBox2dWorld().SetContactListener(new ContactListener());
-        }
+        scene->getBox2dWorld().SetContactListener(new ContactListener());
         scene->start();
         try {
             while (true) {

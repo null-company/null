@@ -1,9 +1,11 @@
 #include "Weapons/WeaponGenerator.hpp"
-#include "Weapons/WeaponHolders/StraightWeaponScript.hpp"
-#include "Weapons/WeaponAmmunition/GrenadeScript.hpp"
-#include "GameObjectSensor.hpp"
-#include <Scene.hpp>
+
 #include <random>
+
+#include <Scene.hpp>
+#include <Weapons/WeaponHolders/StraightWeaponScript.hpp>
+#include <Weapons/WeaponAmmunition/GrenadeScript.hpp>
+#include <GameObjectSensor.hpp>
 #include <Weapons/WeaponHolders/GrenadeBunchScript.hpp>
 #include <DeleteScript.hpp>
 

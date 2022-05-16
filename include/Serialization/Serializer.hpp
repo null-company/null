@@ -13,8 +13,5 @@ namespace null {
 
         static void serializeSceneToFile(const Scene* scene, const std::string& filename);
         static std::shared_ptr<Scene> getSceneFromFile(const std::string& filename);
-
-
     };
 }
-

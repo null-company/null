@@ -1,11 +1,13 @@
 #pragma once
 
 #include <memory>
-#include "Script.hpp"
-#include "Schedulers/Timer.hpp"
-#include "SFML/System/Vector2.hpp"
-#include "Weapons/WeaponHolders/WeaponStorage.hpp"
 #include <functional>
+
+#include <SFML/System/Vector2.hpp>
+
+#include <Script.hpp>
+#include <Schedulers/Timer.hpp>
+#include <Weapons/WeaponHolders/WeaponStorage.hpp>
 #include <GameObject.hpp>
 #include <PlayerAnimation.hpp>
 
@@ -25,6 +27,7 @@ namespace null {
 
         void start() override;
 
+        [[nodiscard]]
         std::shared_ptr<GameObject> getObjectToAdd() const;
 
         void onTouch(GameObject* touchedObject);

@@ -31,6 +31,7 @@ namespace null {
         void splitTextureIntoAnimations(std::vector<Animation_s>&) const;
         SpriteSheet(std::string , sf::Vector2i, std::vector<Animation_s>);
 
+        [[nodiscard]]
         sf::IntRect getCurrentTextureRect() const;
 
         void serialize(google::protobuf::Message &) const;

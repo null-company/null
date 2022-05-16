@@ -6,7 +6,7 @@
 namespace null {
     class WindowMetaInfo {
     private:
-        constexpr const static sf::Event::KeyEvent defaultKeyEvent = {sf::Keyboard::Key::Unknown,
+        static constexpr sf::Event::KeyEvent defaultKeyEvent = {sf::Keyboard::Key::Unknown,
                                                                       false,
                                                                       false,
                                                                       false,

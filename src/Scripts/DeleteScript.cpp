@@ -1,7 +1,3 @@
-//
-// Created by artemonchelus on 11.05.22.
-//
-
 #include "DeleteScript.hpp"
 #include "GameObject.hpp"
 
@@ -13,11 +9,11 @@ namespace null {
     void DeleteScript::update() {
         Component::update();
         if (isDeleted) {
-            gameObject.deleteMe();
+            gameObject.destroy();
         }
     }
 
-    void DeleteScript::del() {
+    void DeleteScript::deleteGameObject() {
         isDeleted = true;
     }
 

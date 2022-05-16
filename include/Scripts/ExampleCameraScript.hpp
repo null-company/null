@@ -2,8 +2,6 @@
 
 #include <Scripts.hpp>
 
-#define q(a) #a
-
 namespace null {
     class ExampleCameraScript : public CameraScript {
     private:
