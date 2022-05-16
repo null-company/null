@@ -73,10 +73,6 @@ namespace null {
             sfmlWin = new sf::RenderWindow(sf::VideoMode(1280, 720), "{[Null]}");
             sfmlWin->setFramerateLimit(MAX_FRAMERATE);
             sfmlWin->setMouseCursorVisible(false);
-            sf::RenderWindow sfmlWin(sf::VideoMode(1280, 720), "{[Null]}");
-            sfmlWin.setFramerateLimit(MAX_FRAMERATE);
-            sfmlWin.setMouseCursorVisible(false);
-//            std::unordered_set<uint> gg;
         }
 
         sceneStart:
