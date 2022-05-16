@@ -19,7 +19,9 @@ namespace null{
         // no serialization since it's deprecated
         // TODO delete this script altogether
         void serialize(google::protobuf::Message &) const override {};
-        static std::unique_ptr<Component> deserialize(const google::protobuf::Message&) {};
+        static std::unique_ptr<Component> deserialize(const google::protobuf::Message&) {
+            return {};
+        };
     };
 }
 
