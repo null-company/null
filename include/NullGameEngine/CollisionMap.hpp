@@ -17,7 +17,7 @@ namespace null {
     public:
         CollisionMapInternal collisionMapInternal;
 
-        explicit CollisionMap(const CollisionMapInternal&);
+        explicit CollisionMap(CollisionMapInternal );
         void serialize(google::protobuf::Message&) const;
         static std::unique_ptr<CollisionMap> deserialize(const google::protobuf::Message&);
     };

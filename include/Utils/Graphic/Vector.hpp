@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SFML/Graphics.hpp"
+#include <SFML/Graphics.hpp>
 
 namespace null {
     sf::Vector2f normalize(sf::Vector2f vector);
@@ -9,5 +9,3 @@ namespace null {
 
     sf::Vector2f fromAngle(float angle);
 }
-
-

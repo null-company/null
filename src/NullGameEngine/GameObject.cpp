@@ -171,7 +171,7 @@ namespace null {
         children.erase(it, children.end());
     }
 
-    void GameObject::deleteMe() {
+    void GameObject::destroy() {
         parent.lock()->deleteChild(this);
     }
 
@@ -179,7 +179,7 @@ namespace null {
         return children[index];
     }
 
-    // todo concern pointer leakage // todo todo todo todo todo я люблю когда волосатые мужики обмазываются маслом
+    // TODO(Artem) concern pointer leakage
     std::vector<std::unique_ptr<Script>>& GameObject::getScripts() {
         return scripts;
     }

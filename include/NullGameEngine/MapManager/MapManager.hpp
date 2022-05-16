@@ -1,9 +1,10 @@
 #pragma once
 
-#include "GameObject.hpp"
 #include <memory>
+
 #include <box2d/box2d.h>
 #include <box2d/b2_math.h>
+#include <GameObject.hpp>
 
 namespace null {
     class MapManager {

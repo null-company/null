@@ -1,6 +1,7 @@
-#include "CollisionMap.hpp"
+#include <CollisionMap.hpp>
+#include <utility>
 #include "scripts.pb.h"
-#include "box2d/b2_polygon_shape.h"
+#include <box2d/b2_polygon_shape.h>
 
 namespace null {
     void CollisionMap::serialize(google::protobuf::Message& message) const {
@@ -75,7 +76,7 @@ namespace null {
         return std::make_unique<CollisionMap>(cmi);
     }
 
-    null::CollisionMap::CollisionMap(const null::CollisionMapInternal& collisionMapInternal1)
-            : collisionMapInternal(collisionMapInternal1) { }
+    null::CollisionMap::CollisionMap(null::CollisionMapInternal  collisionMapInternal1)
+            : collisionMapInternal(std::move(collisionMapInternal1)) { }
 
 }

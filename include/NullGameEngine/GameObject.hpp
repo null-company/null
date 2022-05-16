@@ -143,7 +143,7 @@ namespace null {
 
         void deleteChild(GameObject* childToDelete);
 
-        void deleteMe();
+        void destroy();
 
         GameObject* getCollied();
 

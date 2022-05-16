@@ -1,10 +1,8 @@
-//
-// Created by artemonchelus on 28.04.22.
-//
-
 #include "Weapons/WeaponHolders/WeaponStorage.hpp"
-#include "Scene.hpp"
+
 #include <utility>
+
+#include <Scene.hpp>
 #include <GameObject.hpp>
 
 namespace null {
@@ -28,7 +26,7 @@ namespace null {
     }
 
     WeaponStorage::WeaponStorage(null::GameObject& object,
-                                 std::vector<std::shared_ptr<GameObject>> weapons)
+                                 const std::vector<std::shared_ptr<GameObject>>& weapons)
             : Component(object) {
         gameObject.addTag("WeaponStorage");
         for (auto& weapon: weapons) {
@@ -36,7 +34,7 @@ namespace null {
         }
     }
 
-    void WeaponStorage::addWeapon(std::shared_ptr<GameObject> weapon) {
+    void WeaponStorage::addWeapon(const std::shared_ptr<GameObject>& weapon) {
         auto tag = "WeaponInStorage:" + std::to_string(WeaponStorage::counter++);
         weapon->addTag(tag);
         this->weapons.push(weapon);
@@ -44,14 +42,14 @@ namespace null {
     }
 
     void WeaponStorage::swapWeapon() {
+        if(weapons.empty()) {
+            return;
+        }
         auto weapon = gameObject.findFirstChildrenByTag(weaponToTag[weapons.front()]);
         if (weapon != nullptr) {
             gameObject.deleteChild(&*weapon);
             weapons.push(weapon);
             weapons.pop();
-        }
-        if(weapons.empty()){
-            return;
         }
         auto newWeapon = weapons.front();
         gameObject.addChild(std::move(newWeapon));

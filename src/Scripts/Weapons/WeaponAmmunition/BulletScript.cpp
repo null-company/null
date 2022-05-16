@@ -3,7 +3,6 @@
 #include "GameObject.hpp"
 #include "Serializer.hpp"
 #include "ResourceManager.hpp"
-#include "Scene.hpp"
 
 namespace null {
     void null::BulletScript::start() {
@@ -22,7 +21,7 @@ namespace null {
     void null::BulletScript::update() {
         Component::update();
         if (contactedGameObject) {
-            gameObject.deleteMe();
+            gameObject.destroy();
         }
     }
 
