@@ -1,5 +1,12 @@
 # null
 
+## Buidling
+
+[Google protobuffers](https://github.com/protocolbuffers/protobuf) is used in the project, so should be present on system
+
+Debian-like OS: `sudo apt-get install protobuf-compiler`
+
+Windows: use [vcpkg](https://github.com/microsoft/vcpkg) to install protobuf and then use vcpkg as cmake toolchain
 
 ## Team members
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* **Brek Roman**, 19213 - r.brek@g.nsu.ru
