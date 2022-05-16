@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(INCROOT ${PROJECT_SOURCE_DIR}/include/Scripts/)
@@ -66,6 +66,7 @@ target_include_directories(scripts
 
 target_link_libraries(scripts
         nullGameEngine
+        serialization
         network
         utils
         sfml-graphics

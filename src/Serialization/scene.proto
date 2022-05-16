@@ -1,62 +1,54 @@
 syntax = "proto3";
 package serial;
+import public "scripts.proto";
 
 message Scene{
-  GameObject game_object = 1;
-  Camera camera = 2;
-}
-message Camera{}
-
-message GameObject{
-  oneof game_object_instance {
-    BasicGameObject basic_game_object = 1;
-    // subclasses of game object
-  }
+  repeated GameObject game_object = 1;
+  GameObject camera = 2;
 }
 
-message Script{
+message Script {
+  uint64 guid = 1;
+  uint64 gameobject_guid = 2;
+  // New scripts go here
   oneof script_instance {
-    BasicScript basic_script = 1;
-    CameraScript camera_script = 2;
-    ClockedScript clocked_script = 3;
-    ReloadSceneScript reload_script = 4;
-    ExampleCameraScript example_camera_script = 5;
-    ExampleClockedScript example_clocked_script = 6;
-    ExampleScript example_script = 7;
-
+    PlayerAnimation player_animation = 18;
+    ExampleCameraScript example_camera_script = 19;
+    ExampleClockedScript example_clocked_script = 3;
+    ReloadSceneScript reload_scene_script = 4;
+    CameraScript camera_script = 5;
+    ButtonScript button_script = 6;
+    ExampleScript example_script = 8;
+    StraightWeaponScript straight_weapon_script = 9;
+    BulletScript bullet_script = 11;
+    NetworkPlayerScript network_player_script = 12;
+    CursorAnimation cursor_animation = 13;
+    Animation animation = 16;
+    RigidBodyAnimation rigid_body_animation = 17;
   }
 }
 
-message BasicScript{}
-message ExampleCameraScript{}
-message ExampleClockedScript{}
-message ExampleScript{}
-message CameraScript{}
-message ClockedScript{}
-message ReloadSceneScript{}
-
-message BasicGameObject{
+message GameObject {
   repeated GameObject children_objects = 1;
   repeated Script children_scripts = 2;
   repeated string tags = 3;
-  RenderLayer render_layer = 7;
   Sprite sprite = 4;
   bool visible = 5;
   //TODO Need to be refactored since now it connect objects only to main window
   Box2DType box2d_type = 6;
+  RenderLayer render_layer = 7;
+  uint64 guid = 8;
+  bool fixed_rotation = 9;
 }
 
-message Position{
-  float x = 1;
-  float y = 2;
-}
 message Sprite{
   message Scale{
     float scale_x = 1;
     float scale_y = 2;
   }
   string texture_path = 1;
-  Position position = 2;
+  Vector2f position = 2;
+  IntRect texture_rect = 3;
   Scale scale = 5;
 }
 enum RenderLayer {
@@ -72,6 +64,7 @@ enum RenderLayer {
 };
 
 enum Box2DType{
-  STATIC = 0;
-  DYNAMIC = 1;
+  NONE = 0;
+  STATIC = 1;
+  DYNAMIC = 2;
 }

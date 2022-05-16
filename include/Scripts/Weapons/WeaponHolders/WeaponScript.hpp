@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Script.hpp>
+#include <GameObject.hpp>
 #include <SFML/Graphics.hpp>
 #include <chrono>
 #include <random>

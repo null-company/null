@@ -28,6 +28,9 @@ namespace null {
 
             ButtonScript(GameObject& go, sf::Texture unpressedButtonTexture,
                     sf::Texture pressedButtonTexture, const std::function<void()> callback);
+
+            void serialize(google::protobuf::Message &) const override {};
+            static std::unique_ptr<Component> deserialize(const google::protobuf::Message&) {};
     };
 
 }

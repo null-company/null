@@ -25,7 +25,7 @@ namespace null {
 
         messageQueue.attachTo(
                 &gameObject.getScene().lock()->findFirstByTag("network-manager")
-                        .lock()->getScript<NetworkManagerServerScript>()->subscribe(gameObject.getGuid())
+                        .lock()->getScript<NetworkManagerServerScript>()->subscribe(gameObject.guid)
         );
         lastStateSnapshotTimer.restart();
     }
@@ -68,7 +68,7 @@ namespace null {
         });
 
         net::GameMessage::SubscriberState stateToBroadcast;
-        stateToBroadcast.set_subscriber_id(gameObject.getGuid());
+        stateToBroadcast.set_subscriber_id(gameObject.guid);
 
         const auto threshold = sf::milliseconds(10);
         if (lastStateSnapshotTimer.getElapsedTime() > threshold) {

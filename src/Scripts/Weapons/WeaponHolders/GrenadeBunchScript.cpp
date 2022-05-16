@@ -34,7 +34,7 @@ namespace null {
         sf::Texture* weaponTexture = ResourceManager::loadTexture("weapons/grenade.png");
         gameObject.getSprite().setTexture(*weaponTexture);
         gameObject.getSprite().scale(0.3, 0.3);
-        gameObject.renderLayer = FOREGROUND2;
+        gameObject.renderLayer = serial::FOREGROUND2;
         gameObject.visible = true;
         restartTime = std::chrono::milliseconds(2000);
     }

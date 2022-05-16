@@ -7,10 +7,10 @@
 namespace null {
     class ExampleCameraScript : public CameraScript {
     private:
-        GameObject* map = nullptr;
-        GameObject* trackedObject = &gameObject;
         sf::FloatRect computeNewViewRect();
     public:
+        GameObject* map = nullptr;
+        GameObject* trackedObject = &gameObject;
         void start() override;
 
         void update() override;
@@ -21,6 +21,8 @@ namespace null {
 
         void setMap(GameObject& object);
 
+        void serialize(google::protobuf::Message &) const override;
+        static std::unique_ptr<Component> deserialize(const google::protobuf::Message&);
 
     };
 }

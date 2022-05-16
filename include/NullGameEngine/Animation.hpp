@@ -10,7 +10,10 @@ namespace null{
     public:
         SpriteSheet spriteSheet;
         void update() override;
-        explicit Animation(GameObject&, SpriteSheet&);
+        explicit Animation(GameObject&, SpriteSheet const&);
+
+        virtual void serialize(google::protobuf::Message &) const override;
+        static std::unique_ptr<Component> deserialize(const google::protobuf::Message&);
     };
 
 }

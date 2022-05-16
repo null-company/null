@@ -49,4 +49,3 @@ target_link_libraries(NULL_GAME_SERVER
         sfml-window
         sfml-system
         )
-

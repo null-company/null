@@ -2,12 +2,14 @@
 
 #include <Animation.hpp>
 #include <GameObject.hpp>
+#include "CollisionMap.hpp"
 
 namespace null{
+
     class RigidBodyAnimation : public Animation {
     public:
 
-        std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>> fixtureDefMap;
+        CollisionMap collisionMap;
 
         std::string currRigidAnim;
 
@@ -21,10 +23,12 @@ namespace null{
 
         // Creates RigidBodyAnimation
         // Throws exception if provided map and sprite sheet don't line up
-        // NOTE: all user data in fixture defs will be lost in the proccess
+        // NOTE: all user data in fixture defs will be lost in the process
         RigidBodyAnimation(GameObject& gameObject, SpriteSheet& spriteSheet,
-                           const std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>>& fixtureDefMap);
+                           const CollisionMap & collisionMap);
 
+        void serialize(google::protobuf::Message&) const override;
+        static std::unique_ptr<Component> deserialize(const google::protobuf::Message&);
 
     };
 }

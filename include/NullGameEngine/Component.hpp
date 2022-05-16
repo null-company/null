@@ -1,17 +1,29 @@
 #pragma once
 
 #include <NullGameEngine.hpp>
-#include <string>
+#include "scene.pb.h"
+#include "serializable.h"
+#include "Entity.hpp"
+
 namespace null {
-    class Component {
+    class Component : public Entity {
     protected:
         null::GameObject& gameObject;
     public:
-        Component(GameObject&);
 
-        virtual void start() {};
+        explicit Component(GameObject &);
 
-        virtual void update() {};
+        virtual void start() { };
+
+        virtual void update() { };
+
+        // These two functions have to be implemented by subclasses
+
+        virtual void serialize(google::protobuf::Message &) const { };
+        static std::unique_ptr<Component> deserialize(const google::protobuf::Message&) {
+            return nullptr;
+        };
+
     };
 }
 
