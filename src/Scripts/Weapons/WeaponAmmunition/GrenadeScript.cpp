@@ -7,7 +7,7 @@
 
 namespace null {
     void null::GrenadeScript::start() {
-        Component::start();
+        RigidBodyAnimation::start();
         auto& scene = gameObject.getSceneForce();
         sf::Texture* weaponTexture = ResourceManager::loadTexture("weapons/grenade.png");
         gameObject.getSprite().setTexture(*weaponTexture);
@@ -29,7 +29,7 @@ namespace null {
         if (timer.expired()) {
             gameObject.deleteMe();
         }
-        Component::update();
+        RigidBodyAnimation::update();
     }
 
     GrenadeScript::GrenadeScript(GameObject& object, float speed, float angle, sf::Vector2f from) : Component(object),

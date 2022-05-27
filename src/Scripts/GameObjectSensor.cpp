@@ -52,6 +52,9 @@ namespace null {
     void onPlayerEnter(GameObject* touchedObject, GameObject* sensorObject) {
         if (touchedObject->getScript<PlayerAnimation>() and sf::Keyboard::isKeyPressed(sf::Keyboard::T)) {
             auto weaponStorage = touchedObject->findFirstChildrenByTag("WeaponStorage");
+            if(! weaponStorage){
+                return;
+            }
             auto script = weaponStorage->getScript<WeaponStorage>();
             script->addWeapon(std::move(sensorObject->getScript<GameObjectSensor>()->getObjectToAdd()));
             sensorObject->getScript<DeleteScript>()->del();

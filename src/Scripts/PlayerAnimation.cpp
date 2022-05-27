@@ -39,6 +39,7 @@ namespace null {
             }
         }
 
+
         moovin = false;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
             gameObject.getRigidBody()->SetLinearVelocity({3.0f, gameObject.getRigidBody()->GetLinearVelocity().y});

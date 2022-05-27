@@ -3,9 +3,10 @@
 #include "Script.hpp"
 #include "SFML/Graphics.hpp"
 #include "Schedulers/Timer.hpp"
+#include "RigidBodyAnimation.hpp"
 
 namespace null {
-    class GrenadeScript : public Script {
+    class GrenadeScript : public RigidBodyAnimation {
     private:
         Timer timer{std::chrono::milliseconds{3000}};
         float speed, angle;

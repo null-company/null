@@ -204,17 +204,18 @@ namespace null {
                                                                              {"walkRight", 1, 0, 3},
                                                                              {"walkLeft",  2, 0, 3}});
 
-//        auto grenadeBunch = std::make_shared<GameObject>();
-//        grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
+        auto grenadeBunch = std::make_shared<GameObject>();
+        grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
 
+        player->addChild(std::move(grenadeBunch));
 //        auto gun = std::make_shared<GameObject>();
 //        gun->addScript<StraightWeaponScript>(*gun, 0.01);
 
-        auto weaponStorage = std::make_shared<GameObject>();
-        std::vector<std::shared_ptr<GameObject>> guns{};
-        weaponStorage->addScript<WeaponStorage>(*weaponStorage, guns);
+//        auto weaponStorage = std::make_shared<GameObject>();
+//        std::vector<std::shared_ptr<GameObject>> guns{};
+//        weaponStorage->addScript<WeaponStorage>(*weaponStorage, guns);
 
-        player->addChild(std::move(weaponStorage));
+//        player->addChild(std::move(weaponStorage));
         newScene->camera->getScript<ExampleCameraScript>()->setTrackedGameObject(*player);
         newScene->camera->getScript<ExampleCameraScript>()->setMap(*nullGameLogo);
 
@@ -238,6 +239,7 @@ namespace null {
         b2FixtureDef fixtureDef3;
         fixtureDef3.shape = shape3;
         fixtureDef3.density = 1;
+
 
         player->addScript<PlayerAnimation>(*player, playerSpriteSheet,
                                            std::unordered_map<std::string,
