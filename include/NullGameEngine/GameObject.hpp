@@ -11,13 +11,15 @@
 #include <NullGameEngine.hpp>
 #include <Script.hpp>
 #include <RenderLayer.hpp>
+#include "serializable.h"
+#include "Entity.hpp"
 
 enum class GameObjectStatus {
     NONE, RUNNING, DEATCHED
 };
 namespace null {
 
-    class GameObject : public std::enable_shared_from_this<GameObject> {
+    class GameObject :  public Entity, public std::enable_shared_from_this<GameObject> {
     private:
         void assertSpriteHasSize();
 
@@ -41,15 +43,13 @@ namespace null {
         std::vector<std::unique_ptr<Script>> scripts;
         GameObjectStatus gameObjectStatus = GameObjectStatus::NONE;
 
-        uint64_t guid;
-
         void start();
 
         void update();
 
     public:
 
-        RenderLayer renderLayer;
+        RenderLayer renderLayer = serial::BACKGROUND;
 
         explicit GameObject(uint64_t guid);
 
@@ -67,15 +67,13 @@ namespace null {
 
         ~GameObject();
 
-        uint64_t getGuid();
-
         std::weak_ptr<GameObject> addChild(std::shared_ptr<GameObject>&&);
 
         std::weak_ptr<GameObject> getParent() const;
 
         std::weak_ptr<Scene> getScene();
 
-        bool visible;
+        bool visible = false;
 
         sf::Sprite& getSprite();
 
@@ -136,13 +134,16 @@ namespace null {
             return nullptr;
         }
 
+        void serialize(google::protobuf::Message&) const;
+        static std::shared_ptr<GameObject> deserialize(const google::protobuf::Message&);
+
         friend Scene;
 
         void makeDynamic();
 
         void deleteChild(GameObject* childToDelete);
 
-        void deleteMe();
+        void destroy();
 
         GameObject* getCollied();
 

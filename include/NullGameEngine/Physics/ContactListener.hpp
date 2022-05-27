@@ -1,13 +1,9 @@
-//
-// Created by artemonchelus on 12.04.2022.
-//
-
 #pragma once
 
-
-#include "box2d/b2_world_callbacks.h"
 #include <vector>
 #include <functional>
+
+#include <box2d/b2_world_callbacks.h>
 #include <GameObject.hpp>
 
 namespace null {

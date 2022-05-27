@@ -12,6 +12,4 @@ namespace null {
 
 
     Timer::Timer(const std::chrono::milliseconds& maxTime) : max_time(maxTime) {}
-
-
 }

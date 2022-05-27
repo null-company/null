@@ -14,9 +14,10 @@ namespace null {
         void start() override;
 
         void update() override;
+        PlayerAnimation(GameObject&, SpriteSheet&, const CollisionMap&);
 
-        PlayerAnimation(GameObject&, SpriteSheet&,
-                        const std::unordered_map<std::string, std::vector<std::vector<b2FixtureDef>>>&);
+        void serialize(google::protobuf::Message &) const override;
+        static std::unique_ptr<Component> deserialize(const google::protobuf::Message&);
     };
 
 }

@@ -2,7 +2,7 @@
 
 #include <GameObject.hpp>
 #include <Camera.hpp>
-#include "WindowMetaInfo.hpp"
+#include <WindowMetaInfo.hpp>
 
 namespace null {
     class CameraScript : public Script {
@@ -16,5 +16,7 @@ namespace null {
 
         void update() override;
 
+        void serialize(google::protobuf::Message &) const override;
+        static std::unique_ptr<Component> deserialize(const google::protobuf::Message&);
     };
 }

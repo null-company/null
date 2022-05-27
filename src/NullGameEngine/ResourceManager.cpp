@@ -16,5 +16,15 @@ namespace null {
         }
         return texture;
     }
+
+    std::string ResourceManager::getTexturePath(const sf::Texture *p_texture) {
+        for (auto& i : textureCache) {
+            if (i.second == p_texture) {
+                return i.first;
+            }
+        }
+        return "";
+    }
+
 }
 

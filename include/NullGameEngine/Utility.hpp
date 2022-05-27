@@ -5,6 +5,11 @@
 
 #include <box2d/b2_math.h>
 #include <SFML/System/Vector2.hpp>
+#include <unordered_map>
+#include "scene.pb.h"
+#include <Script.hpp>
+#include "Component.hpp"
+#include <Scripts.hpp>
 
 namespace null::Utility {
 
@@ -44,4 +49,18 @@ namespace null::Utility {
         return guidImpl(gen);
     }
 
+    const std::unordered_map<serial::Script::ScriptInstanceCase, std::function<std::unique_ptr<Script>(const google::protobuf::Message&)>>
+            scriptSerializationMap = {
+            {serial::Script::ScriptInstanceCase::kPlayerAnimation, PlayerAnimation::deserialize},
+            {serial::Script::ScriptInstanceCase::kExampleCameraScript, ExampleCameraScript::deserialize},
+            {serial::Script::ScriptInstanceCase::kExampleClockedScript, ExampleClockedScript::deserialize},
+            {serial::Script::ScriptInstanceCase::kReloadSceneScript, ReloadSceneScript::deserialize},
+            {serial::Script::ScriptInstanceCase::kCameraScript, CameraScript::deserialize},
+            {serial::Script::ScriptInstanceCase::kButtonScript, ButtonScript::deserialize},
+            {serial::Script::ScriptInstanceCase::kExampleScript, ExampleScript::deserialize},
+            {serial::Script::ScriptInstanceCase::kStraightWeaponScript, StraightWeaponScript::deserialize},
+            {serial::Script::ScriptInstanceCase::kBulletScript, BulletScript::deserialize},
+            {serial::Script::ScriptInstanceCase::kNetworkPlayerScript, NetworkPlayerScript::deserialize},
+            {serial::Script::ScriptInstanceCase::kCursorAnimation, CursorAnimation::deserialize},
+    };
 }

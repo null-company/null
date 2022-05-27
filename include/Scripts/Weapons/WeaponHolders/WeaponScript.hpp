@@ -1,10 +1,12 @@
 #pragma once
 
-#include <Script.hpp>
-#include <SFML/Graphics.hpp>
 #include <chrono>
 #include <random>
-#include "Script.hpp"
+
+#include <SFML/Graphics.hpp>
+
+#include <GameObject.hpp>
+#include <Script.hpp>
 
 namespace null {
     class WeaponScript : public Script {

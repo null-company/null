@@ -27,7 +27,7 @@ namespace null {
 
     void null::GrenadeScript::update() {
         if (timer.expired()) {
-            gameObject.deleteMe();
+            gameObject.destroy();
         }
         RigidBodyAnimation::update();
     }

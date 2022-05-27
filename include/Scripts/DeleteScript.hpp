@@ -7,12 +7,12 @@ namespace null {
     private:
         bool isDeleted = false;
     public:
-        DeleteScript(GameObject& object);
+        explicit DeleteScript(GameObject& object);
 
         void start() override;
 
         void update() override;
 
-        void del();
+        void deleteGameObject();
     };
 }

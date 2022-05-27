@@ -8,3 +8,12 @@
 #include <ExampleCameraScript.hpp>
 #include <CursorAnimation.hpp>
 #include <ButtonScript.hpp>
+#include <Weapons/WeaponAmmunition/BulletScript.hpp>
+#include <Weapons/WeaponAmmunition/GrenadeScript.hpp>
+#include <Weapons/WeaponHolders/GrenadeBunchScript.hpp>
+#include <Weapons/WeaponHolders/StraightWeaponScript.hpp>
+#include <Weapons/WeaponHolders/WeaponScript.hpp>
+#include <Weapons/WeaponHolders/WeaponStorage.hpp>
+#include <Weapons/WeaponGenerator.hpp>
+#include <PlayerAnimation.hpp>
+#include <NetworkPlayerScript.hpp>

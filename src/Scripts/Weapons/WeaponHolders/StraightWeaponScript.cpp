@@ -4,17 +4,18 @@
 #include "ResourceManager.hpp"
 #include "Scene.hpp"
 #include "box2d/box2d.h"
+#include "Serializer.hpp"
 #include "Weapons/WeaponAmmunition/BulletScript.hpp"
 #include "Graphic/Vector.hpp"
 
 namespace null {
     void StraightWeaponScript::start() {
-        Component::start();
-
+        WeaponScript::start();
+        gameObject.getSprite().setOrigin(sf::Vector2f(250, 150));
     }
 
     void StraightWeaponScript::update() {
-        Component::update();
+        WeaponScript::update();
         auto scene = gameObject.getScene().lock();
         if (scene == nullptr) {
             return;
@@ -25,7 +26,7 @@ namespace null {
             return;
         }
         auto& winInfo = gameObject.getScene().lock()->getWindowMetaInfo();
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) and checkIfCanShoot()) {
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && checkIfCanShoot()) {
             auto windowInfo = scene->getWindowMetaInfo().absoluteMouseWorldCoords;
             sf::Vector2f weaponDirection = windowInfo - gameObject.getPosition();
             weaponDirection = normalize(weaponDirection);
@@ -65,7 +66,23 @@ namespace null {
         gameObject.getSprite().setOrigin(sf::Vector2f(250, 100));
         gameObject.getSprite().setTexture(*weaponTexture);
         gameObject.getSprite().scale(0.24, 0.24);
-        gameObject.renderLayer = FOREGROUND2;
+        gameObject.renderLayer = serial::FOREGROUND2;
         gameObject.visible = true;
+    }
+
+    void StraightWeaponScript::serialize(google::protobuf::Message& message) const {
+        auto& msg = dynamic_cast<serial::Script&>(message);
+
+        auto s_script = msg.mutable_straight_weapon_script();
+        s_script->set_deviance(d.stddev());
+    }
+
+    std::unique_ptr<Component> StraightWeaponScript::deserialize(const google::protobuf::Message& message) {
+        auto& msg = dynamic_cast<const serial::Script&>(message);
+        auto p_script = std::make_unique<StraightWeaponScript>(
+                *Serializer::currentDeserializationGameObject,
+                msg.straight_weapon_script().deviance()
+                );
+        return p_script;
     }
 }
