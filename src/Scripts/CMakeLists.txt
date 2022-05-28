@@ -57,6 +57,8 @@ set(SRC
         ${INCROOT}/Network/PrimitiveStateConverter.hpp
         ${SRCROOT}/Network/Utility/LastAcceptedMessageProcessor.cpp
         ${INCROOT}/Network/Utility/LastAcceptedMessageProcessor.hpp
+        ${SRCROOT}/Network/Utility/EveryAcceptedMessageProcessor.cpp
+        ${INCROOT}/Network/Utility/EveryAcceptedMessageProcessor.hpp
         )
 
 add_library(scripts STATIC ${SRC})
