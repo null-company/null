@@ -5,6 +5,11 @@
 #include <functional>
 
 namespace null {
+    /**
+     * Use this utility class for receiving commands or generally any kind of
+     * messages which you cannot ignore
+     * @tparam T message type
+     */
     template<typename T>
     class EveryAcceptedMessageProcessor {
     public:
