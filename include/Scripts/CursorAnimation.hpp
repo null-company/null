@@ -8,7 +8,7 @@ namespace null {
     private:
         static constexpr auto cursorAnim = "cursorAnim";
         int frameCount = 0;
-        WindowMetaInfo * windowMetaInfo;
+        WindowMetaInfo* windowMetaInfo;
     public:
         void start() override;
 

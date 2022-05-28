@@ -7,7 +7,7 @@
 namespace null {
     class CameraScript : public Script {
     public:
-        WindowMetaInfo * windowMetaInfo;
+        WindowMetaInfo* windowMetaInfo;
         GameObject& camera;
         sf::View view;
         explicit CameraScript(GameObject& camera);

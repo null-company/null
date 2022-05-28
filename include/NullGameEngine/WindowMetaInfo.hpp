@@ -16,9 +16,10 @@ namespace null {
         sf::Vector2u windowsSize = {0, 0};
         sf::Vector2f absoluteMouseWorldCoords = {0, 0};
 
-        sf::Event::KeyEvent getKeyEvent();
+        [[nodiscard]]
+        sf::Event::KeyEvent getKeyEvent() const;
 
-        void resetKey() ;
+        void resetKey();
     };
 }
 

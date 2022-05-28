@@ -67,5 +67,5 @@ Client& ClientNetworkManager::getClient() {
 void ClientNetworkManager::sendCommandToServer(const net::GameMessage::ClientCommand& message) {
     net::GameMessage gameMessage;
     *gameMessage.mutable_client_command() = message;
-    ::sendGameMessage(client.getGameServerSocket(), gameMessage);
+    null::Network::Utils::sendGameMessage(client.getGameServerSocket(), gameMessage);
 }

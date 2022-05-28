@@ -50,7 +50,7 @@ void ServerArbiter::sendGameServerConfig(sf::TcpSocket& client, const std::strin
     serverConfig->set_room_code(roomCode);
     serverConfig->set_v4(sf::IpAddress("127.0.0.1").toInteger());
     serverConfig->set_server_port(server.getPort());
-    sendNetMessage(client, message);
+    null::Network::Utils::sendNetMessage(client, message);
 }
 
 void ServerArbiter::handleNetMessage(int clientIdx, const net::NetMessage& message) {
@@ -79,7 +79,7 @@ void ServerArbiter::sendRoomCode(sf::TcpSocket& socket, const std::string& roomC
     LOGD << "sending room code to the " << socket.getRemoteAddress() << " " << socket.getRemotePort();
     net::NetMessage netMessage;
     netMessage.mutable_connect_room()->set_room_code(roomCode);
-    sendNetMessage(socket, netMessage);
+    null::Network::Utils::sendNetMessage(socket, netMessage);
 }
 
 ServerArbiter::~ServerArbiter() {
