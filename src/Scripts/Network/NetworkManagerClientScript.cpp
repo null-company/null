@@ -36,7 +36,7 @@ namespace null {
     void NetworkManagerClientScript::update() {
         try {
             while (true) {
-                auto message = receiveNetMessage(
+                auto message = null::Network::Utils::receiveNetMessage(
                         networkManager->getClient().getGameServerSocket()).game_message();
                 networkManager->distributeMessageToSubscribers(*message.mutable_subscriber_state());
             }

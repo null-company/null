@@ -6,7 +6,6 @@
 #include <utils/NetMessageTransmitting.h>
 #include "exceptions/NetworkException.h"
 
-
 void NetClientCollector::defaultJob(NetClientCollector *self) {
     while (self->threadIsActive) {
         int readyClientIdx = self->getFirstReadySocketIdx();
@@ -19,7 +18,7 @@ void NetClientCollector::defaultJob(NetClientCollector *self) {
         }
         try {
             sf::TcpSocket &client = self->getClient(readyClientIdx);
-            net::NetMessage message = receiveNetMessage(client);
+            net::NetMessage message = null::Network::Utils::receiveNetMessage(client);
             self->handleNetMessage(readyClientIdx, message);
         } catch (const ReceiveException &exception) {
             auto status = exception.getStatus();

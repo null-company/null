@@ -8,7 +8,7 @@ namespace null {
         this->keyEvent = defaultKeyEvent;
     }
 
-    sf::Event::KeyEvent WindowMetaInfo::getKeyEvent() {
+    sf::Event::KeyEvent WindowMetaInfo::getKeyEvent() const {
         return keyEvent;
     }
 }

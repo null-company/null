@@ -12,14 +12,11 @@
 #include <ResourceManager.hpp>
 #include <PlayerAnimation.hpp>
 #include <Utility.hpp>
-#include <functional>
-#include <unordered_map>
 #include <Serializer.hpp>
 #include "MapManager/MapManager.hpp"
 #include "Weapons/WeaponHolders/WeaponScript.hpp"
 #include "Weapons/WeaponHolders/StraightWeaponScript.hpp"
 #include "Weapons/WeaponHolders/WeaponStorage.hpp"
-#include <MapManager/MapManager.hpp>
 #include "PlayerControlledBox/PlayerControlledBoxClient.hpp"
 #include "PlayerControlledBox/PlayerControlledBoxServer.hpp"
 #include <Network/NetworkManagerClientScript.hpp>
@@ -46,8 +43,7 @@ namespace null {
                 {"/menu/play/joinRoom",     getJoinRoomScene},
                 {"/game",                   getGameScene},
                 {"/network-demo-client",    getNetworkDemoClientScene},
-                {"/network-demo-server",    getNetworkDemoServerScene},
-                {"/network-demo-connector", getNetworkDemoClientScene}
+                {"/network-demo-server",    getNetworkDemoServerScene}
         };
 
         std::shared_ptr<Scene> scene;
@@ -345,9 +341,18 @@ namespace null {
         return newScene;
     }
 
+    /**
+     * Reload current game tree and restart simulation
+     * @param path path to level to load
+     */
     void SceneLoader::changeScene(const std::filesystem::path& path) {
-        loadSceneFromFile(path);
-        throw SceneChangedException();
+        try {
+            loadSceneFromFile(path);
+        } catch (const null::UnknownSceneException& ignored) {
+            std::cerr << "SceneLoader::changeScene tried to load a non-existent scene" << std::endl;
+            exit(-1);
+        }
+        throw SceneChangedException(); // a mean of flow control
     }
 
 }

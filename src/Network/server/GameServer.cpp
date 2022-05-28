@@ -11,7 +11,7 @@ uint8_t GameServer::globalGameID = 1;
 
 void GameServer::broadcastMessage(const net::GameMessage& message) {
     for (int i = 0; i < clientCount(); i++) {
-        sendGameMessage(getClient(i), message);
+        null::Network::Utils::sendGameMessage(getClient(i), message);
     }
 }
 

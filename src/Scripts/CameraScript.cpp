@@ -1,10 +1,8 @@
 #include "CameraScript.hpp"
 #include "Serializer.hpp"
-#include <Camera.hpp>
-#include <Scene.hpp>
 
 namespace null {
-    CameraScript::CameraScript(GameObject& camera) : Component(camera),
+    CameraScript::CameraScript(GameObject& camera) : Script(camera),
                                                      camera(camera) {}
 
     void CameraScript::start() {
