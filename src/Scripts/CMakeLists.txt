@@ -59,6 +59,8 @@ set(SRC
         ${INCROOT}/Network/Utility/LastAcceptedMessageProcessor.hpp
         ${SRCROOT}/Network/Utility/EveryAcceptedMessageProcessor.cpp
         ${INCROOT}/Network/Utility/EveryAcceptedMessageProcessor.hpp
+        ${SRCROOT}/MusicManager.cpp
+        ${INCROOT}/MusicManager.hpp
         )
 
 add_library(scripts STATIC ${SRC})

@@ -12,6 +12,7 @@ namespace null {
     public:
 
         explicit Component(GameObject &);
+        virtual ~Component() = default;
 
         virtual void start() { };
 
