@@ -28,7 +28,7 @@ namespace null {
             if (rigidBody == nullptr) {
                 return;
             }
-            b2ContactEdge* collision;
+            b2ContactEdge* collision = nullptr;
             if (rigidBody->GetContactList() == nullptr) {
                 return;
             }
