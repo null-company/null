@@ -11,7 +11,7 @@ namespace null{
 
         CollisionMap collisionMap;
 
-        std::string currRigidAnim;
+        std::string currRigidAnim = "NOT STATED";
 
         int currRigidFrame = 0;
 

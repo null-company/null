@@ -14,10 +14,6 @@ namespace null {
     }
 
     void PlayerAnimation::update() {
-        static bool moovin = false;
-        static int fram = 0;
-        static bool canJump = false;
-
         auto rb = gameObject.getRigidBody();
         if (!canJump) {
             for (auto* contact = rb->GetContactList(); contact != nullptr; contact = contact->next) {
@@ -40,8 +36,9 @@ namespace null {
             }
         }
 
+
         moovin = false;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+        if (controlled && sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
             gameObject.getRigidBody()->SetLinearVelocity({3.0f, gameObject.getRigidBody()->GetLinearVelocity().y});
             moovin = true;
             if (spriteSheet.currAnimation->name != "walkRight") {
@@ -50,7 +47,7 @@ namespace null {
                 spriteSheet.setAnimation("walkRight");
             }
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !moovin) {
+        if (controlled && sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !moovin) {
             gameObject.getRigidBody()->SetLinearVelocity({-3.0f, gameObject.getRigidBody()->GetLinearVelocity().y});
             moovin = true;
             if (spriteSheet.currAnimation->name != "walkLeft") {
@@ -71,11 +68,14 @@ namespace null {
         fram++;
         if (fram >= 3) {
             fram = 0;
-            spriteSheet.setFrame(
-                    spriteSheet.currFrame == spriteSheet.currAnimation->end ? 0 : spriteSheet.currFrame + 1);
+            if (!moovin or std::abs(previousPosition.x - gameObject.getPosition().x) > 30) {
+                spriteSheet.setFrame(
+                        spriteSheet.currFrame == spriteSheet.currAnimation->end ? 0 : spriteSheet.currFrame + 1);
+                previousPosition = gameObject.getPosition();
+            }
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && canJump) {
+        if (controlled && sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && canJump) {
             gameObject.getRigidBody()->SetLinearVelocity({gameObject.getRigidBody()->GetLinearVelocity().x, -6});
             canJump = false;
         }
@@ -89,7 +89,7 @@ namespace null {
     PlayerAnimation::PlayerAnimation(GameObject& gameObject,
                                      SpriteSheet& spriteSheet,
                                      const CollisionMap& map
-                                     ) : RigidBodyAnimation(gameObject, spriteSheet, map) { }
+    ) : RigidBodyAnimation(gameObject, spriteSheet, map) {}
 
     void PlayerAnimation::serialize(google::protobuf::Message& message) const {
         auto& msg = dynamic_cast<serial::Script&>(message);
@@ -111,7 +111,65 @@ namespace null {
                 *Serializer::currentDeserializationGameObject,
                 *p_ss,
                 *p_cm
-                );
+        );
+    }
+
+    void PlayerAnimation::damage(float healthDelta) {
+        health -= healthDelta;
+        if (health < 0) {
+            health = 0;
+            gameObject.destroy();
+        }
+    }
+
+    std::shared_ptr<GameObject> PlayerAnimation::initPlayer(const std::string& anim, b2World& box2dWorld) {
+        auto player = std::make_shared<GameObject>();
+        player->addTag("player");
+        player->getSprite().setTextureRect({0, 0, 30, 54});
+        player->getSprite().setScale(3.0f, 3.0f);
+        player->visible = true;
+        player->renderLayer = serial::FOREGROUND1;
+        player->makeDynamic(box2dWorld);
+        player->getRigidBody()->SetFixedRotation(true);
+        auto playerSpriteSheet = SpriteSheet(anim, {30, 54}, {{"idle",      0, 0, 7},
+                                                              {"walkRight", 1, 0, 3},
+                                                              {"walkLeft",  2, 0, 3}});
+
+        auto shape1 = new b2PolygonShape();
+        auto sizeVector = Utility::pixelToMetersVector(sf::Vector2i{60, 162});
+        shape1->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, player->getRigidBody()->GetLocalCenter(), 0.0f);
+        b2FixtureDef fixtureDef1;
+        fixtureDef1.shape = shape1;
+        fixtureDef1.density = 1;
+        fixtureDef1.friction = 0;
+
+        auto shape2 = new b2PolygonShape();
+        sizeVector = Utility::pixelToMetersVector(sf::Vector2i{90, 162});
+        shape2->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, player->getRigidBody()->GetLocalCenter(), 0.0f);
+        b2FixtureDef fixtureDef2;
+        fixtureDef2.shape = shape2;
+        fixtureDef2.density = 1;
+        fixtureDef2.friction = 0;
+
+        auto shape3 = new b2PolygonShape();
+        sizeVector = Utility::pixelToMetersVector(sf::Vector2i{78, 162});
+        shape3->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, player->getRigidBody()->GetWorldCenter(), 0.0f);
+        b2FixtureDef fixtureDef3;
+        fixtureDef3.shape = shape3;
+        fixtureDef3.density = 1;
+
+
+        player->addScript<PlayerAnimation>(*player, playerSpriteSheet,
+                                           CollisionMap({
+                                                                {"idle",      {{fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}}},
+                                                                {"walkRight", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}},
+                                                                {"walkLeft",  {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}}
+                                                        }));
+        return player;
+    }
+
+    GameObject& PlayerAnimation::getGameObject() {
+        return gameObject;
     }
 
 }

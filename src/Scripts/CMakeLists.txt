@@ -61,7 +61,12 @@ set(SRC
         ${INCROOT}/Network/Utility/EveryAcceptedMessageProcessor.hpp
         ${SRCROOT}/MusicManager.cpp
         ${INCROOT}/MusicManager.hpp
+        PlayerProgress/HealthBarHolder.cpp
+        ../../include/Scripts/PlayerProgress/HealthBarHolder.hpp
+        PlayerProgress/HealthBar.cpp
+        ../../include/Scripts/PlayerProgress/HealthBar.hpp
         )
+
 
 add_library(scripts STATIC ${SRC})
 target_include_directories(scripts

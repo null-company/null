@@ -24,6 +24,7 @@
 #include "Weapons/WeaponHolders/GrenadeBunchScript.hpp"
 #include "Weapons/WeaponGenerator.hpp"
 #include <MusicManager.hpp>
+#include "PlayerProgress/HealthBarHolder.hpp"
 
 namespace null {
 
@@ -201,66 +202,49 @@ namespace null {
         cursorObject->renderLayer = serial::FOREGROUND3;
         cursorObject->visible = true;
 
-        auto player = std::make_shared<GameObject>();
-        player->getSprite().setTextureRect({0, 0, 30, 54});
-        player->getSprite().setScale(3.0f, 3.0f);
-//        player->setPosition(300, 300);
-        player->visible = true;
-        player->renderLayer = serial::FOREGROUND1;
-        player->makeDynamic(box2dWorld);
-        player->getRigidBody()->SetFixedRotation(true);
-        auto playerSpriteSheet = SpriteSheet("playerAnim_v2.png", {30, 54}, {{"idle",      0, 0, 7},
-                                                                             {"walkRight", 1, 0, 3},
-                                                                             {"walkLeft",  2, 0, 3}});
+        auto player = PlayerAnimation::initPlayer("playerAnim_v2.png", box2dWorld);
+        auto grenadeBunch = std::make_shared<GameObject>();
+        grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
 
-//        auto grenadeBunch = std::make_shared<GameObject>();
-//        grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
+        player->getScript<PlayerAnimation>()->controlled = true;
+        auto enemy1 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
+        auto enemy2 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
+        auto enemy3 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
+        auto enemy4 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
+//        enemy1->setPosition(300, 0);
+//        enemy2->setPosition(200, 200);
+//        enemy3->setPosition(400, 000);
+        enemy4->setPosition(400, 200);
+//        enemy1->getScript<PlayerAnimation>()->name = "Meow";
+//        enemy2->getScript<PlayerAnimation>()->name = "Gav";
+//        enemy4->getScript<PlayerAnimation>()->name = "Meowss";
+//        enemy3->getScript<PlayerAnimation>()->name = "Gavaa";
 
-//        auto gun = std::make_shared<GameObject>();
-//        gun->addScript<StraightWeaponScript>(*gun, 0.01);
+        auto gun = std::make_shared<GameObject>();
+        gun->addScript<StraightWeaponScript>(*gun, 0.01);
 
         auto weaponStorage = std::make_shared<GameObject>();
-        std::vector<std::shared_ptr<GameObject>> guns{};
+        std::vector<std::shared_ptr<GameObject>> guns{gun, grenadeBunch};
         weaponStorage->addScript<WeaponStorage>(*weaponStorage, guns);
 
         player->addChild(std::move(weaponStorage));
         newScene->camera->getScript<ExampleCameraScript>()->setTrackedGameObject(*player);
         newScene->camera->getScript<ExampleCameraScript>()->setMap(*nullGameLogo);
 
-        auto shape1 = new b2PolygonShape();
-        auto sizeVector = Utility::pixelToMetersVector(sf::Vector2i{60, 162});
-        shape1->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, player->getRigidBody()->GetLocalCenter(), 0.0f);
-        b2FixtureDef fixtureDef1;
-        fixtureDef1.shape = shape1;
-        fixtureDef1.density = 1;
-
-        auto shape2 = new b2PolygonShape();
-        sizeVector = Utility::pixelToMetersVector(sf::Vector2i{90, 162});
-        shape2->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, player->getRigidBody()->GetLocalCenter(), 0.0f);
-        b2FixtureDef fixtureDef2;
-        fixtureDef2.shape = shape2;
-        fixtureDef2.density = 1;
-
-        auto shape3 = new b2PolygonShape();
-        sizeVector = Utility::pixelToMetersVector(sf::Vector2i{78, 162});
-        shape3->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, player->getRigidBody()->GetWorldCenter(), 0.0f);
-        b2FixtureDef fixtureDef3;
-        fixtureDef3.shape = shape3;
-        fixtureDef3.density = 1;
-
-        player->addScript<PlayerAnimation>(*player, playerSpriteSheet,
-                                           CollisionMap({
-                                                   {"idle",      {{fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}}},
-                                                   {"walkRight", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}},
-                                                   {"walkLeft",  {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}}
-                                           }));
+        auto healthBarHolder = std::make_shared<GameObject>();
+        healthBarHolder->addScript<HealthBarHolder>(*healthBarHolder);
+        parentGameObject->addChild(std::move(healthBarHolder));
 
         MapManager mapManager(box2dWorld);
-        newScene->addRootGameObject(std::move(mapManager.makeBorder(nullGameLogo->getSprite())));
+        parentGameObject->addChild(std::move(mapManager.makeBorder(nullGameLogo->getSprite())));
         nullGameLogo->addChild(std::move(boxObject));
-        newScene->addRootGameObject(std::move(nullGameLogo));
-        newScene->addRootGameObject(std::move(player));
-        newScene->addRootGameObject(std::move(cursorObject));
+        parentGameObject->addChild(std::move(nullGameLogo));
+        parentGameObject->addChild(std::move(player));
+        parentGameObject->addChild(std::move(cursorObject));
+//        parentGameObject->addChild(std::move(enemy1));
+//        parentGameObject->addChild(std::move(enemy2));
+//        parentGameObject->addChild(std::move(enemy3));
+        parentGameObject->addChild(std::move(enemy4));
         Serializer::serializeSceneToFile(newScene.get(), "myscene.pbuf");
         newScene->addRootGameObject(std::move(parentGameObject));
         newScene->addRootGameObject(std::move(musicManager));

@@ -18,7 +18,7 @@ include(cmake/libraries.txt)
 add_subdirectory(./src/)
 add_subdirectory(./test/)
 
-add_executable(NULL_GAME main.cpp)
+add_executable(NULL_GAME main.cpp include/NullGameEngine/MapManager/Wall.cpp include/NullGameEngine/MapManager/Wall.hpp)
 
 add_executable(NULL_GAME_SERVER server.cpp)
 

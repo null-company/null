@@ -17,7 +17,7 @@ namespace null {
     constexpr static float pixelToMeter = 1.0f / static_cast<float>(meterToPixel);
     constexpr static double pi = 3.14159265358979323846;
 
-    GameObject::GameObject(): Entity() {}
+    GameObject::GameObject() : Entity() {}
 
     GameObject::GameObject(uint64_t guid) : GameObject() {
         Entity::guid = guid;
@@ -211,10 +211,18 @@ namespace null {
         return sprite.getPosition();
     }
 
-    void GameObject::setPosition(float x, float y) {
-        sprite.setPosition(x, y);
+    void GameObject::setPosition(float x, float y, bool relative) {
+        setPosition({x, y}, relative);
+    }
+
+    void GameObject::setPosition(sf::Vector2f pos, bool relative) {
+        if (relative) {
+            auto viewPosition = scene.lock()->windowMetaInfo.position;
+            pos = pos + viewPosition;
+        }
+        sprite.setPosition(pos);
         if (rigidBody) {
-            b2Vec2 newPosition = pixelToMetersVector(sf::Vector2f(x, y));
+            b2Vec2 newPosition = pixelToMetersVector(pos);
             rigidBody->SetTransform(newPosition, rigidBody->GetAngle());
         }
     }
@@ -237,13 +245,6 @@ namespace null {
 
     }
 
-    void GameObject::setPosition(const sf::Vector2f& pos) {
-        sprite.setPosition(pos);
-        if (rigidBody) {
-            b2Vec2 newPosition = pixelToMetersVector(pos);
-            rigidBody->SetTransform(newPosition, rigidBody->GetAngle());
-        }
-    }
 
     void GameObject::start() {
         gameObjectStatus = GameObjectStatus::RUNNING;
@@ -261,7 +262,7 @@ namespace null {
         }
         if (rigidBody) {
             sf::Vector2f newPosition =
-                meterToPixelVector<float>(rigidBody->GetPosition());
+                    meterToPixelVector<float>(rigidBody->GetPosition());
             sprite.setPosition(newPosition);
             sprite.setRotation(rigidBody->GetAngle() * (180.0 / pi));
         }
@@ -293,8 +294,7 @@ namespace null {
 
     void GameObject::setCollisionCategories(uint16_t categoryBits) {
         b2Filter b2Filter = this->getRigidBody()->GetFixtureList()->GetFilterData();
-        b2Filter.categoryBits = categoryBits;
-        this->getRigidBody()->GetFixtureList()->SetFilterData(b2Filter);
+
     }
 
     void GameObject::setCollisionMasks(uint16_t maskBits) {
@@ -306,6 +306,7 @@ namespace null {
     void GameObject::makeStatic() {
         makeStatic(getScene().lock()->getBox2dWorld());
     }
+
 
     void GameObject::serialize(google::protobuf::Message& msg) const {
         auto new_msg = serial::GameObject();
@@ -365,7 +366,7 @@ namespace null {
         msg.CopyFrom(new_msg);
     }
 
-    std::shared_ptr<GameObject> GameObject::deserialize(const google::protobuf::Message &msg) {
+    std::shared_ptr<GameObject> GameObject::deserialize(const google::protobuf::Message& msg) {
         auto s_go = (const serial::GameObject&) msg;
         auto p_go = std::make_shared<GameObject>();
 
