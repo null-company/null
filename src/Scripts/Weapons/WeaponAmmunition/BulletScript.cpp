@@ -10,7 +10,7 @@ namespace null {
     void null::BulletScript::start() {
         Component::start();
         gameObject.getSprite().setTexture(*ResourceManager::loadTexture("weapons/bullet.png"));
-        gameObject.getSprite().setScale({0.010, 0.010});
+        gameObject.getSprite().setScale({0.020, 0.020});
         gameObject.makeDynamic();
         gameObject.renderLayer = serial::FOREGROUND3;
         gameObject.getRigidBody()->SetGravityScale(0);
