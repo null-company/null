@@ -20,6 +20,7 @@ namespace null {
         // Write once read never (c) Artem
         auto trackedGOPosition = trackedObject->getSprite().getPosition();
         auto viewSize = sf::Vector2f(windowMetaInfo->windowsSize);
+        viewSize *= scale;
         sf::FloatRect newViewRect(trackedGOPosition.x - viewSize.x / 2,
                                   trackedGOPosition.y - viewSize.y / 2,
                                   viewSize.x,
@@ -70,20 +71,28 @@ namespace null {
         auto const& s_script = msg.example_camera_script();
         auto p_script = std::make_unique<ExampleCameraScript>(
                 *Serializer::currentDeserializationGameObject
-                );
+        );
         // This is an example of getting the pointers to serialized entities
         // (they're set in Serializer::getSceneFromFile)
         Serializer::toBeSetEntityPointerMap.insert(
-                {(Entity**)(&p_script->map), s_script.map_guid()}
-                );
-        auto asdf = Serializer::toBeSetEntityPointerMap.find((Entity**)&p_script->map);
+                {(Entity**) (&p_script->map), s_script.map_guid()}
+        );
+        auto asdf = Serializer::toBeSetEntityPointerMap.find((Entity**) &p_script->map);
         Serializer::toBeSetEntityPointerMap.insert(
-                {(Entity**)(&p_script->trackedObject), s_script.tracked_object_guid()}
-                );
+                {(Entity**) (&p_script->trackedObject), s_script.tracked_object_guid()}
+        );
 
-        asdf = Serializer::toBeSetEntityPointerMap.find((Entity**)&p_script->trackedObject);
+        asdf = Serializer::toBeSetEntityPointerMap.find((Entity**) &p_script->trackedObject);
 
         return p_script;
+    }
+
+    float ExampleCameraScript::getScale() const {
+        return scale;
+    }
+
+    void ExampleCameraScript::setScale(float scale) {
+        ExampleCameraScript::scale = scale;
     }
 
 }

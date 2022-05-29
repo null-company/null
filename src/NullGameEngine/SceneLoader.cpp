@@ -37,14 +37,14 @@ namespace null {
         auto keyword = path.string();
 
         const std::unordered_map<std::string, std::function<std::shared_ptr<Scene>(void)>> keywordToLevelGetter = {
-                {"/demo",                   getDemoScene},
-                {"/menu",                   getMenuScene},
-                {"/menu/play",              getPlayScene},
-                {"/menu/play/createRoom",   getCreateRoomScene},
-                {"/menu/play/joinRoom",     getJoinRoomScene},
-                {"/game",                   getGameScene},
-                {"/network-demo-client",    getNetworkDemoClientScene},
-                {"/network-demo-server",    getNetworkDemoServerScene}
+                {"/demo",                 getDemoScene},
+                {"/menu",                 getMenuScene},
+                {"/menu/play",            getPlayScene},
+                {"/menu/play/createRoom", getCreateRoomScene},
+                {"/menu/play/joinRoom",   getJoinRoomScene},
+                {"/game",                 getGameScene},
+                {"/network-demo-client",  getNetworkDemoClientScene},
+                {"/network-demo-server",  getNetworkDemoServerScene}
         };
 
         std::shared_ptr<Scene> scene;
@@ -134,6 +134,7 @@ namespace null {
         auto& box2dWorld = newScene->getBox2dWorld();
 
         newScene->camera->addScript<ExampleCameraScript>(*newScene->camera);
+        newScene->camera->getScript<ExampleCameraScript>()->setScale(1.5);
         // this texture is not released on purpose, because it MUST exist for as long
         // as the sprite lives. todo manage it with resource manager
         sf::Texture* nullTexture = ResourceManager::loadTexture("background.png");
