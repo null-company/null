@@ -3,6 +3,7 @@
 #include "GameObject.hpp"
 #include "Serializer.hpp"
 #include "ResourceManager.hpp"
+#include "Scene.hpp"
 #include "PlayerAnimation.hpp"
 
 namespace null {
