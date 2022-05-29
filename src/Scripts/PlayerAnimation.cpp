@@ -77,7 +77,10 @@ namespace null {
             }
         }
 
-        if (controlled && sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && canJump) {
+        bool isJumpPressed =
+                sf::Keyboard::isKeyPressed(sf::Keyboard::Space)
+                || sf::Keyboard::isKeyPressed(sf::Keyboard::W);
+        if (controlled && isJumpPressed && canJump) {
             jumpSound->play();
             gameObject.getRigidBody()->SetLinearVelocity({gameObject.getRigidBody()->GetLinearVelocity().x, -6});
             canJump = false;
