@@ -10,8 +10,9 @@ namespace null {
         const auto RESOURCES_PATH = std::filesystem::path("../res");
     }
 
-    std::map<std::string, sf::Texture*> ResourceManager::textureCache =
-            std::map<std::string, sf::Texture*>();
+    std::map<std::string, sf::Texture*> ResourceManager::textureCache{};
+    std::map<std::string, sf::Sound> ResourceManager::soundPool{};
+    std::map<std::string, std::shared_ptr<sf::Music>> ResourceManager::musicPool{};
 
     sf::Texture* ResourceManager::loadTexture(const std::string& textureName) {
         sf::Texture* texture;
@@ -36,9 +37,14 @@ namespace null {
     }
 
     sf::SoundBuffer* ResourceManager::loadSoundBuffer(const std::string& soundName) {
+        static std::map<std::string, sf::SoundBuffer> cache;
+        if (auto r = cache.find(soundName); r != cache.end()) {
+            return &r->second;
+        }
         // this implementation does not cache because sounds so far are not really used widely
         // and are not repeated like textures
-        auto soundBuffer = new sf::SoundBuffer;
+//        auto soundBuffer = new sf::SoundBuffer;
+        auto soundBuffer = &cache[soundName];
         constexpr auto soundsDir = "sounds";
         if (!soundBuffer->loadFromFile((RESOURCES_PATH / soundsDir / soundName).string())) {
             throw std::runtime_error("Sound file not found");
@@ -47,14 +53,25 @@ namespace null {
         return soundBuffer;
     }
 
-    sf::Music* ResourceManager::openMusic(const std::string& musicName) {
-        auto music = new sf::Music;
+    std::shared_ptr<sf::Music> ResourceManager::openMusic(const std::string& musicName) {
+        if (auto r = musicPool.find(musicName); r != musicPool.end()) {
+            return r->second; // return cached instance
+        }
+        musicPool[musicName] = std::make_shared<sf::Music>();
+        auto& newInstance = musicPool[musicName];
         constexpr auto musicDir = "music";
         const auto musicPath = RESOURCES_PATH / musicDir / musicName;
-        if (!music->openFromFile(musicPath.string())) {
+        if (!newInstance->openFromFile(musicPath.string())) {
             throw std::runtime_error("Music file not found");
         }
-        return music;
+        return newInstance;
     }
 
+    sf::Sound& ResourceManager::getSound(const std::string& soundName) {
+        if (auto r = soundPool.find(soundName); r != soundPool.end()) {
+            return r->second; // return cached instance
+        }
+        soundPool[soundName] = sf::Sound(*loadSoundBuffer(soundName));
+        return soundPool[soundName];
+    }
 }

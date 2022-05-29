@@ -18,11 +18,12 @@ namespace null {
         void update() override;
 
         explicit MusicManager(GameObject& gameObject);
+        ~MusicManager() override;
 
 //        void serialize(google::protobuf::Message &) const override;
 //        static std::unique_ptr<Component> deserialize(const google::protobuf::Message&);
     private:
-        std::unique_ptr<sf::Music> music{};
+        std::shared_ptr<sf::Music> music{};
     };
 
 }

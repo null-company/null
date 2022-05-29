@@ -7,7 +7,7 @@
 namespace null {
 
     void MusicManager::start() {
-        music = std::unique_ptr<sf::Music>(ResourceManager::openMusic(musicNameToLoad));
+        music = ResourceManager::openMusic(musicNameToLoad);
         music->setVolume(50);
         music->setLoop(true);
         music->play();
@@ -17,4 +17,8 @@ namespace null {
     }
 
     MusicManager::MusicManager(GameObject& gameObject) : Script(gameObject) { }
+
+    MusicManager::~MusicManager() {
+        music->stop();
+    }
 }
