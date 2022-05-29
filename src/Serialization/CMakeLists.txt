@@ -25,7 +25,7 @@ set(SRC
         ${SRCROOT}/Serializer.cpp
         ${SRCROOT}/scene.proto
         ${SRCROOT}/scripts.proto
-        ${SRCROOT}/box2d.proto
+        ${SRCROOT}/internals.proto
         )
 
 set(libname serialization)
@@ -40,7 +40,6 @@ target_include_directories(${libname}
 target_link_libraries(
         serialization
         nullGameEngine
-
         sfml-graphics
         yaml-cpp
         sfml-audio

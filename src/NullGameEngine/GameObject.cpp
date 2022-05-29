@@ -404,7 +404,7 @@ namespace null {
         }
         for (auto& s: s_go.children_scripts()) {
             LOGD << "Deserializing script with guid " << s_go.guid() << " (" << s.script_instance_case() << ")";
-            auto deserializationFunc = Utility::scriptSerializationMap.at(s.script_instance_case());
+            auto deserializationFunc = Serializer::scriptSerializationMap.at(s.script_instance_case());
             auto actualScript = deserializationFunc(dynamic_cast<const google::protobuf::Message&>(s));
             actualScript->guid = s.guid();
             Serializer::deserializedEntitySet.insert(actualScript.get());

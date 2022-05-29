@@ -1,7 +1,7 @@
 syntax = "proto3";
 package serial;
 
-import public "box2d.proto";
+import public "internals.proto";
 
 message View {
   Vector2f center = 1;
@@ -77,5 +77,30 @@ message CursorAnimation {
   Animation animation = 1;
 }
 
+message NetworkManagerClientScript {
+  uint32 ip = 1;
+  uint32 port = 2;
+}
 
+message NetworkManagerServerScript { }
 
+message PlayerControlledBoxClient {
+  uint64 nw_manager_script_guid = 2;
+}
+
+message PlayerControlledBoxServer { }
+
+message HealthBar { }
+
+message HealthBarHolder { }
+
+// do we *need* to serialize this?
+// this seem to be only created in runtime...
+// we really should have prefabs already;;;
+message GrenadeScript { }
+
+message WeaponStorage {
+  repeated uint64 weapon_guid = 1;
+}
+
+message WeaponGenerator { }
