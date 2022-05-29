@@ -29,6 +29,8 @@ namespace null {
 
         static std::unique_ptr<Component> deserialize(const google::protobuf::Message&);
 
+        GameObject& getGameObject();
+
         static std::shared_ptr<GameObject> initPlayer(const std::string& anim, b2World& box2dWorld);
     };
 

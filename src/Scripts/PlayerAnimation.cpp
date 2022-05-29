@@ -141,7 +141,7 @@ namespace null {
         b2FixtureDef fixtureDef1;
         fixtureDef1.shape = shape1;
         fixtureDef1.density = 1;
-        fixtureDef1.friction = 1;
+        fixtureDef1.friction = 0;
 
         auto shape2 = new b2PolygonShape();
         sizeVector = Utility::pixelToMetersVector(sf::Vector2i{90, 162});
@@ -162,10 +162,14 @@ namespace null {
         player->addScript<PlayerAnimation>(*player, playerSpriteSheet,
                                            CollisionMap({
                                                                 {"idle",      {{fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}, {fixtureDef3}}},
-                                                                {"walkRight", {{fixtureDef2}, {fixtureDef2}, {fixtureDef2}, {fixtureDef2}}},
-                                                                {"walkLeft",  {{fixtureDef2}, {fixtureDef2}, {fixtureDef2}, {fixtureDef2}}}
+                                                                {"walkRight", {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}},
+                                                                {"walkLeft",  {{fixtureDef1}, {fixtureDef2}, {fixtureDef1}, {fixtureDef2}}}
                                                         }));
         return player;
+    }
+
+    GameObject& PlayerAnimation::getGameObject() {
+        return gameObject;
     }
 
 }
