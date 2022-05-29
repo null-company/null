@@ -16,6 +16,10 @@ namespace null {
         void update() override;
         explicit PlayerControlledBoxServer(GameObject& go) : Script(go) {}
 
+        void serialize(google::protobuf::Message & message) const override;
+
+        static std::unique_ptr<Script> deserialize(const google::protobuf::Message& message);
+
     private:
         LastAcceptedMessageProcessor<net::GameMessage::ClientCommand> messageQueue{};
         sf::Clock lastStateSnapshotTimer{};

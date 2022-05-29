@@ -35,6 +35,10 @@ namespace null {
         std::shared_ptr<GameObject> initHealthBar(const std::string& name);
 
         void updateBars();
+
+        void serialize(google::protobuf::Message & message) const override;
+
+        static std::unique_ptr<Script> deserialize(const google::protobuf::Message& message);
     };
 
 }

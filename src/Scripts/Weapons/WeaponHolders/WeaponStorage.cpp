@@ -55,5 +55,13 @@ namespace null {
         gameObject.addChild(std::move(newWeapon));
     }
 
+    void WeaponStorage::serialize(google::protobuf::Message& message) const {
+        Component::serialize(message);
+    }
+
+    std::unique_ptr<Script> WeaponStorage::deserialize(const google::protobuf::Message& message) {
+        return std::unique_ptr<Script>();
+    }
+
 
 }

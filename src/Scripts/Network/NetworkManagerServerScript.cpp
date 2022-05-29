@@ -44,4 +44,12 @@ namespace null {
     }
 
     NetworkManagerServerScript::NetworkManagerServerScript(GameObject& go) : Script(go) { }
+
+    void NetworkManagerServerScript::serialize(google::protobuf::Message& message) const {
+        Component::serialize(message);
+    }
+
+    std::unique_ptr<Script> NetworkManagerServerScript::deserialize(const google::protobuf::Message& message) {
+        return std::unique_ptr<Script>();
+    }
 }

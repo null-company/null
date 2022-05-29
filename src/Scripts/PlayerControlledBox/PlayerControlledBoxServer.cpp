@@ -81,4 +81,12 @@ namespace null {
             );
         }
     }
+
+    void PlayerControlledBoxServer::serialize(google::protobuf::Message& message) const {
+        Component::serialize(message);
+    }
+
+    std::unique_ptr<Script> PlayerControlledBoxServer::deserialize(const google::protobuf::Message& message) {
+        return std::unique_ptr<Script>();
+    }
 }

@@ -21,6 +21,10 @@ namespace null {
 
         std::queue<net::GameMessage::ClientCommand>& subscribe(uint64_t guid);
 
+        void serialize(google::protobuf::Message & message) const override;
+
+        static std::unique_ptr<Script> deserialize(const google::protobuf::Message& message);
+
     private:
         GameServer* gameServer{};
     };

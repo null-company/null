@@ -15,5 +15,9 @@ namespace null {
         void update() override;
 
         void shoot(sf::Vector2f from, sf::Vector2f to) override;
+
+        void serialize(google::protobuf::Message & message) const override;
+
+        static std::unique_ptr<Script> deserialize(const google::protobuf::Message& message);
     };
 }

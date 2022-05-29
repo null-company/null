@@ -17,6 +17,8 @@ namespace null {
 
         HealthBar(GameObject& object);
 
-        void serialize(google::protobuf::Message& message) const override;
+        void serialize(google::protobuf::Message & message) const override;
+
+        static std::unique_ptr<Script> deserialize(const google::protobuf::Message& message);
     };
 }

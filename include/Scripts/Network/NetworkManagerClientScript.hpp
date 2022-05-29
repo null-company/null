@@ -24,6 +24,10 @@ namespace null {
         void update() override;
         explicit NetworkManagerClientScript(GameObject& go);
 
+        void serialize(google::protobuf::Message & message) const override;
+
+        static std::unique_ptr<Script> deserialize(const google::protobuf::Message& message);
+
         [[nodiscard]]
         ClientNetworkManager& getNetworkManager() const;
 

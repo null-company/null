@@ -65,4 +65,12 @@ namespace null {
 
     PlayerControlledBoxClient::PlayerControlledBoxClient(GameObject& go)
             : Script(go) { }
+
+    void PlayerControlledBoxClient::serialize(google::protobuf::Message& message) const {
+        Component::serialize(message);
+    }
+
+    std::unique_ptr<Script> PlayerControlledBoxClient::deserialize(const google::protobuf::Message& message) {
+        return std::unique_ptr<Script>();
+    }
 }

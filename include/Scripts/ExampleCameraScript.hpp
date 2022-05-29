@@ -20,7 +20,7 @@ namespace null {
         void setMap(GameObject& object);
 
         void serialize(google::protobuf::Message &) const override;
-        static std::unique_ptr<Component> deserialize(const google::protobuf::Message&);
+        static std::unique_ptr<Script> deserialize(const google::protobuf::Message&);
 
     };
 }

@@ -80,4 +80,12 @@ namespace null {
 
     WeaponGenerator::WeaponGenerator(GameObject& object) : Component(object) {}
 
+    void WeaponGenerator::serialize(google::protobuf::Message& message) const {
+        Component::serialize(message);
+    }
+
+    std::unique_ptr<Script> WeaponGenerator::deserialize(const google::protobuf::Message& message) {
+        return std::unique_ptr<Script>();
+    }
+
 } // null

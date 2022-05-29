@@ -25,5 +25,9 @@ namespace null {
 
 
         void update() override;
+
+        void serialize(google::protobuf::Message & message) const override;
+
+        static std::unique_ptr<Script> deserialize(const google::protobuf::Message& message);
     };
 }

@@ -17,10 +17,6 @@ namespace null {
         Component::update();
     }
 
-    void HealthBar::serialize(google::protobuf::Message& message) const {
-        Component::serialize(message);
-    }
-
     HealthBar::HealthBar(GameObject& object) : Component(object) {
 
     }
@@ -31,6 +27,14 @@ namespace null {
                                                           currentRect.top,
                                                           int(initialRect.width * progress),
                                                           currentRect.height});
+    }
+
+    void HealthBar::serialize(google::protobuf::Message& message) const {
+        Component::serialize(message);
+    }
+
+    std::unique_ptr<Script> HealthBar::deserialize(const google::protobuf::Message& message) {
+        return std::unique_ptr<Script>();
     }
 
 

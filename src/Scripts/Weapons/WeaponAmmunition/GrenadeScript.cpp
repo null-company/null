@@ -53,4 +53,12 @@ namespace null {
                                                       speed(speed),
                                                       angle(angle),
                                                       from(from) {}
+
+    void GrenadeScript::serialize(google::protobuf::Message& message) const {
+        RigidBodyAnimation::serialize(message);
+    }
+
+    std::unique_ptr<Script> GrenadeScript::deserialize(const google::protobuf::Message& message) {
+        return std::unique_ptr<Script>();
+    }
 }

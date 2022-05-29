@@ -21,5 +21,9 @@ namespace null {
         void swapWeapon();
 
         void addWeapon(const std::shared_ptr<GameObject> &weapon);
+
+        void serialize(google::protobuf::Message & message) const override;
+
+        static std::unique_ptr<Script> deserialize(const google::protobuf::Message& message);
     };
 }

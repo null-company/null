@@ -78,4 +78,12 @@ namespace null {
     }
 
     HealthBarHolder::HealthBarHolder(GameObject& object) : Component(object) {}
+
+    void HealthBarHolder::serialize(google::protobuf::Message& message) const {
+        Component::serialize(message);
+    }
+
+    std::unique_ptr<Script> HealthBarHolder::deserialize(const google::protobuf::Message& message) {
+        return std::unique_ptr<Script>();
+    }
 } // null

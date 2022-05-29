@@ -85,4 +85,12 @@ namespace null {
                                           gameObject.getPosition() - sf::Vector2f{0, 60});
         gameObject.addChild(std::move(grenade));
     }
+
+    void GrenadeBunchScript::serialize(google::protobuf::Message& message) const {
+        Component::serialize(message);
+    }
+
+    std::unique_ptr<Script> GrenadeBunchScript::deserialize(const google::protobuf::Message& message) {
+        return {};
+    }
 }

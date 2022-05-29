@@ -48,4 +48,12 @@ namespace null {
     ClientNetworkManager& NetworkManagerClientScript::getNetworkManager() const {
         return *networkManager;
     }
+
+    void NetworkManagerClientScript::serialize(google::protobuf::Message& message) const {
+        Component::serialize(message);
+    }
+
+    std::unique_ptr<Script> NetworkManagerClientScript::deserialize(const google::protobuf::Message& message) {
+        return std::unique_ptr<Script>();
+    }
 }
