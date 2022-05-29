@@ -4,7 +4,6 @@
 #include "SFML/Graphics.hpp"
 #include "Schedulers/Timer.hpp"
 #include "RigidBodyAnimation.hpp"
-#include "Projectile.hpp"
 
 namespace null {
     class GrenadeScript : public RigidBodyAnimation{
