@@ -12,6 +12,10 @@ namespace null {
     void Renderer::render(sf::RenderWindow& window, const Scene& scene) {
         if (scene.camera->getScript<CameraScript>()) {
             window.setView(scene.camera->getScript<CameraScript>()->view);
+            scene.windowMetaInfo.windowSize = scene.camera->getScript<CameraScript>()->view.getSize();
+            scene.windowMetaInfo.position = scene.camera->getScript<CameraScript>()->view.getCenter() -
+                                            sf::Vector2f{scene.windowMetaInfo.windowSize.x / 2,
+                                                         scene.windowMetaInfo.windowSize.y / 2};
         }
         scene.windowMetaInfo.windowsSize = window.getSize();
         scene.windowMetaInfo.absoluteMouseWorldCoords = window.mapPixelToCoords(sf::Mouse::getPosition(window));
@@ -31,7 +35,7 @@ namespace null {
                 queue.push(spriteRefPair);
             }
         });
-        while(!queue.empty()) {
+        while (!queue.empty()) {
             auto& srp = queue.top();
             window.draw(*(srp.sprite_ref));
             queue.pop();

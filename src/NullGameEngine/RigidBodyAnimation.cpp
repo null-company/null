@@ -17,33 +17,35 @@ namespace null {
     }
 
     RigidBodyAnimation::RigidBodyAnimation(GameObject& gameObject, SpriteSheet& spriteSheet,
-                                           const CollisionMap & collisionMap1) :
+                                           const CollisionMap& collisionMap1) :
             Animation(gameObject, spriteSheet), collisionMap(collisionMap1) {
         // check that spriteSheet and collisionMap are the same size
         if (collisionMap.collisionMapInternal.size() != spriteSheet.animations.size()) {
             throw std::invalid_argument("RigidBodyAnimation error: collisionMap and spriteSheet are not the same size");
         }
-        for (const auto& [name, vec] : collisionMap.collisionMapInternal) {
+        for (const auto& [name, vec]: collisionMap.collisionMapInternal) {
             if (vec.size() != spriteSheet.animations[name].framePositions.size()) {
-                throw std::invalid_argument("RigidBodyAnimation error: collisionMap and spriteSheet are not the same size");
+                throw std::invalid_argument(
+                        "RigidBodyAnimation error: collisionMap and spriteSheet are not the same size");
             }
         }
 
         destroyAllFixtures();
 
-        for (const auto& pair : collisionMap.collisionMapInternal) {
+        for (const auto& pair: collisionMap.collisionMapInternal) {
             this->collisionMap.collisionMapInternal.insert(pair);
         }
     }
 
     void RigidBodyAnimation::destroyAllFixtures() {
-        for (auto fx = gameObject.getRigidBody()->GetFixtureList(); fx != nullptr; fx = gameObject.getRigidBody()->GetFixtureList()) {
+        for (auto fx = gameObject.getRigidBody()->GetFixtureList();
+             fx != nullptr; fx = gameObject.getRigidBody()->GetFixtureList()) {
             gameObject.getRigidBody()->DestroyFixture(fx);
         }
     }
 
     void RigidBodyAnimation::createFixtures() {
-        for (auto const& fd : collisionMap.collisionMapInternal[currRigidAnim][currRigidFrame]) {
+        for (auto const& fd: collisionMap.collisionMapInternal[currRigidAnim][currRigidFrame]) {
             gameObject.getRigidBody()->CreateFixture(&fd);
         }
     }
@@ -66,6 +68,6 @@ namespace null {
                 *Serializer::currentDeserializationGameObject,
                 *spsh,
                 *cm
-                );
+        );
     }
 }

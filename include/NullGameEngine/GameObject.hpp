@@ -19,7 +19,7 @@ enum class GameObjectStatus {
 };
 namespace null {
 
-    class GameObject :  public Entity, public std::enable_shared_from_this<GameObject> {
+    class GameObject : public Entity, public std::enable_shared_from_this<GameObject> {
     private:
         void assertSpriteHasSize();
 
@@ -80,7 +80,9 @@ namespace null {
         b2Body* getRigidBody();
 
         void makeStatic(b2World& box2dWorld);
+
         void makeStatic();
+
         void makeDynamic(b2World& box2dWorld);
 
         void setCollisionCategories(uint16_t categoryBits);
@@ -108,16 +110,16 @@ namespace null {
 
         const sf::Vector2f& getPosition();
 
-        void setPosition(float x, float y);
+        void setPosition(float x, float y, bool relative = false);
 
-        void setPosition(const sf::Vector2f& pos);
+        void setPosition(sf::Vector2f pos, bool relative = false);
 
         void addScript(std::unique_ptr<Script> script);
 
         template<class T, typename... Args>
-        T& addScript(Args&&... args) {
+        T& addScript(Args&& ... args) {
             auto script =
-                std::make_unique<T>(std::forward<Args>(args)...);
+                    std::make_unique<T>(std::forward<Args>(args)...);
             auto& ref = *script;
             scripts.push_back(std::move(script));
             return ref;
@@ -135,6 +137,7 @@ namespace null {
         }
 
         void serialize(google::protobuf::Message&) const;
+
         static std::shared_ptr<GameObject> deserialize(const google::protobuf::Message&);
 
         friend Scene;
@@ -150,6 +153,24 @@ namespace null {
         Scene& getSceneForce();
 
         std::shared_ptr<GameObject> findFirstChildrenByTag(const std::string& tag);
+
+        template<typename T>
+        std::vector<T*> getContactedGameObjects() {
+            auto rb = getRigidBody();
+            std::vector<T*> result;
+            for (auto* contact = rb->GetContactList(); contact != nullptr; contact = contact->next) {
+                if (!contact->contact->IsTouching())
+                    continue;
+
+                auto* otherRb = contact->other;
+                auto* otherGo = (GameObject*) otherRb->GetUserData().pointer;
+                if (otherGo->template getScript<T>()) {
+                    result.push_back(otherGo->template getScript<T>());
+                }
+            }
+            return result;
+        }
+
     };
 
 }

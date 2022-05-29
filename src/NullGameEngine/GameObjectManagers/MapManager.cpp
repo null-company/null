@@ -1,6 +1,7 @@
 #include "MapManager/MapManager.hpp"
 #include "GameObject.hpp"
 #include "Utility.hpp"
+#include "MapManager/Wall.hpp"
 #include <ResourceManager.hpp>
 #include <iostream>
 #include <SFML/Graphics.hpp>
@@ -17,9 +18,9 @@ namespace null {
         borderShapes.emplace_back(0, 0, int(bsize), int(height + 2 * bsize));
 
         auto pos = std::vector<sf::Vector2f>();
-        pos.emplace_back(x - bsize, y - bsize);
+        pos.emplace_back(x - bsize, y - bsize); // верхняя
         pos.emplace_back(x + width, y - bsize);
-        pos.emplace_back(x - bsize, y + height);
+        pos.emplace_back(x - bsize, y + height); // нижняя
         pos.emplace_back(x - bsize, y - bsize);
         auto walls = std::make_shared<GameObject>();
         for (int i = 0; i < pos.size(); i++) {
@@ -30,6 +31,10 @@ namespace null {
             wall->makeStatic(box2dWorld);
             wall->renderLayer = serial::FOREGROUND1;
             wall->visible = true;
+            if (i == 2) {
+                wall->getRigidBody()->GetFixtureList()->SetSensor(true);
+                wall->addScript<Wall>(*wall);
+            }
             walls->addChild(std::move(wall));
         }
         return walls;
