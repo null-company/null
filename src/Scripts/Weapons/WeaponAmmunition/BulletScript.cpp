@@ -3,6 +3,7 @@
 #include "GameObject.hpp"
 #include "Serializer.hpp"
 #include "ResourceManager.hpp"
+#include "PlayerAnimation.hpp"
 
 namespace null {
     void null::BulletScript::start() {
@@ -20,6 +21,10 @@ namespace null {
 
     void null::BulletScript::update() {
         Component::update();
+        auto players = gameObject.getContactedGameObjects<PlayerAnimation>();
+        for (auto player: players) {
+            player->damage(5);
+        }
         if (contactedGameObject) {
             gameObject.destroy();
         }

@@ -57,7 +57,7 @@ set(SRC
         ${INCROOT}/Network/PrimitiveStateConverter.hpp
         ${SRCROOT}/Network/Utility/LastAcceptedMessageProcessor.cpp
         ${INCROOT}/Network/Utility/LastAcceptedMessageProcessor.hpp
-        )
+        PlayerProgress/HealthBarHolder.cpp ../../include/Scripts/PlayerProgress/HealthBarHolder.hpp PlayerProgress/HealthBar.cpp ../../include/Scripts/PlayerProgress/HealthBar.hpp)
 
 add_library(scripts STATIC ${SRC})
 target_include_directories(scripts

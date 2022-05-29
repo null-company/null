@@ -4,36 +4,53 @@
 #include "Graphic/Vector.hpp"
 #include "ResourceManager.hpp"
 #include "Physics/CollisionCategories.hpp"
+#include "PlayerAnimation.hpp"
 
 namespace null {
     void null::GrenadeScript::start() {
-        RigidBodyAnimation::start();
-        auto& scene = gameObject.getSceneForce();
-        sf::Texture* weaponTexture = ResourceManager::loadTexture("weapons/grenade.png");
-        gameObject.getSprite().setTexture(*weaponTexture);
-        gameObject.getSprite().scale(0.3, 0.3);
-        gameObject.makeDynamic();
-        gameObject.visible = true;
+        spriteSheet.setAnimation("");
+        spriteSheet.setFrame(0);
         gameObject.setPosition(from);
-
-        gameObject.setCollisionCategories(GRENADE_CATEGORY);
-        gameObject.setCollisionMasks(ALL_CATEGORIES & ~PLAYER_CATEGORY);
+        RigidBodyAnimation::start();
         gameObject.getRigidBody()->SetLinearVelocity(
                 {cos(2 * 3.14f / 360 * angle) * speed, sin(2 * 3.14f / 360 * angle) * speed});
-        gameObject.getRigidBody()->SetAngularVelocity(5);
-        gameObject.getRigidBody()->GetFixtureList()->SetFriction(1);
-        timer.start();
+        frameChangeTimer.start();
     }
 
     void null::GrenadeScript::update() {
-        if (timer.expired()) {
-            gameObject.destroy();
+        if (frameChangeTimer.expired()) {
+            int step = spriteSheet.currFrame;
+            int explodeStep = 5;
+            if (step == 0) {
+                frameChangeTimer = Timer(std::chrono::milliseconds(100));
+            }
+            if (step == explodeStep) {
+                gameObject.getRigidBody()->SetType(b2_staticBody);
+            }
+            if (step == explodeStep +1 ) {
+                auto players = gameObject.getContactedGameObjects<PlayerAnimation>();
+                for (auto player: players) {
+                    player->damage(30);
+                }
+            }
+            frameChangeTimer.start();
+            spriteSheet.setFrame(spriteSheet.currFrame + 1);
+            if (collisionMap.collisionMapInternal[""].size() == spriteSheet.currFrame + 1) {
+                gameObject.destroy();
+                return;
+            }
         }
+
         RigidBodyAnimation::update();
     }
 
-    GrenadeScript::GrenadeScript(GameObject& object, float speed, float angle, sf::Vector2f from) : Component(object),
-                                                                                                    speed(speed),
-                                                                                                    angle(angle),
-                                                                                                    from(from) {}
+    GrenadeScript::GrenadeScript(GameObject& object,
+                                 SpriteSheet& spriteSheet,
+                                 const CollisionMap& collisionMap,
+                                 float speed,
+                                 float angle,
+                                 sf::Vector2f from) : RigidBodyAnimation(object, spriteSheet, collisionMap),
+                                                      speed(speed),
+                                                      angle(angle),
+                                                      from(from) {}
 }
