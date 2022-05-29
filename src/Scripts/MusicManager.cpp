@@ -8,7 +8,7 @@ namespace null {
 
     void MusicManager::start() {
         music = ResourceManager::openMusic(musicNameToLoad);
-        music->setVolume(50);
+        music->setVolume(40);
         music->setLoop(true);
         music->play();
     }

@@ -1,14 +1,16 @@
 #include "PlayerAnimation.hpp"
 #include "Serializer.hpp"
 
+#include <ResourceManager.hpp>
 #include <Utility.hpp>
 #include <utility>
-#include <iostream>
 #include <MainLoop.hpp>
-#include "Physics/CollisionCategories.hpp"
+#include <Physics/CollisionCategories.hpp>
 
 namespace null {
     void PlayerAnimation::start() {
+        deathSound = &ResourceManager::getSound("death.ogg");
+        jumpSound = &ResourceManager::getSound("jump.ogg");
         spriteSheet.setAnimation("walkRight");
         RigidBodyAnimation::update();
     }
@@ -76,6 +78,7 @@ namespace null {
         }
 
         if (controlled && sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && canJump) {
+            jumpSound->play();
             gameObject.getRigidBody()->SetLinearVelocity({gameObject.getRigidBody()->GetLinearVelocity().x, -6});
             canJump = false;
         }
@@ -118,6 +121,7 @@ namespace null {
         health -= healthDelta;
         if (health < 0) {
             health = 0;
+            deathSound->play();
             gameObject.destroy();
         }
     }
