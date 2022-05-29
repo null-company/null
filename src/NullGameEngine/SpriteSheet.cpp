@@ -1,6 +1,6 @@
 #include "SpriteSheet.hpp"
 #include "scripts.pb.h"
-#include "box2d.pb.h"
+#include "internals.pb.h"
 
 #include <utility>
 

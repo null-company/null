@@ -72,6 +72,14 @@ namespace null {
             {serial::Script::ScriptInstanceCase::kBulletScript, BulletScript::deserialize},
             {serial::Script::ScriptInstanceCase::kNetworkPlayerScript, NetworkPlayerScript::deserialize},
             {serial::Script::ScriptInstanceCase::kCursorAnimation, CursorAnimation::deserialize},
+            {serial::Script::ScriptInstanceCase::kNetworkManagerClientScript, NetworkManagerClientScript::deserialize},
+            {serial::Script::ScriptInstanceCase::kNetworkManagerServerScript, NetworkManagerServerScript::deserialize},
+            {serial::Script::ScriptInstanceCase::kPlayerControlledBoxClient, PlayerControlledBoxClient::deserialize},
+            {serial::Script::ScriptInstanceCase::kPlayerControlledBoxServer, PlayerControlledBoxServer::deserialize},
+            {serial::Script::ScriptInstanceCase::kHealthBar, HealthBar::deserialize},
+            {serial::Script::ScriptInstanceCase::kHealthBarHolder, HealthBarHolder::deserialize},
+            {serial::Script::ScriptInstanceCase::kWeaponGenerator, WeaponGenerator::deserialize},
+            {serial::Script::ScriptInstanceCase::kWeaponStorage, WeaponStorage::deserialize},
     };
 
 }

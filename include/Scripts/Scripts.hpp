@@ -17,3 +17,11 @@
 #include <Weapons/WeaponGenerator.hpp>
 #include <PlayerAnimation.hpp>
 #include <NetworkPlayerScript.hpp>
+#include <Network/NetworkManagerClientScript.hpp>
+#include <Network/NetworkManagerServerScript.hpp>
+#include <PlayerControlledBox/PlayerControlledBoxClient.hpp>
+#include <PlayerControlledBox/PlayerControlledBoxServer.hpp>
+#include <PlayerProgress/HealthBar.hpp>
+#include <PlayerProgress/HealthBarHolder.hpp>
+#include <DeleteScript.hpp>
+

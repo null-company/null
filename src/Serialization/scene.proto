@@ -25,6 +25,14 @@ message Script {
     CursorAnimation cursor_animation = 13;
     Animation animation = 16;
     RigidBodyAnimation rigid_body_animation = 17;
+    NetworkManagerClientScript network_manager_client_script = 20;
+    NetworkManagerServerScript network_manager_server_script = 21;
+    PlayerControlledBoxClient player_controlled_box_client = 22;
+    PlayerControlledBoxServer player_controlled_box_server = 23;
+    HealthBar health_bar = 24;
+    HealthBarHolder health_bar_holder = 25;
+    WeaponStorage weapon_storage = 26;
+    WeaponGenerator weapon_generator = 27;
   }
 }
 
