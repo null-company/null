@@ -7,7 +7,7 @@ namespace null {
     class StraightWeaponScript : public WeaponScript {
     private:
         double speed = 5;
-
+        sf::Vector2f initialScale = {1,1};
     public:
         explicit StraightWeaponScript(GameObject& object, double deviance);
 

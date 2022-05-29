@@ -134,7 +134,7 @@ namespace null {
         auto& box2dWorld = newScene->getBox2dWorld();
 
         newScene->camera->addScript<ExampleCameraScript>(*newScene->camera);
-        newScene->camera->getScript<ExampleCameraScript>()->setScale(1.5);
+        newScene->camera->getScript<ExampleCameraScript>()->setScale(1.25);
         // this texture is not released on purpose, because it MUST exist for as long
         // as the sprite lives. todo manage it with resource manager
         sf::Texture* nullTexture = ResourceManager::loadTexture("background.png");
@@ -156,7 +156,7 @@ namespace null {
         boxObject->getSprite().setTexture(*boxTexture);
         boxObject->getSprite().setScale(0.125f, 0.125f);
         boxObject->setPosition(200, 0);
-        boxObject->renderLayer = serial::FOREGROUND;
+        boxObject->renderLayer = serial::BACKGROUND1;
         boxObject->visible = true;
 
         auto boxObject2 = std::make_shared<GameObject>();
@@ -172,7 +172,7 @@ namespace null {
             groundSprite.setTexture(*ResourceManager::loadTexture("platform.png"));
             groundSprite.setScale(3.0f, 3.0f);
             groundSprite.setPosition(x, y);
-            groundObject->renderLayer = serial::FOREGROUND;
+            groundObject->renderLayer = serial::BACKGROUND1;
             groundObject->visible = true;
             groundObject->addTag("platform");
             groundObject->makeStatic(box2dWorld);
@@ -209,12 +209,12 @@ namespace null {
         auto enemy4 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
 //        enemy1->setPosition(300, 0);
 //        enemy2->setPosition(200, 200);
-//        enemy3->setPosition(400, 000);
+        enemy3->setPosition(400, 000);
         enemy4->setPosition(400, 200);
 //        enemy1->getScript<PlayerAnimation>()->name = "Meow";
 //        enemy2->getScript<PlayerAnimation>()->name = "Gav";
-//        enemy4->getScript<PlayerAnimation>()->name = "Meowss";
-//        enemy3->getScript<PlayerAnimation>()->name = "Gavaa";
+        enemy4->getScript<PlayerAnimation>()->name = "Meowss";
+        enemy3->getScript<PlayerAnimation>()->name = "Gavaa";
 
         auto gun = std::make_shared<GameObject>();
         gun->addScript<StraightWeaponScript>(*gun, 0.01);
@@ -239,7 +239,7 @@ namespace null {
         parentGameObject->addChild(std::move(cursorObject));
 //        parentGameObject->addChild(std::move(enemy1));
 //        parentGameObject->addChild(std::move(enemy2));
-//        parentGameObject->addChild(std::move(enemy3));
+        parentGameObject->addChild(std::move(enemy3));
         parentGameObject->addChild(std::move(enemy4));
         Serializer::serializeSceneToFile(newScene.get(), "myscene.pbuf");
         newScene->addRootGameObject(std::move(parentGameObject));

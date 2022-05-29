@@ -11,7 +11,8 @@
 namespace null {
     void StraightWeaponScript::start() {
         WeaponScript::start();
-        gameObject.getSprite().setOrigin(sf::Vector2f(250, 150));
+        gameObject.getSprite().setOrigin(sf::Vector2f(80, 70));
+        initialScale = gameObject.getSprite().getScale();
     }
 
     void StraightWeaponScript::update() {
@@ -33,7 +34,7 @@ namespace null {
             weaponDirection *= 120.0f;
             shoot(gameObject.getPosition() + weaponDirection, scene->getWindowMetaInfo().absoluteMouseWorldCoords);
         }
-        auto coords = parent->getPosition() + sf::Vector2f(70, 70);
+        auto coords = parent->getPosition() + sf::Vector2f(60, 60);
         gameObject.setPosition(coords);
         setWeaponRotation();
     }
@@ -46,6 +47,11 @@ namespace null {
         auto window_info = scene->getWindowMetaInfo().absoluteMouseWorldCoords;
         sf::Vector2f weapondirection = window_info - gameObject.getPosition();
         gameObject.getSprite().setRotation(getAngle(weapondirection));
+        if (getAngle(weapondirection) > 90 and getAngle(weapondirection) < 270) {
+            gameObject.getSprite().setScale(initialScale.x, -1.0f * initialScale.y);
+        } else {
+            gameObject.getSprite().setScale(initialScale.x, initialScale.y);
+        }
     }
 
     void StraightWeaponScript::shoot(sf::Vector2f from, sf::Vector2f to) {
@@ -63,9 +69,9 @@ namespace null {
     StraightWeaponScript::StraightWeaponScript(GameObject& object, double deviance) : WeaponScript(object) {
         d = std::normal_distribution<>(0, deviance);
         sf::Texture* weaponTexture = ResourceManager::loadTexture("weapon.png");
-        gameObject.getSprite().setOrigin(sf::Vector2f(250, 100));
+//        gameObject.getSprite().setOrigin(sf::Vector2f(250, 100));
         gameObject.getSprite().setTexture(*weaponTexture);
-        gameObject.getSprite().scale(0.24, 0.24);
+        gameObject.getSprite().scale(0.40, 0.25);
         gameObject.renderLayer = serial::FOREGROUND2;
         gameObject.visible = true;
     }
@@ -82,7 +88,7 @@ namespace null {
         auto p_script = std::make_unique<StraightWeaponScript>(
                 *Serializer::currentDeserializationGameObject,
                 msg.straight_weapon_script().deviance()
-                );
+        );
         return p_script;
     }
 }

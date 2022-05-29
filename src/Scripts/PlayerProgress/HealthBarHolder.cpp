@@ -64,16 +64,18 @@ namespace null {
     std::shared_ptr<GameObject> HealthBarHolder::initHealthBar(const std::string& name) {
         auto healthBar = std::make_shared<GameObject>();
         nameToBar[name] = healthBar;
-        healthBar->addScript<HealthBar>(*healthBar);
+        healthBar->addScript<HealthBar>(*healthBar, back);
         healthBar->getSprite().setTexture(*ResourceManager::loadTexture(names.back()), true);
         names.insert(names.begin(), names.back());
         names.pop_back();
         auto scale = getScaleToFitNewSize<float>(sf::Vector2<float>(healthBar->getSprite().getTexture()->getSize()),
                                                  size);
         healthBar->getSprite().setScale(scale);
-        healthBar->getSprite().setPosition(sf::Vector2f{(float) padding, (size.y + padding) * (nameToBar.size() - 1) + padding});
-        healthBar->renderLayer = serial::FOREGROUND1;
+        healthBar->getSprite().setPosition(
+                sf::Vector2f{(float) padding, (size.y + padding) * (nameToBar.size() - 1) + padding});
+        healthBar->renderLayer = serial::FOREGROUND3;
         healthBar->visible = true;
+
         return healthBar;
     }
 

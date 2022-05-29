@@ -25,6 +25,7 @@ namespace null {
                 frameChangeTimer = Timer(std::chrono::milliseconds(100));
             }
             if (step == explodeStep) {
+                gameObject.getRigidBody()->SetLinearVelocity({0,0});
                 gameObject.getRigidBody()->SetType(b2_staticBody);
             }
             if (step == explodeStep +1 ) {
