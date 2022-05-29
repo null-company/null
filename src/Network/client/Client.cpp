@@ -20,7 +20,7 @@ void Client::sendGenerateRoomMessage() {
     net::NetMessage message;
     message.mutable_generate_room_request();
     net::NetMessage message2;
-    sendNetMessage(arbiterSocket, message);
+    null::Network::Utils::sendNetMessage(arbiterSocket, message);
     LOGD << "Message was send: " << message.ShortDebugString();
 }
 
@@ -43,7 +43,7 @@ void Client::createRoomAndConnect() {
     arbiterSocket.setBlocking(true);
     sendGenerateRoomMessage();
     LOGD << "Sent generate room message";
-    net::NetMessage message = receiveNetMessage(arbiterSocket);
+    net::NetMessage message = null::Network::Utils::receiveNetMessage(arbiterSocket);
     if (!message.has_connect_room()) {
         throw std::invalid_argument("Expected room code");
     }
@@ -53,7 +53,7 @@ void Client::createRoomAndConnect() {
 }
 
 net::GameMessage Client::receiveGameMessage() {
-    net::NetMessage message = receiveNetMessage(this->getGameServerSocket());
+    net::NetMessage message = null::Network::Utils::receiveNetMessage(this->getGameServerSocket());
     if (!message.has_game_message()) {
         throw NetworkException("Unexpected type message");
     }
@@ -65,7 +65,7 @@ void Client::connectRoom(const std::string& roomCodeToConnect) {
     gameServerSocket.setBlocking(true);
     setRoomCode(roomCodeToConnect);
     askGameServerConfigByRoomCode();
-    net::NetMessage message = receiveNetMessage(arbiterSocket);
+    net::NetMessage message = null::Network::Utils::receiveNetMessage(arbiterSocket);
     if (!message.has_server_config()) {
         throw std::invalid_argument("Expected server config");
     }
@@ -77,7 +77,7 @@ void Client::askGameServerConfigByRoomCode() {
     LOGD << "Ask arbiter server for GameServerConfig";
     net::NetMessage message;
     *(message.mutable_connect_room()->mutable_room_code()) = roomCode;
-    sendNetMessage(arbiterSocket, message);
+    null::Network::Utils::sendNetMessage(arbiterSocket, message);
 }
 
 void Client::handleServerConfigMessageAndConnect(const net::GameServerConfig& config) {

@@ -26,11 +26,7 @@ public:
 
     void connectRoom(sf::IpAddress serverAddress, uint16_t port);
 
-    void sendChatMessage(const std::string &chatMessage);
-
     void handleGameServerMessage(const net::GameMessage &message);
-
-    void handleChatMessage(net::ChatMessage *pMessage);
 
     void handleRoomCodeMessage(const net::ConnectRoom &room);
 

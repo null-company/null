@@ -7,8 +7,9 @@
 #include <iostream>
 
 int main() {
-    static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;
-    plog::init(plog::debug, &consoleAppender);
+    // Uncomment to see logs. Know that it slows execution time
+//    static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;
+//    plog::init(plog::debug, &consoleAppender);
     const std::string defaultLevel = "/network-demo-server";
     std::string levelToLoad;
     bool sceneIsLoaded = false;
@@ -33,6 +34,7 @@ int main() {
     null::MainLoop::serverArbiter->listen(5002);
     null::MainLoop::serverArbiter->launch();
 
+    std::cout << "Server is up. Type 'exit' to stop." << std::endl;
     while (true) {
         std::string oper;
         std::cin >> oper;

@@ -26,7 +26,7 @@ namespace null {
         }
         try {
             sf::TcpSocket& client = gameServer->getClient(readyClientIdx);
-            net::NetMessage message = receiveNetMessage(client);
+            net::NetMessage message = null::Network::Utils::receiveNetMessage(client);
             gameServer->handleNetMessage(readyClientIdx, message);
         } catch (const ReceiveException& exception) {
             auto status = exception.getStatus();

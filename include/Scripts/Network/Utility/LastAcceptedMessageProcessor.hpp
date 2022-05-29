@@ -5,6 +5,10 @@
 #include <functional>
 
 namespace null {
+    /**
+     * Use this utility class to receive state, if you can ingore previous snapshots of it
+     * @tparam T message type
+     */
     template<typename T>
     class LastAcceptedMessageProcessor {
     public:

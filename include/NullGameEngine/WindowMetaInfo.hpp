@@ -16,11 +16,13 @@ namespace null {
         sf::Vector2u windowsSize = {0, 0};
         sf::Vector2f absoluteMouseWorldCoords = {0, 0};
 
+        [[nodiscard]]
+        sf::Event::KeyEvent getKeyEvent() const;
         sf::Vector2f windowSize = {0, 0};
         // left corner position
         sf::Vector2f position = {0, 0};
 
-        sf::Event::KeyEvent getKeyEvent();
+        \
 
         void resetKey();
     };

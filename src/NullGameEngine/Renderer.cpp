@@ -1,4 +1,3 @@
-#include <memory>
 #include <queue>
 
 #include <SFML/Graphics.hpp>
@@ -8,7 +7,7 @@
 
 namespace null {
 
-    constexpr bool DEBUG_RENDER_B2_BODIES = true;
+    constexpr bool DEBUG_RENDER_B2_BODIES = false;
 
     void Renderer::render(sf::RenderWindow& window, const Scene& scene) {
         if (scene.camera->getScript<CameraScript>()) {
@@ -42,7 +41,7 @@ namespace null {
             queue.pop();
         }
         // Toggle b2Body debug rendering by switching DEBUG_RENDER_B2_BODIES
-        if (!DEBUG_RENDER_B2_BODIES)
+        if constexpr (!DEBUG_RENDER_B2_BODIES)
             return;
         auto blist = scene.box2dWorld.GetBodyList();
         while (blist != nullptr) {
