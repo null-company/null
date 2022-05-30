@@ -37,7 +37,7 @@ set(SRC
         ${SRCROOT}/WindowMetaInfo.cpp
         ${INCROOT}/WindowMetaInfo.hpp
         ${SRCROOT}/GameObjectManagers/MapManager.cpp
-        ${INCROOT}/MapManager/MapManager.hpp
+        ${INCROOT}/GameObjectManagers/MapManager.hpp
         ${SRCROOT}/Movement/Movable.cpp
         ${SRCROOT}/Movement/LinearMovable.cpp
         ${INCROOT}/Movememt/LinearMovable.hpp
@@ -47,7 +47,8 @@ set(SRC
         ${SRCROOT}/Entity.cpp
         ${INCROOT}/Entity.hpp
         ${SRCROOT}/CollisionMap.cpp
-        ${INCROOT}/CollisionMap.hpp)
+        ${INCROOT}/CollisionMap.hpp
+        )
 
 add_library(nullGameEngine STATIC ${SRC})
 target_include_directories(nullGameEngine

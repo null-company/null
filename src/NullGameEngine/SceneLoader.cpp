@@ -13,7 +13,7 @@
 #include <PlayerAnimation.hpp>
 #include <Utility.hpp>
 #include <Serializer.hpp>
-#include "MapManager/MapManager.hpp"
+#include <GameObjectManagers/MapManager.hpp>
 #include "Weapons/WeaponHolders/WeaponScript.hpp"
 #include "Weapons/WeaponHolders/StraightWeaponScript.hpp"
 #include "Weapons/WeaponHolders/WeaponStorage.hpp"
