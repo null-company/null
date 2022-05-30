@@ -27,6 +27,7 @@
 #include "PlayerProgress/HealthBarHolder.hpp"
 #include <Network/PlayerDispatchers/PlayerDispatcherClient.hpp>
 #include <Network/PlayerDispatchers/PlayerDispatcherServer.hpp>
+#include "TextHandler.hpp"
 
 namespace null {
 
@@ -48,7 +49,8 @@ namespace null {
                 {"/game",                 getGameScene},
                 {"/game-server",          getGameServerScene},
                 {"/network-demo-client",  getNetworkDemoClientScene},
-                {"/network-demo-server",  getNetworkDemoServerScene}
+                {"/network-demo-server",  getNetworkDemoServerScene},
+                {"/room_connector",       getRoomCreateConnectScene},
         };
 
         std::shared_ptr<Scene> scene;
@@ -88,6 +90,69 @@ namespace null {
             boxObject->addScript<PlayerControlledBoxClient>(*boxObject);
             newScene->addRootGameObject(std::move(boxObject));
         }
+
+        return newScene;
+    }
+
+    std::shared_ptr<Scene> SceneLoader::getRoomCreateConnectScene() {
+        auto newScene = std::make_shared<Scene>();
+        auto& box2dWorld = newScene->getBox2dWorld();
+        sf::Texture* nullTexture = ResourceManager::loadTexture("menu/menu_background.png");
+
+        auto musicManager = std::make_shared<GameObject>();
+        auto& musicManagerScript = musicManager->addScript<MusicManager>(*musicManager);
+        musicManagerScript.musicNameToLoad = "game-theme-synth.ogg";
+
+        auto background = std::make_shared<GameObject>();
+        background->getSprite().setTexture(*nullTexture);
+        background->getSprite().setPosition({0, 0});
+        background->renderLayer = serial::BACKGROUND;
+        background->visible = true;
+
+        auto cursorObject = std::make_shared<GameObject>(std::set<std::string>({"cursor"}));
+
+        auto spriteSheet = SpriteSheet("cursorAnim.png", sf::Vector2i(16, 16), {{"cursorAnim", 0, 0, 5}});
+        cursorObject->addScript<CursorAnimation>(*cursorObject, spriteSheet);
+        cursorObject->renderLayer = serial::FOREGROUND3;
+        cursorObject->addTag("cursor");
+        cursorObject->visible = true;
+        cursorObject->getSprite().setScale(0.1f, 0.1f);
+        cursorObject->makeDynamic(box2dWorld);
+        cursorObject->getSprite().setScale(4.f, 4.f);
+        cursorObject->getRigidBody()->GetFixtureList()->SetSensor(true);
+
+        sf::Texture* pressedTexture = ResourceManager::loadTexture("menu/buttons/null_text.png");
+
+        auto createRoom = std::make_shared<GameObject>();
+        auto createRoomButtonTexture = ResourceManager::loadTexture("menu/buttons/CREATE_ROOM.png");
+        createRoom->setPosition(180, 410);
+        createRoom->addScript<ButtonScript>(*createRoom, *createRoomButtonTexture, *pressedTexture, []() -> void {
+            SceneLoader::changeScene("/demo");
+
+        });
+
+        createRoom->renderLayer = serial::FOREGROUND;
+        createRoom->visible = true;
+
+        auto joinRoom = std::make_shared<GameObject>();
+        auto joinRoomButtonScript = ResourceManager::loadTexture("menu/buttons/JOIN_ROOM.png");
+        joinRoom->setPosition(215, 510);
+        GameObject& joinRoomObject = *joinRoom;
+        joinRoomObject.addScript<TextHandler>(joinRoomObject);
+        //TODO: memory leak
+        joinRoom->addScript<ButtonScript>(*joinRoom, *joinRoomButtonScript, *pressedTexture,
+                                          [&joinRoomObject]() -> void {
+                                              joinRoomObject.getScript<TextHandler>()->active = true;
+                                          });
+        joinRoom->renderLayer = serial::FOREGROUND;
+        joinRoom->visible = true;
+
+
+        newScene->addRootGameObject(std::move(musicManager));
+        newScene->addRootGameObject(std::move(background));
+        newScene->addRootGameObject(std::move(cursorObject));
+        newScene->addRootGameObject(std::move(createRoom));
+        newScene->addRootGameObject(std::move(joinRoom));
 
         return newScene;
     }
@@ -138,7 +203,7 @@ namespace null {
         musicManagerScript.musicNameToLoad = "game-theme-synth.ogg";
 
         newScene->camera->addScript<ExampleCameraScript>(*newScene->camera);
-        newScene->camera->getScript<ExampleCameraScript>()->setScale(1.25);
+        newScene->camera->getScript<ExampleCameraScript>()->setScale(1.7);
         // this texture is not released on purpose, because it MUST exist for as long
         // as the sprite lives. todo manage it with resource manager
         sf::Texture* nullTexture = ResourceManager::loadTexture("background.png");
@@ -566,7 +631,7 @@ namespace null {
         auto playButtonTexture = ResourceManager::loadTexture("menu/buttons/play.png");
         playButton->setPosition(450, 380);
         playButton->addScript<ButtonScript>(*playButton, *playButtonTexture, *pressedTexture, []() -> void {
-            SceneLoader::changeScene("/demo");
+            SceneLoader::changeScene("/room_connector");
         });
         playButton->renderLayer = serial::FOREGROUND;
         playButton->visible = true;

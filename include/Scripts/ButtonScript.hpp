@@ -17,6 +17,7 @@ namespace null {
     public:
 
         void start() override;
+
         void update() override;
 
         void press();
@@ -24,10 +25,12 @@ namespace null {
         ButtonScript(GameObject& go, sf::Texture unpressedButtonTexture,
                      sf::Texture pressedButtonTexture, const std::function<void()> callback);
 
-        void serialize(google::protobuf::Message &) const override {};
+        void serialize(google::protobuf::Message&) const override {};
+
         static std::unique_ptr<Component> deserialize(const google::protobuf::Message&) {
             return {};
         };
+        bool active = true;
     private:
         sf::Texture unpressedButtonTexture;
         sf::Texture pressedButtonTexture;

@@ -47,6 +47,24 @@ namespace null {
                         case sf::Event::KeyReleased: {
                             break;
                         }
+                        case sf::Event::MouseButtonPressed: {
+                            if (e.mouseButton.button == sf::Mouse::Left) {
+                                scene->windowMetaInfo.leftLock = true;
+                            }
+                            break;
+                        }
+                        case sf::Event::MouseButtonReleased: {
+                            if (e.mouseButton.button == sf::Mouse::Left and scene->windowMetaInfo.leftLock) {
+                                scene->windowMetaInfo.leftLock = false;
+                                scene->windowMetaInfo.leftKeyPressed = true;
+                            }
+                            break;
+                        }
+                        case sf::Event::TextEntered: {
+                            if (e.text.unicode <= 127) {
+                                scene->windowMetaInfo.enteredChar = static_cast<char>(e.text.unicode);
+                            }
+                        }
                         default:
                             break;
                     }
@@ -54,6 +72,8 @@ namespace null {
             }
             scene->update();
             scene->windowMetaInfo.resetKey();
+            scene->windowMetaInfo.leftKeyPressed = false;
+            scene->windowMetaInfo.enteredChar = '\0';
             if (!isServer) {
                 sfmlWin->clear(sf::Color::Black);
                 Renderer::render(*sfmlWin, *scene);

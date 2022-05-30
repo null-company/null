@@ -31,8 +31,11 @@ namespace null {
         if (!cursorIsHovered) {
             playedHover = false;
         }
-
-        sprite->setTexture(cursorIsHovered ? pressedButtonTexture : unpressedButtonTexture);
+        if(active){
+            sprite->setTexture(cursorIsHovered ? pressedButtonTexture : unpressedButtonTexture);
+        }else{
+            sprite->setTexture(pressedButtonTexture);
+        }
         if (cursorIsHovered && !playedHover) {
             onHoverSound->play();
             playedHover = true;

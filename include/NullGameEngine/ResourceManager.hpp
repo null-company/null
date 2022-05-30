@@ -14,6 +14,7 @@ namespace null {
         static std::map<std::string, sf::Texture*> textureCache;
         static std::map<std::string, std::shared_ptr<sf::Music>> musicPool;
         static std::map<std::string, sf::Sound> soundPool;
+        static std::map<std::string, std::shared_ptr<sf::Font>> fontPool;
     public:
         static sf::Texture* loadTexture(const std::string& textureName);
 
@@ -40,5 +41,7 @@ namespace null {
         static sf::Sound& getSound(const std::string& soundName);
 
         static std::string getTexturePath(const sf::Texture* p_texture);
+
+        static std::shared_ptr<sf::Font> loadFont(const std::string& fontName);
     };
 }

@@ -71,6 +71,8 @@ set(SRC
         ${SRCROOT}/Network/PlayerDispatchers/PlayerDispatcherClient.cpp
         ${INCROOT}/Network/PlayerDispatchers/PlayerDispatcherServer.hpp
         ${SRCROOT}/Network/PlayerDispatchers/PlayerDispatcherServer.cpp
+        ${SRCROOT}/TextHandler.cpp
+        ${INCROOT}/TextHandler.hpp
         )
 
 
