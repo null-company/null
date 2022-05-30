@@ -40,8 +40,7 @@ int main(int argc, char** argv) {
     const std::string defaultLevel = "/network-demo-client";
     std::cout << "Type level uri to load.\n"
                  "Empty string for default /network-demo-client.\n"
-//                 "/network-demo-server to create headless server\n"
-                 "Try /demo for single player." << std::endl;
+                 "Try /menu if you don't know what to do." << std::endl;
     while (!sceneIsLoaded) {
         std::getline(std::cin, levelToLoad);
         if (levelToLoad.empty()) {
