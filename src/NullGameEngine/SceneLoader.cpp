@@ -129,8 +129,8 @@ namespace null {
         // IMPORTANT!!!
         // If you want to bypass deserialization or get the scene serialized, comment next two lines
         // Otherwise leave them alone
-         auto sc = Serializer::getSceneFromFile("myscene.pbuf");
-         return sc;
+//         auto sc = Serializer::getSceneFromFile("myscene.pbuf");
+//         return sc;
 
         // todo this should be done in a scene file
         auto newScene = std::make_shared<Scene>();
