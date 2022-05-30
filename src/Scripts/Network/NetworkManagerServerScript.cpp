@@ -16,26 +16,28 @@ namespace null {
 
 
     void NetworkManagerServerScript::update() {
-        int readyClientIdx = gameServer->getFirstReadySocketIdx();
-        if (readyClientIdx == -2) {
-            return;
-        }
-        if (readyClientIdx == -1) {
-            gameServer->acceptNewClient();
-            return;
-        }
-        try {
-            sf::TcpSocket& client = gameServer->getClient(readyClientIdx);
-            net::NetMessage message = null::Network::Utils::receiveNetMessage(client);
-            gameServer->handleNetMessage(readyClientIdx, message);
-        } catch (const ReceiveException& exception) {
-            auto status = exception.getStatus();
-            if (status == sf::Socket::Disconnected) {
-                gameServer->disconnectClient(readyClientIdx);
+        while (true) {
+            int readyClientIdx = gameServer->getFirstReadySocketIdx();
+            if (readyClientIdx == -2) {
                 return;
             }
-            throw ReceiveException("Unexpected client receive exception status",
-                                   exception.getStatus());
+            if (readyClientIdx == -1) {
+                gameServer->acceptNewClient();
+                return;
+            }
+            try {
+                sf::TcpSocket& client = gameServer->getClient(readyClientIdx);
+                net::NetMessage message = null::Network::Utils::receiveNetMessage(client);
+                gameServer->handleNetMessage(readyClientIdx, message);
+            } catch (const ReceiveException& exception) {
+                auto status = exception.getStatus();
+                if (status == sf::Socket::Disconnected) {
+                    gameServer->disconnectClient(readyClientIdx);
+                    return;
+                }
+                throw ReceiveException("Unexpected client receive exception status",
+                                       exception.getStatus());
+            }
         }
     }
 

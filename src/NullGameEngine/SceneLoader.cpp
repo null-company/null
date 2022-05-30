@@ -80,7 +80,7 @@ namespace null {
         std::uniform_real_distribution<> randX(0, 1280);
         std::uniform_real_distribution<> randY(0, 920);
 
-        constexpr uint32_t totalBoxes = 15;
+        constexpr uint32_t totalBoxes = 50;
         for (uint32_t i = 0; i < totalBoxes; i++) {
             auto x = static_cast<float>(randX(rng));
             auto y = static_cast<float>(randY(rng));
@@ -109,7 +109,7 @@ namespace null {
         std::uniform_real_distribution<> randX(0, 1280);
         std::uniform_real_distribution<> randY(0, 920);
 
-        constexpr uint32_t totalBoxes = 15;
+        constexpr uint32_t totalBoxes = 50;
         for (uint32_t i = 0; i < totalBoxes; i++) {
             auto x = static_cast<float>(randX(rng));
             auto y = static_cast<float>(randY(rng));
