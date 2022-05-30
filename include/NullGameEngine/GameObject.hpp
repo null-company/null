@@ -156,6 +156,7 @@ namespace null {
 
         template<typename T>
         std::vector<T*> getContactedGameObjects() {
+            //TODO: Return weakPtr
             auto rb = getRigidBody();
             std::vector<T*> result;
             for (auto* contact = rb->GetContactList(); contact != nullptr; contact = contact->next) {

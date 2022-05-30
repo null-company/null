@@ -6,9 +6,12 @@ namespace null {
     class ExampleCameraScript : public CameraScript {
     private:
         sf::FloatRect computeNewViewRect();
+
     public:
+        float scale = 1;
         GameObject* map = nullptr;
         GameObject* trackedObject = &gameObject;
+
         void start() override;
 
         void update() override;
@@ -19,8 +22,12 @@ namespace null {
 
         void setMap(GameObject& object);
 
-        void serialize(google::protobuf::Message &) const override;
+        void serialize(google::protobuf::Message&) const override;
+
         static std::unique_ptr<Component> deserialize(const google::protobuf::Message&);
 
+        float getScale() const;
+
+        void setScale(float scale);
     };
 }

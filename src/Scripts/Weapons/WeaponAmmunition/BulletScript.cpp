@@ -5,17 +5,24 @@
 #include "ResourceManager.hpp"
 #include "Scene.hpp"
 #include "PlayerAnimation.hpp"
+#include "Graphic/Vector.hpp"
 
 namespace null {
     void null::BulletScript::start() {
         Component::start();
-        gameObject.getSprite().setTexture(*ResourceManager::loadTexture("weapons/bullet.png"));
-        gameObject.getSprite().setScale({0.020, 0.020});
+        gameObject.getSprite().setTexture(*ResourceManager::loadTexture("weapons/bullet.jpg"));
+        gameObject.getSprite().setScale({5, 5});
+
         gameObject.makeDynamic();
         gameObject.renderLayer = serial::FOREGROUND3;
         gameObject.getRigidBody()->SetGravityScale(0);
         gameObject.getRigidBody()->SetLinearVelocity(
                 {cos(2 * 3.14f / 360 * rotation) * speed, sin(2 * 3.14f / 360 * rotation) * speed});
+        gameObject.getSprite().setRotation(rotation);
+        float parentAngle = degreeToRadian(rotation);
+
+        gameObject.getRigidBody()->SetTransform(gameObject.getRigidBody()->GetPosition(), parentAngle);
+
         gameObject.setPosition(from);
         gameObject.visible = true;
     }

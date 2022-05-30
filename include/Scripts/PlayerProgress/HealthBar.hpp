@@ -8,6 +8,7 @@ namespace null {
     private:
         sf::IntRect initialRect;
         sf::Vector2f initialPosition;
+        std::string back;
     public:
         void start() override;
 
@@ -15,7 +16,7 @@ namespace null {
 
         void setProgress(float progress);
 
-        HealthBar(GameObject& object);
+        HealthBar(GameObject& object, std::string backName);
 
         void serialize(google::protobuf::Message& message) const override;
     };
