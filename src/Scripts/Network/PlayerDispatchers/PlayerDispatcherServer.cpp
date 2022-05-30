@@ -43,6 +43,10 @@ namespace null {
             }
         });
 
+        if (currentPlayerIdx >= players.size()) {
+            return;
+        }
+
         net::GameMessage::SubscriberState availablePlayerTag;
         availablePlayerTag.set_subscriber_id(gameObject.guid);
 
