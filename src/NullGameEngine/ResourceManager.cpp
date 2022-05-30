@@ -34,9 +34,9 @@ namespace null {
             font = ResourceManager::fontPool.at(fontName);
         } catch (std::out_of_range& exception) {
             constexpr auto fontsDir = "fonts";
-            if (!font->loadFromFile(RESOURCES_PATH / fontsDir / fontName)) {
+            if (!font->loadFromFile((RESOURCES_PATH / fontsDir / fontName).string())) {
                 throw std::runtime_error("Font file not found");
-            };
+            }
             ResourceManager::fontPool[fontName] = font;
         }
         return font;
