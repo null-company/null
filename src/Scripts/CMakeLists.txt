@@ -67,8 +67,13 @@ set(SRC
         ${INCROOT}/PlayerProgress/HealthBar.hpp
         ${INCROOT}/Wall.hpp
         ${SRCROOT}/Wall.cpp
+        ${INCROOT}/Network/PlayerDispatchers/PlayerDispatcherClient.hpp
+        ${SRCROOT}/Network/PlayerDispatchers/PlayerDispatcherClient.cpp
+        ${INCROOT}/Network/PlayerDispatchers/PlayerDispatcherServer.hpp
+        ${SRCROOT}/Network/PlayerDispatchers/PlayerDispatcherServer.cpp
         ${SRCROOT}/TextHandler.cpp
-        ${INCROOT}/TextHandler.hpp)
+        ${INCROOT}/TextHandler.hpp
+        )
 
 
 add_library(scripts STATIC ${SRC})
