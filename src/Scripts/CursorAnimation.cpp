@@ -23,7 +23,7 @@ namespace null {
         }
         Animation::update();
 
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        if (gameObject.getSceneForce().windowMetaInfo.leftKeyPressed) {
             auto rigidBody = gameObject.getRigidBody();
             if (rigidBody == nullptr) {
                 return;
@@ -74,6 +74,6 @@ namespace null {
         return std::make_unique<CursorAnimation>(
                 *Serializer::currentDeserializationGameObject,
                 *p_ss
-                );
+        );
     }
 }

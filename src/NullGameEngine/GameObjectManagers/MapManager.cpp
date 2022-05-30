@@ -31,7 +31,7 @@ namespace null {
             wall->renderLayer = serial::FOREGROUND1;
             wall->visible = true;
             if (i == 2) {
-                wall->getRigidBody()->GetFixtureList()->SetSensor(true);
+//                wall->getRigidBody()->GetFixtureList()->SetSensor(true);
                 wall->addScript<Wall>(*wall);
             }
             walls->addChild(std::move(wall));

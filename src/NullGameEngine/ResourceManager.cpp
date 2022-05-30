@@ -13,6 +13,7 @@ namespace null {
     std::map<std::string, sf::Texture*> ResourceManager::textureCache{};
     std::map<std::string, sf::Sound> ResourceManager::soundPool{};
     std::map<std::string, std::shared_ptr<sf::Music>> ResourceManager::musicPool{};
+    std::map<std::string, std::shared_ptr<sf::Font>> ResourceManager::fontPool{};
 
     sf::Texture* ResourceManager::loadTexture(const std::string& textureName) {
         sf::Texture* texture;
@@ -27,8 +28,22 @@ namespace null {
         return texture;
     }
 
-    std::string ResourceManager::getTexturePath(const sf::Texture *p_texture) {
-        for (auto& i : textureCache) {
+    std::shared_ptr<sf::Font> ResourceManager::loadFont(const std::string& fontName) {
+        std::shared_ptr<sf::Font> font = std::make_shared<sf::Font>();
+        try {
+            font = ResourceManager::fontPool.at(fontName);
+        } catch (std::out_of_range& exception) {
+            constexpr auto fontsDir = "fonts";
+            if (!font->loadFromFile(RESOURCES_PATH / fontsDir / fontName)) {
+                throw std::runtime_error("Font file not found");
+            };
+            ResourceManager::fontPool[fontName] = font;
+        }
+        return font;
+    }
+
+    std::string ResourceManager::getTexturePath(const sf::Texture* p_texture) {
+        for (auto& i: textureCache) {
             if (i.second == p_texture) {
                 return i.first;
             }

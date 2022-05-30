@@ -16,6 +16,7 @@ namespace null {
         static std::shared_ptr<Scene> getGameScene();
         static std::shared_ptr<Scene> getNetworkDemoClientScene();
         static std::shared_ptr<Scene> getNetworkDemoServerScene();
+        static std::shared_ptr<Scene> getRoomCreateConnectScene();
 
     public:
         static void loadSceneFromFile(const std::filesystem::path &path);

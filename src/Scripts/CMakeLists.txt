@@ -67,7 +67,8 @@ set(SRC
         ${INCROOT}/PlayerProgress/HealthBar.hpp
         ${INCROOT}/Wall.hpp
         ${SRCROOT}/Wall.cpp
-        )
+        ${SRCROOT}/TextHandler.cpp
+        ${INCROOT}/TextHandler.hpp)
 
 
 add_library(scripts STATIC ${SRC})
