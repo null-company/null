@@ -108,4 +108,3 @@ Client::~Client() {
     gameServerSocket.disconnect();
     arbiterSocket.disconnect();
 }
-
