@@ -22,23 +22,30 @@ namespace null {
     }
 
     void PlayerDispatcherServer::update() {
+        if (isFinished) {
+            // clean the queue
+            messageQueue.clear();
+            return;
+        }
         messageQueue.processMessageIfAny([this](net::GameMessage::ClientCommand& commandMessage) {
-            // we do not really care what the message is, it really only does
+            // we do not really care what the message is. Receiving it only means we are doing good
             uint32_t ignored;
-            CommandConverter::restoreFromMessage(commandMessage.content(),
-                                                 reinterpret_cast<uint32_t&>(ignored));
+            CommandConverter::restoreFromMessage(commandMessage.content(), ignored);
             ++currentPlayerIdx;
+            if (currentPlayerIdx >= players.size()) {
+                isFinished = true;
+            }
         });
 
-        net::GameMessage::SubscriberState stateToBroadcast;
-        stateToBroadcast.set_subscriber_id(gameObject.guid);
+        net::GameMessage::SubscriberState availablePlayerTag;
+        availablePlayerTag.set_subscriber_id(gameObject.guid);
 
-        *stateToBroadcast.mutable_content() =
+        *availablePlayerTag.mutable_content() =
                 StateConverter::makeMessageFrom(players[currentPlayerIdx]);
         MainLoop::serverArbiter->getGameServer().broadcastMessage(
-                stateToBroadcast
+                availablePlayerTag
         );
     }
 
-    PlayerDispatcherServer::PlayerDispatcherServer(GameObject& go) : Component(go) { }
+    PlayerDispatcherServer::PlayerDispatcherServer(GameObject& go) : Script(go) { }
 }

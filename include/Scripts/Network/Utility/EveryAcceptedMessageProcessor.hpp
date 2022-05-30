@@ -35,6 +35,14 @@ namespace null {
             }
         }
 
+        /**
+         * Ignores all messages, clears the queue
+         */
+        void clear() {
+            std::queue<T> emptyQueue;
+            std::swap(*storage, emptyQueue);
+        }
+
     private:
         std::queue<T>* storage{};
     };
