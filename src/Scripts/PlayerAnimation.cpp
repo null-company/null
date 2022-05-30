@@ -1,14 +1,16 @@
 #include "PlayerAnimation.hpp"
 #include "Serializer.hpp"
 
+#include <ResourceManager.hpp>
 #include <Utility.hpp>
 #include <utility>
-#include <iostream>
 #include <MainLoop.hpp>
-#include "Physics/CollisionCategories.hpp"
+#include <Physics/CollisionCategories.hpp>
 
 namespace null {
     void PlayerAnimation::start() {
+        deathSound = &ResourceManager::getSound("death.ogg");
+        jumpSound = &ResourceManager::getSound("jump.ogg");
         spriteSheet.setAnimation("walkRight");
         RigidBodyAnimation::update();
     }
@@ -38,7 +40,7 @@ namespace null {
 
 
         moovin = false;
-        if (controlled && sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+        if (controlled && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
             gameObject.getRigidBody()->SetLinearVelocity({3.0f, gameObject.getRigidBody()->GetLinearVelocity().y});
             moovin = true;
             if (spriteSheet.currAnimation->name != "walkRight") {
@@ -47,7 +49,7 @@ namespace null {
                 spriteSheet.setAnimation("walkRight");
             }
         }
-        if (controlled && sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !moovin) {
+        if (controlled && sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !moovin) {
             gameObject.getRigidBody()->SetLinearVelocity({-3.0f, gameObject.getRigidBody()->GetLinearVelocity().y});
             moovin = true;
             if (spriteSheet.currAnimation->name != "walkLeft") {
@@ -75,7 +77,11 @@ namespace null {
             }
         }
 
-        if (controlled && sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && canJump) {
+        bool isJumpPressed =
+                sf::Keyboard::isKeyPressed(sf::Keyboard::Space)
+                || sf::Keyboard::isKeyPressed(sf::Keyboard::W);
+        if (controlled && isJumpPressed && canJump) {
+            jumpSound->play();
             gameObject.getRigidBody()->SetLinearVelocity({gameObject.getRigidBody()->GetLinearVelocity().x, -6});
             canJump = false;
         }
@@ -118,6 +124,7 @@ namespace null {
         health -= healthDelta;
         if (health < 0) {
             health = 0;
+            deathSound->play();
             gameObject.destroy();
         }
     }

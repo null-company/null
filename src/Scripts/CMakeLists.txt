@@ -59,10 +59,14 @@ set(SRC
         ${INCROOT}/Network/Utility/LastAcceptedMessageProcessor.hpp
         ${SRCROOT}/Network/Utility/EveryAcceptedMessageProcessor.cpp
         ${INCROOT}/Network/Utility/EveryAcceptedMessageProcessor.hpp
+        ${SRCROOT}/MusicManager.cpp
+        ${INCROOT}/MusicManager.hpp
         ${SRCROOT}/PlayerProgress/HealthBarHolder.cpp
         ${INCROOT}/PlayerProgress/HealthBarHolder.hpp
         ${SRCROOT}/PlayerProgress/HealthBar.cpp
         ${INCROOT}/PlayerProgress/HealthBar.hpp
+        ${INCROOT}/Wall.hpp
+        ${SRCROOT}/Wall.cpp
         )
 
 

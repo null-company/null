@@ -23,6 +23,7 @@
 #include <Network/NetworkManagerServerScript.hpp>
 #include "Weapons/WeaponHolders/GrenadeBunchScript.hpp"
 #include "Weapons/WeaponGenerator.hpp"
+#include <MusicManager.hpp>
 #include "PlayerProgress/HealthBarHolder.hpp"
 
 namespace null {
@@ -132,6 +133,10 @@ namespace null {
         // todo this should be done in a scene file
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
+
+        auto musicManager = std::make_shared<GameObject>();
+        auto& musicManagerScript = musicManager->addScript<MusicManager>(*musicManager);
+        musicManagerScript.musicNameToLoad = "game-theme-synth.ogg";
 
         newScene->camera->addScript<ExampleCameraScript>(*newScene->camera);
         newScene->camera->getScript<ExampleCameraScript>()->setScale(1.25);
@@ -243,6 +248,7 @@ namespace null {
         parentGameObject->addChild(std::move(enemy4));
         Serializer::serializeSceneToFile(newScene.get(), "myscene.pbuf");
         newScene->addRootGameObject(std::move(parentGameObject));
+        newScene->addRootGameObject(std::move(musicManager));
         return newScene;
     }
 
@@ -268,6 +274,9 @@ namespace null {
         auto& box2dWorld = newScene->getBox2dWorld();
         sf::Texture* nullTexture = ResourceManager::loadTexture("menu/menu_background.png");
 
+        auto musicManager = std::make_shared<GameObject>();
+        auto& musicManagerScript = musicManager->addScript<MusicManager>(*musicManager);
+        musicManagerScript.musicNameToLoad = "game-theme-synth.ogg";
 
         auto background = std::make_shared<GameObject>();
         background->getSprite().setTexture(*nullTexture);
@@ -317,6 +326,7 @@ namespace null {
         optionsButton->visible = true;
 
 
+        newScene->addRootGameObject(std::move(musicManager));
         newScene->addRootGameObject(std::move(background));
         newScene->addRootGameObject(std::move(cursorObject));
         newScene->addRootGameObject(std::move(playButton));

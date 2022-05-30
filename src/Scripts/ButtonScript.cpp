@@ -1,4 +1,6 @@
-#include <ButtonScript.hpp>
+#include "ButtonScript.hpp"
+
+#include <ResourceManager.hpp>
 #include <Script.hpp>
 #include <GameObject.hpp>
 #include <Scene.hpp>
@@ -12,6 +14,9 @@ namespace null {
         gameObject.makeStatic(gameObject.getScene().lock()->getBox2dWorld());
         rigidBody = gameObject.getRigidBody();
         rigidBody->GetFixtureList()->SetSensor(true);
+
+        onPressSound = &ResourceManager::getSound("menu-choose-option.ogg");
+        onHoverSound = &ResourceManager::getSound("hover-mouse.ogg");
     }
 
     void ButtonScript::update() {
@@ -23,10 +28,19 @@ namespace null {
             cursorIsHovered = contactList->contact->IsTouching();
         }
 
+        if (!cursorIsHovered) {
+            playedHover = false;
+        }
+
         sprite->setTexture(cursorIsHovered ? pressedButtonTexture : unpressedButtonTexture);
+        if (cursorIsHovered && !playedHover) {
+            onHoverSound->play();
+            playedHover = true;
+        }
     }
 
     void ButtonScript::press() {
+        onPressSound->play();
         callback();
     }
 

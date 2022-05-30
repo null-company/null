@@ -7,7 +7,7 @@
 namespace null {
 
     class ExampleScript : public Script {
-        sf::Clock clock;
+        sf::Clock clock{};
         
         public:
         void start() override;

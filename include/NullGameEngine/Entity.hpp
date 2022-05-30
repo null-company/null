@@ -8,6 +8,7 @@ namespace null {
     public:
         uint64_t guid;
         Entity();
+        explicit Entity(uint64_t guid);
     };
 
 }

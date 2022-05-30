@@ -13,6 +13,8 @@ namespace null {
         WeaponScript::start();
         gameObject.getSprite().setOrigin(sf::Vector2f(80, 70));
         initialScale = gameObject.getSprite().getScale();
+        gunShotSound = &ResourceManager::getSound("gunshot.ogg");
+        gameObject.getSprite().setOrigin(sf::Vector2f(250, 150));
     }
 
     void StraightWeaponScript::update() {
@@ -62,8 +64,7 @@ namespace null {
         bullet->addScript<BulletScript>(*bullet, from, gameObject.getSprite().getRotation() + d(gen), speed);
 
         gameObject.addChild(std::move(bullet));
-
-
+        gunShotSound->play();
     }
 
     StraightWeaponScript::StraightWeaponScript(GameObject& object, double deviance) : WeaponScript(object) {

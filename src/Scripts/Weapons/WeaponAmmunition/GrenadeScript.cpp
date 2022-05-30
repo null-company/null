@@ -1,10 +1,11 @@
 #include "Weapons/WeaponAmmunition/GrenadeScript.hpp"
-#include "GameObject.hpp"
-#include "Scene.hpp"
-#include "Graphic/Vector.hpp"
-#include "ResourceManager.hpp"
-#include "Physics/CollisionCategories.hpp"
-#include "PlayerAnimation.hpp"
+
+#include <GameObject.hpp>
+#include <Scene.hpp>
+#include <Graphic/Vector.hpp>
+#include <ResourceManager.hpp>
+#include <Physics/CollisionCategories.hpp>
+#include <PlayerAnimation.hpp>
 
 namespace null {
     void null::GrenadeScript::start() {
@@ -13,6 +14,7 @@ namespace null {
         gameObject.setPosition(from);
         RigidBodyAnimation::start();
 
+        explosionSound = &ResourceManager::getSound("grenade-explosion.ogg");
         gameObject.getRigidBody()->SetLinearVelocity(
                 {cos(2 * 3.14f / 360 * angle) * speed, sin(2 * 3.14f / 360 * angle) * speed});
 
@@ -32,6 +34,10 @@ namespace null {
 //                gameObject.getRigidBody()->SetType(b2_staticBody);
             }
             if (step == explodeStep) {
+                gameObject.getRigidBody()->SetType(b2_staticBody);
+                explosionSound->play();
+            }
+            if (step == explodeStep + 1) {
                 auto players = gameObject.getContactedGameObjects<PlayerAnimation>();
                 for (auto player: players) {
                     player->damage(30);
