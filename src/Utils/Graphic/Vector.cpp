@@ -27,6 +27,13 @@ namespace null {
         return normalize(v);
     }
 
+    float degreeToRadian(float degree) {
+        return degree / 180.0f * 3.141562f;
+    }
+
+    float radianToDegree(float degree) {
+        return degree * 180.0f / 3.141562f;
+    }
 
 }
 

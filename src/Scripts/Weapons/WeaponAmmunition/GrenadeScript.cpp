@@ -13,18 +13,25 @@ namespace null {
         spriteSheet.setFrame(0);
         gameObject.setPosition(from);
         RigidBodyAnimation::start();
+
         explosionSound = &ResourceManager::getSound("grenade-explosion.ogg");
         gameObject.getRigidBody()->SetLinearVelocity(
                 {cos(2 * 3.14f / 360 * angle) * speed, sin(2 * 3.14f / 360 * angle) * speed});
+
         frameChangeTimer.start();
     }
 
     void null::GrenadeScript::update() {
         if (frameChangeTimer.expired()) {
             int step = spriteSheet.currFrame;
-            int explodeStep = 5;
+            int explodeStep = 8;
             if (step == 0) {
                 frameChangeTimer = Timer(std::chrono::milliseconds(100));
+            }
+            if (step >= explodeStep - 1) {
+                gameObject.getRigidBody()->SetLinearVelocity({0.001, 0.001});
+                gameObject.getRigidBody()->SetAngularVelocity(0.001);
+//                gameObject.getRigidBody()->SetType(b2_staticBody);
             }
             if (step == explodeStep) {
                 gameObject.getRigidBody()->SetType(b2_staticBody);

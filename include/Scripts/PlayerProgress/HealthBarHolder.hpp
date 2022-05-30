@@ -16,9 +16,11 @@ namespace null {
         std::map<std::string, std::shared_ptr<GameObject>> nameToBar;
         std::map<std::string, std::weak_ptr<GameObject>> nameToPlayer;
         Timer checkNewPlayersTimer{std::chrono::milliseconds(1000)};
-        std::deque<std::string> names = {"progress_bar/green.png", "progress_bar/orange.png", "progress_bar/red.png"};
-
-        sf::Vector2f size = {300, 30};
+        std::deque<std::string> names = {"progress_bar/progress_bar_front_3.png",
+                                         "progress_bar/progress_bar_front_2.png",
+                                         "progress_bar/progress_bar_front.png"};
+        std::string back =  "progress_bar/progress_bar_back.png";
+        sf::Vector2f size = {500, 40};
         float padding = {5};
 
     public:
