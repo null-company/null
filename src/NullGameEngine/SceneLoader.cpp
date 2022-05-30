@@ -265,7 +265,126 @@ namespace null {
     }
 
     std::shared_ptr<Scene> SceneLoader::getGameScene() {
-        return nullptr;
+
+        // todo this should be done in a scene file
+        auto newScene = std::make_shared<Scene>();
+        auto& box2dWorld = newScene->getBox2dWorld();
+
+        auto musicManager = std::make_shared<GameObject>();
+        auto& musicManagerScript = musicManager->addScript<MusicManager>(*musicManager);
+        musicManagerScript.musicNameToLoad = "game-theme-synth.ogg";
+
+        auto& cameraScript = newScene->camera->addScript<ExampleCameraScript>(*newScene->camera);
+        cameraScript.scale = 1.2;
+        // this texture is not released on purpose, because it MUST exist for as long
+        // as the sprite lives. todo manage it with resource manager
+        sf::Texture* nullTexture = ResourceManager::loadTexture("background.png");
+        auto parentGameObject = std::make_shared<GameObject>();
+        auto weaponGenerator = std::make_shared<GameObject>();
+
+        weaponGenerator->addScript<WeaponGenerator>(*weaponGenerator);
+        parentGameObject->addChild(std::move(weaponGenerator));
+
+        auto nullGameLogo = std::make_shared<GameObject>();
+        nullGameLogo->getSprite().setTexture(*nullTexture);
+        nullGameLogo->getSprite().setScale({8.0f, 8.0f});
+        nullGameLogo->renderLayer = serial::BACKGROUND;
+        nullGameLogo->visible = true;
+
+        auto boxTexture = ResourceManager::loadTexture("box.png");
+
+        auto boxObject = std::make_shared<GameObject>();
+        boxObject->getSprite().setTexture(*boxTexture);
+        boxObject->getSprite().setScale(0.125f, 0.125f);
+        boxObject->setPosition(200, 0);
+        boxObject->renderLayer = serial::FOREGROUND;
+        boxObject->visible = true;
+
+        auto boxObject2 = std::make_shared<GameObject>();
+        boxObject2->getSprite().setTexture(*boxTexture);
+        boxObject2->getSprite().setScale(0.125f, 0.125f);
+        boxObject2->setPosition(750.0f, 200.0f);
+        boxObject2->getSprite().setColor(sf::Color(255U, 0U, 0U));
+        boxObject2->renderLayer = serial::BACKGROUND1;
+        boxObject2->visible = true;
+        auto createGround = [&box2dWorld, &newScene](float x, float y) {
+            auto groundObject = std::make_shared<GameObject>();
+            auto& groundSprite = groundObject->getSprite();
+            groundSprite.setTexture(*ResourceManager::loadTexture("platform.png"));
+            groundSprite.setScale(3.0f, 3.0f);
+            groundSprite.setPosition(x, y);
+            groundObject->renderLayer = serial::FOREGROUND;
+            groundObject->visible = true;
+            groundObject->addTag("platform");
+            groundObject->makeStatic(box2dWorld);
+            groundObject->addScript<ReloadSceneScript>(*groundObject);
+            newScene->addRootGameObject(std::move(groundObject));
+        };
+        createGround(0, 400);
+        createGround(192, 466);
+        createGround(384, 532);
+        createGround(576, 532);
+        createGround(1152, 400);
+        createGround(880, 100);
+        for (int i = 0; i < 10; i++) {
+            createGround(i * 300, i * 200);
+        }
+        boxObject->makeDynamic(box2dWorld);
+
+        auto cursorObject = std::make_shared<GameObject>(std::set<std::string>({"cursor"}));
+
+        auto spriteSheet = SpriteSheet("cursorAnim.png", sf::Vector2i(16, 16), {{"cursorAnim", 0, 0, 5}});
+        cursorObject->addScript<CursorAnimation>(*cursorObject, spriteSheet);
+        cursorObject->addTag("cursor");
+        cursorObject->renderLayer = serial::FOREGROUND3;
+        cursorObject->visible = true;
+
+        auto player = PlayerAnimation::initPlayer("playerAnim_v2.png", box2dWorld);
+        auto grenadeBunch = std::make_shared<GameObject>();
+        grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
+
+        player->getScript<PlayerAnimation>()->controlled = true;
+        auto enemy1 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
+        auto enemy2 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
+        auto enemy3 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
+        auto enemy4 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
+//        enemy1->setPosition(300, 0);
+//        enemy2->setPosition(200, 200);
+//        enemy3->setPosition(400, 000);
+        enemy4->setPosition(400, 200);
+//        enemy1->getScript<PlayerAnimation>()->name = "Meow";
+//        enemy2->getScript<PlayerAnimation>()->name = "Gav";
+//        enemy4->getScript<PlayerAnimation>()->name = "Meowss";
+//        enemy3->getScript<PlayerAnimation>()->name = "Gavaa";
+
+        auto gun = std::make_shared<GameObject>();
+        gun->addScript<StraightWeaponScript>(*gun, 0.01);
+
+        auto weaponStorage = std::make_shared<GameObject>();
+        std::vector<std::shared_ptr<GameObject>> guns{gun, grenadeBunch};
+        weaponStorage->addScript<WeaponStorage>(*weaponStorage, guns);
+
+        player->addChild(std::move(weaponStorage));
+        newScene->camera->getScript<ExampleCameraScript>()->setTrackedGameObject(*player);
+        newScene->camera->getScript<ExampleCameraScript>()->setMap(*nullGameLogo);
+
+        auto healthBarHolder = std::make_shared<GameObject>();
+        healthBarHolder->addScript<HealthBarHolder>(*healthBarHolder);
+        parentGameObject->addChild(std::move(healthBarHolder));
+
+        MapManager mapManager(box2dWorld);
+        parentGameObject->addChild(std::move(mapManager.makeBorder(nullGameLogo->getSprite())));
+        nullGameLogo->addChild(std::move(boxObject));
+        parentGameObject->addChild(std::move(nullGameLogo));
+        parentGameObject->addChild(std::move(player));
+        parentGameObject->addChild(std::move(cursorObject));
+//        parentGameObject->addChild(std::move(enemy1));
+//        parentGameObject->addChild(std::move(enemy2));
+//        parentGameObject->addChild(std::move(enemy3));
+        parentGameObject->addChild(std::move(enemy4));
+        newScene->addRootGameObject(std::move(parentGameObject));
+        newScene->addRootGameObject(std::move(musicManager));
+        return newScene;
     }
 
     std::shared_ptr<Scene> SceneLoader::getMenuScene() {
