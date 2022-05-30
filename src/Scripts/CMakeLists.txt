@@ -65,6 +65,8 @@ set(SRC
         ${INCROOT}/PlayerProgress/HealthBarHolder.hpp
         ${SRCROOT}/PlayerProgress/HealthBar.cpp
         ${INCROOT}/PlayerProgress/HealthBar.hpp
+        ${INCROOT}/Wall.hpp
+        ${SRCROOT}/Wall.cpp
         )
 
 
