@@ -1,4 +1,4 @@
-#include <GameObjectManagers/Wall.hpp>
+#include <Wall.hpp>
 #include "GameObject.hpp"
 #include "PlayerAnimation.hpp"
 
