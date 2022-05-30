@@ -23,6 +23,7 @@
 #include <Network/NetworkManagerServerScript.hpp>
 #include "Weapons/WeaponHolders/GrenadeBunchScript.hpp"
 #include "Weapons/WeaponGenerator.hpp"
+#include <MusicManager.hpp>
 #include "PlayerProgress/HealthBarHolder.hpp"
 
 namespace null {
@@ -133,6 +134,10 @@ namespace null {
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
 
+        auto musicManager = std::make_shared<GameObject>();
+        auto& musicManagerScript = musicManager->addScript<MusicManager>(*musicManager);
+        musicManagerScript.musicNameToLoad = "game-theme-synth.ogg";
+
         newScene->camera->addScript<ExampleCameraScript>(*newScene->camera);
         // this texture is not released on purpose, because it MUST exist for as long
         // as the sprite lives. todo manage it with resource manager
@@ -242,6 +247,7 @@ namespace null {
         parentGameObject->addChild(std::move(enemy4));
         Serializer::serializeSceneToFile(newScene.get(), "myscene.pbuf");
         newScene->addRootGameObject(std::move(parentGameObject));
+        newScene->addRootGameObject(std::move(musicManager));
         return newScene;
     }
 
@@ -267,6 +273,9 @@ namespace null {
         auto& box2dWorld = newScene->getBox2dWorld();
         sf::Texture* nullTexture = ResourceManager::loadTexture("menu/menu_background.png");
 
+        auto musicManager = std::make_shared<GameObject>();
+        auto& musicManagerScript = musicManager->addScript<MusicManager>(*musicManager);
+        musicManagerScript.musicNameToLoad = "game-theme-synth.ogg";
 
         auto background = std::make_shared<GameObject>();
         background->getSprite().setTexture(*nullTexture);
@@ -316,6 +325,7 @@ namespace null {
         optionsButton->visible = true;
 
 
+        newScene->addRootGameObject(std::move(musicManager));
         newScene->addRootGameObject(std::move(background));
         newScene->addRootGameObject(std::move(cursorObject));
         newScene->addRootGameObject(std::move(playButton));

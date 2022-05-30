@@ -9,7 +9,12 @@ namespace null {
 
     void NetworkManagerClientScript::start() {
         LOGD << "Client server script start";
-        networkManager = std::make_unique<ClientNetworkManager>(ipToConnectTo, port);
+        try {
+            networkManager = std::make_unique<ClientNetworkManager>(ipToConnectTo, port);
+        } catch (const NetworkException& e) {
+            std::cerr << "Tried to connect to server but failed" << std::endl;
+            exit(20);
+        }
 
         dialog:
         std::cout << "Create room? [y/n]" << std::flush;

@@ -1,17 +1,15 @@
 #pragma once
 
-#include "Script.hpp"
-#include "SFML/Graphics.hpp"
-#include "Schedulers/Timer.hpp"
-#include "RigidBodyAnimation.hpp"
+#include <SFML/Audio/Sound.hpp>
+#include <SFML/Graphics.hpp>
+
+#include <Schedulers/Timer.hpp>
+#include <Script.hpp>
+#include <RigidBodyAnimation.hpp>
+
 
 namespace null {
     class GrenadeScript : public RigidBodyAnimation{
-    private:
-        Timer timer{std::chrono::milliseconds{3000}};
-        Timer frameChangeTimer{std::chrono::milliseconds{1500}};
-        float speed, angle;
-        sf::Vector2f from;
     public:
         GameObject* contactedGameObject = nullptr;
 
@@ -29,5 +27,12 @@ namespace null {
         void serialize(google::protobuf::Message & message) const override;
 
         static std::unique_ptr<Script> deserialize(const google::protobuf::Message& message);
+    private:
+        Timer timer{std::chrono::milliseconds{3000}};
+        Timer frameChangeTimer{std::chrono::milliseconds{1500}};
+        float speed, angle;
+        sf::Vector2f from;
+
+        sf::Sound* explosionSound{};
     };
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <SFML/Audio/Sound.hpp>
+
 #include <RigidBodyAnimation.hpp>
 
 namespace null {
@@ -32,6 +34,10 @@ namespace null {
         GameObject& getGameObject();
 
         static std::shared_ptr<GameObject> initPlayer(const std::string& anim, b2World& box2dWorld);
+
+    private:
+        sf::Sound* deathSound{};
+        sf::Sound* jumpSound{};
     };
 
 }

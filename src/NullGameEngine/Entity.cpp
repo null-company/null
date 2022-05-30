@@ -1,4 +1,8 @@
 #include <Entity.hpp>
 #include <Utility.hpp>
 
-null::Entity::Entity():guid(null::Utility::generateGuid()) { }
+namespace null {
+    Entity::Entity(): Entity(null::Utility::generateGuid()) { }
+
+    Entity::Entity(uint64_t guid): guid(guid) { }
+}

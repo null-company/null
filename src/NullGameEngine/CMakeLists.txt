@@ -43,7 +43,6 @@ set(SRC
         ${INCROOT}/Movememt/LinearMovable.hpp
         ${SRCROOT}/Physics/ContactListener.cpp
         ${INCROOT}/Physics/ContactListener.hpp
-        ../../include/Scripts/Weapons/WeaponHolders/GrenadeBunchScript.hpp
         ${INCROOT}/Physics/CollisionCategories.hpp
         ${SRCROOT}/Entity.cpp
         ${INCROOT}/Entity.hpp

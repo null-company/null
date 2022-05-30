@@ -7,8 +7,6 @@
 
 namespace null {
 
-    sf::Clock clock;
-
     void ExampleScript::start() {
         clock.restart();
     }
@@ -37,8 +35,7 @@ namespace null {
         auto& msg = dynamic_cast<const serial::Script&>(message);
         return std::make_unique<ExampleScript>(
                 *Serializer::currentDeserializationGameObject
-                );
+        );
     }
 
 }
-

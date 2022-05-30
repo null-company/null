@@ -1,7 +1,7 @@
 #include "MapManager/MapManager.hpp"
 #include "GameObject.hpp"
 #include "Utility.hpp"
-#include "MapManager/Wall.hpp"
+#include "Wall.hpp"
 #include <ResourceManager.hpp>
 #include <iostream>
 #include <SFML/Graphics.hpp>
