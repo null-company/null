@@ -9,6 +9,7 @@
 #include <Network/NetworkManagerClientScript.hpp>
 #include <client/ClientNetworkManager.h>
 #include <Network/PrimitiveStateConverter.hpp>
+#include <PlayerAnimation.hpp>
 
 #include <plog/Log.h>
 
@@ -16,7 +17,7 @@ namespace null {
 
 
     void PlayerDispatcherClient::start() {
-        std::cout << "CLIENT DISPATCHER START" << std::endl;
+        LOGD << "CLIENT DISPATCHER START";
         auto networkManagerObject =
                 gameObject.getScene().lock()->findFirstByTag("network-manager");
         networkManagerScript = networkManagerObject.lock()->getScript<NetworkManagerClientScript>();
@@ -32,8 +33,7 @@ namespace null {
         messageQueue.processMessageIfAny([this](net::GameMessage::SubscriberState& message) {
             std::string availablePlayer;
             PrimitiveStateConverter::restoreFromMessage(message.content(), availablePlayer);
-//            LOGD << "PLAYING AS " << availablePlayer;
-            std::cout << "PLAYING AS " << availablePlayer << std::endl;
+            LOGD << "PLAYING AS " << availablePlayer;
             foundPlayer = true;
 
             net::GameMessage::ClientCommand iReserverAPlayerMessage;
@@ -42,7 +42,9 @@ namespace null {
                     CommandConverter::makeMessageFrom(42u); // any number
             networkManagerScript->getNetworkManager().sendCommandToServer(iReserverAPlayerMessage);
             // make player controllable
-//            throw std::runtime_error("todo");
+            auto& player = *gameObject.getSceneForce().findFirstByTag(availablePlayer).lock();
+            auto playerAnimationP = player.getScript<PlayerAnimation>();
+            playerAnimationP->controlled = true;
         });
     }
 

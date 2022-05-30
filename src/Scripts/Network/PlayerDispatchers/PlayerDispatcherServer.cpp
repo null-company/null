@@ -15,7 +15,7 @@
 namespace null {
 
     void PlayerDispatcherServer::start() {
-        std::cout << "SERVER DISPATCHER START" << std::endl;
+        LOGD << "SERVER DISPATCHER START";
         if (players.empty()) {
             throw std::runtime_error("No players were provided");
         }
@@ -35,10 +35,10 @@ namespace null {
             // we do not really care what the message is. Receiving it only means we are doing good
             uint32_t ignored;
             CommandConverter::restoreFromMessage(commandMessage.content(), ignored);
-            std::cout << "gave away player " << players[currentPlayerIdx] << std::endl;
+            LOGD << "gave away player " << players[currentPlayerIdx];
             ++currentPlayerIdx;
             if (currentPlayerIdx >= players.size()) {
-                std::cout << "no players left" << std::endl;
+                LOGD << "no players left";
                 isFinished = true;
             }
         });
