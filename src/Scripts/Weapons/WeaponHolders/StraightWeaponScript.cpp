@@ -11,10 +11,9 @@
 namespace null {
     void StraightWeaponScript::start() {
         WeaponScript::start();
-        gameObject.getSprite().setOrigin(sf::Vector2f(80, 70));
         initialScale = gameObject.getSprite().getScale();
         gunShotSound = &ResourceManager::getSound("gunshot.ogg");
-        gameObject.getSprite().setOrigin(sf::Vector2f(250, 150));
+        gameObject.getSprite().setOrigin(sf::Vector2f(40, 60));
     }
 
     void StraightWeaponScript::update() {

@@ -27,7 +27,6 @@ namespace null {
         static std::unique_ptr<Component> deserialize(const google::protobuf::Message&);
 
     private:
-        double speed = 5;
         sf::Sound* gunShotSound{};
     };
 }
