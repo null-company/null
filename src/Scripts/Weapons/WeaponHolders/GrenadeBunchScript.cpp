@@ -47,17 +47,17 @@ namespace null {
         auto& scene = gameObject.getSceneForce();
         auto speed = scheduler.getValue();
         auto grenade = std::make_shared<GameObject>();
-        grenade->getSprite().setTextureRect({0, 0, 32, 32});
+        grenade->getSprite().setTextureRect({0, 0, 64, 64});
         grenade->getSprite().setScale({3, 3});
         grenade->makeDynamic(gameObject.getSceneForce().getBox2dWorld());
         grenade->renderLayer = serial::FOREGROUND;
         grenade->visible = true;
 
-        auto grenadeSpriteSheet = SpriteSheet("weapons/grenade_anim.jpg", sf::Vector2i{32, 32}, {{"", 0, 0, 8}});
+        auto grenadeSpriteSheet = SpriteSheet("weapons/grenade_anim.png", sf::Vector2i{64, 64}, {{"", 0, 0, 12}});
 
         //TODO Memory leak......
         auto shape1 = new b2PolygonShape();
-        auto sizeVector = Utility::pixelToMetersVector(sf::Vector2i{30, 40});
+        auto sizeVector = Utility::pixelToMetersVector(sf::Vector2i{15, 25});
         shape1->SetAsBox(sizeVector.x / 2, sizeVector.y / 2, grenade->getRigidBody()->GetLocalCenter(), 0.0f);
         b2FixtureDef fixtureDef1;
         fixtureDef1.shape = shape1;
@@ -68,16 +68,18 @@ namespace null {
         b2Filter.maskBits = ALL_CATEGORIES & ~PLAYER_CATEGORY;
         fixtureDef1.filter = b2Filter;
 
+        // Волшебные константы при SetAsBox но нужно решить
+        auto explodeSizeVector = Utility::pixelToMetersVector(sf::Vector2i{64, 64});
         auto shape2 = new b2PolygonShape();
-        shape2->SetAsBox(sizeVector.x * 1.5, sizeVector.y * 1.5, grenade->getRigidBody()->GetLocalCenter(), 0.0f);
+        shape2->SetAsBox(explodeSizeVector.x*1.3, explodeSizeVector.y*1.3, grenade->getRigidBody()->GetLocalCenter(), 0.0f);
         b2FixtureDef fixtureDef2;
         fixtureDef2.shape = shape2;
         fixtureDef2.isSensor = true;
         grenade->addScript<GrenadeScript>(*grenade,
                                           grenadeSpriteSheet,
                                           CollisionMap(
-                                                  {{"", {{fixtureDef1}, {fixtureDef1}, {fixtureDef1}, {fixtureDef1},
-                                                         {fixtureDef2},
+                                                  {{"", {{fixtureDef1}, {fixtureDef1}, {fixtureDef1}, {fixtureDef1}, {fixtureDef1},
+                                                         {fixtureDef1}, {fixtureDef1}, {fixtureDef1}, {fixtureDef2},
                                                          {fixtureDef2}, {fixtureDef2}, {fixtureDef2}, {fixtureDef2}}}}),
                                           speed,
                                           getAngle(scene.getWindowMetaInfo().absoluteMouseWorldCoords -

@@ -49,6 +49,8 @@ namespace null {
             if (player) {
                 auto playerScript = player->getScript<PlayerAnimation>();
                 bar->getScript<HealthBar>()->setProgress(playerScript->health / 100.f);
+            }else{
+                bar->getScript<HealthBar>()->setProgress(0 / 100.f);
             }
         }
     }

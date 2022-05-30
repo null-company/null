@@ -15,4 +15,9 @@ namespace null {
     sf::Vector2f getScaleToFitNewSize(sf::Vector2<T> currSize, sf::Vector2<T> newSize) {
         return sf::Vector2f{float(newSize.x / currSize.x), float(newSize.y / currSize.y)};
     }
+
+    float degreeToRadian(float degree);
+
+    float radianToDegree(float degree);
+
 }
