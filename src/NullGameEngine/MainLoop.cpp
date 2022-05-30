@@ -36,7 +36,7 @@ namespace null {
                     switch (e.type) {
                         case sf::Event::EventType::Closed:
                             sfmlWin->close();
-                            break;
+                            return false;
                         case sf::Event::Resized: {
                             break;
                         }

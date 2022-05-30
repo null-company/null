@@ -1,13 +1,14 @@
 #pragma once
 
-#include <Weapons/WeaponHolders/WeaponScript.hpp>
+#include <SFML/Audio/Sound.hpp>
+
 #include <box2d/box2d.h>
+
+#include <Weapons/WeaponHolders/WeaponScript.hpp>
+
 
 namespace null {
     class StraightWeaponScript : public WeaponScript {
-    private:
-        double speed = 5;
-
     public:
         explicit StraightWeaponScript(GameObject& object, double deviance);
 
@@ -21,6 +22,10 @@ namespace null {
 
         void serialize(google::protobuf::Message&) const override;
         static std::unique_ptr<Component> deserialize(const google::protobuf::Message&);
+
+    private:
+        double speed = 5;
+        sf::Sound* gunShotSound{};
     };
 }
 
