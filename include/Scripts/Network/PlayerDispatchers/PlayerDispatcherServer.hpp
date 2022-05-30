@@ -18,6 +18,8 @@ namespace null {
      */
     class PlayerDispatcherServer: public Script {
     public:
+        std::vector<std::string> players;
+    public:
 
         void start() override;
         void update() override;
@@ -27,7 +29,6 @@ namespace null {
         bool isFinished = false;
         EveryAcceptedMessageProcessor<net::GameMessage::ClientCommand> messageQueue{};
         uint32_t currentPlayerIdx = 0;
-        std::vector<std::string> players{"player1", "player2", "player3", "player4"};
     };
 
 }
