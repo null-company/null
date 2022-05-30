@@ -12,6 +12,7 @@
 #include "string"
 #include "ResourceManager.hpp"
 #include "Graphic/Vector.hpp"
+#include "Serializer.hpp"
 
 namespace null {
 
@@ -80,10 +81,16 @@ namespace null {
     HealthBarHolder::HealthBarHolder(GameObject& object) : Component(object) {}
 
     void HealthBarHolder::serialize(google::protobuf::Message& message) const {
-        Component::serialize(message);
+        auto& msg = (serial::Script&)message;
+        msg.mutable_health_bar_holder();
     }
 
     std::unique_ptr<Script> HealthBarHolder::deserialize(const google::protobuf::Message& message) {
-        return std::unique_ptr<Script>();
+        const auto& msg = (const serial::Script&)message;
+        auto s_script = msg.health_bar_holder();
+        auto p_script = std::make_unique<HealthBar>(
+                *Serializer::currentDeserializationGameObject
+        );
+        return p_script;
     }
 } // null

@@ -407,7 +407,7 @@ namespace null {
             auto deserializationFunc = Serializer::scriptSerializationMap.at(s.script_instance_case());
             auto actualScript = deserializationFunc(dynamic_cast<const google::protobuf::Message&>(s));
             actualScript->guid = s.guid();
-            Serializer::deserializedEntitySet.insert(actualScript.get());
+            Serializer::addToDeserialized(actualScript.get());
             p_go->addScript(std::move(actualScript));
         }
 
@@ -415,7 +415,7 @@ namespace null {
             p_go->addChild(deserialize(c));
         }
 
-        Serializer::deserializedEntitySet.insert(p_go.get());
+        Serializer::addToDeserialized(p_go.get());
 
         return p_go;
     }

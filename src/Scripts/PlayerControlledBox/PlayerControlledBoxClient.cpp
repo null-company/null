@@ -1,4 +1,5 @@
 #include "PlayerControlledBox/PlayerControlledBoxClient.hpp"
+#include "Serializer.hpp"
 
 #include <unordered_map>
 
@@ -67,10 +68,18 @@ namespace null {
             : Script(go) { }
 
     void PlayerControlledBoxClient::serialize(google::protobuf::Message& message) const {
-        Component::serialize(message);
+        auto& msg = (serial::Script&)message;
+        auto s_script = msg.mutable_player_controlled_box_client();
+        s_script->set_nw_manager_script_guid(networkManagerScript->guid);
     }
 
     std::unique_ptr<Script> PlayerControlledBoxClient::deserialize(const google::protobuf::Message& message) {
-        return std::unique_ptr<Script>();
+        const auto& msg = (const serial::Script&)message;
+        auto s_script = msg.player_controlled_box_client();
+        auto p_script = std::make_unique<PlayerControlledBoxClient>(
+                (*Serializer::currentDeserializationGameObject)
+                );
+        Serializer::addToBeSetPointer((Entity**)&p_script->networkManagerScript, s_script.nw_manager_script_guid());
+        return p_script;
     }
 }

@@ -80,6 +80,20 @@ namespace null {
             {serial::Script::ScriptInstanceCase::kHealthBarHolder, HealthBarHolder::deserialize},
             {serial::Script::ScriptInstanceCase::kWeaponGenerator, WeaponGenerator::deserialize},
             {serial::Script::ScriptInstanceCase::kWeaponStorage, WeaponStorage::deserialize},
+            {serial::Script::ScriptInstanceCase::kGrenadeBunchScript, GrenadeBunchScript::deserialize},
+            {serial::Script::ScriptInstanceCase::kAnimation, Animation::deserialize},
+            {serial::Script::ScriptInstanceCase::kRigidBodyAnimation, RigidBodyAnimation::deserialize},
+            {serial::Script::ScriptInstanceCase::kMusicManager, MusicManager::deserialize},
+            {serial::Script::ScriptInstanceCase::kWall, Wall::deserialize},
     };
+
+    void Serializer::addToDeserialized(Entity* pEntity) {
+        deserializedEntitySet.insert(pEntity);
+    }
+
+    void Serializer::addToBeSetPointer(Entity** ppEntity, uint64_t guid) {
+        toBeSetEntityPointerMap.try_emplace(ppEntity, guid);
+    }
+
 
 }

@@ -99,8 +99,16 @@ message HealthBarHolder { }
 // we really should have prefabs already;;;
 message GrenadeScript { }
 
+message GrenadeBunchScript { }
+
 message WeaponStorage {
   repeated uint64 weapon_guid = 1;
 }
 
 message WeaponGenerator { }
+
+message MusicManager {
+  string musicPath = 1;
+}
+
+message Wall { }

@@ -79,6 +79,7 @@ namespace null {
         });
         sceneTreeForEachDo([](GameObject& obj) -> void {
             obj.start();
+            PLOGD << obj.guid;
         });
     }
 

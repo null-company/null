@@ -33,6 +33,9 @@ message Script {
     HealthBarHolder health_bar_holder = 25;
     WeaponStorage weapon_storage = 26;
     WeaponGenerator weapon_generator = 27;
+    GrenadeBunchScript grenade_bunch_script = 28;
+    MusicManager music_manager = 29;
+    Wall wall = 30;
   }
 }
 

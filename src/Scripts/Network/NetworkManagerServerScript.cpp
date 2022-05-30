@@ -1,5 +1,6 @@
 #include "Network/NetworkManagerServerScript.hpp"
 #include "exceptions/NetworkException.h"
+#include "Serializer.hpp"
 
 #include <unordered_map>
 
@@ -46,10 +47,14 @@ namespace null {
     NetworkManagerServerScript::NetworkManagerServerScript(GameObject& go) : Script(go) { }
 
     void NetworkManagerServerScript::serialize(google::protobuf::Message& message) const {
-        Component::serialize(message);
+        ((serial::Script&)message).mutable_network_manager_server_script();
     }
 
     std::unique_ptr<Script> NetworkManagerServerScript::deserialize(const google::protobuf::Message& message) {
-        return std::unique_ptr<Script>();
+        auto msg = (const serial::Script&)message;
+        auto p_script = std::make_unique<NetworkManagerServerScript>(
+                *Serializer::currentDeserializationGameObject
+                );
+        return p_script;
     }
 }

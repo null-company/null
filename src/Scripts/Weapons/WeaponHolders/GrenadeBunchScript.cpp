@@ -11,6 +11,7 @@
 #include "Utility.hpp"
 #include "Physics/CollisionCategories.hpp"
 #include "SFML/Graphics.hpp"
+#include "Serializer.hpp"
 
 namespace null {
     void GrenadeBunchScript::start() {
@@ -87,10 +88,14 @@ namespace null {
     }
 
     void GrenadeBunchScript::serialize(google::protobuf::Message& message) const {
-        Component::serialize(message);
+        auto& msg = (serial::Script&)message;
+        msg.mutable_grenade_bunch_script();
     }
 
     std::unique_ptr<Script> GrenadeBunchScript::deserialize(const google::protobuf::Message& message) {
-        return {};
+        auto p_script = std::make_unique<GrenadeBunchScript>(
+                *Serializer::currentDeserializationGameObject
+                );
+        return p_script;
     }
 }

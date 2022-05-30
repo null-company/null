@@ -15,6 +15,8 @@ namespace null {
 
         static void serializeSceneToFile(const Scene* scene, const std::string& filename);
         static std::shared_ptr<Scene> getSceneFromFile(const std::string& filename);
+        static void addToDeserialized(Entity*);
+        static void addToBeSetPointer(Entity**, uint64_t);
 
         static const std::unordered_map<
                 serial::Script::ScriptInstanceCase,

@@ -1,5 +1,6 @@
 #include "PlayerControlledBox/PlayerControlledBoxServer.hpp"
 #include "serialized/serverConfig.pb.h"
+#include "Serializer.hpp"
 
 #include <SFML/System/Time.hpp>
 #include <MainLoop.hpp>
@@ -83,10 +84,15 @@ namespace null {
     }
 
     void PlayerControlledBoxServer::serialize(google::protobuf::Message& message) const {
-        Component::serialize(message);
+        auto& msg = (serial::Script&)message;
+        msg.mutable_player_controlled_box_server();
     }
 
     std::unique_ptr<Script> PlayerControlledBoxServer::deserialize(const google::protobuf::Message& message) {
-        return std::unique_ptr<Script>();
+        const auto& msg = (const serial::Script&)message;
+        auto p_script = std::make_unique<PlayerControlledBoxServer>(
+                *Serializer::currentDeserializationGameObject
+                );
+        return p_script;
     }
 }

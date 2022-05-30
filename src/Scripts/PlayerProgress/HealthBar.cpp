@@ -4,6 +4,7 @@
 
 #include "PlayerProgress/HealthBar.hpp"
 #include "GameObject.hpp"
+#include "Serializer.hpp"
 
 namespace null {
     void HealthBar::start() {
@@ -30,11 +31,17 @@ namespace null {
     }
 
     void HealthBar::serialize(google::protobuf::Message& message) const {
-        Component::serialize(message);
+        auto& msg = (serial::Script&)message;
+        msg.mutable_health_bar();
     }
 
     std::unique_ptr<Script> HealthBar::deserialize(const google::protobuf::Message& message) {
-        return std::unique_ptr<Script>();
+        const auto& msg = (const serial::Script&)message;
+        auto s_script = msg.health_bar();
+        auto p_script = std::make_unique<HealthBar>(
+                *Serializer::currentDeserializationGameObject
+        );
+        return p_script;
     }
 
 

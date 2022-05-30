@@ -1,4 +1,5 @@
 #include "Weapons/WeaponGenerator.hpp"
+#include "Serializer.hpp"
 
 #include <random>
 
@@ -81,11 +82,15 @@ namespace null {
     WeaponGenerator::WeaponGenerator(GameObject& object) : Component(object) {}
 
     void WeaponGenerator::serialize(google::protobuf::Message& message) const {
-        Component::serialize(message);
+        auto& msg = (serial::Script&)message;
+        msg.mutable_weapon_generator();
     }
 
     std::unique_ptr<Script> WeaponGenerator::deserialize(const google::protobuf::Message& message) {
-        return std::unique_ptr<Script>();
+        auto p_script = std::make_unique<WeaponGenerator>(
+                *Serializer::currentDeserializationGameObject
+        );
+        return p_script;
     }
 
 } // null

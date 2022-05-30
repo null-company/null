@@ -24,4 +24,6 @@
 #include <PlayerProgress/HealthBar.hpp>
 #include <PlayerProgress/HealthBarHolder.hpp>
 #include <DeleteScript.hpp>
+#include <MusicManager.hpp>
+#include <Wall.hpp>
 

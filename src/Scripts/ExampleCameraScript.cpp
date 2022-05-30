@@ -73,15 +73,15 @@ namespace null {
                 );
         // This is an example of getting the pointers to serialized entities
         // (they're set in Serializer::getSceneFromFile)
-        Serializer::toBeSetEntityPointerMap.insert(
-                {(Entity**)(&p_script->map), s_script.map_guid()}
-                );
-        auto asdf = Serializer::toBeSetEntityPointerMap.find((Entity**)&p_script->map);
-        Serializer::toBeSetEntityPointerMap.insert(
-                {(Entity**)(&p_script->trackedObject), s_script.tracked_object_guid()}
+        Serializer::addToBeSetPointer(
+                (Entity**)(&p_script->map),
+                s_script.map_guid()
                 );
 
-        asdf = Serializer::toBeSetEntityPointerMap.find((Entity**)&p_script->trackedObject);
+        Serializer::addToBeSetPointer(
+                (Entity**)(&p_script->trackedObject),
+                s_script.tracked_object_guid()
+                );
 
         return p_script;
     }

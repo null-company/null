@@ -49,12 +49,14 @@ namespace null {
         };
 
         std::shared_ptr<Scene> scene;
+        std::function<std::shared_ptr<Scene>(void)> sceneFunction;
 
         try {
-            scene = keywordToLevelGetter.at(keyword)();
+            sceneFunction = keywordToLevelGetter.at(keyword);
         } catch (const std::out_of_range& e) {
             throw null::UnknownSceneException();
         }
+        scene = sceneFunction();
         MainLoop::provideScene(scene);
     }
 
@@ -127,8 +129,8 @@ namespace null {
         // IMPORTANT!!!
         // If you want to bypass deserialization or get the scene serialized, comment next two lines
         // Otherwise leave them alone
-        // auto sc = Serializer::getSceneFromFile("myscene.pbuf");
-        // return sc;
+         auto sc = Serializer::getSceneFromFile("myscene.pbuf");
+         return sc;
 
         // todo this should be done in a scene file
         auto newScene = std::make_shared<Scene>();
@@ -245,9 +247,10 @@ namespace null {
 //        parentGameObject->addChild(std::move(enemy2));
 //        parentGameObject->addChild(std::move(enemy3));
         parentGameObject->addChild(std::move(enemy4));
-        Serializer::serializeSceneToFile(newScene.get(), "myscene.pbuf");
         newScene->addRootGameObject(std::move(parentGameObject));
         newScene->addRootGameObject(std::move(musicManager));
+
+        Serializer::serializeSceneToFile(newScene.get(), "myscene.pbuf");
         return newScene;
     }
 

@@ -1,5 +1,6 @@
 #include "Network/NetworkManagerClientScript.hpp"
 #include "exceptions/NetworkException.h"
+#include "Serializer.hpp"
 
 #include <GameObject.hpp>
 #include <MainLoop.hpp>
@@ -55,10 +56,19 @@ namespace null {
     }
 
     void NetworkManagerClientScript::serialize(google::protobuf::Message& message) const {
-        Component::serialize(message);
+        auto s_script = ((serial::Script&)message).mutable_network_manager_client_script();
+        s_script->set_ip(ipToConnectTo.toInteger());
+        s_script->set_port(port);
     }
 
     std::unique_ptr<Script> NetworkManagerClientScript::deserialize(const google::protobuf::Message& message) {
-        return std::unique_ptr<Script>();
+        auto& msg = (const serial::Script&) message;
+        auto const& s_script = msg.network_manager_client_script();
+        auto p_script = std::make_unique<NetworkManagerClientScript>(
+                (*Serializer::currentDeserializationGameObject)
+                );
+        p_script->ipToConnectTo = sf::IpAddress(s_script.ip());
+        p_script->port = s_script.port();
+        return p_script;
     }
 }

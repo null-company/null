@@ -1,4 +1,5 @@
 #include "Weapons/WeaponHolders/WeaponStorage.hpp"
+#include "Serializer.hpp"
 
 #include <utility>
 
@@ -56,11 +57,17 @@ namespace null {
     }
 
     void WeaponStorage::serialize(google::protobuf::Message& message) const {
-        Component::serialize(message);
+        auto& msg = (serial::Script&)message;
+        msg.mutable_weapon_storage();
     }
 
     std::unique_ptr<Script> WeaponStorage::deserialize(const google::protobuf::Message& message) {
-        return std::unique_ptr<Script>();
+        auto vec = std::vector<std::shared_ptr<GameObject>>{};
+        auto p_script = std::make_unique<WeaponStorage>(
+                *Serializer::currentDeserializationGameObject,
+                vec
+        );
+        return p_script;
     }
 
 

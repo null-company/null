@@ -5,6 +5,7 @@
 #include "Wall.hpp"
 #include "GameObject.hpp"
 #include "PlayerAnimation.hpp"
+#include "Serializer.hpp"
 
 namespace null {
     void Wall::start() {
@@ -24,6 +25,14 @@ namespace null {
     Wall::Wall(GameObject& object) : Component(object) {}
 
     void Wall::serialize(google::protobuf::Message& message) const {
-        Component::serialize(message);
+        auto& msg = dynamic_cast<serial::Script&>(message);
+        msg.mutable_wall();
+    }
+
+    std::unique_ptr<Component> Wall::deserialize(const google::protobuf::Message& message) {
+        auto& msg = dynamic_cast<const serial::Script&>(message);
+        return std::make_unique<Wall>(
+                *Serializer::currentDeserializationGameObject
+        );
     }
 } // null
