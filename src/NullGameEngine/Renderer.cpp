@@ -22,6 +22,7 @@ namespace null {
         using SpriteRefPair = struct SpriteRefPair_s {
             RenderLayer renderLayer;
             sf::Sprite* sprite_ref;
+            std::optional<sf::Text>* text;
         };
 
         auto compSRP = [](SpriteRefPair x, SpriteRefPair y) {
@@ -31,13 +32,16 @@ namespace null {
         auto queue = std::priority_queue<SpriteRefPair, std::vector<SpriteRefPair>, decltype(compSRP)>(compSRP);
         scene.sceneTreeForEachDo([&queue](GameObject& go) -> void {
             if (go.visible) {
-                auto spriteRefPair = SpriteRefPair{go.renderLayer, &(go.getSprite())};
+                auto spriteRefPair = SpriteRefPair{go.renderLayer, &(go.getSprite()), &(go.getText())};
                 queue.push(spriteRefPair);
             }
         });
         while (!queue.empty()) {
             auto& srp = queue.top();
             window.draw(*(srp.sprite_ref));
+            if (srp.text->has_value()) {
+                window.draw(srp.text->value());
+            }
             queue.pop();
         }
         // Toggle b2Body debug rendering by switching DEBUG_RENDER_B2_BODIES

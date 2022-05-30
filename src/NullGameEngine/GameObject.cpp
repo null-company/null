@@ -420,5 +420,13 @@ namespace null {
         return p_go;
     }
 
+    std::optional<sf::Text>& GameObject::getText() {
+        return text;
+    }
+
+    void GameObject::setText(sf::Text& text) {
+        GameObject::text = text;
+    }
+
 }
 

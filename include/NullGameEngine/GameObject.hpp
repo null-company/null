@@ -11,6 +11,7 @@
 #include <NullGameEngine.hpp>
 #include <Script.hpp>
 #include <RenderLayer.hpp>
+#include <optional>
 #include "serializable.h"
 #include "Entity.hpp"
 
@@ -36,6 +37,13 @@ namespace null {
 
     protected:
         sf::Sprite sprite;
+        std::optional<sf::Text> text;
+    public:
+        std::optional<sf::Text>& getText();
+
+        void setText(sf::Text& text);
+
+    protected:
         b2Body* rigidBody = nullptr;
         std::weak_ptr<GameObject> parent;
         std::vector<std::shared_ptr<GameObject>> children;
