@@ -104,6 +104,8 @@ namespace null {
         spriteSheet.serialize(*s_ss);
         auto cm = s_anim->mutable_animation()->mutable_collision_map();
         collisionMap.serialize(*cm);
+        s_anim->set_controlled(controlled);
+        *s_anim->mutable_name() = name;
     }
 
     std::unique_ptr<Component> PlayerAnimation::deserialize(const google::protobuf::Message& message) {
@@ -113,11 +115,14 @@ namespace null {
         auto const& cm = s_anim.animation().collision_map();
         auto p_ss = SpriteSheet::deserialize(s_ss);
         auto p_cm = CollisionMap::deserialize(cm);
-        return std::make_unique<PlayerAnimation>(
+        auto p_script = std::make_unique<PlayerAnimation>(
                 *Serializer::currentDeserializationGameObject,
                 *p_ss,
                 *p_cm
         );
+        p_script->name = s_anim.name();
+        p_script->controlled = s_anim.controlled();
+        return p_script;
     }
 
     void PlayerAnimation::damage(float healthDelta) {

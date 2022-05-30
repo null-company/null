@@ -42,6 +42,8 @@ message RigidBodyAnimation {
 
 message PlayerAnimation {
   RigidBodyAnimation animation = 1;
+  bool controlled = 2;
+  string name = 3;
 }
 message ExampleCameraScript {
   uint64 map_guid = 1;

@@ -88,7 +88,7 @@ namespace null {
     std::unique_ptr<Script> HealthBarHolder::deserialize(const google::protobuf::Message& message) {
         const auto& msg = (const serial::Script&)message;
         auto s_script = msg.health_bar_holder();
-        auto p_script = std::make_unique<HealthBar>(
+        auto p_script = std::make_unique<HealthBarHolder>(
                 *Serializer::currentDeserializationGameObject
         );
         return p_script;
