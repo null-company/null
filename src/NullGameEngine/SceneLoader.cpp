@@ -24,6 +24,7 @@
 #include "Weapons/WeaponHolders/GrenadeBunchScript.hpp"
 #include "Weapons/WeaponGenerator.hpp"
 #include <MusicManager.hpp>
+#include <utility>
 #include "PlayerProgress/HealthBarHolder.hpp"
 #include "TextHandler.hpp"
 
@@ -32,6 +33,7 @@ namespace null {
     // todo this is a dummy implementation
     // later reimplement this by loading stuff from file 
     // and using a resource manager
+    std::shared_ptr<void> SceneLoader::context = nullptr;
     void SceneLoader::loadSceneFromFile(const std::filesystem::path& path) {
 
         // a temporary solution to get a scene by keyword
@@ -128,8 +130,7 @@ namespace null {
         auto createRoomButtonTexture = ResourceManager::loadTexture("menu/buttons/CREATE_ROOM.png");
         createRoom->setPosition(180, 410);
         createRoom->addScript<ButtonScript>(*createRoom, *createRoomButtonTexture, *pressedTexture, []() -> void {
-            SceneLoader::changeScene("/demo");
-
+            SceneLoader::changeScene("/demo", std::shared_ptr<void>());
         });
 
         createRoom->renderLayer = serial::FOREGROUND;
@@ -141,7 +142,9 @@ namespace null {
         GameObject& joinRoomObject = *joinRoom;
         joinRoomObject.addScript<TextHandler>(joinRoomObject);
         //TODO: memory leak
-        joinRoom->addScript<ButtonScript>(*joinRoom, *joinRoomButtonScript, *pressedTexture,
+        joinRoom->addScript<ButtonScript>(*joinRoom,
+                                          *joinRoomButtonScript,
+                                          *pressedTexture,
                                           [&joinRoomObject]() -> void {
                                               joinRoomObject.getScript<TextHandler>()->active = true;
                                           });
@@ -196,6 +199,9 @@ namespace null {
         // return sc;
 
         // todo this should be done in a scene file
+        if (SceneLoader::context != nullptr) {
+            std::shared_ptr<std::string> roomCode = std::reinterpret_pointer_cast<std::string>(SceneLoader::context);
+        }
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
 
@@ -367,7 +373,7 @@ namespace null {
         auto playButtonTexture = ResourceManager::loadTexture("menu/buttons/play.png");
         playButton->setPosition(450, 380);
         playButton->addScript<ButtonScript>(*playButton, *playButtonTexture, *pressedTexture, []() -> void {
-            SceneLoader::changeScene("/room_connector");
+            SceneLoader::changeScene("/room_connector", std::shared_ptr<void>());
         });
         playButton->renderLayer = serial::FOREGROUND;
         playButton->visible = true;
@@ -405,14 +411,19 @@ namespace null {
      * Reload current game tree and restart simulation
      * @param path path to level to load
      */
-    void SceneLoader::changeScene(const std::filesystem::path& path) {
+    void SceneLoader::changeScene(const std::filesystem::path& path, std::shared_ptr<void> newContext) {
         try {
             loadSceneFromFile(path);
+            context = std::move(newContext);
         } catch (const null::UnknownSceneException& ignored) {
             std::cerr << "SceneLoader::changeScene tried to load a non-existent scene" << std::endl;
             exit(-1);
         }
         throw SceneChangedException(); // a mean of flow control
+    }
+
+    const void* SceneLoader::getContext() {
+        return context.get();
     }
 
 }

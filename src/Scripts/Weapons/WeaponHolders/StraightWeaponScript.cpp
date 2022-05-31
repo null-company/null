@@ -8,6 +8,7 @@
 #include "Weapons/WeaponAmmunition/BulletScript.hpp"
 #include "Graphic/Vector.hpp"
 #include "PlayerAnimation.hpp"
+#include <SceneLoader.hpp>
 
 namespace null {
     void StraightWeaponScript::start() {
@@ -30,7 +31,7 @@ namespace null {
         }
         auto& winInfo = gameObject.getScene().lock()->getWindowMetaInfo();
         bool controlled = isControlledByCurrentPlayer();
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && checkIfCanShoot() ) {
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && checkIfCanShoot()) {
             auto windowInfo = scene->getWindowMetaInfo().absoluteMouseWorldCoords;
             sf::Vector2f weaponDirection = windowInfo - gameObject.getPosition();
             weaponDirection = normalize(weaponDirection);

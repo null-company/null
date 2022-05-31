@@ -15,7 +15,7 @@ namespace null {
 
     void ReloadSceneScript::update() {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
-            SceneLoader::changeScene("/demo");
+            SceneLoader::changeScene("/menu", std::shared_ptr<void>());
         }
     }
 

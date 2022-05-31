@@ -12,7 +12,7 @@ namespace null {
     public:
         bool active = false;
         bool wasStarted = false;
-
+        static constexpr int codeLength = 6;
         TextHandler(GameObject& object);
 
         void start() override;
