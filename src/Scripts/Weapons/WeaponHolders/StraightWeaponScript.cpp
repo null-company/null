@@ -7,6 +7,7 @@
 #include "Serializer.hpp"
 #include "Weapons/WeaponAmmunition/BulletScript.hpp"
 #include "Graphic/Vector.hpp"
+#include "PlayerAnimation.hpp"
 
 namespace null {
     void StraightWeaponScript::start() {
@@ -28,7 +29,8 @@ namespace null {
             return;
         }
         auto& winInfo = gameObject.getScene().lock()->getWindowMetaInfo();
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && checkIfCanShoot()) {
+        bool controlled = isControlledByCurrentPlayer();
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && checkIfCanShoot() ) {
             auto windowInfo = scene->getWindowMetaInfo().absoluteMouseWorldCoords;
             sf::Vector2f weaponDirection = windowInfo - gameObject.getPosition();
             weaponDirection = normalize(weaponDirection);
@@ -37,7 +39,9 @@ namespace null {
         }
         auto coords = parent->getPosition() + sf::Vector2f(60, 60);
         gameObject.setPosition(coords);
-        setWeaponRotation();
+        if (controlled) {
+            setWeaponRotation();
+        }
     }
 
     void StraightWeaponScript::setWeaponRotation() {
@@ -72,6 +76,7 @@ namespace null {
 //        gameObject.getSprite().setOrigin(sf::Vector2f(250, 100));
         gameObject.getSprite().setTexture(*weaponTexture);
         gameObject.getSprite().scale(0.40, 0.25);
+        speed = 8;
         gameObject.renderLayer = serial::FOREGROUND2;
         gameObject.visible = true;
     }
