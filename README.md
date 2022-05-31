@@ -6,7 +6,16 @@
 
 Debian-like OS: `sudo apt-get install protobuf-compiler`
 
-Windows: use [vcpkg](https://github.com/microsoft/vcpkg) to install protobuf and then use vcpkg as cmake toolchain
+Windows: use [vcpkg](https://github.com/microsoft/vcpkg) to install protobuf and then use vcpkg as cmake toolchain. Also, Windows users are supposed to have openal32.dll in their wd or on PATH to run the application. You can copy one from extlibs/bin.
+
+## Game controls
+*(for as long as we do not have a help in-game)*
+
+ - Pick up a weapon using **T**
+ - Change weapons using **E**
+ - Shoot by **LMB**
+ - Move using **WASD** and **SPACE**
+
 
 ## Team members
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* **Brek Roman**, 19213 - r.brek@g.nsu.ru
