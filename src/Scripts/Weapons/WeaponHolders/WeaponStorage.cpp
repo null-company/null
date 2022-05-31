@@ -12,7 +12,7 @@ namespace null {
         Component::start();
         if (!weapons.empty()) {
             auto weapon = weapons.front();
-            gameObject.addChild(std::move(weapon));
+            gameObject.getParent().lock()->addChild(std::move(weapon));
         }
         gameObject.setPosition(gameObject.getParent().lock()->getPosition());
     }
@@ -42,17 +42,17 @@ namespace null {
     }
 
     void WeaponStorage::swapWeapon() {
-        if(weapons.empty()) {
+        if (weapons.empty()) {
             return;
         }
-        auto weapon = gameObject.findFirstChildrenByTag(weaponToTag[weapons.front()]);
+        auto weapon = gameObject.getParent().lock()->findFirstChildrenByTag(weaponToTag[weapons.front()]);
         if (weapon != nullptr) {
-            gameObject.deleteChild(&*weapon);
+            gameObject.getParent().lock()->deleteChild(&*weapon);
             weapons.push(weapon);
             weapons.pop();
         }
         auto newWeapon = weapons.front();
-        gameObject.addChild(std::move(newWeapon));
+        gameObject.getParent().lock()->addChild(std::move(newWeapon));
     }
 
 
