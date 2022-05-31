@@ -22,6 +22,7 @@ namespace null {
         std::mt19937 gen{rd()};
         std::normal_distribution<> d{0, 0.1};
     public:
+
         explicit WeaponScript(GameObject& object);
 
         virtual void shoot(sf::Vector2f from, sf::Vector2f to) = 0;
@@ -30,5 +31,6 @@ namespace null {
 
         void saveShotInfo();
 
+        bool isControlledByCurrentPlayer();
     };
 }

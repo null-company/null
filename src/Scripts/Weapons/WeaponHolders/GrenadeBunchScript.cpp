@@ -39,7 +39,7 @@ namespace null {
         gameObject.getSprite().scale(0.3, 0.3);
         gameObject.renderLayer = serial::FOREGROUND2;
         gameObject.visible = true;
-        restartTime = std::chrono::milliseconds(2000);
+        restartTime = std::chrono::milliseconds(1000);
     }
 
     void GrenadeBunchScript::shoot(sf::Vector2f from, sf::Vector2f to) {
