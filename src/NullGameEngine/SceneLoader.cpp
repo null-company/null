@@ -271,7 +271,7 @@ namespace null {
         auto grenadeBunch = std::make_shared<GameObject>();
         grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
 
-        player->getScript<PlayerAnimation>()->controlled = true;
+        player->getScript<PlayerAnimation>()->controller = true;
         auto enemy1 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
         auto enemy2 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
         auto enemy3 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
@@ -413,15 +413,17 @@ namespace null {
 
         auto player = PlayerAnimation::initPlayer("playerAnim_v2.png", box2dWorld);
         player->addTag("player1");
+        player->guid = 101101;
         auto grenadeBunch = std::make_shared<GameObject>();
         grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
 
-        player->getScript<PlayerAnimation>()->controlled = true;
+        player->getScript<PlayerAnimation>()->controller = true;
 //        auto enemy1 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
 //        auto enemy2 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
 //        auto enemy3 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
         auto enemy4 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
         enemy4->addTag("player2");
+        enemy4->guid = 202202;
 //        enemy1->setPosition(300, 0);
 //        enemy2->setPosition(200, 200);
 //        enemy3->setPosition(400, 000);
@@ -549,15 +551,17 @@ namespace null {
 
         auto player = PlayerAnimation::initPlayer("playerAnim_v2.png", box2dWorld);
         player->addTag("player1");
+        player->guid = 101101;
         auto grenadeBunch = std::make_shared<GameObject>();
         grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
 
-        player->getScript<PlayerAnimation>()->controlled = false;
+        player->getScript<PlayerAnimation>()->controller = false;
 //        auto enemy1 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
 //        auto enemy2 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
 //        auto enemy3 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
         auto enemy4 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
         enemy4->addTag("player2");
+        enemy4->guid = 202202;
 //        enemy1->setPosition(300, 0);
 //        enemy2->setPosition(200, 200);
 //        enemy3->setPosition(400, 000);

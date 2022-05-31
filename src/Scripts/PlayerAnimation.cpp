@@ -40,21 +40,22 @@ namespace null {
 
 
         moovin = false;
-        if (controlled && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+        if (controller == Nothing) {
+            return;
+        }
+        if (controller && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
             gameObject.getRigidBody()->SetLinearVelocity({3.0f, gameObject.getRigidBody()->GetLinearVelocity().y});
             moovin = true;
             if (spriteSheet.currAnimation->name != "walkRight") {
                 fram = 0;
-                flip = false;
                 spriteSheet.setAnimation("walkRight");
             }
         }
-        if (controlled && sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !moovin) {
+        if (controller && sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !moovin) {
             gameObject.getRigidBody()->SetLinearVelocity({-3.0f, gameObject.getRigidBody()->GetLinearVelocity().y});
             moovin = true;
             if (spriteSheet.currAnimation->name != "walkLeft") {
                 fram = 0;
-                flip = true;
                 spriteSheet.setAnimation("walkLeft");
             }
         }
@@ -80,7 +81,7 @@ namespace null {
         bool isJumpPressed =
                 sf::Keyboard::isKeyPressed(sf::Keyboard::Space)
                 || sf::Keyboard::isKeyPressed(sf::Keyboard::W);
-        if (controlled && isJumpPressed && canJump) {
+        if (controller && isJumpPressed && canJump) {
             jumpSound->play();
             gameObject.getRigidBody()->SetLinearVelocity({gameObject.getRigidBody()->GetLinearVelocity().x, -6});
             canJump = false;
@@ -177,6 +178,10 @@ namespace null {
 
     GameObject& PlayerAnimation::getGameObject() {
         return gameObject;
+    }
+
+    float PlayerAnimation::getHealth() const {
+        return health;
     }
 
 }

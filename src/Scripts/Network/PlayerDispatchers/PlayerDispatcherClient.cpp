@@ -44,7 +44,7 @@ namespace null {
             // make player controllable
             auto& player = *gameObject.getSceneForce().findFirstByTag(availablePlayer).lock();
             auto playerAnimationP = player.getScript<PlayerAnimation>();
-            playerAnimationP->controlled = true;
+            playerAnimationP->controller = true;
         });
     }
 
