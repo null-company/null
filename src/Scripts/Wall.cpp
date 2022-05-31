@@ -1,8 +1,4 @@
-//
-// Created by artemonchelus on 29.05.22.
-//
-
-#include "Wall.hpp"
+#include <Wall.hpp>
 #include "GameObject.hpp"
 #include "PlayerAnimation.hpp"
 
@@ -21,7 +17,7 @@ namespace null {
         Component::update();
     }
 
-    Wall::Wall(GameObject& object) : Component(object) {}
+    Wall::Wall(GameObject& object) : Script(object) {}
 
     void Wall::serialize(google::protobuf::Message& message) const {
         Component::serialize(message);

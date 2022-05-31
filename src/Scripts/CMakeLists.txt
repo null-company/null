@@ -87,5 +87,3 @@ target_link_libraries(scripts
         sfml-window
         sfml-system
         )
-
-

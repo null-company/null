@@ -1,9 +1,8 @@
-#include "MapManager/MapManager.hpp"
+#include <GameObjectManagers/MapManager.hpp>
 #include "GameObject.hpp"
 #include "Utility.hpp"
 #include "Wall.hpp"
 #include <ResourceManager.hpp>
-#include <iostream>
 #include <SFML/Graphics.hpp>
 
 namespace null {

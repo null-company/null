@@ -23,7 +23,7 @@ namespace null {
         bool simulationStep(Scene* scene,
                             sf::RenderWindow* sfmlWin,
                             bool isServer) {
-            bool continueMainLoop = sfmlWin == nullptr || sfmlWin->isOpen();
+            const bool continueMainLoop = sfmlWin == nullptr || sfmlWin->isOpen();
             if (!continueMainLoop) {
                 return false;
             }

@@ -1,13 +1,12 @@
-
 #pragma once
 
-#include "Script.hpp"
+#include <Script.hpp>
 
 namespace null {
 
-    class Wall: public Script{
+    class Wall: public Script {
     public:
-        Wall(GameObject& object);
+        explicit Wall(GameObject& object);
 
         void start() override;
 
