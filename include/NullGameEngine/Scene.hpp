@@ -13,8 +13,16 @@ namespace null {
     private:
         mutable std::shared_ptr<GameObject> camera = std::make_shared<GameObject>(std::set<std::string>({"camera"}));
         std::vector<std::shared_ptr<GameObject>> rootGameObjects;
-        b2World box2dWorld;
+        b2World box2dWorld{b2Vec2(0.0, 9.8f)};
+        std::string name = "scene";
+
+        // this function is a crutch;;;;
+        // the camera->scene cannot be set to anything other than NULL at init time
+        // so you have to call it if you wanna use camera->scene before calling Scene.start()
+        // TODO solve this problem
+        void setProperCameraScene();
     public:
+
         mutable WindowMetaInfo windowMetaInfo;
 
         Scene();
@@ -36,13 +44,17 @@ namespace null {
 
         b2World& getBox2dWorld();
 
+        const std::string& getName() const;
+
+        void setName(const std::string&);
+
         class GameObjectNotFoundException : public std::exception {};
 
         friend Renderer;
 
         friend SceneLoader;
 
-        void serialize(google::protobuf::Message &) const;
+        void serialize(google::protobuf::Message &, bool) const;
 
         static std::shared_ptr<Scene> deserialize(const google::protobuf::Message &);
 

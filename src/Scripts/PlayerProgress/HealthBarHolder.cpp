@@ -39,7 +39,8 @@ namespace null {
             auto playerScript = player.lock()->getScript<PlayerAnimation>();
             if (!isPlayerTagged(playerScript->name)) {
                 nameToPlayer.insert(std::pair{playerScript->name, player});
-                gameObject.addChild(std::move(initHealthBar(playerScript->name)));
+                auto init_health_bar = initHealthBar(playerScript->name);
+                gameObject.addChild(init_health_bar);
             }
         }
     }

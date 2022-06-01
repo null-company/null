@@ -3,12 +3,13 @@ package serial;
 import public "scripts.proto";
 
 message Scene{
-  repeated GameObject game_object = 1;
-  GameObject camera = 2;
+  repeated uint64 game_object_guid = 1;
+  uint64 camera_guid = 2;
 }
 
 message Script {
   uint64 guid = 1;
+  // TODO this might be useless and useless
   uint64 gameobject_guid = 2;
   // New scripts go here
   oneof script_instance {
@@ -40,7 +41,7 @@ message Script {
 }
 
 message GameObject {
-  repeated GameObject children_objects = 1;
+  repeated uint64 children_objects = 1;
   repeated Script children_scripts = 2;
   repeated string tags = 3;
   Sprite sprite = 4;

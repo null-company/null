@@ -3,12 +3,15 @@
 #include <Scene.hpp>
 #include "plog/Log.h"
 #include "Serializer.hpp"
+#include "Utility.hpp"
 
 namespace null {
 
     // box2dWorld is initiated under assumption that
     // gravity is default
-    Scene::Scene() : box2dWorld(b2Vec2(0.0, 9.8f)) { }
+    Scene::Scene() {
+        camera->scene = weak_from_this();
+    }
 
     void Scene::objectTreeForEachDo(GameObject& gameObject,
                                     const std::function<void(GameObject&)>& function) const {
@@ -64,7 +67,7 @@ namespace null {
 
     std::weak_ptr<GameObject> Scene::addRootGameObject(std::shared_ptr<GameObject>&& newGameObject) {
         newGameObject->scene = weak_from_this();
-        objectTreeForEachDo(*newGameObject, [&](GameObject& gameObject) {
+        objectTreeForEachDo(*newGameObject, [&newGameObject](GameObject& gameObject) {
             gameObject.scene = newGameObject->scene;
         });
         rootGameObjects.push_back(newGameObject);
@@ -103,29 +106,37 @@ namespace null {
         return windowMetaInfo;
     }
 
-    void Scene::serialize(google::protobuf::Message& message) const {
+    void Scene::serialize(google::protobuf::Message& message, bool json) const {
         auto msg = (serial::Scene&) message;
-        auto cam = msg.mutable_camera();
-        camera->serialize(*cam);
-        auto gos = msg.mutable_game_object();
+        msg.set_camera_guid(camera->guid);
+        Serializer::serializeGameObjectToFile(camera.get(), Utility::gameObjectToFilename(camera.get(), json));
         for (auto const& i: rootGameObjects) {
-            auto s_go = serial::GameObject();
-            i->serialize(s_go);
-            gos->Add(std::move(s_go));
+            msg.add_game_object_guid(i->guid);
+            Serializer::serializeGameObjectToFile(i.get(), Utility::gameObjectToFilename(i.get(), json));
         }
         message.CopyFrom(msg);
     }
 
     std::shared_ptr<Scene> Scene::deserialize(const google::protobuf::Message& message) {
-        auto scene = std::make_shared<Scene>();
+        auto scene = Serializer::currentScene;
         auto msg = (const serial::Scene&) message;
-        Serializer::currentDeserializationScene = scene.get();
-        scene->camera = GameObject::deserialize(msg.camera());
-        for (auto const& i: msg.game_object()) {
-            auto go = GameObject::deserialize(i);
-            scene->addRootGameObject(std::move(go));
+        scene->camera = Serializer::guidToGameObjectMap[msg.camera_guid()];
+        for (auto const& i: msg.game_object_guid()) {
+            scene->addRootGameObject(std::move(Serializer::guidToGameObjectMap[i]));
         }
         return scene;
+    }
+
+    const std::string& Scene::getName() const {
+        return name;
+    }
+
+    void Scene::setName(const std::string& string) {
+        this->name = string;
+    }
+
+    void Scene::setProperCameraScene() {
+        camera->scene = weak_from_this();
     }
 }
 

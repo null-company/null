@@ -13,7 +13,7 @@ namespace null {
         Component::start();
         if (!weapons.empty()) {
             auto weapon = weapons.front();
-            gameObject.addChild(std::move(weapon));
+            gameObject.addChild(weapon);
         }
         gameObject.setPosition(gameObject.getParent().lock()->getPosition());
     }
@@ -53,7 +53,7 @@ namespace null {
             weapons.pop();
         }
         auto newWeapon = weapons.front();
-        gameObject.addChild(std::move(newWeapon));
+        gameObject.addChild(newWeapon);
     }
 
     void WeaponStorage::serialize(google::protobuf::Message& message) const {

@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include "scene.pb.h"
 #include <Script.hpp>
+#include <Scene.hpp>
 #include "Component.hpp"
 #include <Scripts.hpp>
 
@@ -24,8 +25,8 @@ namespace null::Utility {
 
     template<typename T>
     sf::Vector2<T> meterToPixelVector(const b2Vec2& meterVec) {
-        T x = static_cast<T>(meterVec.x * meterToPixel);
-        T y = static_cast<T>(meterVec.y * meterToPixel);
+        auto x = static_cast<T>(meterVec.x * meterToPixel);
+        auto y = static_cast<T>(meterVec.y * meterToPixel);
 
         return sf::Vector2<T>(x, y);
     }
@@ -47,5 +48,9 @@ namespace null::Utility {
         std::random_device rd{};
         std::mt19937 gen(rd());
         return guidImpl(gen);
+    }
+
+    inline std::string gameObjectToFilename(GameObject const* go, bool json) {
+        return go->getScene().lock()->getName() + "/" + (json ? "json" : "pbuf") + "/gameObjects/" + std::to_string(go->guid) + (json ? ".json" : ".pbuf");
     }
 }

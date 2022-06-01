@@ -56,7 +56,7 @@ namespace null {
         bullet->setName(std::string("Bullet: ") + std::to_string(i++));
         bullet->addScript<BulletScript>(*bullet, from, gameObject.getSprite().getRotation() + d(gen), speed);
 
-        gameObject.addChild(std::move(bullet));
+        gameObject.addChild(bullet);
         gunShotSound->play();
     }
 

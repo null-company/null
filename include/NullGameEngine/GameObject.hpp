@@ -67,11 +67,11 @@ namespace null {
 
         ~GameObject();
 
-        std::weak_ptr<GameObject> addChild(std::shared_ptr<GameObject>&&);
+        std::weak_ptr<GameObject> addChild(std::shared_ptr<GameObject>&);
 
         std::weak_ptr<GameObject> getParent() const;
 
-        std::weak_ptr<Scene> getScene();
+        std::weak_ptr<Scene> getScene() const;
 
         bool visible = false;
 
@@ -136,7 +136,7 @@ namespace null {
             return nullptr;
         }
 
-        void serialize(google::protobuf::Message&) const;
+        void serialize(google::protobuf::Message&, bool) const;
 
         static std::shared_ptr<GameObject> deserialize(const google::protobuf::Message&);
 

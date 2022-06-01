@@ -31,7 +31,7 @@ namespace null {
         }
     }
 
-    std::weak_ptr<GameObject> GameObject::addChild(std::shared_ptr<GameObject>&& child) {
+    std::weak_ptr<GameObject> GameObject::addChild(std::shared_ptr<GameObject>& child) {
         child->scene = scene;
         child->parent = weak_from_this();
         children.push_back(child);
@@ -39,7 +39,7 @@ namespace null {
         return child;
     }
 
-    std::weak_ptr<Scene> GameObject::getScene() {
+    std::weak_ptr<Scene> GameObject::getScene() const{
         return scene;
     }
 
@@ -308,11 +308,12 @@ namespace null {
     }
 
 
-    void GameObject::serialize(google::protobuf::Message& msg) const {
+    void GameObject::serialize(google::protobuf::Message& msg, bool json) const {
         auto new_msg = serial::GameObject();
         new_msg.set_render_layer(renderLayer);
         new_msg.set_guid(guid);
         new_msg.set_visible(visible);
+
         // TODO: Serialize whole bodies?
         if (rigidBody) {
             if (rigidBody->GetType() == b2_dynamicBody) {
@@ -359,9 +360,8 @@ namespace null {
         }
 
         for (auto& child: children) {
-            auto s_child = serial::GameObject();
-            child->serialize(s_child);
-            new_msg.mutable_children_objects()->Add(std::move(s_child));
+            Serializer::serializeGameObjectToFile(child.get(), Utility::gameObjectToFilename(child.get(), json));
+            new_msg.add_children_objects(child->guid);
         }
         msg.CopyFrom(new_msg);
     }
@@ -393,10 +393,10 @@ namespace null {
 
         switch (s_go.box2d_type()) {
             case serial::STATIC:
-                p_go->makeStatic(Serializer::currentDeserializationScene->getBox2dWorld());
+                p_go->makeStatic(Serializer::currentScene->getBox2dWorld());
                 break;
             case serial::DYNAMIC:
-                p_go->makeDynamic(Serializer::currentDeserializationScene->getBox2dWorld());
+                p_go->makeDynamic(Serializer::currentScene->getBox2dWorld());
                 p_go->rigidBody->SetFixedRotation(s_go.fixed_rotation());
                 break;
             default:
@@ -411,8 +411,9 @@ namespace null {
             p_go->addScript(std::move(actualScript));
         }
 
+        Serializer::childrenByGuidMap.try_emplace(p_go->guid);
         for (const auto& c: s_go.children_objects()) {
-            p_go->addChild(deserialize(c));
+            Serializer::childrenByGuidMap[p_go->guid].push_back(c);
         }
 
         Serializer::addToDeserialized(p_go.get());

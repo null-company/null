@@ -35,7 +35,7 @@ namespace null {
                 wall->getRigidBody()->GetFixtureList()->SetSensor(true);
                 wall->addScript<Wall>(*wall);
             }
-            walls->addChild(std::move(wall));
+            walls->addChild(wall);
         }
         return walls;
 

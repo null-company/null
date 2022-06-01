@@ -84,7 +84,7 @@ namespace null {
                                           getAngle(scene.getWindowMetaInfo().absoluteMouseWorldCoords -
                                                    gameObject.getPosition()),
                                           gameObject.getPosition() - sf::Vector2f{0, 60});
-        gameObject.addChild(std::move(grenade));
+        gameObject.addChild(grenade);
     }
 
     void GrenadeBunchScript::serialize(google::protobuf::Message& message) const {

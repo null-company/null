@@ -76,7 +76,8 @@ namespace null {
         std::uniform_int_distribution<> dist(0, platforms.size() - 1);
         int platformNum = dist(mt);
         auto platform = platforms[platformNum];
-        platform->addChild(generateWeapon());
+        auto generatedWeapon = generateWeapon();
+        platform->addChild(generatedWeapon);
     }
 
     WeaponGenerator::WeaponGenerator(GameObject& object) : Component(object) {}

@@ -129,11 +129,13 @@ namespace null {
         // IMPORTANT!!!
         // If you want to bypass deserialization or get the scene serialized, comment next two lines
         // Otherwise leave them alone
-//         auto sc = Serializer::getSceneFromFile("myscene.pbuf");
+//         auto sc = Serializer::getSceneFromFile("demoScene", true);
 //         return sc;
 
         // todo this should be done in a scene file
         auto newScene = std::make_shared<Scene>();
+        newScene->setProperCameraScene();
+        newScene->setName("demoScene");
         auto& box2dWorld = newScene->getBox2dWorld();
 
         auto musicManager = std::make_shared<GameObject>();
@@ -148,7 +150,7 @@ namespace null {
         auto weaponGenerator = std::make_shared<GameObject>();
 
         weaponGenerator->addScript<WeaponGenerator>(*weaponGenerator);
-        parentGameObject->addChild(std::move(weaponGenerator));
+        parentGameObject->addChild(weaponGenerator);
 
         auto nullGameLogo = std::make_shared<GameObject>();
         nullGameLogo->getSprite().setTexture(*nullTexture);
@@ -229,28 +231,29 @@ namespace null {
         std::vector<std::shared_ptr<GameObject>> guns{gun, grenadeBunch};
         weaponStorage->addScript<WeaponStorage>(*weaponStorage, guns);
 
-        player->addChild(std::move(weaponStorage));
+        player->addChild(weaponStorage);
         newScene->camera->getScript<ExampleCameraScript>()->setTrackedGameObject(*player);
         newScene->camera->getScript<ExampleCameraScript>()->setMap(*nullGameLogo);
 
         auto healthBarHolder = std::make_shared<GameObject>();
         healthBarHolder->addScript<HealthBarHolder>(*healthBarHolder);
-        parentGameObject->addChild(std::move(healthBarHolder));
+        parentGameObject->addChild(healthBarHolder);
 
         MapManager mapManager(box2dWorld);
-        parentGameObject->addChild(std::move(mapManager.makeBorder(nullGameLogo->getSprite())));
-        nullGameLogo->addChild(std::move(boxObject));
-        parentGameObject->addChild(std::move(nullGameLogo));
-        parentGameObject->addChild(std::move(player));
-        parentGameObject->addChild(std::move(cursorObject));
+        auto border = mapManager.makeBorder(nullGameLogo->getSprite());
+        parentGameObject->addChild(border);
+        nullGameLogo->addChild(boxObject);
+        parentGameObject->addChild(nullGameLogo);
+        parentGameObject->addChild(player);
+        parentGameObject->addChild(cursorObject);
 //        parentGameObject->addChild(std::move(enemy1));
 //        parentGameObject->addChild(std::move(enemy2));
 //        parentGameObject->addChild(std::move(enemy3));
-        parentGameObject->addChild(std::move(enemy4));
+        parentGameObject->addChild(enemy4);
         newScene->addRootGameObject(std::move(parentGameObject));
         newScene->addRootGameObject(std::move(musicManager));
 
-        Serializer::serializeSceneToFile(newScene.get(), "myscene.pbuf");
+        Serializer::serializeSceneToFile(newScene.get());
         return newScene;
     }
 

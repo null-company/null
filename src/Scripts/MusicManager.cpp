@@ -20,7 +20,9 @@ namespace null {
     MusicManager::MusicManager(GameObject& gameObject) : Script(gameObject) { }
 
     MusicManager::~MusicManager() {
-        music->stop();
+        if (music != nullptr) {
+            music->stop();
+        }
     }
 
     void MusicManager::serialize(google::protobuf::Message& message) const {
