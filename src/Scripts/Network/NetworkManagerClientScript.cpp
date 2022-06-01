@@ -4,6 +4,7 @@
 #include <GameObject.hpp>
 #include <MainLoop.hpp>
 #include <utils/NetMessageTransmitting.h>
+#include <SceneLoader.hpp>
 
 namespace null {
 
@@ -16,24 +17,14 @@ namespace null {
             exit(20);
         }
 
-        dialog:
-        std::cout << "Create room? [y/n]" << std::flush;
-        std::string answer;
-        std::cin >> answer;
-        std::cout << "\n";
-        if (answer == "y") {
+        if (SceneLoader::getContext() == nullptr) {
             networkManager->getClient().createRoomAndConnect();
-            std::cout << "Room code: " << networkManager->getClient().getRoomCode() << std::endl;
             LOGD << "Created room. Code: " << networkManager->getClient().getRoomCode();
-        } else if (answer == "n") {
-            std::cout << "Room code:" << std::flush;
-            std::string roomCodeToConnect;
-            std::cin >> roomCodeToConnect;
-            std::cout << std::endl;
-            networkManager->getClient().connectRoom(roomCodeToConnect);
+            std::cout << "Created room. Code: " << networkManager->getClient().getRoomCode();
         } else {
-            std::cerr << "Wrong input. Try again" << std::endl;
-            goto dialog;
+            const auto* roomCode = static_cast<const std::string*>(SceneLoader::getContext());
+            LOGD << "Joined room";
+            networkManager->getClient().connectRoom(*roomCode);
         }
     }
 
