@@ -514,8 +514,19 @@ namespace null {
         parentGameObject->addChild(std::move(weaponGenerator));
 
         auto nullGameLogo = std::make_shared<GameObject>();
-        nullGameLogo->getSprite().setTexture(*nullTexture);
-        nullGameLogo->getSprite().setScale({8.0f, 8.0f});
+        nullGameLogo->addScript<BackgroundAnimation>(*nullGameLogo,
+                                                     SpriteSheet("bg_2-_full.png", sf::Vector2i(192, 108),
+                                                                 {{"0", 0, 0, 20},
+                                                                  {"1", 1, 0, 20},
+                                                                  {"2", 2, 0, 20},
+                                                                  {"3", 3, 0, 20},
+                                                                  {"4", 4, 0, 20},
+                                                                  {"5", 5, 0, 20},
+                                                                  {"6", 6, 0, 20},
+                                                                  {"7", 7, 0, 20},
+                                                                  {"8", 8, 0, 5}}));
+//        nullGameLogo->getSprite().setTexture(*nullGameLogo,);
+        nullGameLogo->getSprite().setScale({13.0f, 13.0f});
         nullGameLogo->renderLayer = serial::BACKGROUND;
         nullGameLogo->visible = true;
 
