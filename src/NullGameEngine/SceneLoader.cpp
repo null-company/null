@@ -27,6 +27,7 @@
 #include <utility>
 #include "PlayerProgress/HealthBarHolder.hpp"
 #include "TextHandler.hpp"
+#include "BackgroundAnimation.hpp"
 
 namespace null {
 
@@ -34,6 +35,7 @@ namespace null {
     // later reimplement this by loading stuff from file 
     // and using a resource manager
     std::shared_ptr<void> SceneLoader::context = nullptr;
+
     void SceneLoader::loadSceneFromFile(const std::filesystem::path& path) {
 
         // a temporary solution to get a scene by keyword
@@ -191,7 +193,6 @@ namespace null {
     }
 
     std::shared_ptr<Scene> SceneLoader::getDemoScene() {
-
         // IMPORTANT!!!
         // If you want to bypass deserialization or get the scene serialized, comment next two lines
         // Otherwise leave them alone
@@ -213,7 +214,9 @@ namespace null {
         newScene->camera->getScript<ExampleCameraScript>()->setScale(1.7);
         // this texture is not released on purpose, because it MUST exist for as long
         // as the sprite lives. todo manage it with resource manager
-        sf::Texture* nullTexture = ResourceManager::loadTexture("background.png");
+        sf::Texture* background = ResourceManager::loadTexture("anim_background.png");
+
+
         auto parentGameObject = std::make_shared<GameObject>();
         auto weaponGenerator = std::make_shared<GameObject>();
 
@@ -221,8 +224,19 @@ namespace null {
         parentGameObject->addChild(std::move(weaponGenerator));
 
         auto nullGameLogo = std::make_shared<GameObject>();
-        nullGameLogo->getSprite().setTexture(*nullTexture);
-        nullGameLogo->getSprite().setScale({8.0f, 8.0f});
+        nullGameLogo->addScript<BackgroundAnimation>(*nullGameLogo,
+                                                     SpriteSheet("bg_2-_full.png", sf::Vector2i(192, 108),
+                                                                 {{"0", 0, 0, 20},
+                                                                  {"1", 1, 0, 20},
+                                                                  {"2", 2, 0, 20},
+                                                                  {"3", 3, 0, 20},
+                                                                  {"4", 4, 0, 20},
+                                                                  {"5", 5, 0, 20},
+                                                                  {"6", 6, 0, 20},
+                                                                  {"7", 7, 0, 20},
+                                                                  {"8", 8, 0, 5}}));
+//        nullGameLogo->getSprite().setTexture(*nullGameLogo,);
+        nullGameLogo->getSprite().setScale({13.0f, 13.0f});
         nullGameLogo->renderLayer = serial::BACKGROUND;
         nullGameLogo->visible = true;
 
