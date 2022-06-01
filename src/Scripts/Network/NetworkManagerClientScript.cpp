@@ -20,7 +20,7 @@ namespace null {
         if (SceneLoader::getContext() == nullptr) {
             networkManager->getClient().createRoomAndConnect();
             LOGD << "Created room. Code: " << networkManager->getClient().getRoomCode();
-            std::cout << "Created room. Code: " << networkManager->getClient().getRoomCode();
+            std::cout << "Created room. Code: " << networkManager->getClient().getRoomCode()<< std::endl;
         } else {
             const auto* roomCode = static_cast<const std::string*>(SceneLoader::getContext());
             LOGD << "Joined room";
@@ -36,10 +36,10 @@ namespace null {
                         networkManager->getClient().getGameServerSocket()).game_message();
                 networkManager->distributeMessageToSubscribers(*message.mutable_subscriber_state());
             }
-        } catch (const ReceiveException& noMessagesLeft) { }
+        } catch (const ReceiveException& noMessagesLeft) {}
     }
 
-    NetworkManagerClientScript::NetworkManagerClientScript(GameObject& go) : Script(go) { }
+    NetworkManagerClientScript::NetworkManagerClientScript(GameObject& go) : Script(go) {}
 
     ClientNetworkManager& NetworkManagerClientScript::getNetworkManager() const {
         return *networkManager;
