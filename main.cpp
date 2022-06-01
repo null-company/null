@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
     }
 
     if (argc == 2) {
-        std::cout << "You chose" << argv[1] << std::endl;
+        std::cout << "You chose " << argv[1] << std::endl;
         std::string levelToLoad = argv[1];
         try {
             null::SceneLoader::loadSceneFromFile(levelToLoad);

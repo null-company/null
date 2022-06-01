@@ -3,19 +3,22 @@
 #include <SFML/Audio/Sound.hpp>
 
 #include <RigidBodyAnimation.hpp>
+#include <Network/PrimitiveStateConverter.hpp>
+#include <Network/Utility/LastAcceptedMessageProcessor.hpp>
+#include <Network/NetworkManagerClientScript.hpp>
 
 namespace null {
 
     class PlayerAnimation : public RigidBodyAnimation {
     public:
         enum Controller: uint8_t {
-            Nothing = 0,
+//            Nothing = 0,
             Keyboard = 1,
             Network = 2
         };
     public:
         std::string name = "default";
-        Controller controller = Nothing;
+        Controller controller = Network;
 
     public:
         void start() override;
@@ -39,10 +42,17 @@ namespace null {
 
     private:
         float health = 100;
-        bool moovin = false;
-        int fram = 0;
+        int currentAnimationFrame = 0;
         bool canJump = false;
         sf::Vector2f previousPosition = {0, 0};
+
+        enum {
+            Server, Client
+        } host;
+
+        LastAcceptedMessageProcessor<net::GameMessage::ClientCommand> serverQueue{};
+        LastAcceptedMessageProcessor<net::GameMessage::SubscriberState> clientQueue{};
+        NetworkManagerClientScript* networkManagerScript{};
 
         sf::Sound* deathSound{};
         sf::Sound* jumpSound{};
