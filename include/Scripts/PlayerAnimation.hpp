@@ -68,6 +68,7 @@ namespace null {
         LastAcceptedMessageProcessor<net::GameMessage::ClientCommand> serverQueue{};
         LastAcceptedMessageProcessor<net::GameMessage::SubscriberState> clientQueue{};
         NetworkManagerClientScript* networkManagerScript{};
+        sf::Clock lastStateSnapshotTimer{};
 
         sf::Sound* deathSound{};
         sf::Sound* jumpSound{};

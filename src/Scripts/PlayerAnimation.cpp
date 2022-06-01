@@ -118,6 +118,15 @@ namespace null {
                 throw std::logic_error("impossible");
             }
             clientQueue.processMessageIfAny([this, &playerIsMoving](net::GameMessage::SubscriberState& message) {
+                if (controller == Keyboard) {
+                    // reduce lag for your client
+                    const auto threshold = sf::seconds(5);
+                    if (lastStateSnapshotTimer.getElapsedTime() > threshold) {
+                        lastStateSnapshotTimer.restart();
+                    } else {
+                        return;
+                    }
+                }
                 struct {
                     float x, y;
                 } playerPos{}, velocity{};
