@@ -271,7 +271,7 @@ namespace null {
         auto grenadeBunch = std::make_shared<GameObject>();
         grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
 
-        player->getScript<PlayerAnimation>()->controlled = true;
+        player->getScript<PlayerAnimation>()->controller = PlayerAnimation::Keyboard;
         auto enemy1 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
         auto enemy2 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
         auto enemy3 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
@@ -413,26 +413,29 @@ namespace null {
 
         auto player = PlayerAnimation::initPlayer("playerAnim_v2.png", box2dWorld);
         player->addTag("player1");
+        player->guid = 101101;
         auto grenadeBunch = std::make_shared<GameObject>();
         grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
 
-        player->getScript<PlayerAnimation>()->controlled = true;
+        player->getScript<PlayerAnimation>()->controller = PlayerAnimation::Network;
 //        auto enemy1 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
 //        auto enemy2 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
 //        auto enemy3 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
         auto enemy4 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
         enemy4->addTag("player2");
+        enemy4->guid = 202202;
 //        enemy1->setPosition(300, 0);
 //        enemy2->setPosition(200, 200);
 //        enemy3->setPosition(400, 000);
         enemy4->setPosition(400, 200);
 //        enemy1->getScript<PlayerAnimation>()->name = "Meow";
 //        enemy2->getScript<PlayerAnimation>()->name = "Gav";
-//        enemy4->getScript<PlayerAnimation>()->name = "Meowss";
+        enemy4->getScript<PlayerAnimation>()->name = "Meowss";
 //        enemy3->getScript<PlayerAnimation>()->name = "Gavaa";
 
         auto gun = std::make_shared<GameObject>();
         gun->addScript<StraightWeaponScript>(*gun, 0.01);
+        gun->guid = 69;
 
         auto weaponStorage = std::make_shared<GameObject>();
         std::vector<std::shared_ptr<GameObject>> guns{gun, grenadeBunch};
@@ -457,7 +460,7 @@ namespace null {
 //        parentGameObject->addChild(std::move(enemy3));
         parentGameObject->addChild(std::move(enemy4));
         newScene->addRootGameObject(std::move(parentGameObject));
-        return newScene;       return std::shared_ptr<Scene>();
+        return newScene;
     }
 
     std::shared_ptr<Scene> SceneLoader::getGameScene() {
@@ -480,9 +483,10 @@ namespace null {
 
         auto clientPlayerDispatcher = std::make_shared<GameObject>(800800);
         clientPlayerDispatcher->addScript<PlayerDispatcherClient>(*clientPlayerDispatcher);
+        clientPlayerDispatcher->addTag("client-player-dispatcher");
         newScene->addRootGameObject(std::move(clientPlayerDispatcher));
 
-        auto& cameraScript = newScene->camera->addScript<ExampleCameraScript>(*newScene->camera);
+        auto& cameraScript = newScene->camera->addScript<CurrentPlayerCameraScript>(*newScene->camera);
         cameraScript.scale = 1.2;
         // this texture is not released on purpose, because it MUST exist for as long
         // as the sprite lives. todo manage it with resource manager
@@ -549,25 +553,31 @@ namespace null {
 
         auto player = PlayerAnimation::initPlayer("playerAnim_v2.png", box2dWorld);
         player->addTag("player1");
+        player->guid = 101101;
         auto grenadeBunch = std::make_shared<GameObject>();
         grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
 
-        player->getScript<PlayerAnimation>()->controlled = false;
+        player->getScript<PlayerAnimation>()->controller = PlayerAnimation::Network;
 //        auto enemy1 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
 //        auto enemy2 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
 //        auto enemy3 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
+
         auto enemy4 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
+//        auto enemy4 = ArrowsControlledPlayer::initPlayer("playerAnim_v3.png", box2dWorld);
+
         enemy4->addTag("player2");
+        enemy4->guid = 202202;
 //        enemy1->setPosition(300, 0);
 //        enemy2->setPosition(200, 200);
 //        enemy3->setPosition(400, 000);
         enemy4->setPosition(400, 200);
 //        enemy1->getScript<PlayerAnimation>()->name = "Meow";
 //        enemy2->getScript<PlayerAnimation>()->name = "Gav";
-//        enemy4->getScript<PlayerAnimation>()->name = "Meowss";
+        enemy4->getScript<PlayerAnimation>()->name = "Meowss";
 //        enemy3->getScript<PlayerAnimation>()->name = "Gavaa";
 
         auto gun = std::make_shared<GameObject>();
+        gun->guid = 69;
         gun->addScript<StraightWeaponScript>(*gun, 0.01);
 
         auto weaponStorage = std::make_shared<GameObject>();
@@ -575,8 +585,8 @@ namespace null {
         weaponStorage->addScript<WeaponStorage>(*weaponStorage, guns);
 
         player->addChild(std::move(weaponStorage));
-        newScene->camera->getScript<ExampleCameraScript>()->setTrackedGameObject(*player);
-        newScene->camera->getScript<ExampleCameraScript>()->setMap(*nullGameLogo);
+        newScene->camera->getScript<CurrentPlayerCameraScript>()->setTrackedGameObject(*player);
+        newScene->camera->getScript<CurrentPlayerCameraScript>()->setMap(*nullGameLogo);
 
         auto healthBarHolder = std::make_shared<GameObject>();
         healthBarHolder->addScript<HealthBarHolder>(*healthBarHolder);

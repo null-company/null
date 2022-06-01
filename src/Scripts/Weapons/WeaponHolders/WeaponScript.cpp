@@ -17,7 +17,8 @@ namespace null {
         if (parent == nullptr) {
             return false;
         }
-        if (parent->getScript<PlayerAnimation>() && parent->getScript<PlayerAnimation>()->controlled) {
+        if (parent->getScript<PlayerAnimation>()
+            && parent->getScript<PlayerAnimation>()->controller == PlayerAnimation::Keyboard) {
             return true;
         }
         return false;

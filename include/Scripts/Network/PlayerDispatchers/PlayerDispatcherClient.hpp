@@ -21,10 +21,17 @@ namespace null {
 
         void start() override;
         void update() override;
+        /**
+         * Calls back with player tag when it is available
+         * @param callback
+         */
+        void registerPlayerFindingObserver(const std::function<void(const std::string&)>& callback);
         explicit PlayerDispatcherClient(GameObject& go);
 
     private:
         bool foundPlayer = false;
+        std::string foundPlayerName{};
+        std::vector<std::function<void(const std::string&)>> callbacks{};
         LastAcceptedMessageProcessor<net::GameMessage::SubscriberState> messageQueue{};
         NetworkManagerClientScript* networkManagerScript{};
     };

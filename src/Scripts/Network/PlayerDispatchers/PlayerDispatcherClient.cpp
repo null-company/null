@@ -35,18 +35,32 @@ namespace null {
             PrimitiveStateConverter::restoreFromMessage(message.content(), availablePlayer);
             LOGD << "PLAYING AS " << availablePlayer;
             foundPlayer = true;
+            foundPlayerName = availablePlayer;
 
-            net::GameMessage::ClientCommand iReserverAPlayerMessage;
-            iReserverAPlayerMessage.set_subscriber_id(gameObject.guid);
-            *iReserverAPlayerMessage.mutable_content() =
+            net::GameMessage::ClientCommand iReserveAPlayerMessage;
+            iReserveAPlayerMessage.set_subscriber_id(gameObject.guid);
+            *iReserveAPlayerMessage.mutable_content() =
                     CommandConverter::makeMessageFrom(42u); // any number
-            networkManagerScript->getNetworkManager().sendCommandToServer(iReserverAPlayerMessage);
+            networkManagerScript->getNetworkManager().sendCommandToServer(iReserveAPlayerMessage);
             // make player controllable
             auto& player = *gameObject.getSceneForce().findFirstByTag(availablePlayer).lock();
             auto playerAnimationP = player.getScript<PlayerAnimation>();
-            playerAnimationP->controlled = true;
+            playerAnimationP->controller = PlayerAnimation::Keyboard;
+            for (const auto& callback : callbacks) {
+                callback(availablePlayer);
+            }
         });
     }
 
     PlayerDispatcherClient::PlayerDispatcherClient(GameObject& go) : Script(go) { }
+
+    void PlayerDispatcherClient::registerPlayerFindingObserver(
+            const std::function<void(const std::string&)>& callback
+    ) {
+        if (foundPlayer) {
+            callback(foundPlayerName);
+            return;
+        }
+        callbacks.push_back(callback);
+    }
 }

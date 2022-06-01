@@ -1,16 +1,16 @@
 #pragma once
 
 #include <Scripts.hpp>
+#include <Scene.hpp>
+#include <Network/PlayerDispatchers/PlayerDispatcherClient.hpp>
 
 namespace null {
     class ExampleCameraScript : public CameraScript {
-    private:
-        sf::FloatRect computeNewViewRect();
-
     public:
         float scale = 1;
         GameObject* map = nullptr;
         GameObject* trackedObject = &gameObject;
+    public:
 
         void start() override;
 
@@ -29,5 +29,26 @@ namespace null {
         float getScale() const;
 
         void setScale(float scale);
+    private:
+        sf::FloatRect computeNewViewRect();
+    };
+
+    class CurrentPlayerCameraScript : public ExampleCameraScript {
+    public:
+        explicit CurrentPlayerCameraScript(GameObject& camera) : ExampleCameraScript(camera) { };
+
+        void start() override {
+            const auto& clientDispatcher =
+                    gameObject.getSceneForce().findFirstByTag("client-player-dispatcher").lock();
+            const auto& clientDispatcherScript =
+                    clientDispatcher->getScript<PlayerDispatcherClient>();
+            clientDispatcherScript->registerPlayerFindingObserver([this](const std::string& playerTag) {
+                auto& playerObject =
+                        *gameObject.getSceneForce().findFirstByTag(playerTag).lock();
+                setTrackedGameObject(playerObject);
+            });
+            ExampleCameraScript::start();
+        }
+
     };
 }
