@@ -120,7 +120,7 @@ namespace null {
             clientQueue.processMessageIfAny([this, &playerIsMoving](net::GameMessage::SubscriberState& message) {
                 if (controller == Keyboard) {
                     // reduce lag for your client
-                    const auto threshold = sf::seconds(5);
+                    const auto threshold = sf::seconds(0);
                     if (lastStateSnapshotTimer.getElapsedTime() > threshold) {
                         lastStateSnapshotTimer.restart();
                     } else {
