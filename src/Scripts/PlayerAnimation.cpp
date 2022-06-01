@@ -32,9 +32,6 @@ namespace null {
     namespace {
         constexpr float movingVelocity = 3.0f;
         constexpr float jumpVelocity = 6.0f;
-        enum KeyboardCommand {
-            LEFT, RIGHT, JUMP
-        };
     }
 
     void PlayerAnimation::update() {
@@ -69,50 +66,12 @@ namespace null {
         bool playerIsMoving = false;
         if (controller == Keyboard) {
             // it is assumed that host == Client
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-                auto direction = RIGHT;
-                net::GameMessage::ClientCommand commandMessage;
-                // TODO reuse message
-                commandMessage.set_subscriber_id(gameObject.guid);
-                *commandMessage.mutable_content() =
-                        CommandConverter::makeMessageFrom(static_cast<uint32_t>(direction));
-                networkManagerScript->getNetworkManager().sendCommandToServer(commandMessage);
-                gameObject.getRigidBody()->SetLinearVelocity({movingVelocity, gameObject.getRigidBody()->GetLinearVelocity().y});
-                playerIsMoving = true;
-                if (spriteSheet.currAnimation->name != "walkRight") {
-                    currentAnimationFrame = 0;
-                    spriteSheet.setAnimation("walkRight");
+            auto commands = getCurrentCommands();
+            for (const auto command : commands) {
+                if (command == LEFT || command == RIGHT) {
+                    playerIsMoving = true;
                 }
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !playerIsMoving) {
-                auto direction = LEFT;
-                net::GameMessage::ClientCommand commandMessage;
-                commandMessage.set_subscriber_id(gameObject.guid);
-                *commandMessage.mutable_content() =
-                        CommandConverter::makeMessageFrom(static_cast<uint32_t>(direction));
-                networkManagerScript->getNetworkManager().sendCommandToServer(commandMessage);
-                gameObject.getRigidBody()->SetLinearVelocity({-movingVelocity, gameObject.getRigidBody()->GetLinearVelocity().y});
-                playerIsMoving = true;
-                if (spriteSheet.currAnimation->name != "walkLeft") {
-                    currentAnimationFrame = 0;
-                    spriteSheet.setAnimation("walkLeft");
-                }
-            }
-            bool isJumpPressed =
-                    sf::Keyboard::isKeyPressed(sf::Keyboard::Space)
-                    || sf::Keyboard::isKeyPressed(sf::Keyboard::W);
-            if (controller == Keyboard && isJumpPressed && canJump) {
-                auto direction = JUMP;
-                net::GameMessage::ClientCommand commandMessage;
-                commandMessage.set_subscriber_id(gameObject.guid);
-                *commandMessage.mutable_content() =
-                        CommandConverter::makeMessageFrom(static_cast<uint32_t>(direction));
-                networkManagerScript->getNetworkManager().sendCommandToServer(commandMessage);
-                jumpSound->play();
-                gameObject.getRigidBody()->SetLinearVelocity(
-                        {gameObject.getRigidBody()->GetLinearVelocity().x, -jumpVelocity}
-                );
-                canJump = false;
+                processCommand(command);
             }
         }
         if (host == Server) {
@@ -320,5 +279,60 @@ namespace null {
 
     float PlayerAnimation::getHealth() const {
         return health;
+    }
+
+    /**
+     * @return list of all commands by pressed buttons
+     */
+    std::vector<PlayerAnimation::KeyboardCommand> PlayerAnimation::getCurrentCommands() {
+        std::vector<KeyboardCommand> res{};
+        for (const auto& kv : controls) {
+            if (sf::Keyboard::isKeyPressed(kv.first)) {
+                res.push_back(kv.second);
+            }
+        }
+        return res;
+    }
+
+    void PlayerAnimation::processCommand(PlayerAnimation::KeyboardCommand command) {
+        switch (command) {
+            case LEFT: {
+                gameObject.getRigidBody()->SetLinearVelocity(
+                        {-movingVelocity, gameObject.getRigidBody()->GetLinearVelocity().y}
+                );
+                if (spriteSheet.currAnimation->name != "walkLeft") {
+                    currentAnimationFrame = 0;
+                    spriteSheet.setAnimation("walkLeft");
+                }
+                break;
+            }
+            case RIGHT: {
+                gameObject.getRigidBody()->SetLinearVelocity(
+                        {movingVelocity, gameObject.getRigidBody()->GetLinearVelocity().y}
+                );
+                if (spriteSheet.currAnimation->name != "walkRight") {
+                    currentAnimationFrame = 0;
+                    spriteSheet.setAnimation("walkRight");
+                }
+                break;
+            }
+            case JUMP: {
+                if (!canJump) {
+                    return; // do not send the command either
+                }
+                jumpSound->play();
+                gameObject.getRigidBody()->SetLinearVelocity(
+                        {gameObject.getRigidBody()->GetLinearVelocity().x, -jumpVelocity}
+                );
+                canJump = false;
+                break;
+            }
+        }
+        // TODO reuse message
+        net::GameMessage::ClientCommand commandMessage;
+        commandMessage.set_subscriber_id(gameObject.guid);
+        *commandMessage.mutable_content() =
+                CommandConverter::makeMessageFrom(static_cast<uint32_t>(command));
+        networkManagerScript->getNetworkManager().sendCommandToServer(commandMessage);
     }
 }

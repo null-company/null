@@ -2,6 +2,8 @@
 
 #include <SFML/Audio/Sound.hpp>
 
+#include <unordered_map>
+
 #include <RigidBodyAnimation.hpp>
 #include <Network/PrimitiveStateConverter.hpp>
 #include <Network/Utility/LastAcceptedMessageProcessor.hpp>
@@ -40,6 +42,19 @@ namespace null {
 
         static std::shared_ptr<GameObject> initPlayer(const std::string& anim, b2World& box2dWorld);
 
+    protected:
+        enum KeyboardCommand {
+            LEFT, RIGHT, JUMP
+        };
+        std::unordered_map<sf::Keyboard::Key, KeyboardCommand> controls{
+                {sf::Keyboard::A, LEFT},
+                {sf::Keyboard::D, RIGHT},
+                {sf::Keyboard::Space, JUMP},
+                {sf::Keyboard::W, JUMP}
+        };
+    private:
+        std::vector<PlayerAnimation::KeyboardCommand> getCurrentCommands();
+        void processCommand(PlayerAnimation::KeyboardCommand command);
     private:
         float health = 100;
         int currentAnimationFrame = 0;
@@ -56,5 +71,18 @@ namespace null {
 
         sf::Sound* deathSound{};
         sf::Sound* jumpSound{};
+    };
+
+    class WASDControlledPlayer : public PlayerAnimation {
+
+        WASDControlledPlayer(GameObject& go, SpriteSheet& ss, const CollisionMap& cm)
+                : PlayerAnimation(go, ss, cm) {
+            controls = {
+                    {sf::Keyboard::Left, LEFT},
+                    {sf::Keyboard::Right, RIGHT},
+                    {sf::Keyboard::Up, JUMP}
+            };
+        };
+
     };
 }
