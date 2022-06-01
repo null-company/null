@@ -24,7 +24,7 @@ namespace null {
         static std::shared_ptr<Scene> getNetworkDemoClientScene();
 
         static std::shared_ptr<Scene> getNetworkDemoServerScene();
-
+        static std::shared_ptr<Scene> getGameServerScene();
         static std::shared_ptr<Scene> getRoomCreateConnectScene();
 
     public:

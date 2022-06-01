@@ -2,11 +2,26 @@
 
 ## Buidling
 
-[Google protobuffers](https://github.com/protocolbuffers/protobuf) is used in the project, so should be present on system
+Debian-like OS: `sudo apt-get install build-essential protobuf-compiler xorg-dev libudev-dev libvorbis-dev`
 
-Debian-like OS: `sudo apt-get install protobuf-compiler`
+```
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=RELEASE ..
+cmake --build . --target NULL_GAME NULL_GAME_SERVER
+./NULL_GAME # keep in mind you are not supposed to launch it from root of the project
+```
 
-Windows: use [vcpkg](https://github.com/microsoft/vcpkg) to install protobuf and then use vcpkg as cmake toolchain
+Windows: use [vcpkg](https://github.com/microsoft/vcpkg) to install protobuf and then use vcpkg as cmake toolchain. Also, Windows users are supposed to have openal32.dll in their wd or on PATH to run the application. You can copy one from extlibs/bin.
+
+## Game controls
+*(for as long as we do not have a help in-game)*
+
+ - Pick up a weapon using **T**
+ - Change weapons using **E**
+ - Shoot by **LMB**
+ - Move using **WASD** and **SPACE**
+
 
 ## Team members
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* **Brek Roman**, 19213 - r.brek@g.nsu.ru

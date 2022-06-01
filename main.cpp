@@ -12,10 +12,27 @@
 #include <X11/Xlib.h>
 #endif //__linux
 
-int main() {
+int main(int argc, char** argv) {
     // Uncomment to see logs. Know that it slows execution time
 //    static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;
 //    plog::init(plog::debug, &consoleAppender);
+
+    if (argc > 2) {
+        std::cerr << "Provide 1 arg to load exact scene or no args to interact" << std::endl;
+        exit(424242);
+    }
+
+    if (argc == 2) {
+        std::cout << "You chose " << argv[1] << std::endl;
+        std::string levelToLoad = argv[1];
+        try {
+            null::SceneLoader::loadSceneFromFile(levelToLoad);
+        } catch (const null::UnknownSceneException& ignored) {
+            std::cerr << "Unknown scene, try again" << std::endl;
+            exit(30);
+        }
+        return null::MainLoop::run();
+    }
 
     // try /menu or /network-demo-(client|connector|server) or /demo
     std::string levelToLoad;
@@ -34,7 +51,7 @@ int main() {
             null::SceneLoader::loadSceneFromFile(levelToLoad);
             sceneIsLoaded = true;
         } catch (const null::UnknownSceneException& ignored) {
-            std::cout << "Unknown scene, try again" << std::endl;
+            std::cerr << "Unknown scene, try again" << std::endl;
         }
     }
     null::MainLoop::run();

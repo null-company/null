@@ -26,7 +26,6 @@ void NetClientCollector::defaultJob(NetClientCollector *self) {
                 self->disconnectClient(readyClientIdx);
                 continue;
             }
-            std::cout << status << std::endl;
             throw ReceiveException("Unexpected client receive exception status", exception.getStatus());
         }
     }
@@ -83,7 +82,7 @@ int NetClientCollector::getFirstReadySocketIdx() {
         socketSelector.add(*client);
     }
     socketSelector.add(listener);
-    auto status = socketSelector.wait(sf::seconds(0.1));
+    auto status = socketSelector.wait(sf::microseconds(1));
     if (!status) {
         return -2;
     }

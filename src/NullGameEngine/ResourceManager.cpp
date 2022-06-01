@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
 #include <ResourceManager.hpp>
+#include <MainLoop.hpp>
 
 #include <filesystem>
 
@@ -34,9 +35,9 @@ namespace null {
             font = ResourceManager::fontPool.at(fontName);
         } catch (std::out_of_range& exception) {
             constexpr auto fontsDir = "fonts";
-            if (!font->loadFromFile(RESOURCES_PATH / fontsDir / fontName)) {
+            if (!font->loadFromFile((RESOURCES_PATH / fontsDir / fontName).string())) {
                 throw std::runtime_error("Font file not found");
-            };
+            }
             ResourceManager::fontPool[fontName] = font;
         }
         return font;
@@ -56,9 +57,6 @@ namespace null {
         if (auto r = cache.find(soundName); r != cache.end()) {
             return &r->second;
         }
-        // this implementation does not cache because sounds so far are not really used widely
-        // and are not repeated like textures
-//        auto soundBuffer = new sf::SoundBuffer;
         auto soundBuffer = &cache[soundName];
         constexpr auto soundsDir = "sounds";
         if (!soundBuffer->loadFromFile((RESOURCES_PATH / soundsDir / soundName).string())) {
@@ -79,6 +77,11 @@ namespace null {
         if (!newInstance->openFromFile(musicPath.string())) {
             throw std::runtime_error("Music file not found");
         }
+        if (MainLoop::serverArbiter != nullptr) {
+            // this is a funny way to turn volume down for the server app
+            // TODO it is to be changed later
+            newInstance->setVolume(0);
+        }
         return newInstance;
     }
 
@@ -87,6 +90,11 @@ namespace null {
             return r->second; // return cached instance
         }
         soundPool[soundName] = sf::Sound(*loadSoundBuffer(soundName));
+        if (MainLoop::serverArbiter != nullptr) {
+            // this is a funny way to turn volume down for the server app
+            // TODO it is to be changed later
+            soundPool[soundName].setVolume(0);
+        }
         return soundPool[soundName];
     }
 }

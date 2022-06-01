@@ -54,7 +54,7 @@ namespace null {
                             break;
                         }
                         case sf::Event::MouseButtonReleased: {
-                            if (e.mouseButton.button == sf::Mouse::Left and scene->windowMetaInfo.leftLock) {
+                            if (e.mouseButton.button == sf::Mouse::Left && scene->windowMetaInfo.leftLock) {
                                 scene->windowMetaInfo.leftLock = false;
                                 scene->windowMetaInfo.leftKeyPressed = true;
                             }
