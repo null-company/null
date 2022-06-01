@@ -10,7 +10,7 @@ namespace null {
     void NetworkManagerClientScript::start() {
         LOGD << "Client server script start";
         try {
-            networkManager = std::make_unique<ClientNetworkManager>(ipToConnectTo, port);
+            networkManager = std::make_unique<ClientNetworkManager>(serverArbiterIp, serverArbiterPort);
         } catch (const NetworkException& e) {
             std::cerr << "Tried to connect to server but failed" << std::endl;
             exit(20);

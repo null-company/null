@@ -40,7 +40,7 @@ namespace null {
     std::shared_ptr<GameObject> WeaponGenerator::generateWeapon() {
         std::random_device rd;
         std::mt19937 mt(rd());
-        int total_weapons = 2;
+        constexpr int total_weapons = 2;
         std::uniform_int_distribution<> dist(0, total_weapons - 1);
         int weapon_number = dist(mt);
         std::shared_ptr<GameObject> weapon;

@@ -17,8 +17,8 @@ namespace null {
         /**
          * It is caller responsibility to set these values
          */
-        sf::IpAddress ipToConnectTo{};
-        uint16_t port{};
+        sf::IpAddress serverArbiterIp{};
+        uint16_t serverArbiterPort{};
 
         void start() override;
         void update() override;

@@ -35,11 +35,18 @@ namespace null {
                     lastProcessedIndex = lastIndex;
                 }
                 if (storage->size() >= queueSizeThreshold) {
-                    std::queue<T> emptyQueue;
-                    std::swap(*storage, emptyQueue);
+                    clear();
                     lastProcessedIndex = -1;
                 }
             }
+        }
+
+        /**
+         * Ignores all messages, clears the queue
+         */
+        void clear() {
+            std::queue<T> emptyQueue;
+            std::swap(*storage, emptyQueue);
         }
 
     private:
