@@ -430,11 +430,12 @@ namespace null {
         enemy4->setPosition(400, 200);
 //        enemy1->getScript<PlayerAnimation>()->name = "Meow";
 //        enemy2->getScript<PlayerAnimation>()->name = "Gav";
-//        enemy4->getScript<PlayerAnimation>()->name = "Meowss";
+        enemy4->getScript<PlayerAnimation>()->name = "Meowss";
 //        enemy3->getScript<PlayerAnimation>()->name = "Gavaa";
 
         auto gun = std::make_shared<GameObject>();
         gun->addScript<StraightWeaponScript>(*gun, 0.01);
+        gun->guid = 69;
 
         auto weaponStorage = std::make_shared<GameObject>();
         std::vector<std::shared_ptr<GameObject>> guns{gun, grenadeBunch};
@@ -572,10 +573,11 @@ namespace null {
         enemy4->setPosition(400, 200);
 //        enemy1->getScript<PlayerAnimation>()->name = "Meow";
 //        enemy2->getScript<PlayerAnimation>()->name = "Gav";
-//        enemy4->getScript<PlayerAnimation>()->name = "Meowss";
+        enemy4->getScript<PlayerAnimation>()->name = "Meowss";
 //        enemy3->getScript<PlayerAnimation>()->name = "Gavaa";
 
         auto gun = std::make_shared<GameObject>();
+        gun->guid = 69;
         gun->addScript<StraightWeaponScript>(*gun, 0.01);
 
         auto weaponStorage = std::make_shared<GameObject>();
