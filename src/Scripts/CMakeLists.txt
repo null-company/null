@@ -68,7 +68,9 @@ set(SRC
         ${INCROOT}/Wall.hpp
         ${SRCROOT}/Wall.cpp
         ${SRCROOT}/TextHandler.cpp
-        ${INCROOT}/TextHandler.hpp BackgroundAnimation.cpp ../../include/Scripts/BackgroundAnimation.hpp)
+        ${INCROOT}/TextHandler.hpp
+        ${SRCROOT}/BackgroundAnimation.cpp
+        ${INCROOT}/BackgroundAnimation.hpp)
 
 
 add_library(scripts STATIC ${SRC})
