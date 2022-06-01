@@ -20,6 +20,8 @@ add_subdirectory(./test/)
 
 add_executable(NULL_GAME main.cpp)
 
+add_executable(NULL_LEVEL_CHOOSER level-chooser.cpp)
+
 add_executable(NULL_GAME_SERVER server.cpp)
 
 target_link_libraries(NULL_GAME
@@ -48,4 +50,18 @@ target_link_libraries(NULL_GAME_SERVER
         sfml-audio
         sfml-window
         sfml-system
+        )
+
+target_link_libraries(NULL_LEVEL_CHOOSER
+        scripts
+        nullGameEngine
+        sfml-network
+        plog
+        network
+        serialization
+        sfml-graphics
+        sfml-audio
+        sfml-window
+        sfml-system
+        sfml-network
         )
