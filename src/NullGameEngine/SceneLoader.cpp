@@ -129,7 +129,7 @@ namespace null {
         auto createRoomButtonTexture = ResourceManager::loadTexture("menu/buttons/CREATE_ROOM.png");
         createRoom->setPosition(180, 410);
         createRoom->addScript<ButtonScript>(*createRoom, *createRoomButtonTexture, *pressedTexture, []() -> void {
-            SceneLoader::changeScene("/demo", std::shared_ptr<void>());
+            SceneLoader::changeScene("/game", std::shared_ptr<void>());
         });
 
         createRoom->renderLayer = serial::FOREGROUND;
@@ -197,10 +197,6 @@ namespace null {
         // auto sc = Serializer::getSceneFromFile("myscene.pbuf");
         // return sc;
 
-        // todo this should be done in a scene file
-        if (SceneLoader::context != nullptr) {
-            std::shared_ptr<std::string> roomCode = std::reinterpret_pointer_cast<std::string>(SceneLoader::context);
-        }
         auto newScene = std::make_shared<Scene>();
         auto& box2dWorld = newScene->getBox2dWorld();
 
