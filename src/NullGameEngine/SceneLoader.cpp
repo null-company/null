@@ -72,8 +72,8 @@ namespace null {
         clientManagerObject->addTag("network-manager");
         auto& clientScript =
                 clientManagerObject->addScript<NetworkManagerClientScript>(*clientManagerObject);
-        clientScript.ipToConnectTo = "127.0.0.1";
-        clientScript.port = 5002;
+        clientScript.serverArbiterIp = "127.0.0.1";
+        clientScript.serverArbiterPort = 5002;
         newScene->addRootGameObject(std::move(clientManagerObject));
 
         std::random_device dev;
@@ -476,8 +476,8 @@ namespace null {
         clientManagerObject->addTag("network-manager");
         auto& clientScript =
                 clientManagerObject->addScript<NetworkManagerClientScript>(*clientManagerObject);
-        clientScript.ipToConnectTo = "127.0.0.1";
-        clientScript.port = 5002;
+        clientScript.serverArbiterIp = "127.0.0.1";
+        clientScript.serverArbiterPort = 5002;
         // Note: this is done immediately, it should start() before any consumers
         newScene->addRootGameObject(std::move(clientManagerObject));
 
