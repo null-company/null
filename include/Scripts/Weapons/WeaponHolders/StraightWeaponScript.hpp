@@ -42,6 +42,3 @@ namespace null {
         sf::Sound* gunShotSound{};
     };
 }
-
-
-
