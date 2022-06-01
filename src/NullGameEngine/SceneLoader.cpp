@@ -560,7 +560,10 @@ namespace null {
 //        auto enemy1 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
 //        auto enemy2 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
 //        auto enemy3 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
+
         auto enemy4 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
+//        auto enemy4 = ArrowsControlledPlayer::initPlayer("playerAnim_v3.png", box2dWorld);
+
         enemy4->addTag("player2");
         enemy4->guid = 202202;
 //        enemy1->setPosition(300, 0);

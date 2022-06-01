@@ -73,9 +73,9 @@ namespace null {
         sf::Sound* jumpSound{};
     };
 
-    class WASDControlledPlayer : public PlayerAnimation {
-
-        WASDControlledPlayer(GameObject& go, SpriteSheet& ss, const CollisionMap& cm)
+    class ArrowsControlledPlayer : public PlayerAnimation {
+    public:
+        ArrowsControlledPlayer(GameObject& go, SpriteSheet& ss, const CollisionMap& cm)
                 : PlayerAnimation(go, ss, cm) {
             controls = {
                     {sf::Keyboard::Left, LEFT},
@@ -83,6 +83,8 @@ namespace null {
                     {sf::Keyboard::Up, JUMP}
             };
         };
+
+        static std::shared_ptr<GameObject> initPlayer(const std::string& anim, b2World& box2dWorld);
 
     };
 }
