@@ -272,6 +272,7 @@ namespace null {
         auto player = PlayerAnimation::initPlayer("playerAnim_v2.png", box2dWorld);
         auto grenadeBunch = std::make_shared<GameObject>();
         grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
+        grenadeBunch->guid = 220220220;
 
         player->getScript<PlayerAnimation>()->controller = PlayerAnimation::Keyboard;
         auto enemy1 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
@@ -418,6 +419,7 @@ namespace null {
         player->guid = 101101;
         auto grenadeBunch = std::make_shared<GameObject>();
         grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
+        grenadeBunch->guid = 220220220;
 
         player->getScript<PlayerAnimation>()->controller = PlayerAnimation::Network;
 //        auto enemy1 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
@@ -531,7 +533,7 @@ namespace null {
             groundObject->visible = true;
             groundObject->addTag("platform");
             groundObject->makeStatic(box2dWorld);
-            groundObject->addScript<ReloadSceneScript>(*groundObject);
+//            groundObject->addScript<ReloadSceneScript>(*groundObject);
             newScene->addRootGameObject(std::move(groundObject));
         };
         createGround(0, 400);
@@ -558,6 +560,7 @@ namespace null {
         player->guid = 101101;
         auto grenadeBunch = std::make_shared<GameObject>();
         grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
+        grenadeBunch->guid = 220220220;
 
         player->getScript<PlayerAnimation>()->controller = PlayerAnimation::Network;
 //        auto enemy1 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);

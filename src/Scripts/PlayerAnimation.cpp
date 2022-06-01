@@ -37,25 +37,23 @@ namespace null {
     void PlayerAnimation::update() {
         auto rb = gameObject.getRigidBody();
 
-        if (host == Client) {
-            if (!canJump) {
-                for (auto* contact = rb->GetContactList(); contact != nullptr; contact = contact->next) {
-                    if (!contact->contact->IsTouching())
-                        continue;
+        if (!canJump) {
+            for (auto* contact = rb->GetContactList(); contact != nullptr; contact = contact->next) {
+                if (!contact->contact->IsTouching())
+                    continue;
 
-                    auto* otherRb = contact->other;
-                    auto* otherGo = (GameObject*) otherRb->GetUserData().pointer;
-                    if (otherRb->GetWorldCenter().y - Utility::pixelToMetersVector<float>(
-                            {0, otherGo->getSprite().getTextureRect().height * otherGo->getSprite().getScale().y}).y / 2 +
-                        1 >
-                        rb->GetWorldCenter().y + Utility::pixelToMetersVector<float>({0,
-                                                                                      gameObject.getSprite().getTextureRect().height *
-                                                                                      gameObject.getSprite().getScale().y}).y /
-                                                 2) {
-                        canJump = true;
-                        rb->SetLinearVelocity({rb->GetLinearVelocity().x, 0});
-                        break;
-                    }
+                auto* otherRb = contact->other;
+                auto* otherGo = (GameObject*) otherRb->GetUserData().pointer;
+                if (otherRb->GetWorldCenter().y - Utility::pixelToMetersVector<float>(
+                        {0, otherGo->getSprite().getTextureRect().height * otherGo->getSprite().getScale().y}).y / 2 +
+                    1 >
+                    rb->GetWorldCenter().y + Utility::pixelToMetersVector<float>({0,
+                                                                                  gameObject.getSprite().getTextureRect().height *
+                                                                                  gameObject.getSprite().getScale().y}).y /
+                                             2) {
+                    canJump = true;
+                    rb->SetLinearVelocity({rb->GetLinearVelocity().x, 0});
+                    break;
                 }
             }
         }
@@ -84,18 +82,10 @@ namespace null {
                             {movingVelocity,gameObject.getRigidBody()->GetLinearVelocity().y}
                     );
                     playerIsMoving = true;
-//                        if (spriteSheet.currAnimation->name != "walkRight") {
-//                            currentAnimationFrame = 0;
-//                            spriteSheet.setAnimation("walkRight");
-//                        }
                 }
                 if (direction == LEFT && !playerIsMoving) {
                     gameObject.getRigidBody()->SetLinearVelocity({-movingVelocity, gameObject.getRigidBody()->GetLinearVelocity().y});
                     playerIsMoving = true;
-//                        if (spriteSheet.currAnimation->name != "walkLeft") {
-//                            currentAnimationFrame = 0;
-//                            spriteSheet.setAnimation("walkLeft");
-//                        }
                 }
                 if (direction == JUMP) {
                     gameObject.getRigidBody()->SetLinearVelocity(
@@ -103,15 +93,7 @@ namespace null {
                     );
                 }
             });
-            const auto& position = gameObject.getPosition();
-            const auto& velocity = gameObject.getRigidBody()->GetLinearVelocity();
-            net::GameMessage::SubscriberState stateToBroadcast;
-            stateToBroadcast.set_subscriber_id(gameObject.guid);
-            *stateToBroadcast.mutable_content() =
-                    StateConverter::makeMessageFrom(position.x, position.y, velocity.x, velocity.y);
-            MainLoop::serverArbiter->getGameServer().broadcastMessage(
-                    stateToBroadcast
-            );
+            sendState();
         } else {
             // controller == Network OR Keyboard
             if (host != Client) {
@@ -120,7 +102,7 @@ namespace null {
             clientQueue.processMessageIfAny([this, &playerIsMoving](net::GameMessage::SubscriberState& message) {
                 if (controller == Keyboard) {
                     // reduce lag for your client
-                    const auto threshold = sf::seconds(5);
+                    const auto threshold = sf::milliseconds(300);
                     if (lastStateSnapshotTimer.getElapsedTime() > threshold) {
                         lastStateSnapshotTimer.restart();
                     } else {
@@ -133,18 +115,21 @@ namespace null {
                 PrimitiveStateConverter::restoreFromMessage(
                         message.content(),
                         playerPos.x, playerPos.y,
-                        velocity.x, velocity.y
+                        velocity.x, velocity.y,
+                        health
                 );
-                if (velocity.x != 0) {
-                    playerIsMoving = true;
+                if (health <= 0) {
+                    die();
                 }
-                if (velocity.x > 0) {
+                if (velocity.x > movingVelocity / 2.0f) {
+                    playerIsMoving = true;
                     if (spriteSheet.currAnimation->name != "walkRight") {
                         currentAnimationFrame = 0;
                         spriteSheet.setAnimation("walkRight");
                     }
                 }
-                if (velocity.x < 0) {
+                if (velocity.x < -movingVelocity / 2.0f) {
+                    playerIsMoving = true;
                     if (spriteSheet.currAnimation->name != "walkLeft") {
                         currentAnimationFrame = 0;
                         spriteSheet.setAnimation("walkLeft");
@@ -153,22 +138,6 @@ namespace null {
                 gameObject.setPosition(playerPos.x, playerPos.y);
                 gameObject.getRigidBody()->SetLinearVelocity({velocity.x, velocity.y});
             });
-//            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-//                gameObject.getRigidBody()->SetLinearVelocity({movingVelocity, gameObject.getRigidBody()->GetLinearVelocity().y});
-//                playerIsMoving = true;
-//                if (spriteSheet.currAnimation->name != "walkRight") {
-//                    currentAnimationFrame = 0;
-//                    spriteSheet.setAnimation("walkRight");
-//                }
-//            }
-//            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !playerIsMoving) {
-//                gameObject.getRigidBody()->SetLinearVelocity({-movingVelocity, gameObject.getRigidBody()->GetLinearVelocity().y});
-//                playerIsMoving = true;
-//                if (spriteSheet.currAnimation->name != "walkLeft") {
-//                    currentAnimationFrame = 0;
-//                    spriteSheet.setAnimation("walkLeft");
-//                }
-//            }
         }
 
         if (!playerIsMoving) {
@@ -226,10 +195,9 @@ namespace null {
 
     void PlayerAnimation::damage(float healthDelta) {
         health -= healthDelta;
-        if (health < 0) {
+        if (health <= 0) {
             health = 0;
-            deathSound->play();
-            gameObject.destroy();
+            die();
         }
     }
 
@@ -340,6 +308,23 @@ namespace null {
         *commandMessage.mutable_content() =
                 CommandConverter::makeMessageFrom(static_cast<uint32_t>(command));
         networkManagerScript->getNetworkManager().sendCommandToServer(commandMessage);
+    }
+
+    void PlayerAnimation::sendState() {
+        const auto& position = gameObject.getPosition();
+        const auto& velocity = gameObject.getRigidBody()->GetLinearVelocity();
+        net::GameMessage::SubscriberState stateToBroadcast;
+        stateToBroadcast.set_subscriber_id(gameObject.guid);
+        *stateToBroadcast.mutable_content() =
+                StateConverter::makeMessageFrom(position.x, position.y, velocity.x, velocity.y, health);
+        MainLoop::serverArbiter->getGameServer().broadcastMessage(
+                stateToBroadcast
+        );
+    }
+
+    void PlayerAnimation::die() {
+        deathSound->play();
+        gameObject.destroy();
     }
 
     std::shared_ptr<GameObject> ArrowsControlledPlayer::initPlayer(const std::string& anim, b2World& box2dWorld) {

@@ -14,7 +14,6 @@ namespace null {
     class PlayerAnimation : public RigidBodyAnimation {
     public:
         enum Controller: uint8_t {
-//            Nothing = 0,
             Keyboard = 1,
             Network = 2
         };
@@ -55,6 +54,8 @@ namespace null {
     private:
         std::vector<PlayerAnimation::KeyboardCommand> getCurrentCommands();
         void processCommand(PlayerAnimation::KeyboardCommand command);
+        void die();
+        void sendState();
     private:
         float health = 100;
         int currentAnimationFrame = 0;
