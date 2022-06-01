@@ -13,7 +13,8 @@ namespace null {
      * A place to manage any network deeds.
      * You may want this script to run first. TODO investigate this issue
      */
-    struct NetworkManagerClientScript: public Script {
+    class NetworkManagerClientScript : public Script {
+    public:
         /**
          * It is caller responsibility to set these values
          */

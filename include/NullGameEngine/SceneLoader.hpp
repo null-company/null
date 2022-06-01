@@ -32,10 +32,10 @@ namespace null {
 
         static void changeScene(const std::filesystem::path& path, std::shared_ptr<void> newContext = nullptr);
 
-        static const void* getContext();
         /**
          * Describes data that was provided between changing scenes
          */
+        static const void* getContext();
 
     private:
         static std::shared_ptr<void> context;

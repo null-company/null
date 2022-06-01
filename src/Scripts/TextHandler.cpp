@@ -63,7 +63,7 @@ namespace null {
             } else if ((enteredChar == '\n' || enteredChar == '\r') &&
                        gameObject.getText()->getString().getSize() == TextHandler::codeLength) {
 
-                SceneLoader::changeScene("/demo", std::make_shared<std::string>(gameObject.getText()->getString()));
+                SceneLoader::changeScene("/game", std::make_shared<std::string>(gameObject.getText()->getString()));
             }
         }
         Component::update();
