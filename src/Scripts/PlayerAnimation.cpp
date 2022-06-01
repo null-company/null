@@ -35,9 +35,6 @@ namespace null {
     }
 
     void PlayerAnimation::update() {
-//        if (controller == Nothing) {
-//            return;
-//        }
         auto rb = gameObject.getRigidBody();
 
         if (host == Client) {
