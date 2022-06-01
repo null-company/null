@@ -7,7 +7,8 @@
 #include <SFML/Graphics.hpp>
 #include <ResourceManager.hpp>
 #include <Scene.hpp>
-#include "ButtonScript.hpp"
+#include <ButtonScript.hpp>
+#include <SceneLoader.hpp>
 
 namespace null {
     void TextHandler::start() {
@@ -48,7 +49,7 @@ namespace null {
         auto backGo = gameObject.findFirstChildrenByTag("text back");
         if (enteredChar != '\0') {
             if (std::isalpha(enteredChar) || std::isdigit(enteredChar)) {
-                if (gameObject.getText()->getString().getSize() != 6) {
+                if (gameObject.getText()->getString().getSize() != TextHandler::codeLength) {
                     enteredChar = !std::isdigit(enteredChar) ? std::toupper(enteredChar) : enteredChar;
                     gameObject.getText()->setString(gameObject.getText()->getString() + enteredChar);
                     backGo->getText()->setString(backGo->getText()->getString() + enteredChar);
@@ -59,6 +60,10 @@ namespace null {
                     gameObject.getText()->setString(string.substring(0, string.getSize() - 1));
                     backGo->getText()->setString(gameObject.getText()->getString());
                 }
+            } else if ((enteredChar == '\n' || enteredChar == '\r') &&
+                       gameObject.getText()->getString().getSize() == TextHandler::codeLength) {
+
+                SceneLoader::changeScene("/demo", std::make_shared<std::string>(gameObject.getText()->getString()));
             }
         }
         Component::update();

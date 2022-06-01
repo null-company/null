@@ -8,6 +8,7 @@
 #include "Weapons/WeaponAmmunition/BulletScript.hpp"
 #include "Graphic/Vector.hpp"
 #include "PlayerAnimation.hpp"
+#include <SceneLoader.hpp>
 #include <MainLoop.hpp>
 #include <Network/NetworkManagerServerScript.hpp>
 
