@@ -339,9 +339,11 @@ namespace null {
                                                          SceneLoader::HostType ht,
                                                          uint64_t guid) {
             auto player = PlayerAnimation::initPlayer(playerAnim, box2dWorld);
-            player->addTag("player1");
+            player->addTag(name);
             player->guid = guid;
-            player->getScript<PlayerAnimation>()->controller = ht == SceneLoader::Server ? PlayerAnimation::Network : PlayerAnimation::Keyboard;
+//            player->getScript<PlayerAnimation>()->controller = ht == SceneLoader::Server ? PlayerAnimation::Network : PlayerAnimation::Keyboard;
+            player->getScript<PlayerAnimation>()->controller = PlayerAnimation::Network;
+            player->getScript<PlayerAnimation>()->name = name;
 
             auto gun1 = std::make_shared<GameObject>();
             gun1->guid = guid + 1;
@@ -625,7 +627,7 @@ namespace null {
             auto serverPlayerDispatcher = std::make_shared<GameObject>(800800);
             auto& serverPlayerDispatcherScript =
                     serverPlayerDispatcher->addScript<PlayerDispatcherServer>(*serverPlayerDispatcher);
-            serverPlayerDispatcherScript.players = {"player1", "player2"};
+            serverPlayerDispatcherScript.players = {"player1", "player2", "player3"};
             newScene->addRootGameObject(std::move(serverPlayerDispatcher));
         } else {
             auto musicManager = std::make_shared<GameObject>();
@@ -728,6 +730,8 @@ namespace null {
         auto player = makeWeaponizedPlayer(box2dWorld, "player1", "playerAnim_v2.png", ht, 200300);
         auto player2 = makeWeaponizedPlayer(box2dWorld, "player2", "playerAnim_v3.png", ht, 200310);
         auto player3 = makeWeaponizedPlayer(box2dWorld, "player3", "playerAnim_v3.png", ht, 200320);
+
+        player2->setPosition(player2->getPosition().x + 100, player2->getPosition().y);
 
         auto healthBarHolder = std::make_shared<GameObject>();
         healthBarHolder->addScript<HealthBarHolder>(*healthBarHolder);
