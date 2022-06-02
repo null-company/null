@@ -69,7 +69,7 @@ namespace null {
         gameObject.getSprite().scale(0.3, 0.3);
         gameObject.renderLayer = serial::FOREGROUND2;
         gameObject.visible = true;
-        restartTime = std::chrono::milliseconds(1000);
+        restartTime = std::chrono::milliseconds(500);
     }
 
     void GrenadeBunchScript::shoot(sf::Vector2f from, sf::Vector2f to) {
@@ -112,8 +112,7 @@ namespace null {
                                                          {fixtureDef1}, {fixtureDef1}, {fixtureDef1}, {fixtureDef2},
                                                          {fixtureDef2}, {fixtureDef2}, {fixtureDef2}, {fixtureDef2}}}}),
                                           speed,
-                                          getAngle(scene.getWindowMetaInfo().absoluteMouseWorldCoords -
-                                                   gameObject.getPosition()),
+                                          getAngle(to - from),
                                           gameObject.getPosition() - sf::Vector2f{0, 60});
         gameObject.addChild(std::move(grenade));
     }
@@ -157,16 +156,15 @@ namespace null {
     void GrenadeBunchScript::getStateFromNetAndApply() {
         clientQueue.processMessageIfAny([this](net::GameMessage::SubscriberState& receivedState) {
             sf::Vector2f mousePos;
-            sf::Vector2f weaponEnd;
             bool isShooting;
             PrimitiveStateConverter::restoreFromMessage(
                     receivedState.content(),
                     mousePos.x, mousePos.y,
-                    weaponEnd.x, weaponEnd.y,
                     isShooting
             );
+            auto& goPos = gameObject.getPosition();
             if (isShooting) {
-                shoot(weaponEnd, mousePos);
+                shoot(goPos, mousePos);
             }
         });
     }

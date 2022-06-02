@@ -442,6 +442,7 @@ namespace null {
         gun->guid = 69;
 
         auto weaponStorage = std::make_shared<GameObject>();
+        weaponStorage->guid = 10001000;
         std::vector<std::shared_ptr<GameObject>> guns{gun, grenadeBunch};
         weaponStorage->addScript<WeaponStorage>(*weaponStorage, guns);
 
@@ -586,6 +587,7 @@ namespace null {
         gun->addScript<StraightWeaponScript>(*gun, 0.01);
 
         auto weaponStorage = std::make_shared<GameObject>();
+        weaponStorage->guid = 10001000;
         std::vector<std::shared_ptr<GameObject>> guns{gun, grenadeBunch};
         weaponStorage->addScript<WeaponStorage>(*weaponStorage, guns);
 

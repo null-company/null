@@ -323,7 +323,11 @@ namespace null {
     }
 
     void PlayerAnimation::die() {
-        deathSound->play();
+        if (host == Server) {
+            sendState();
+        } else {
+            deathSound->play();
+        }
         gameObject.destroy();
     }
 
