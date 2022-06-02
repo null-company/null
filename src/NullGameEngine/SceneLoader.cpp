@@ -437,16 +437,34 @@ namespace null {
         enemy4->getScript<PlayerAnimation>()->name = "Meowss";
 //        enemy3->getScript<PlayerAnimation>()->name = "Gavaa";
 
-        auto gun = std::make_shared<GameObject>();
-        gun->addScript<StraightWeaponScript>(*gun, 0.01);
-        gun->guid = 69;
+        auto gun1 = std::make_shared<GameObject>();
+        gun1->guid = 69;
+        gun1->addScript<StraightWeaponScript>(*gun1, 0.01);
 
-        auto weaponStorage = std::make_shared<GameObject>();
-        weaponStorage->guid = 10001000;
-        std::vector<std::shared_ptr<GameObject>> guns{gun, grenadeBunch};
-        weaponStorage->addScript<WeaponStorage>(*weaponStorage, guns);
+        auto grenadeBunch1 = std::make_shared<GameObject>();
+        grenadeBunch1->addScript<GrenadeBunchScript>(*grenadeBunch1);
+        grenadeBunch1->guid = 220220220;
 
-        player->addChild(std::move(weaponStorage));
+        auto grenadeBunch2 = std::make_shared<GameObject>();
+        grenadeBunch2->addScript<GrenadeBunchScript>(*grenadeBunch2);
+        grenadeBunch2->guid = 220220221;
+
+        auto weaponStorage1 = std::make_shared<GameObject>();
+        weaponStorage1->guid = 10001000;
+        std::vector<std::shared_ptr<GameObject>> guns1{gun1, grenadeBunch1};
+        weaponStorage1->addScript<WeaponStorage>(*weaponStorage1, guns1);
+
+        auto gun2 = std::make_shared<GameObject>();
+        gun2->guid = 70;
+        gun2->addScript<StraightWeaponScript>(*gun2, 0.01);
+
+        auto weaponStorage2 = std::make_shared<GameObject>();
+        weaponStorage2->guid = 20001000;
+        std::vector<std::shared_ptr<GameObject>> guns2{gun2, grenadeBunch2};
+        weaponStorage2->addScript<WeaponStorage>(*weaponStorage2, guns2);
+
+        player->addChild(std::move(weaponStorage1));
+        enemy4->addChild(std::move(weaponStorage2));
         newScene->camera->getScript<ExampleCameraScript>()->setTrackedGameObject(*player);
         newScene->camera->getScript<ExampleCameraScript>()->setMap(*nullGameLogo);
 
@@ -559,10 +577,6 @@ namespace null {
         auto player = PlayerAnimation::initPlayer("playerAnim_v2.png", box2dWorld);
         player->addTag("player1");
         player->guid = 101101;
-        auto grenadeBunch = std::make_shared<GameObject>();
-        grenadeBunch->addScript<GrenadeBunchScript>(*grenadeBunch);
-        grenadeBunch->guid = 220220220;
-
         player->getScript<PlayerAnimation>()->controller = PlayerAnimation::Network;
 //        auto enemy1 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
 //        auto enemy2 = PlayerAnimation::initPlayer("playerAnim_v3.png", box2dWorld);
@@ -582,18 +596,37 @@ namespace null {
         enemy4->getScript<PlayerAnimation>()->name = "Meowss";
 //        enemy3->getScript<PlayerAnimation>()->name = "Gavaa";
 
-        auto gun = std::make_shared<GameObject>();
-        gun->guid = 69;
-        gun->addScript<StraightWeaponScript>(*gun, 0.01);
+        auto gun1 = std::make_shared<GameObject>();
+        gun1->guid = 69;
+        gun1->addScript<StraightWeaponScript>(*gun1, 0.01);
 
-        auto weaponStorage = std::make_shared<GameObject>();
-        weaponStorage->guid = 10001000;
-        std::vector<std::shared_ptr<GameObject>> guns{gun, grenadeBunch};
-        weaponStorage->addScript<WeaponStorage>(*weaponStorage, guns);
+        auto grenadeBunch1 = std::make_shared<GameObject>();
+        grenadeBunch1->addScript<GrenadeBunchScript>(*grenadeBunch1);
+        grenadeBunch1->guid = 220220220;
 
-        player->addChild(std::move(weaponStorage));
+        auto grenadeBunch2 = std::make_shared<GameObject>();
+        grenadeBunch2->addScript<GrenadeBunchScript>(*grenadeBunch2);
+        grenadeBunch2->guid = 220220221;
+
+        auto weaponStorage1 = std::make_shared<GameObject>();
+        weaponStorage1->guid = 10001000;
+        std::vector<std::shared_ptr<GameObject>> guns1{gun1, grenadeBunch1};
+        weaponStorage1->addScript<WeaponStorage>(*weaponStorage1, guns1);
+
+        auto gun2 = std::make_shared<GameObject>();
+        gun2->guid = 70;
+        gun2->addScript<StraightWeaponScript>(*gun2, 0.01);
+
+        auto weaponStorage2 = std::make_shared<GameObject>();
+        weaponStorage2->guid = 20001000;
+        std::vector<std::shared_ptr<GameObject>> guns2{gun2, grenadeBunch2};
+        weaponStorage2->addScript<WeaponStorage>(*weaponStorage2, guns2);
+
+        player->addChild(std::move(weaponStorage1));
         newScene->camera->getScript<CurrentPlayerCameraScript>()->setTrackedGameObject(*player);
         newScene->camera->getScript<CurrentPlayerCameraScript>()->setMap(*nullGameLogo);
+
+        enemy4->addChild(std::move(weaponStorage2));
 
         auto healthBarHolder = std::make_shared<GameObject>();
         healthBarHolder->addScript<HealthBarHolder>(*healthBarHolder);
