@@ -1,9 +1,11 @@
 #include "Weapons/WeaponHolders/WeaponStorage.hpp"
+#include "Network/NetworkManagerServerScript.hpp"
 
 #include <utility>
 
 #include <Scene.hpp>
 #include <GameObject.hpp>
+#include <MainLoop.hpp>
 
 namespace null {
     int WeaponStorage::counter = 0;
@@ -15,13 +17,35 @@ namespace null {
             gameObject.getParent().lock()->addChild(std::move(weapon));
         }
         gameObject.setPosition(gameObject.getParent().lock()->getPosition());
+        host = MainLoop::serverArbiter == nullptr ? Client : Server;
+        if (host == Client) {
+            auto networkManagerObject =
+                    gameObject.getScene().lock()->findFirstByTag("network-manager");
+            networkManagerScript = networkManagerObject.lock()->getScript<NetworkManagerClientScript>();
+            clientQueue.attachTo(&networkManagerScript->getNetworkManager().subscribe(gameObject.guid));
+        } else {
+            serverQueue.attachTo(
+                    &gameObject.getScene().lock()->findFirstByTag("network-manager")
+                            .lock()->getScript<NetworkManagerServerScript>()->subscribe(gameObject.guid)
+            );
+        }
     }
 
     void WeaponStorage::update() {
         Component::update();
         gameObject.setPosition(gameObject.getParent().lock()->getPosition());
-        if (gameObject.getSceneForce().windowMetaInfo.getKeyEvent().code == sf::Keyboard::E) {
-            swapWeapon();
+        if (host == Client) {
+            if (isControlledByCurrentPlayer()) {
+                if (gameObject.getSceneForce().windowMetaInfo.getKeyEvent().code == sf::Keyboard::E) {
+                    swapWeapon();
+                    sendSwapCommand();
+                }
+            } else {
+                getStateFromNetAndApply();
+            }
+        } else {
+            // host == Server
+            processClientCommands();
         }
     }
 
@@ -55,5 +79,48 @@ namespace null {
         gameObject.getParent().lock()->addChild(std::move(newWeapon));
     }
 
+    void WeaponStorage::sendSwapCommand() {
+        net::GameMessage::ClientCommand commandMessage;
+        commandMessage.set_subscriber_id(gameObject.guid);
+        bool swap = true;
+        *commandMessage.mutable_content() = CommandConverter::makeMessageFrom(
+                swap
+        );
+        networkManagerScript->getNetworkManager().sendCommandToServer(commandMessage);
+    }
 
+    void WeaponStorage::getStateFromNetAndApply() {
+        clientQueue.processMessageIfAny([this](net::GameMessage::SubscriberState& receivedState) {
+            bool swap;
+            PrimitiveStateConverter::restoreFromMessage(
+                    receivedState.content(),
+                    swap
+            );
+            if (swap) {
+                swapWeapon();
+            }
+        });
+    }
+
+    void WeaponStorage::processClientCommands() {
+        serverQueue.processMessageIfAny([this](net::GameMessage::ClientCommand& clientCommand) {
+            bool swap;
+            PrimitiveStateConverter::restoreFromMessage(
+                    clientCommand.content(),
+                    swap
+            );
+            if (swap) {
+                swapWeapon();
+            }
+
+            net::GameMessage::SubscriberState stateToBroadcast;
+            stateToBroadcast.set_subscriber_id(gameObject.guid);
+            *stateToBroadcast.mutable_content() = CommandConverter::makeMessageFrom(
+                    swap
+            );
+            MainLoop::serverArbiter->getGameServer().broadcastMessage(
+                    stateToBroadcast
+            );
+        });
+    }
 }

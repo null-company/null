@@ -11,25 +11,55 @@
 #include "Utility.hpp"
 #include "Physics/CollisionCategories.hpp"
 #include "SFML/Graphics.hpp"
+#include "Network/NetworkManagerServerScript.hpp"
+#include <MainLoop.hpp>
 
 namespace null {
     void GrenadeBunchScript::start() {
-        Component::start();
-
+        WeaponScript::start();
+        host = MainLoop::serverArbiter == nullptr ? Client : Server;
+        if (host == Client) {
+            auto networkManagerObject =
+                    gameObject.getScene().lock()->findFirstByTag("network-manager");
+            networkManagerScript = networkManagerObject.lock()->getScript<NetworkManagerClientScript>();
+            clientQueue.attachTo(&networkManagerScript->getNetworkManager().subscribe(gameObject.guid));
+        } else {
+            serverQueue.attachTo(
+                    &gameObject.getScene().lock()->findFirstByTag("network-manager")
+                            .lock()->getScript<NetworkManagerServerScript>()->subscribe(gameObject.guid)
+            );
+        }
     }
 
-    void null::GrenadeBunchScript::update() {
-        Component::update();
+    void GrenadeBunchScript::update() {
+        WeaponScript::update();
         gameObject.setPosition(gameObject.getParent().lock()->getPosition() + sf::Vector2f(10, 30));
 
-        auto& scene = gameObject.getSceneForce();
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !scheduler.isStarted() && checkIfCanShoot()) {
-            scheduler.start();
-            return;
-        }
-        if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && scheduler.isStarted()) {
-            scheduler.end();
-            shoot(gameObject.getPosition(), scene.getWindowMetaInfo().absoluteMouseWorldCoords);
+        if (host == Client) {
+            if (isControlledByCurrentPlayer()) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !scheduler.isStarted() && checkIfCanShoot()) {
+                    scheduler.start();
+                    return;
+                }
+
+                bool isShooting = false;
+                if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && scheduler.isStarted()) {
+                    auto& scene = gameObject.getSceneForce();
+                    scheduler.end();
+                    shoot(gameObject.getPosition(), scene.getWindowMetaInfo().absoluteMouseWorldCoords);
+                    isShooting = true;
+                }
+                auto& scene = gameObject.getSceneForce();
+                auto mouseCoords = scene.getWindowMetaInfo().absoluteMouseWorldCoords;
+                if (isShooting) {
+                    sendState(mouseCoords, isShooting);
+                }
+            } else {
+                getStateFromNetAndApply();
+            }
+        } else {
+            // host == Server
+            processClientCommands();
         }
     }
 
@@ -39,7 +69,7 @@ namespace null {
         gameObject.getSprite().scale(0.3, 0.3);
         gameObject.renderLayer = serial::FOREGROUND2;
         gameObject.visible = true;
-        restartTime = std::chrono::milliseconds(1000);
+        restartTime = std::chrono::milliseconds(500);
     }
 
     void GrenadeBunchScript::shoot(sf::Vector2f from, sf::Vector2f to) {
@@ -82,9 +112,60 @@ namespace null {
                                                          {fixtureDef1}, {fixtureDef1}, {fixtureDef1}, {fixtureDef2},
                                                          {fixtureDef2}, {fixtureDef2}, {fixtureDef2}, {fixtureDef2}}}}),
                                           speed,
-                                          getAngle(scene.getWindowMetaInfo().absoluteMouseWorldCoords -
-                                                   gameObject.getPosition()),
+                                          getAngle(to - from),
                                           gameObject.getPosition() - sf::Vector2f{0, 60});
         gameObject.addChild(std::move(grenade));
+    }
+
+    void GrenadeBunchScript::processClientCommands() {
+        serverQueue.processMessageIfAny([this](net::GameMessage::ClientCommand& clientCommand) {
+            sf::Vector2f mousePos;
+            bool isShooting;
+            PrimitiveStateConverter::restoreFromMessage(
+                    clientCommand.content(),
+                    mousePos.x, mousePos.y,
+                    isShooting
+            );
+            if (isShooting) {
+                auto& goPos = gameObject.getPosition();
+                shoot(goPos, mousePos);
+            }
+
+            net::GameMessage::SubscriberState stateToBroadcast;
+            stateToBroadcast.set_subscriber_id(gameObject.guid);
+            *stateToBroadcast.mutable_content() = CommandConverter::makeMessageFrom(
+                    mousePos.x, mousePos.y,
+                    isShooting
+            );
+            MainLoop::serverArbiter->getGameServer().broadcastMessage(
+                    stateToBroadcast
+            );
+        });
+    }
+
+    void GrenadeBunchScript::sendState(sf::Vector2<float> mousePosition, bool isShooting) {
+        net::GameMessage::ClientCommand commandMessage;
+        commandMessage.set_subscriber_id(gameObject.guid);
+        *commandMessage.mutable_content() = CommandConverter::makeMessageFrom(
+                mousePosition.x, mousePosition.y,
+                isShooting
+        );
+        networkManagerScript->getNetworkManager().sendCommandToServer(commandMessage);
+    }
+
+    void GrenadeBunchScript::getStateFromNetAndApply() {
+        clientQueue.processMessageIfAny([this](net::GameMessage::SubscriberState& receivedState) {
+            sf::Vector2f mousePos;
+            bool isShooting;
+            PrimitiveStateConverter::restoreFromMessage(
+                    receivedState.content(),
+                    mousePos.x, mousePos.y,
+                    isShooting
+            );
+            auto& goPos = gameObject.getPosition();
+            if (isShooting) {
+                shoot(goPos, mousePos);
+            }
+        });
     }
 }
