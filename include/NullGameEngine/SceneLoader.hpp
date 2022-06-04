@@ -28,6 +28,9 @@ namespace null {
         static std::shared_ptr<Scene> getRoomCreateConnectScene();
 
     public:
+        enum HostType {
+            Server, Client
+        };
         static void loadSceneFromFile(const std::filesystem::path& path);
 
         static void changeScene(const std::filesystem::path& path, std::shared_ptr<void> newContext = nullptr);
@@ -37,6 +40,8 @@ namespace null {
          */
         static const void* getContext();
 
+    private:
+        static std::shared_ptr<Scene> mainGame(HostType ht);
     private:
         static std::shared_ptr<void> context;
     };
