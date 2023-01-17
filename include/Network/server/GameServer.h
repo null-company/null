@@ -1,6 +1,7 @@
 #pragma once
 
 #include <queue>
+#include <mutex>
 
 #include "SFML/Network.hpp"
 #include "NetClientCollector.h"
