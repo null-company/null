@@ -4,15 +4,28 @@
 
 Debian-like OS: `sudo apt-get install build-essential protobuf-compiler xorg-dev libudev-dev libvorbis-dev libalut-dev libflac-dev`
 
+Unix:
+
 ```
 mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=RELEASE ..
-cmake --build . --target NULL_GAME NULL_GAME_SERVER
-./NULL_GAME # keep in mind you are not supposed to launch it from root of the project
+pushd build
+cmake -DCMAKE_BUILD_TYPE=Release .. # grab a cup of coffee
+cmake --build . --target NULL_GAME NULL_GAME_SERVER # grab more coffee
+popd
+cd ./out
+./NULL_GAME
 ```
 
-Windows: use [vcpkg](https://github.com/microsoft/vcpkg) to install protobuf and then use vcpkg as cmake toolchain. Also, Windows users are supposed to have openal32.dll in their wd or on PATH to run the application. You can copy one from extlibs/bin.
+Windows (MSVC generator is preferred):
+```
+mkdir build
+pushd build
+cmake -A x64 .. # grab a cup of coffee
+cmake --build . --target NULL_GAME NULL_GAME_SERVER --config Release # grab more coffee
+popd
+cd ./out
+./NULL_GAME # check that openal32.dll is in out, too
+```
 
 ## Game controls
 *(for as long as we do not have a help in-game)*
