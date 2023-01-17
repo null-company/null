@@ -14,10 +14,10 @@ make_dependency_available(
         GIT_TAG yaml-cpp-0.6.3
 )
 
-make_dependency_available(
-                googletest
-                URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
-)
+#make_dependency_available(
+#                googletest
+#                URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
+#)
 if (WIN32)
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 endif (WIN32)
@@ -40,3 +40,17 @@ make_dependency_available(
         GIT_REPOSITORY https://github.com/erincatto/box2d.git
         GIT_TAG v2.4.1
 )
+
+make_dependency_available(
+        protobuf
+        GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
+        GIT_TAG        e842f3fe3ccb96f35478a218808d360300cf3552
+)
+
+# https://stackoverflow.com/questions/74844369/how-to-i-use-the-cmake-command-protobuf-generate-when-installing-protobuf-throug
+# Get source directory of the Protobuf
+FetchContent_GetProperties(protobuf SOURCE_DIR Protobuf_SOURCE_DIR)
+message(STATUS "Protobuf source dir: ${Protobuf_SOURCE_DIR}")
+# Include the script which defines 'protobuf_generate'
+include(${Protobuf_SOURCE_DIR}/cmake/protobuf-generate.cmake)
+#protobuf_generate(TARGET proto-stuff IMPORT_DIRS ${Protobuf_SOURCE_DIR}/src)
