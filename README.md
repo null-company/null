@@ -2,7 +2,7 @@
 
 ## Buidling
 
-Debian-like OS: `sudo apt-get install build-essential protobuf-compiler xorg-dev libudev-dev libvorbis-dev`
+Debian-like OS: `sudo apt-get install build-essential protobuf-compiler xorg-dev libudev-dev libvorbis-dev libalut-dev libflac-dev`
 
 ```
 mkdir build
