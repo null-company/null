@@ -83,7 +83,7 @@ target_link_libraries(NULL_LEVEL_CHOOSER
 
 set(applications NULL_GAME_SERVER NULL_LEVEL_CHOOSER NULL_GAME)
 if (WIN32)
-    if (NOT MSVC)
+    if (NOT DEFINED CMAKE_GENERATOR_PLATFORM)
         message(WARNING "Cannot know what arch is used. You may need to manually copy openal32.dll from extlibs/bin")
         else()
         if (${CMAKE_GENERATOR_PLATFORM} MATCHES "64")
@@ -91,21 +91,23 @@ if (WIN32)
         else()
             set(arch_dir "x86")
         endif()
-        message(STATUS "Choose arch ${arch_dir} from generator platform ${CMAKE_GENERATOR_PLATFORM}")
+        message(STATUS "Chose arch ${arch_dir} from generator platform '${CMAKE_GENERATOR_PLATFORM}'")
+        message(STATUS "Openal will be copied to out directory for you")
     endif()
 endif()
 
 foreach(target_app ${applications})
+    set(output_dir "${CMAKE_SOURCE_DIR}/out/")
     add_custom_command(
             TARGET ${target_app} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy  $<TARGET_FILE:${target_app}> ${CMAKE_SOURCE_DIR}/out
+            COMMAND ${CMAKE_COMMAND} -E make_directory ${output_dir}
+            COMMAND ${CMAKE_COMMAND} -E copy  $<TARGET_FILE:${target_app}> ${output_dir}
             COMMENT "Copy artifact to out directory"
     )
-    if (WIN32 and MSVC)
-        message(STATUS "Openal will be copied to out directory for you")
+    if (DEFINED arch_dir)
         add_custom_command(
                 TARGET ${target_app} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/extlibs/bin/${arch_dir}/openal32.dll ${CMAKE_SOURCE_DIR}/out
+                COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/extlibs/bin/${arch_dir}/openal32.dll ${output_dir}
                 COMMENT "Copy proper dll to out directory"
         )
     endif()
